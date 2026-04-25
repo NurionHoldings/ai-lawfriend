@@ -124,6 +124,7 @@
 |------|------|
 | **수정·추가 파일** | [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml), `IMPLEMENTATION_EVIDENCE.md` (본 블록·목차) |
 | **로컬** | `npm run verify:349-12` **exit 0** (2026-04-25, 워크스페이스: tsc / lint / verify:canonical-sources / vitest 31·94) |
+| **원격 저장소** | [kis1000burn-netizen/ai-lawfriend](https://github.com/kis1000burn-netizen/ai-lawfriend) — branch **`main`** **푸시 완료** (2026-04-25; `ci.yml` 포함). |
 | **CI (요약)** | workflow **`CI`** ([`ci.yml`](../../.github/workflows/ci.yml)) · job **`verify-349-12`** · **`npm run verify:349-12`**. **성공·Run URL** → [CI run (아래)](#evidence-20260425-350-ci-run) |
 
 **로컬 출력 (확인됨, 2026-04-25):**
@@ -140,7 +141,7 @@
 | **결과** | **success** (job `verify-349-12`) — *Run URL이 위 형식의 **실제 주소**로 기입되면, 아래「완료 판정」 **CI**·**최종 기록**을 [x]로 둔다.* |
 | **확인일** | 2026-04-25 (증빙 문서·로컬 gate 일치) · *Run URL **실기입**이 같은 날이면 «원격 CI 확인일»로 읽는다* |
 
-*이 Cursor 워크스페이스에는 **`.git` 없음** / **`gh` 미로그인**이라 **public REST API**로 `RUN_ID` **자동 조회 불가**(해당 org 저장소는 API **404**·비공개·절차상 미노출 가능). **Run URL**은 **로그인한 브라우저**에서 [저장소 Actions](https://github.com/kis1000burn-netizen/ai-lawfriend/actions) → **`CI` / `verify-349-12` success** run **전체 URL**로 위 표 **한 줄**을 **덮어쓴 뒤** «완료 판정» **CI**·**최종**을 [x]로 둔다.*
+*로컬 **`.git` 초기화·`main` 푸시** 완료(2026-04-25). **public REST API** `actions/runs` **목록**은 **비로그인·비공개 저장소**일 때 **404** — **Run ID**는 [저장소 Actions](https://github.com/kis1000burn-netizen/ai-lawfriend/actions) (로그인)에서 **`CI` / `verify-349-12` success** run **전체 URL**로 위 표 **Run URL** **한 줄**을 **덮어쓴 뒤** «완료 판정» **CI**·**최종**을 [x]로 둔다.*
 
 #### 완료 판정
 
