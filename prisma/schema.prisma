@@ -1,0 +1,976 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  LAWYER
+  STAFF
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  PENDING
+  SUSPENDED
+  DELETED
+}
+
+/// 앱 단일 기준: `src/lib/definitions/case-status.ts` 의 `CaseStatusEnum` 과 값·순서를 맞출 것.
+/// (`npm run verify:canonical-sources` + 선택적 `POST /api/admin/verify-canonical-sources`)
+enum CaseStatus {
+  CREATED
+  INTAKE_PENDING
+  IN_INTERVIEW
+  INTERVIEW_DONE
+  DRAFTING
+  REVIEW_PENDING
+  APPROVED
+  DELIVERED
+  CLOSED
+  HOLD
+  REJECTED
+  DELETED
+}
+
+enum InterviewStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  REOPENED
+}
+
+enum LegalDocumentType {
+  STATEMENT
+  OPINION
+  CONSULT_NOTE
+}
+
+enum LegalDocumentStatus {
+  NOT_CREATED
+  DRAFT
+  REVIEW_REQUIRED
+  APPROVED
+  LOCKED
+  ARCHIVED
+}
+
+enum LegalParagraphStatus {
+  DRAFT
+  REVIEW_REQUIRED
+  APPROVED
+  LOCKED
+}
+
+enum QuestionSetStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum AttachmentStatus {
+  ACTIVE
+  DELETED
+}
+
+enum TimelineMemoType {
+  USER_NOTE
+  STAFF_NOTE
+  SYSTEM
+}
+
+enum BulkActionJobPriority {
+  LOW
+  NORMAL
+  HIGH
+  CRITICAL
+}
+
+enum BulkActionFailureCategory {
+  VALIDATION
+  PERMISSION
+  NOT_FOUND
+  CONFLICT
+  RATE_LIMIT
+  LOCK
+  TIMEOUT
+  NETWORK
+  INTERNAL
+  UNKNOWN
+}
+
+enum OpsQueuePriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum OpsQueueBoardColumn {
+  TRIAGE
+  QUEUED
+  WORKING
+  BLOCKED
+  DONE
+}
+
+enum TimelineExportFormat {
+  CSV
+  JSON
+}
+
+model User {
+  id           String     @id @default(uuid())
+  email        String     @unique
+  passwordHash String
+  name         String
+  phone        String?
+  role         UserRole   @default(USER)
+  status       UserStatus @default(ACTIVE)
+  lastLoginAt  DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  cases               Case[]             @relation("UserCases")
+  auditLogs           AuditLog[]         @relation("UserAuditLogs")
+  uploadedAttachments CaseAttachment[]   @relation("UserUploadedCaseAttachments")
+  timelineMemos       CaseTimelineMemo[] @relation("UserCaseTimelineMemos")
+  assignedCases       CaseAssignment[]   @relation("UserAssignedCases")
+  createdAssignments  CaseAssignment[]   @relation("UserCreatedAssignments")
+
+  createdAlertRules       AlertRule[]         @relation("AlertRuleCreatedBy")
+  updatedAlertRules       AlertRule[]         @relation("AlertRuleUpdatedBy")
+  alertEventsActed        AlertEvent[]        @relation("AlertEventActor")
+  alertEventsAcknowledged AlertEvent[]        @relation("AlertEventAcknowledgedBy")
+  alertEventsIgnored      AlertEvent[]        @relation("AlertEventIgnoredBy")
+  alertEventsResolved     AlertEvent[]        @relation("AlertEventResolvedBy")
+  alertEventsAssigned     AlertEvent[]        @relation("AlertAssignee")
+  escalationsReleased       AlertEscalation[]        @relation("EscalationReleasedBy")
+  adminNotifications        AdminNotification[]
+  alertBoardFilterPresets     AlertBoardFilterPreset[]
+  bulkActionJobs              BulkActionJob[]          @relation("BulkActionJobActor")
+  canceledBulkActionJobs      BulkActionJob[]          @relation("BulkActionJobCanceledBy")
+  opsQueueTicketsAssigned     OpsQueueTicket[]       @relation("OpsQueueTicketAssignee")
+  timelineExportLogs          TimelineExportLog[]
+  paragraphRewriteHistories   DocumentParagraphRewriteHistory[]
+  documentParagraphVersions   DocumentParagraphVersion[] @relation("UserParagraphVersions")
+
+  @@index([email])
+}
+
+model BulkActionJob {
+  id            String    @id @default(cuid())
+  action        String
+  status        String
+  actorId       String
+  payloadJson   Json?
+  targetIdsJson Json
+  resultJson    Json?
+  errorMessage  String?
+  startedAt     DateTime?
+  finishedAt    DateTime?
+  canceledAt    DateTime?
+  canceledById  String?
+  cancelReason  String?
+
+  retryOfJobId String?
+  lockedAt     DateTime?
+  lockToken    String?
+  lockExpiresAt DateTime?
+  lockId       String?
+
+  lastHeartbeatAt DateTime?
+  heartbeatCount  Int       @default(0)
+
+  priority         BulkActionJobPriority @default(NORMAL)
+  queueGroup       String?
+  concurrencyKey   String?
+  maxConcurrency   Int                   @default(2)
+  metadata         Json?
+
+  totalItems     Int @default(0)
+  completedItems Int @default(0)
+  failedItems    Int @default(0)
+  canceledItems  Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  retryScheduledAt DateTime?
+
+  actor      User           @relation("BulkActionJobActor", fields: [actorId], references: [id], onDelete: Cascade)
+  canceledBy User?          @relation("BulkActionJobCanceledBy", fields: [canceledById], references: [id], onDelete: SetNull)
+  retryOfJob BulkActionJob? @relation("BulkActionJobRetry", fields: [retryOfJobId], references: [id], onDelete: SetNull)
+  retryChildren BulkActionJob[] @relation("BulkActionJobRetry")
+
+  items BulkActionJobItem[]
+
+  schedules       BulkActionSchedule[]
+  opsQueueTickets OpsQueueTicket[]
+
+  @@index([status, createdAt])
+  @@index([status, priority, createdAt])
+  @@index([queueGroup, status, priority, createdAt])
+  @@index([concurrencyKey, status, priority, createdAt])
+  @@index([actorId, createdAt])
+  @@index([retryOfJobId])
+  @@index([lockExpiresAt])
+  @@index([lastHeartbeatAt])
+  @@index([retryScheduledAt])
+}
+
+model BulkActionJobItem {
+  id          String   @id @default(cuid())
+  jobId       String
+  job         BulkActionJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  targetType      String
+  targetId        String
+  action          String
+  status          String
+  sequence        Int     @default(0)
+
+  errorCode             String?
+  errorMessage          String?
+  errorPayload          Json?
+
+  failureCategory       BulkActionFailureCategory?
+  failureTaxonomyCode   String?
+  autoGuideCode         String?
+  autoGuideLabel        String?
+  autoGuideDescription  String?
+  retryable             Boolean @default(false)
+
+  startedAt   DateTime?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  metadata Json?
+
+  @@index([jobId, status])
+  @@index([jobId, failureCategory])
+  @@index([jobId, failureTaxonomyCode])
+  @@index([targetType, targetId])
+}
+
+model BulkActionSchedule {
+  id                String   @id @default(cuid())
+  sourceJobId       String
+  taxonomy          String
+  bulkVariant       String
+  status            String   @default("PENDING")
+  scheduledFor      DateTime
+  note              String?
+  dedupeKey         String   @unique
+  createdRetryJobId String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  sourceJob BulkActionJob @relation(fields: [sourceJobId], references: [id], onDelete: Cascade)
+
+  @@index([status, scheduledFor])
+  @@index([sourceJobId, taxonomy])
+}
+
+model OpsQueueTicket {
+  id             String   @id @default(cuid())
+  sourceJobId    String
+  caseId         String?
+  taxonomy       String
+  bulkVariant    String
+  status         String   @default("OPEN")
+  title          String
+  description    String?
+  severity       String   @default("MEDIUM")
+  priority       OpsQueuePriority @default(NORMAL)
+  dedupeKey      String   @unique
+  assigneeUserId String?
+  metadata       Json?
+  dueAt               DateTime?
+  slaMinutes          Int?
+  overdueNotifiedAt   DateTime?
+  slaLastCheckedAt    DateTime?
+  boardColumn         OpsQueueBoardColumn @default(TRIAGE)
+  boardOrder          Int                  @default(0)
+  retryScheduledAt    DateTime?
+  retrySourceJobId    String?
+  queueGroup          String?
+  concurrencyKey      String?
+  maxConcurrency      Int?
+  completedAt         DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  sourceJob BulkActionJob @relation(fields: [sourceJobId], references: [id], onDelete: Cascade)
+  assignee  User?     @relation("OpsQueueTicketAssignee", fields: [assigneeUserId], references: [id], onDelete: SetNull)
+  case      Case?     @relation(fields: [caseId], references: [id], onDelete: SetNull)
+
+  @@index([status, dueAt])
+  @@index([assigneeUserId, status])
+  @@index([boardColumn, boardOrder])
+  @@index([retryScheduledAt])
+  @@index([overdueNotifiedAt])
+  @@index([status, createdAt])
+  @@index([sourceJobId, taxonomy])
+}
+
+model TimelineExportLog {
+  id            String               @id @default(cuid())
+  requestedById String
+  caseId        String?
+  format        TimelineExportFormat
+  itemCount     Int
+  createdAt     DateTime             @default(now())
+
+  requestedBy User @relation(fields: [requestedById], references: [id], onDelete: Cascade)
+
+  @@index([requestedById, createdAt])
+}
+
+model OpsQueueSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  jsonValue Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WorkerHeartbeat {
+  id              String   @id @default(cuid())
+  workerKey       String   @unique
+  workerType      String
+  hostname        String?
+  pid             Int?
+  currentJobId    String?
+  status          String   @default("IDLE")
+  metadata        Json?
+  lastHeartbeatAt DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([workerType, lastHeartbeatAt])
+  @@index([status, lastHeartbeatAt])
+}
+
+model Case {
+  id                   String     @id @default(cuid())
+  ownerUserId          String
+  title                String
+  description          String?
+  category             String?
+  opponentName         String?
+  courtName            String?
+  incidentDate         DateTime?
+  status               CaseStatus @default(CREATED)
+  assignedLawyerUserId String?
+  assignedStaffUserId  String?
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+
+  owner                       User                            @relation("UserCases", fields: [ownerUserId], references: [id], onDelete: Cascade)
+  attachments                 CaseAttachment[]
+  timelineMemos               CaseTimelineMemo[]
+  assignments                 CaseAssignment[]
+  opsQueueTickets             OpsQueueTicket[]
+  paragraphRewriteHistories   DocumentParagraphRewriteHistory[]
+  caseTimelineMemoParagraphs  CaseTimelineMemoParagraph[]
+  documentApprovalReviews     DocumentApprovalReview[]
+  documentParagraphVersions   DocumentParagraphVersion[]
+  interviews                  Interview[]
+  legalDocuments              LegalDocument[]
+  caseTimelineEvents          CaseTimelineEvent[]
+
+  @@index([ownerUserId, status, createdAt])
+  @@index([status, createdAt])
+  @@index([assignedLawyerUserId])
+  @@index([assignedStaffUserId])
+}
+
+model CaseAttachment {
+  id             String           @id @default(cuid())
+  caseId         String
+  uploaderUserId String
+  originalName   String
+  storedName     String
+  mimeType       String
+  sizeBytes      Int
+  storagePath    String
+  status         AttachmentStatus @default(ACTIVE)
+  createdAt      DateTime         @default(now())
+  deletedAt      DateTime?
+
+  case     Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  uploader User @relation("UserUploadedCaseAttachments", fields: [uploaderUserId], references: [id], onDelete: Cascade)
+
+  @@index([caseId, status, createdAt])
+  @@index([uploaderUserId, createdAt])
+}
+
+model CaseTimelineMemo {
+  id           String           @id @default(cuid())
+  caseId       String
+  authorUserId String
+  memoType     TimelineMemoType @default(USER_NOTE)
+  content      String
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  deletedAt    DateTime?
+
+  alertEventId String?
+  noteType     String?
+
+  case       Case         @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  author     User         @relation("UserCaseTimelineMemos", fields: [authorUserId], references: [id], onDelete: Cascade)
+  alertEvent AlertEvent?  @relation(fields: [alertEventId], references: [id], onDelete: SetNull)
+
+  caseTimelineMemoParagraphs CaseTimelineMemoParagraph[]
+  documentApprovalReview     DocumentApprovalReview?
+  documentParagraphVersions  DocumentParagraphVersion[]
+
+  @@index([caseId, createdAt])
+  @@index([authorUserId, createdAt])
+  @@index([alertEventId])
+  @@index([noteType])
+}
+
+/// 타임라인 메모(기존 초안 문서)에 매달린 문단 — DB 테이블명은 기존 DocumentParagraph 유지
+model CaseTimelineMemoParagraph {
+  id                String   @id @default(cuid())
+  documentId        String
+  caseId            String
+  sectionTitle      String?
+  label             String?
+  content           String   @db.Text
+  format            String
+  orderIndex        Int
+  included          Boolean  @default(true)
+  locked            Boolean  @default(false)
+  aiHint            String?
+  sourceQuestionKey String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  document CaseTimelineMemo @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  case     Case             @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([documentId, orderIndex])
+  @@index([caseId, documentId])
+  @@map("DocumentParagraph")
+}
+
+model DocumentApprovalReview {
+  id                 String    @id @default(cuid())
+  documentId         String    @unique
+  caseId             String
+  reviewChecked      Boolean   @default(false)
+  diffReviewed       Boolean   @default(false)
+  checklistConfirmed Boolean   @default(false)
+  reviewerUserId     String?
+  reviewedAt         DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  document CaseTimelineMemo @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  case     Case             @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId, documentId])
+}
+
+model DocumentParagraphVersion {
+  id                String   @id @default(cuid())
+  documentId        String
+  caseId            String
+  paragraphId       String
+  versionGroupId    String
+  sectionTitle      String?
+  label             String?
+  content           String   @db.Text
+  format            String
+  orderIndex        Int
+  included          Boolean  @default(true)
+  locked            Boolean  @default(false)
+  aiHint            String?
+  sourceQuestionKey String?
+  reason            String?
+  actorUserId       String
+  createdAt         DateTime @default(now())
+
+  document CaseTimelineMemo @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  case     Case             @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  actor    User             @relation("UserParagraphVersions", fields: [actorUserId], references: [id], onDelete: Cascade)
+
+  @@index([documentId, versionGroupId])
+  @@index([paragraphId, createdAt])
+  @@index([caseId, documentId])
+}
+
+model DocumentParagraphRewriteHistory {
+  id                String   @id @default(cuid())
+  caseId            String
+  documentId        String?
+  paragraphId       String
+  sourceQuestionKey String?
+  templateType      String
+  title             String?
+  beforeContent     String
+  afterContent      String
+  instruction       String?
+  aiModel           String?
+  status            String   @default("SUCCEEDED")
+  actorUserId       String
+  createdAt         DateTime @default(now())
+
+  case  Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  actor User @relation(fields: [actorUserId], references: [id], onDelete: Cascade)
+
+  @@index([caseId, paragraphId, createdAt])
+  @@index([documentId, createdAt])
+}
+
+model CaseAssignment {
+  id               String    @id @default(cuid())
+  caseId           String
+  assigneeUserId   String
+  assignedByUserId String
+  note             String?
+  isActive         Boolean   @default(true)
+  createdAt        DateTime  @default(now())
+  endedAt          DateTime?
+
+  case       Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  assignee   User @relation("UserAssignedCases", fields: [assigneeUserId], references: [id], onDelete: Cascade)
+  assignedBy User @relation("UserCreatedAssignments", fields: [assignedByUserId], references: [id], onDelete: Cascade)
+
+  @@index([caseId, isActive, createdAt])
+  @@index([assigneeUserId, isActive, createdAt])
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  actorUserId String
+  action      String
+  entityType  String
+  entityId    String
+  message     String?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  actor User @relation("UserAuditLogs", fields: [actorUserId], references: [id], onDelete: Cascade)
+
+  @@index([actorUserId, createdAt])
+  @@index([entityType, entityId, createdAt])
+}
+
+enum AlertRuleType {
+  ROLE_SPIKE
+  NIGHT_ACTIVITY
+  ACTION_POLICY
+}
+
+enum AlertSeverity {
+  INFO
+  WARNING
+  CRITICAL
+}
+
+enum AlertEventStatus {
+  OPEN
+  ACKNOWLEDGED
+  IGNORED
+  RESOLVED
+}
+
+enum NotificationType {
+  ALERT_EVENT
+  SYSTEM
+  BULK_JOB_SUCCESS
+  BULK_JOB_PARTIAL_SUCCESS
+  BULK_JOB_FAILED
+  BULK_JOB_CANCELED
+}
+
+enum AlertSlaState {
+  ON_TRACK
+  DUE_SOON
+  OVERDUE
+}
+
+enum AlertSlaWarningStatus {
+  OPEN
+  CLEARED
+}
+
+enum AlertEscalationLevel {
+  NONE
+  LEVEL_1
+  LEVEL_2
+  LEVEL_3
+}
+
+enum AlertEscalationStatus {
+  PENDING
+  SENT
+  CLEARED
+}
+
+enum AlertEscalationTargetGroup {
+  ADMINS
+  LAWYERS
+  ASSIGNEE
+  CUSTOM_USERS
+}
+
+model AlertRule {
+  id              String        @id @default(cuid())
+  name            String
+  code            String        @unique
+  type            AlertRuleType
+  enabled         Boolean       @default(true)
+  severity        AlertSeverity @default(WARNING)
+  configJson      Json
+  description     String?
+  slaHours                 Int?
+  dueSoonHours             Int?
+  escalationLevel1Hours    Int?
+  escalationLevel2Hours    Int?
+  escalationLevel3Hours    Int?
+  escalationTargetGroups  AlertEscalationTargetGroup[] @default([ADMINS])
+  escalationUserIdsJson   Json?
+  createdByUserId String?
+  updatedByUserId String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  createdByUser User?        @relation("AlertRuleCreatedBy", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  updatedByUser User?        @relation("AlertRuleUpdatedBy", fields: [updatedByUserId], references: [id], onDelete: SetNull)
+  events        AlertEvent[]
+
+  @@index([enabled, type])
+  @@index([createdAt])
+}
+
+model AlertEvent {
+  id               String           @id @default(cuid())
+  ruleId           String?
+  status           AlertEventStatus @default(OPEN)
+  severity         AlertSeverity
+  title            String
+  message          String
+  fingerprint      String           @unique
+  entityType       String?
+  entityId         String?
+  actorUserId      String?
+  detectedAt       DateTime         @default(now())
+  acknowledgedAt   DateTime?
+  acknowledgedById String?
+  ignoredAt        DateTime?
+  ignoredById      String?
+  resolvedAt       DateTime?
+  resolvedById     String?
+  payloadJson      Json
+  assigneeUserId   String?
+  dueAt            DateTime?
+  slaState         AlertSlaState       @default(ON_TRACK)
+  slaHours                 Int?
+  dueSoonHours             Int?
+  escalationLevel          AlertEscalationLevel @default(NONE)
+  boardOrder              Int                  @default(0)
+
+  rule           AlertRule?          @relation(fields: [ruleId], references: [id], onDelete: SetNull)
+  actorUser      User?               @relation("AlertEventActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+  assigneeUser   User?               @relation("AlertAssignee", fields: [assigneeUserId], references: [id], onDelete: SetNull)
+  acknowledgedBy User?               @relation("AlertEventAcknowledgedBy", fields: [acknowledgedById], references: [id], onDelete: SetNull)
+  ignoredBy      User?               @relation("AlertEventIgnoredBy", fields: [ignoredById], references: [id], onDelete: SetNull)
+  resolvedBy     User?               @relation("AlertEventResolvedBy", fields: [resolvedById], references: [id], onDelete: SetNull)
+  notifications  AdminNotification[]
+  timelineMemos  CaseTimelineMemo[]
+  slaWarnings    AlertSlaWarning[]
+  escalations    AlertEscalation[]
+
+  @@index([status, detectedAt])
+  @@index([severity, detectedAt])
+  @@index([entityType, entityId])
+  @@index([actorUserId, detectedAt])
+  @@index([assigneeUserId, status])
+  @@index([dueAt, status])
+  @@index([slaState, status])
+  @@index([status, escalationLevel])
+  @@index([status, boardOrder])
+}
+
+model AlertEscalation {
+  id                 String                  @id @default(cuid())
+  alertEventId       String
+  level              AlertEscalationLevel
+  status             AlertEscalationStatus   @default(PENDING)
+  message            String
+  createdAt          DateTime                @default(now())
+  sentAt             DateTime?
+  clearedAt          DateTime?
+  releaseReason      String?
+  releasedByUserId   String?
+
+  alertEvent   AlertEvent @relation(fields: [alertEventId], references: [id], onDelete: Cascade)
+  releasedBy   User?      @relation("EscalationReleasedBy", fields: [releasedByUserId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@unique([alertEventId, level, status])
+}
+
+model AlertSlaWarning {
+  id           String                  @id @default(cuid())
+  alertEventId String
+  status       AlertSlaWarningStatus   @default(OPEN)
+  warningType  String
+  message      String
+  createdAt    DateTime                @default(now())
+  clearedAt    DateTime?
+
+  alertEvent AlertEvent @relation(fields: [alertEventId], references: [id], onDelete: Cascade)
+
+  @@index([status, createdAt])
+  @@index([warningType, createdAt])
+  @@unique([alertEventId, warningType, status])
+}
+
+model AdminNotification {
+  id           String           @id @default(cuid())
+  type         NotificationType @default(ALERT_EVENT)
+  title        String
+  body         String
+  readAt       DateTime?
+  targetHref   String?
+  metaJson     Json?
+  userId       String
+  alertEventId String?
+  createdAt    DateTime         @default(now())
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  alertEvent AlertEvent? @relation(fields: [alertEventId], references: [id], onDelete: SetNull)
+
+  @@index([userId, readAt, createdAt])
+  @@index([alertEventId])
+}
+
+enum CronJobStatus {
+  RUNNING
+  SUCCESS
+  FAILED
+}
+
+model AlertBoardFilterPreset {
+  id              String    @id @default(cuid())
+  name            String
+  userId          String
+  isDefault       Boolean   @default(false)
+  scope           String    @default("PRIVATE")
+
+  status          String?
+  severity        String?
+  ruleCode        String?
+  escalationLevel Int?
+  assigneeUserId  String?
+  dueFrom         DateTime?
+  dueTo           DateTime?
+  q               String?
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@unique([userId, name])
+}
+
+model CronJobExecutionLog {
+  id            String         @id @default(cuid())
+  jobCode       String
+  jobName       String
+  status        CronJobStatus
+  startedAt     DateTime
+  finishedAt    DateTime?
+  durationMs    Int?
+  scannedCount  Int?
+  affectedCount Int?
+  message       String?
+  errorStack    String?
+  metaJson      Json?
+  triggeredBy   String?
+  retryOfRunId  String?
+
+  createdAt     DateTime       @default(now())
+
+  @@index([jobCode, createdAt])
+  @@index([status, createdAt])
+}
+
+model Interview {
+  id                 String          @id @default(cuid())
+  caseId             String
+  questionSetId    String?
+  questionSetCode    String?
+  questionSetVersion String?
+  status             InterviewStatus @default(NOT_STARTED)
+  startedAt          DateTime?
+  completedAt        DateTime?
+  answersJson        Json?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId, status])
+}
+
+model LegalDocument {
+  id                 String              @id @default(cuid())
+  caseId             String
+  type               LegalDocumentType
+  status             LegalDocumentStatus @default(DRAFT)
+  title              String
+  questionSetVersion String?
+  templateCode       String?
+  templateVersion    String?
+  latestApprovedAt   DateTime?
+  latestApprovedById String?
+  lockedAt           DateTime?
+  lockedById         String?
+  body               String?             @db.Text
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+
+  case       Case                     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  paragraphs LegalDocumentParagraph[]
+  versions   LegalDocumentVersion[]
+
+  @@index([caseId, type])
+  @@index([status])
+}
+
+model LegalDocumentParagraph {
+  id                   String               @id @default(cuid())
+  documentId           String
+  sectionKey           String
+  paragraphKey         String
+  title                String
+  displayOrder         Int
+  content              String               @db.Text
+  status               LegalParagraphStatus @default(DRAFT)
+  generationMode       String
+  aiPromptKey          String?
+  lockOnApproval       Boolean              @default(true)
+  supportsRegeneration Boolean              @default(true)
+  supportsRestore      Boolean              @default(true)
+  lockedAt             DateTime?
+  lockedById           String?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+
+  document  LegalDocument                   @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  histories LegalDocumentParagraphHistory[]
+
+  @@unique([documentId, sectionKey, paragraphKey])
+  @@index([documentId, displayOrder])
+  @@index([status])
+}
+
+model LegalDocumentParagraphHistory {
+  id            String   @id @default(cuid())
+  paragraphId   String
+  versionNo     Int
+  action        String
+  beforeContent String?  @db.Text
+  afterContent  String?  @db.Text
+  actorUserId   String?
+  reason        String?
+  createdAt     DateTime @default(now())
+
+  paragraph LegalDocumentParagraph @relation(fields: [paragraphId], references: [id], onDelete: Cascade)
+
+  @@index([paragraphId, versionNo])
+}
+
+model LegalDocumentVersion {
+  id           String   @id @default(cuid())
+  documentId String
+  versionNo  Int
+  snapshotJson Json
+  approved   Boolean  @default(false)
+  approvedAt DateTime?
+  approvedById String?
+  createdAt  DateTime @default(now())
+
+  document LegalDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, versionNo])
+  @@index([documentId, approved])
+}
+
+model CaseTimelineEvent {
+  id          String   @id @default(cuid())
+  caseId      String
+  type        String
+  title       String
+  description String?
+  metaJson    Json?
+  actorUserId String?
+  createdAt   DateTime @default(now())
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId, createdAt])
+}
+
+/// 사건 인터뷰(AID-QS) 질문셋 — `questions` = 인터뷰 런타임(플랫 JSON). `definitionJson`(섹션·Zod) = 관리/게시
+/// 구조; 인터뷰 필수 검증 EVIDENCE-20260423-330: 런타임은 `questions`만(§ SPEC Step3 싱글소스 A안).
+model QuestionSet {
+  id                     String            @id @default(cuid())
+  name                   String
+  code                   String?
+  description            String?
+  isActive               Boolean           @default(true)
+  questions              Json              @default("[]")
+  version                String            @default("1.0.0")
+  catalogStatus          QuestionSetStatus @default(DRAFT)
+  supportedDocumentTypes Json              @default("[]")
+  visibleToRoles         Json              @default("[]")
+  /// 카탈로그(섹션) Zod 구조. 인터뷰 런타임/완료 필수는 getActiveQuestionSet().questions(EVIDENCE-330).
+  definitionJson         Json?
+  publishedAt            DateTime?
+  archivedAt             DateTime?
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+
+  @@index([isActive, updatedAt])
+  @@index([createdAt])
+  @@index([catalogStatus])
+}
+
+/// 문서 템플릿(섹션/문단 정의) — definitionJson에 DocumentTemplateDefinition 저장
+/// catalogStatus는 질문셋과 동일 enum(`QuestionSetStatus`)을 재사용한다.
+model DocumentTemplate {
+  id             String            @id @default(cuid())
+  code           String
+  version        String
+  type           LegalDocumentType
+  title          String
+  description    String?
+  definitionJson Json
+  catalogStatus  QuestionSetStatus @default(DRAFT)
+  publishedAt    DateTime?
+  archivedAt     DateTime?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  @@unique([code, version])
+  @@index([type])
+  @@index([catalogStatus])
+}

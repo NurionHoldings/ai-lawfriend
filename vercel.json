@@ -1,0 +1,24 @@
+{
+  "crons": [
+    {
+      "path": "/api/internal/cron/alerts/sla-scan",
+      "schedule": "*/10 * * * *"
+    },
+    {
+      "path": "/api/internal/cron/alerts/escalation-scan",
+      "schedule": "*/15 * * * *"
+    },
+    {
+      "path": "/api/internal/cron/alerts/bulk-jobs/scheduled-retry-scan",
+      "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/internal/cron/alerts/ops-queue-sla-scan",
+      "schedule": "*/15 * * * *"
+    },
+    {
+      "path": "/api/internal/cron/alerts/ops-queue-wip-alert",
+      "schedule": "*/30 * * * *"
+    }
+  ]
+}

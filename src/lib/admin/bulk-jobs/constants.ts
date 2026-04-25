@@ -1,0 +1,4 @@
+export const BULK_JOB_LOCK_TTL_MS = 1000 * 60 * 2;
+export const BULK_JOB_HEARTBEAT_INTERVAL_MS = 1000 * 20;
+export const WORKER_HEARTBEAT_INTERVAL_MS = 1000 * 15;
+export const WORKER_STALE_MS = 1000 * 60 * 2;

@@ -1,0 +1,210 @@
+import type { DocumentTemplateDefinition } from "./document-template";
+
+export const STATEMENT_TEMPLATE_V1: DocumentTemplateDefinition = {
+  version: "1.0.0",
+  code: "STATEMENT_TEMPLATE_V1",
+  type: "STATEMENT",
+  title: "진술서 기본 템플릿",
+  sections: [
+    {
+      key: "header",
+      title: "문서 헤더",
+      order: 0,
+      type: "HEADER",
+      paragraphs: [
+        {
+          key: "document_title",
+          title: "문서 제목",
+          order: 0,
+          required: true,
+          generationMode: "MANUAL_ONLY",
+          supportsRegeneration: false,
+          supportsRestore: false,
+          lockOnApproval: true,
+          fallbackText: "진술서",
+        },
+      ],
+    },
+    {
+      key: "incident_overview",
+      title: "사건 개요",
+      order: 1,
+      type: "BODY",
+      paragraphs: [
+        {
+          key: "incident_date_summary",
+          title: "사건 발생일 요약",
+          order: 0,
+          required: true,
+          generationMode: "AI_GENERATE",
+          aiPromptKey: "statement.incident_date_summary",
+          supportsRegeneration: true,
+          supportsRestore: true,
+          lockOnApproval: true,
+        },
+        {
+          key: "incident_place_summary",
+          title: "사건 장소 요약",
+          order: 1,
+          required: true,
+          generationMode: "AI_GENERATE",
+          aiPromptKey: "statement.incident_place_summary",
+          supportsRegeneration: true,
+          supportsRestore: true,
+          lockOnApproval: true,
+        },
+      ],
+    },
+    {
+      key: "fact_description",
+      title: "사실관계",
+      order: 2,
+      type: "BODY",
+      paragraphs: [
+        {
+          key: "timeline_summary",
+          title: "경위 요약",
+          order: 0,
+          required: true,
+          generationMode: "AI_REGENERATE",
+          aiPromptKey: "statement.timeline_summary",
+          supportsRegeneration: true,
+          supportsRestore: true,
+          lockOnApproval: true,
+        },
+      ],
+    },
+    {
+      key: "evidence",
+      title: "증거 및 참고사항",
+      order: 3,
+      type: "BODY",
+      paragraphs: [
+        {
+          key: "witness_summary",
+          title: "증인 관련 요약",
+          order: 0,
+          required: false,
+          generationMode: "AI_REGENERATE",
+          aiPromptKey: "statement.witness_summary",
+          supportsRegeneration: true,
+          supportsRestore: true,
+          lockOnApproval: true,
+        },
+      ],
+    },
+    {
+      key: "signature",
+      title: "서명부",
+      order: 4,
+      type: "SIGNATURE",
+      paragraphs: [
+        {
+          key: "signature_block",
+          title: "서명란",
+          order: 0,
+          required: true,
+          generationMode: "MANUAL_ONLY",
+          supportsRegeneration: false,
+          supportsRestore: false,
+          lockOnApproval: true,
+          fallbackText: "위 진술 내용은 사실과 다름이 없습니다.",
+        },
+      ],
+    },
+  ],
+};
+
+export const OPINION_TEMPLATE_V1: DocumentTemplateDefinition = {
+  version: "1.0.0",
+  code: "OPINION_TEMPLATE_V1",
+  type: "OPINION",
+  title: "의견서 기본 템플릿",
+  sections: [
+    {
+      key: "issue_summary",
+      title: "쟁점 요약",
+      order: 0,
+      type: "BODY",
+      paragraphs: [
+        {
+          key: "issue_summary_paragraph",
+          title: "쟁점 요약 문단",
+          order: 0,
+          required: true,
+          generationMode: "AI_GENERATE",
+          aiPromptKey: "opinion.issue_summary",
+          supportsRegeneration: true,
+          supportsRestore: true,
+          lockOnApproval: true,
+        },
+      ],
+    },
+    {
+      key: "legal_analysis",
+      title: "법리 검토",
+      order: 1,
+      type: "BODY",
+      paragraphs: [
+        {
+          key: "legal_analysis_paragraph",
+          title: "법리 분석 문단",
+          order: 0,
+          required: true,
+          generationMode: "AI_REGENERATE",
+          aiPromptKey: "opinion.legal_analysis",
+          supportsRegeneration: true,
+          supportsRestore: true,
+          lockOnApproval: true,
+        },
+      ],
+    },
+  ],
+};
+
+export const CONSULT_NOTE_TEMPLATE_V1: DocumentTemplateDefinition = {
+  version: "1.0.0",
+  code: "CONSULT_NOTE_TEMPLATE_V1",
+  type: "CONSULT_NOTE",
+  title: "상담기록서 기본 템플릿",
+  sections: [
+    {
+      key: "consult_summary",
+      title: "상담 요약",
+      order: 0,
+      type: "BODY",
+      paragraphs: [
+        {
+          key: "consult_summary_paragraph",
+          title: "상담 요약 문단",
+          order: 0,
+          required: true,
+          generationMode: "AI_GENERATE",
+          aiPromptKey: "consult.summary",
+          supportsRegeneration: true,
+          supportsRestore: true,
+          lockOnApproval: true,
+        },
+      ],
+    },
+    {
+      key: "requested_action",
+      title: "요청사항",
+      order: 1,
+      type: "BODY",
+      paragraphs: [
+        {
+          key: "requested_action_paragraph",
+          title: "요청사항 문단",
+          order: 0,
+          required: false,
+          generationMode: "AI_REGENERATE",
+          aiPromptKey: "consult.requested_action",
+          supportsRegeneration: true,
+          supportsRestore: true,
+          lockOnApproval: true,
+        },
+      ],
+    },
+  ],
+};

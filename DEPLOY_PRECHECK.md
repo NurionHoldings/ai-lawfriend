@@ -1,0 +1,256 @@
+# AI법친 배포 전 최종 확인 체크리스트
+
+> **파일명**: `DEPLOY_PRECHECK.md`  
+> **목적**: 운영 패치 반영 후 **배포 직전**에만 빠르게 확인할 항목을 모은 문서  
+> **관련**: 마감 전체 검수는 [PATCH_FINAL_CHECKLIST.md](./PATCH_FINAL_CHECKLIST.md), 장애·롤백은 [OPERATIONS_RECOVERY.md](./OPERATIONS_RECOVERY.md)
+
+---
+
+## 1. 문서 목적
+
+이 문서는 AI법친 프로젝트의 운영 패치 반영 이후, **실제 배포 직전에 반드시 확인해야 하는 항목만** 별도로 모은 배포 전 점검 문서입니다.
+
+이번 문서의 목적은 다음과 같습니다.
+
+- 배포 전에 빌드, 권한, 환경 변수, 운영 API 상태를 빠르게 확인
+- 로컬에서는 통과했지만 배포 환경에서만 발생하는 오류를 줄임
+- 배포 직전 누락되기 쉬운 session, env, health, release-meta 항목을 확인
+- 배포 승인 여부를 빠르게 판단
+
+---
+
+## 2. 적용 범위
+
+이번 배포 전 점검 범위는 아래와 같습니다.
+
+- build 스크립트
+- 배포 환경 변수
+- session / role 판독 흐름
+- `/api/health`
+- `/api/release-meta`
+- `/admin` 권한 접근 흐름
+- OpsQueue mutation API
+- seed / 운영 계정 확인
+
+---
+
+## 3. 배포 전 고정 원칙
+
+아래 항목은 배포 직전 반드시 유지되어야 합니다.
+
+- [ ] Prisma schema / migration 추가 변경 없음
+- [ ] route 경로 체계 추가 변경 없음
+- [ ] `session.ts` 전면 교체 없음
+- [ ] middleware 정책은 최종 확정안 유지
+- [ ] build 전에 임시 디버깅 코드 제거 완료
+- [ ] 운영 패치 범위 외 파일 수정 최소화
+
+---
+
+## 4. 배포 전 필수 코드 상태 확인
+
+### 4.1 권한 정책
+
+- [ ] `ADMIN`, `SUPER_ADMIN` 은 `/admin` 전체 접근 가능
+- [ ] `STAFF` 는 지정 경로만 접근 가능
+- [ ] 느슨한 prefix 허용 코드 제거 완료
+- [ ] `requireRoleApi(...)` 적용 완료
+- [ ] `RoleGate` 호환 props 구조 반영 완료
+
+### 4.2 운영 API
+
+- [ ] bulk-edit route 보호 완료
+- [ ] rebalance-apply route 보호 완료
+- [ ] `requestId` 응답 포함
+- [ ] rate limit 적용 완료
+- [ ] logger 적용 완료
+
+### 4.3 시스템 API / 페이지
+
+- [ ] `/api/health` 공개 최소 응답
+- [ ] `/api/release-meta` ADMIN 보호
+- [ ] system page self-fetch 제거
+- [ ] root `layout` env 강제 실행 제거
+
+---
+
+## 5. 로컬 검수 결과 확인
+
+### 5.1 Lint
+
+```bash
+npm run lint
+```
+
+- [ ] 통과
+
+### 5.2 Test
+
+```bash
+npm run test
+```
+
+- [ ] 통과
+
+### 5.3 Build
+
+```bash
+npm run build
+```
+
+- [ ] 통과
+
+### 5.4 사전 검수 스크립트
+
+```bash
+npm run predeploy:lint-test
+```
+
+- [ ] 통과
+
+---
+
+## 6. 배포 환경 변수 점검
+
+- [ ] `DATABASE_URL` 설정 확인
+- [ ] 운영 환경에서 필요한 auth 관련 env 확인
+- [ ] release meta 에 표시될 build 환경 값 확인 가능
+- [ ] env 누락 시 system page 또는 server route에서 즉시 확인 가능
+
+---
+
+## 7. 운영 계정 점검
+
+- [ ] STAFF 계정 존재 확인
+- [ ] ADMIN 계정 존재 확인
+- [ ] 필요 시 seed 재실행 가능
+- [ ] seed 스크립트가 현재 프로젝트 구조와 충돌 없음
+
+---
+
+## 8. 권한 스모크 테스트 결과 반영
+
+### 8.1 STAFF 계정
+
+- [ ] `/admin/alerts/ops-queue` 접근 가능
+- [ ] `/admin/alerts/ops-dashboard` 접근 가능
+- [ ] `/admin/audit-logs` 접근 가능
+- [ ] `/admin/system` 접근 차단
+- [ ] 제한된 mutation 액션 차단
+
+### 8.2 ADMIN 계정
+
+- [ ] `/admin/system` 접근 가능
+- [ ] `/admin/*` 전체 접근 가능
+- [ ] `/api/release-meta` 응답 정상
+- [ ] bulk-edit 정상
+- [ ] rebalance-apply 정상
+
+---
+
+## 9. API 배포 전 점검
+
+### 9.1 health
+
+- [ ] 비로그인 호출 가능
+- [ ] 정상 시 200
+- [ ] DB 장애 시 503
+- [ ] 응답 필드 최소 구조 유지 (`ok`, `status`, `ts`)
+
+### 9.2 release-meta
+
+- [ ] STAFF / 비로그인 차단
+- [ ] ADMIN 응답 성공
+
+### 9.3 bulk-edit / rebalance-apply
+
+- [ ] 정상 입력 성공
+- [ ] 잘못된 입력 시 검증 오류 응답 확인 가능
+- [ ] 응답에 `requestId` 포함
+- [ ] 과도한 요청 시 rate limit 응답 가능
+
+---
+
+## 10. 배포 직전 grep 점검
+
+```bash
+rg 'pathname\.startsWith\("/admin/alerts/ops"\)' src
+rg "/api/admin/ops-queue/" src
+rg "fetch.*release-meta|/api/release-meta" src
+rg "parseProductionEnv\(\)" src app
+```
+
+**점검 결과**
+
+- [ ] 느슨한 STAFF 허용 코드 없음
+- [ ] 중복 ops route 없음
+- [ ] self-fetch 없음
+- [ ] layout 강제 env 실행 흔적 없음
+
+---
+
+## 11. 배포 승인 기준
+
+### 배포 가능
+
+- [ ] lint 통과
+- [ ] test 통과
+- [ ] build 통과
+- [ ] 권한 스모크 정상
+- [ ] health 정상
+- [ ] release-meta 정상
+- [ ] 운영 계정 정상
+- [ ] env 점검 완료
+
+### 배포 보류
+
+- [ ] middleware role 판독 불안정
+- [ ] Prisma model / field 미보정
+- [ ] session 함수명 충돌
+- [ ] build는 성공했지만 권한 테스트 실패
+- [ ] 운영 API 응답 구조 이상
+
+---
+
+## 12. 배포 후 즉시 확인 예정 항목
+
+- [ ] `/api/health`
+- [ ] `/api/release-meta`
+- [ ] `/admin/system`
+- [ ] `/admin/alerts/ops-queue`
+- [ ] STAFF 차단 동작
+- [ ] bulk-edit
+- [ ] rebalance-apply
+- [ ] 서버 로그
+
+---
+
+## 13. 최종 판정
+
+### 배포 진행
+
+- [ ] 현재 버전 배포 승인 가능
+
+### 배포 보류
+
+- [ ] 사전 체크 미통과
+- [ ] 권한/운영 API 추가 보정 필요
+- [ ] [OPERATIONS_RECOVERY.md](./OPERATIONS_RECOVERY.md) 기준으로 재점검 필요
+
+---
+
+## 14. 운영 메모
+
+배포 직전에는 새로운 수정보다 **현재 반영분의 안정성 확인**이 우선입니다.
+
+가장 중요한 확인 대상은 **middleware**, **guards**, **bulk-edit**, **rebalance-apply**, **health**, **release-meta** 입니다.
+
+배포 승인 전에는 반드시 **STAFF / ADMIN** 기준 수동 권한 테스트를 다시 확인합니다.
+
+---
+
+## 관련 문서
+
+- [PATCH_FINAL_CHECKLIST.md](./PATCH_FINAL_CHECKLIST.md)
+- [OPERATIONS_RECOVERY.md](./OPERATIONS_RECOVERY.md)
+- [docs/post-patch-verification.md](./docs/post-patch-verification.md)
