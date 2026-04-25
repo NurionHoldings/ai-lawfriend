@@ -37,4 +37,13 @@ yarn-error.log*
 # local navigator / tool state
 /.aibeopchin/
 
+# python / IDE
+__pycache__/
+*.pyc
+*.tsbuildinfo
+
+# e2e / playwright local output
+/test-results/
+/playwright-report/
+
 # prisma
