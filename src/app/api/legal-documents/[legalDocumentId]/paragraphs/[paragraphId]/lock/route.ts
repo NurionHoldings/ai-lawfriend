@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/get-session-user";
-import { assertCaseAccess, permissionContextFromSession } from "@/lib/authz";
+import { assertCaseAccess } from "@/lib/authz";
+import { buildPermissionContextForCase } from "@/features/cases/case.permissions";
 import { ok, toErrorResponse } from "@/lib/domain-api-response";
 import { ForbiddenError, NotFoundError, UnauthorizedError } from "@/lib/errors";
 
@@ -38,21 +39,8 @@ export async function POST(
     }
 
     const c = paragraph.document.case;
-    const assignments = await prisma.caseAssignment.findMany({
-      where: { caseId: c.id, isActive: true },
-      select: { assigneeUserId: true },
-    });
-    const isCaseParticipant = assignments.some((a) => a.assigneeUserId === sessionUser.id);
-
-    assertCaseAccess(
-      "paragraph.lock",
-      permissionContextFromSession(sessionUser, {
-        caseOwnerUserId: c.ownerUserId,
-        assignedLawyerUserId: c.assignedLawyerUserId,
-        assignedStaffUserId: c.assignedStaffUserId,
-        isCaseParticipant,
-      }),
-    );
+    const permCtx = await buildPermissionContextForCase(sessionUser, c);
+    assertCaseAccess("paragraph.lock", permCtx);
 
     if (!["ADMIN", "LAWYER", "SUPER_ADMIN"].includes(sessionUser.role)) {
       throw new ForbiddenError("문단 잠금/해제는 관리자 또는 변호사만 가능합니다.");

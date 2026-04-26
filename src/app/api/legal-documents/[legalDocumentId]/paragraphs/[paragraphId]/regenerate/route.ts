@@ -2,7 +2,8 @@ import { NextRequest } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/get-session-user";
-import { assertCaseAccess, permissionContextFromSession } from "@/lib/authz";
+import { assertCaseAccess } from "@/lib/authz";
+import { buildPermissionContextForCase } from "@/features/cases/case.permissions";
 import { canRegenerateParagraph } from "@/lib/definitions";
 import { regenerateParagraphContent } from "@/lib/document-ai";
 import { ok, toErrorResponse } from "@/lib/domain-api-response";
@@ -54,18 +55,7 @@ export async function POST(
     }
 
     const c = paragraph.document.case;
-    const assignments = await prisma.caseAssignment.findMany({
-      where: { caseId: c.id, isActive: true },
-      select: { assigneeUserId: true },
-    });
-    const isCaseParticipant = assignments.some((a) => a.assigneeUserId === sessionUser.id);
-
-    const permCtx = permissionContextFromSession(sessionUser, {
-      caseOwnerUserId: c.ownerUserId,
-      assignedLawyerUserId: c.assignedLawyerUserId,
-      assignedStaffUserId: c.assignedStaffUserId,
-      isCaseParticipant,
-    });
+    const permCtx = await buildPermissionContextForCase(sessionUser, c);
 
     assertCaseAccess("paragraph.regenerate", permCtx);
 

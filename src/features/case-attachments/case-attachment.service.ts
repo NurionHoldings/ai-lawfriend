@@ -1,3 +1,4 @@
+import type { CaseAttachmentCategory } from "@prisma/client";
 import { writeAuditLog } from "@/lib/audit-log";
 import type { SessionUser } from "@/lib/auth/require-session-user";
 import { ForbiddenError, NotFoundError, ValidationError } from "@/lib/errors";
@@ -8,6 +9,7 @@ import {
   findActiveAttachmentsByCaseId,
   findAttachmentById,
   softDeleteAttachment,
+  updateCaseAttachmentCategory,
 } from "@/features/case-attachments/case-attachment.repository";
 import {
   deleteCaseAttachmentFromDisk,
@@ -30,7 +32,8 @@ export async function listCaseAttachmentsService(
 export async function uploadCaseAttachmentService(
   currentUser: SessionUser,
   caseId: string,
-  file: File
+  file: File,
+  category: CaseAttachmentCategory,
 ) {
   const access = await getCaseAccessContext(currentUser, caseId);
 
@@ -66,6 +69,7 @@ export async function uploadCaseAttachmentService(
   const created = await createCaseAttachment({
     caseId,
     uploaderUserId: currentUser.id,
+    category,
     originalName: file.name,
     storedName: stored.storedName,
     mimeType: file.type,
@@ -81,6 +85,7 @@ export async function uploadCaseAttachmentService(
     message: "사건 첨부파일 업로드",
     metadata: {
       caseId,
+      category: created.category,
       fileName: created.originalName,
       sizeBytes: created.sizeBytes,
       currentAttachmentCount: activeCount + 1,
@@ -161,4 +166,49 @@ export async function deleteCaseAttachmentService(
   });
 
   return { success: true };
+}
+
+export async function updateCaseAttachmentCategoryService(
+  currentUser: SessionUser,
+  caseId: string,
+  attachmentId: string,
+  nextCategory: CaseAttachmentCategory,
+) {
+  const access = await getCaseAccessContext(currentUser, caseId);
+
+  if (!access.canWriteCase) {
+    throw new ForbiddenError("첨부파일 분류를 변경할 권한이 없습니다.");
+  }
+
+  const found = await findAttachmentById(attachmentId);
+
+  if (!found || found.caseId !== caseId || found.status === "DELETED") {
+    throw new NotFoundError("첨부파일을 찾을 수 없습니다.");
+  }
+
+  if (found.category === nextCategory) {
+    return {
+      id: found.id,
+      category: found.category,
+      originalName: found.originalName,
+    };
+  }
+
+  const updated = await updateCaseAttachmentCategory(attachmentId, nextCategory);
+
+  await writeAuditLog({
+    actorUserId: currentUser.id,
+    action: "CASE_ATTACHMENT_CATEGORY_UPDATE",
+    entityType: "CASE_ATTACHMENT",
+    entityId: attachmentId,
+    message: "사건 첨부파일 분류 변경",
+    metadata: {
+      caseId,
+      fileName: found.originalName,
+      from: found.category,
+      to: nextCategory,
+    },
+  });
+
+  return updated;
 }

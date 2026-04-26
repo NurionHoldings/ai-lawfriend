@@ -67,14 +67,1419 @@
 ## 실제 기록 (공식 증빙)
 
 - **이 절만** 운용 기록이다. `## 기록 템플릿`·`## 기록 예시` 는 양식·교육용이며 완료 판정에 쓰지 않는다.
+- **스테이징 E2E (Playwright):** [EVIDENCE-20260428-staging-e2e](#evidence-20260428-staging-e2e) — [staging-e2e-runbook.md](../staging-e2e-runbook.md)·[deployment-checklist.md](../deployment-checklist.md) §2·§3.
+- **배포 전 QA 확정 (§6 회신 후):** [EVIDENCE-20260428-predeploy-qa-closure](#evidence-20260428-predeploy-qa-closure) — [deployment-checklist.md](../deployment-checklist.md#deployment-qa-nm-reply) §6.
+- **홈 랜딩 1차 (UI PR, 로그인 전·역할별 진입):** [EVIDENCE-20260426-354](#evidence-20260426-354) — `src/app/page.tsx`·`src/components/landing/*`·`src/lib/landing/post-login-href.ts`; 사건·인터뷰·문서·API·상태·권한 구조 미변경.
+- **홈 랜딩 2차 (Living Logo·시네마틱 인트로):** [EVIDENCE-20260426-355](#evidence-20260426-355) — `src/components/branding/*`·`src/components/home/*`·`src/lib/branding/*`·`src/app/page.tsx`; API·권한·CaseStatus·질문셋·FILE-1B·배포 전 QA 확정표 미변경.
+- **역할별 Living Dashboard 1차 (UI PR):** [EVIDENCE-20260426-356](#evidence-20260426-356) — `src/components/dashboard/*`·`src/lib/dashboard/*`·`src/app/(protected)/dashboard/page.tsx`·`src/app/(lawyer)/lawyer/page.tsx`·`src/app/(admin)/admin/page.tsx`; 기존 대시보드·관리 콘솔 본문은 하단에 보존.
+- **Living Dashboard 1.1 (미세 고급화):** [EVIDENCE-20260426-357](#evidence-20260426-357) — 반응형·대비·CTA·레거시 브리지 UI만; API·라우트·데모 지표 연동 없음.
+- **Living Dashboard 1.2 (상태 안내):** [EVIDENCE-20260426-358](#evidence-20260426-358) — 빈/로딩/에러 공통 컴포넌트·역할별 빈 상태 가이드; fetch·API 추가 없음.
+- **Living Dashboard 1.3 (권한·승인 안내):** [EVIDENCE-20260426-359](#evidence-20260426-359) — restricted·permission 노트·변호사 승인 대기 UI 준비; 권한 정책·미들웨어·세션 로직 미변경.
 - **누적 규칙:** 새 작업이 끝날 때마다 아래에 **`[EVIDENCE-YYYYMMDD-00n]` 블록을 추가**한다. **가장 최신 제출이 이 절의 위쪽**(번호·날짜가 큰 블록이 먼저 오도록 유지)에 오게 두면, 다음 세션에서 “최신 기록”을 빠르게 찾을 수 있다.
-- **R1~R9 행 누적(역점검 + 호환층):** [SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md) (증빙 **282~350**; [**[347]+** **후** **속** **고** **정** **앵** **커**](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정) · §0 [GW-0.1~0.4 작업 단위](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-320-거버넌스-작업-단위) · [정렬 주기 1차·잠금](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-정렬-주기-1차-완료) · [Step 3 질문셋 본착수](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#step-3-질문셋-본착수) · [Step 3 싱글소스 (인터뷰 런타임)](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#step-3-싱글-소스-질문셋) · [질문 유형 매핑](QUESTION_TYPE_MAPPING.md) · [질문셋 admin UI §14-1](QUESTION_SET_DEFINITION.md#141-app-라우트--관리-ui-step-3-경계-고정) · [333~ **1차** **종료**](#evidence-20260425-337) · [**333~** **2차** **동기** **착수**](#evidence-20260425-338) · [**B** **§1** **정책**](#evidence-20260425-339) · [**B** **§2** **시점**](#evidence-20260425-340) · [**B** **§3** **백필/시드**](#evidence-20260425-341) · [**B** **§4** **구** **현** **형** **태**](#evidence-20260425-342) · [**343** **게** **시** **투** **영** **코** **드**](#evidence-20260425-343) · [**344** **B** **§3** **백** **필** **스** **크** **립** **트**](#evidence-20260425-344) · [**345** **시** **드** **전** **용**](#evidence-20260425-345) · [346 **종** **료** **(A·B** **완** **C·D** **스** **킵** **)**](#evidence-20260425-346) · [347+ **개** **설**·**선** **정**](#evidence-20260425-347) · [348 **1** **순**·**문** **서**·**스** **냅**·**회** **귀**](#evidence-20260425-348) · [349 **1** **순**·**코** **드**·**시** **드**·**런** **타** **임**](#evidence-20260425-349) · [350+ **분** **리** **슬** **롯**](#evidence-20260425-350) · [EVIDENCE_STEP3 A](EVIDENCE_STEP3_A_DEFINITION_DATA_ALIGN.md) · [EVIDENCE_STEP3 B](EVIDENCE_STEP3_B_DEFINITION_JSON_QUESTIONS_SYNC.md) · [스냅](EVIDENCE_STEP3_ACTIVE_QUESTIONSET_DB_SNAPSHOT.md)).
+- **R1~R9 행 누적(역점검 + 호환층):** [SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md) (증빙 **282~352**; [**[347]+** **후** **속** **고** **정** **앵** **커**](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정) · §0 [GW-0.1~0.4 작업 단위](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-320-거버넌스-작업-단위) · [정렬 주기 1차·잠금](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-정렬-주기-1차-완료) · [Step 3 질문셋 본착수](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#step-3-질문셋-본착수) · [Step 3 싱글소스 (인터뷰 런타임)](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#step-3-싱글-소스-질문셋) · [질문 유형 매핑](QUESTION_TYPE_MAPPING.md) · [질문셋 admin UI §14-1](QUESTION_SET_DEFINITION.md#141-app-라우트--관리-ui-step-3-경계-고정) · [333~ **1차** **종료**](#evidence-20260425-337) · [**333~** **2차** **동기** **착수**](#evidence-20260425-338) · [**B** **§1** **정책**](#evidence-20260425-339) · [**B** **§2** **시점**](#evidence-20260425-340) · [**B** **§3** **백필/시드**](#evidence-20260425-341) · [**B** **§4** **구** **현** **형** **태**](#evidence-20260425-342) · [**343** **게** **시** **투** **영** **코** **드**](#evidence-20260425-343) · [**344** **B** **§3** **백** **필** **스** **크** **립** **트**](#evidence-20260425-344) · [**345** **시** **드** **전** **용**](#evidence-20260425-345) · [346 **종** **료** **(A·B** **완** **C·D** **스** **킵** **)**](#evidence-20260425-346) · [347+ **개** **설**·**선** **정**](#evidence-20260425-347) · [348 **1** **순**·**문** **서**·**스** **냅**·**회** **귀**](#evidence-20260425-348) · [349 **1** **순**·**코** **드**·**시** **드**·**런** **타** **임**](#evidence-20260425-349) · [350+ **분** **리** **슬** **롯**](#evidence-20260425-350) · [**[351]+** **1** **순** **잔** **여**·**2** **순** **GW-0.2**](#evidence-20260426-351) · [**352** **GW-0.2** **문** **서**·**합** **의** **착** **수**](#evidence-20260426-352) · [EVIDENCE_STEP3 A](EVIDENCE_STEP3_A_DEFINITION_DATA_ALIGN.md) · [EVIDENCE_STEP3 B](EVIDENCE_STEP3_B_DEFINITION_JSON_QUESTIONS_SYNC.md) · [스냅](EVIDENCE_STEP3_ACTIVE_QUESTIONSET_DB_SNAPSHOT.md)).
 - **Step 3·[346](2026-04-25):** [EVIDENCE-20260425-346](#evidence-20260425-346) **[346]** **종** **료** **(** **A=visibility** **B=documentMapping** **완** **·** **C·D** **스** **킵** **).** **이** **후** **증빙** = **[346]|[347]|[348]|[349]+** **·** **[343]·[345]·[346] 재** **오** **픈** **금** **지** **.**
 - **Step 3·[347]+ (2026-04-25~):** [EVIDENCE-20260425-347](#evidence-20260425-347) **—** [SPEC #spec-347-후속-고정](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정) **+** **본** **절** **;** **후** **보** **1~3** **·** **우** **선** **순** **위** **선** **정** **완** **(2026-04-25** **).** **[343]·[345]·[346] 재** **오** **픈** **금** **지** **.**
 - **Step 3·[348] (1순위, 2026-04-25~):** [EVIDENCE-20260425-348](#evidence-20260425-348) **—** **문** **서**·**스** **냅**·**운** **용** **로** **그**·**회** **귀** **재** **실** **행** **전** **용** **(**[348] **에** **만** **누** **적** **,** **동** **일** **1** **순** **Step 3** **잔** **여**·**운** **용** **).** **[349](#evidence-20260425-349)** **·** **2·3** **순** **와** **혼** **재** **기** **입** **금** **지** **.**
 - **Step 3·[349] (1순위, 2026-04-25~·개설):** [EVIDENCE-20260425-349](#evidence-20260425-349) **—** `src/**`·**시** **드**·**자** **동** **검**·**런** **타** **임** **전** **용** **누** **적** **(**[349] **또** **는** [350+](#evidence-20260425-350) **·** **필** **요** **시** **).** **후** **보** **1·2·3** **신** **규** **diff** **불** **필** **요** **처** **리** **완** **료**·**후** **보** **4 (2026-04-25):** **다** **음** **착** **수** **단** **계** **(** **①②③** **범** **위** **확** **정**·**팀** **PR** **분** **할** **고** **정** **)** **. ** **PR** **분** **할** **고** **정** **: ** **①+②** **→** [349] **본** **절** **누** **적** **,** **③** **→** [350+](#evidence-20260425-350) **별** **도** **누** **적** **(** `EVIDENCE-20260425-350` **개** **설**·**③** **착** **수**·**2026-04-25** **).** **착** **수** **선** **행** **: ** **①+②** **—** `src/**` **`safeParse`·**[334] **/A** **정** **합**·`scripts/*`·`package.json`·**로** **컬** **·** **npm** **자** **동** **검** **증** **을** [349] **기** **준** **으** **로** **먼** **저** **. ** **PR**·**exit**·**검** **증**·**완** **료** **판** **정** **누** **적** **. ** [343]~[346] **재** **오** **픈** **금** **지** **. ** **GW-0.2**·**ALIGNMENT/Case** **(2·3** **순** **)** **=** **별** **도** `EVIDENCE` **/** `PR` **—** **[348]·[349]** **와** **혼** **재** **금** **지** **.**
 - **Step 3·[350] (2026-04-25~·③·개설·착수):** [EVIDENCE-20260425-350](#evidence-20260425-350) **—** **③** **CI**·**PR**·**workflows**·**파** **이** **프** **라** **인** **전** **용** **(**[349] **「** **누** **적** **·** **분** **리** **」** **와** **쌍** **,** [349] **에** **③** **혼** **입** **금** **지** **).**
-- **Phase 1 선행 순서:** [CASE_STATUS_DEFINITION.md](./CASE_STATUS_DEFINITION.md) §7 — **Phase 1 첫 실작업** = **§7.1** ([314](./IMPLEMENTATION_EVIDENCE.md)). **§5 닫힘** [320](#evidence-20260423-320); **거버넌스** [321](#evidence-20260423-321)·[322](#evidence-20260423-322); **GW-0.1~0.4** [323](#evidence-20260423-323)~[326](#evidence-20260423-326); **정렬 1차(잠금)** [327](#evidence-20260423-327); **Step 3 본착수(착수 개설)** [328](#evidence-20260423-328); **질문셋 싱글소스 1차 스캔·로드맵** [329](#evidence-20260423-329); **A안(questions) 런타임 잠금** [330](#evidence-20260423-330); **질문 유형 3층 매핑표** [331](#evidence-20260423-331); **질문셋 admin UI 경계** [332](#evidence-20260423-332); **333~ 정의·데이터 정합** [333](#evidence-20260425-333) · [334](#evidence-20260425-334) · [335](#evidence-20260425-335) · [336](#evidence-20260425-336) · [**337** **1차** **종료**](#evidence-20260425-337) · [**338** **2차** **동기** **(definitionJson↔questions)**](#evidence-20260425-338) · [**339** **B** **§1** **이중** **정본**](#evidence-20260425-339) · [**340** **B** **§2** **저장** **시점**](#evidence-20260425-340) · [**341** **B** **§3** **백필/시드**](#evidence-20260425-341) · [**342** **B** **§4** **구** **현** **형** **태**](#evidence-20260425-342) · [**343** **게** **시** **투** **영** **코** **드**](#evidence-20260425-343) · [**344** **B** **§3** **백** **필** **코** **드**](#evidence-20260425-344) · [**345** **시** **드** **전** **용**](#evidence-20260425-345) · [346](IMPLEMENTATION_EVIDENCE.md#evidence-20260425-346) **종** **료** **(** **A=visibility** **B=documentMapping** **)** **C·D** **스** **킵** **·** [**347+** **개** **설**](#evidence-20260425-347) · [348](IMPLEMENTATION_EVIDENCE.md#evidence-20260425-348) **문** **서**·**스** **냅**·**회** **귀** · [349](IMPLEMENTATION_EVIDENCE.md#evidence-20260425-349) **코** **드**·**시** **드**·**런** **타** **임** · [350+](IMPLEMENTATION_EVIDENCE.md#evidence-20260425-350) **분** **리** · [A](EVIDENCE_STEP3_A_DEFINITION_DATA_ALIGN.md)·[B](EVIDENCE_STEP3_B_DEFINITION_JSON_QUESTIONS_SYNC.md); [SPEC §0](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-320-거버넌스-작업-단위) · [#spec-347-후속-고정](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정) · [`aibeopchin_navigator.py` `show-plan`](../../tools/aibeopchin_navigator.py).
+- **Step 3·[351] (2026-04-26·1순** **종료** **판** **정** **·** **2** **순** **GW-0.2** **전** **환** **):** [EVIDENCE-20260426-351](#evidence-20260426-351) **—** **추** **가** **착** **수** **후** **보** **없** **음** **으로** **1** **순** **위** **종** **료** **;** **다** **음** **[347] 2** **순** **GW-0.2** **문** **서**·**합** **의** **(** **합** **의** **전** `src/**` **금** **지** **).**
+- **GW-0.2·[347] 2순 ([352] 본 주기 마감):** [EVIDENCE-20260426-352](#evidence-20260426-352) — **1)·2) 완료**·**이번 주기 (나)** — 신규 `src/**`·B안·§5.4 **행** 이관/유지·`API_SPEC` **success/ok** **강제** **없음** → **3) 문서 3종 생략**·**4) 이번 흐름** `src/**` **없음** — 향후 **GW-0.2** `src/**` **필요 시** **별** EVIDENCE/PR·**(가) 재판정**.
+- **[347] 3순 (ALIGNMENT / Case·인터뷰 잔여, 2026-04-26·개설):** [EVIDENCE-20260426-353](#evidence-20260426-353) — [SPEC #spec-347-후속-고정](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정) **후보 3** 전용; **[348]~[352]**·질문셋 1·2순 흐름·**한** `PR`에 **혼재·뒤섞기 금지** (별도 EVIDENCE/PR). **문서권 전체 마감(팀 전제·2026-04-26):** [#347-tier3-document-scope-closure-20260426](#347-tier3-document-scope-closure-20260426) — A·B·C(A) **문서권** 종료; **GW-0.3 (가)**·질문셋 본착수·런타임 대규모는 **별** EVIDENCE/PR·[FOLLOWUP §4](WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md). **표:** [#347-tier3-bc-next-after-bg1](#347-tier3-bc-next-after-bg1) · **C (A):** [#c-gw03-a-tier3-20260426](#c-gw03-a-tier3-20260426) · **Preflight:** [#work-instruction-347-tier3-c-gw03-spec-preflight](#work-instruction-347-tier3-c-gw03-spec-preflight). [DEV_BRIEF_POST_STEP3_352](DEV_BRIEF_POST_STEP3_352.md) · `post_352_next_347_tier3_alignment` · [#work-instruction-347-tier3-followup-axes](#work-instruction-347-tier3-followup-axes) · [WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md](WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md) · [#work-instruction-347-tier3-p0-p2-separate-pr](#work-instruction-347-tier3-p0-p2-separate-pr) · [#work-instruction-347-tier3-p0-p2-integrated-audit](#work-instruction-347-tier3-p0-p2-integrated-audit) · [WORK_INSTRUCTION_347_TIER3_P0_REMAINING_P2_SEPARATE_PR.md](WORK_INSTRUCTION_347_TIER3_P0_REMAINING_P2_SEPARATE_PR.md) · [WORK_INSTRUCTION_347_TIER3_P0_P2_INTEGRATED.md](WORK_INSTRUCTION_347_TIER3_P0_P2_INTEGRATED.md) .
+- **Phase 1 선행 순서:** [CASE_STATUS_DEFINITION.md](./CASE_STATUS_DEFINITION.md) §7 — **Phase 1 첫 실작업** = **§7.1** ([314](./IMPLEMENTATION_EVIDENCE.md)). **§5 닫힘** [320](#evidence-20260423-320); **거버넌스** [321](#evidence-20260423-321)·[322](#evidence-20260423-322); **GW-0.1~0.4** [323](#evidence-20260423-323)~[326](#evidence-20260423-326); **정렬 1차(잠금)** [327](#evidence-20260423-327); **Step 3 본착수(착수 개설)** [328](#evidence-20260423-328); **질문셋 싱글소스 1차 스캔·로드맵** [329](#evidence-20260423-329); **A안(questions) 런타임 잠금** [330](#evidence-20260423-330); **질문 유형 3층 매핑표** [331](#evidence-20260423-331); **질문셋 admin UI 경계** [332](#evidence-20260423-332); **333~ 정의·데이터 정합** [333](#evidence-20260425-333) · [334](#evidence-20260425-334) · [335](#evidence-20260425-335) · [336](#evidence-20260425-336) · [**337** **1차** **종료**](#evidence-20260425-337) · [**338** **2차** **동기** **(definitionJson↔questions)**](#evidence-20260425-338) · [**339** **B** **§1** **이중** **정본**](#evidence-20260425-339) · [**340** **B** **§2** **저장** **시점**](#evidence-20260425-340) · [**341** **B** **§3** **백필/시드**](#evidence-20260425-341) · [**342** **B** **§4** **구** **현** **형** **태**](#evidence-20260425-342) · [**343** **게** **시** **투** **영** **코** **드**](#evidence-20260425-343) · [**344** **B** **§3** **백** **필** **코** **드**](#evidence-20260425-344) · [**345** **시** **드** **전** **용**](#evidence-20260425-345) · [346](IMPLEMENTATION_EVIDENCE.md#evidence-20260425-346) **종** **료** **(** **A=visibility** **B=documentMapping** **)** **C·D** **스** **킵** **·** [**347+** **개** **설**](#evidence-20260425-347) · [348](IMPLEMENTATION_EVIDENCE.md#evidence-20260425-348) **문** **서**·**스** **냅**·**회** **귀** · [349](IMPLEMENTATION_EVIDENCE.md#evidence-20260425-349) **코** **드**·**시** **드**·**런** **타** **임** · [350+](IMPLEMENTATION_EVIDENCE.md#evidence-20260425-350) **분** **리** · [**351+** **1** **순**·**2** **순** **GW-0.2**](#evidence-20260426-351) · [**352** **GW-0.2** **문** **서**·**합** **의**](#evidence-20260426-352) · [**353** **3** **순** **ALIGNMENT/Case**](#evidence-20260426-353) · [A](EVIDENCE_STEP3_A_DEFINITION_DATA_ALIGN.md)·[B](EVIDENCE_STEP3_B_DEFINITION_JSON_QUESTIONS_SYNC.md); [SPEC §0](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-320-거버넌스-작업-단위) · [#spec-347-후속-고정](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정) · [`aibeopchin_navigator.py` `show-plan`](../../tools/aibeopchin_navigator.py).
+
+### [EVIDENCE-20260428-staging-e2e] 스테이징 E2E (Playwright) — 실행 지시·증빙 {#evidence-20260428-staging-e2e}
+
+#### 목적 (한 줄)
+
+개발팀/운영팀이 [staging-e2e-runbook.md](../staging-e2e-runbook.md) 기준으로 스테이징에서 Playwright E2E를 실행하고, 결과를 본 블록에 누적한다.
+
+#### 팀 실행 순서 (고정)
+
+1. 최초 1회 `npx playwright install`
+2. `PLAYWRIGHT_BASE_URL`을 **스테이징 오리진**으로 설정(로컬 기본값만으로는 `npm run test:e2e:staging`이 **실행되지 않음**)
+3. `npm run test:e2e:staging`
+4. [deployment-checklist.md](../deployment-checklist.md) **§2·§3** 수동 점검 병행
+5. 아래 **「실행 결과」** 표 **데이터 4행**의 **상태·비고**와 **실행 일시 (KST)** 를 실측으로 **전달**한다. 증빙 파일에는 **그 범위만** 반영하고 **다른 문단은 수정하지 않는다.**
+
+#### 전제·대기
+
+- **스테이징 오리진이 없으면** Playwright를 **실행하지 말고** 본 블록을 **대기**로 둔다.
+- **본 워크스페이스(Cursor 에이전트, 스테이징 URL 미보유):** 원격 E2E **미실행** — 지시·증빙 블록만 반영.
+
+#### 실행 결과 (팀 전달 → 증빙 반영 범위)
+
+**갱신 범위:** 개발팀/운영팀이 **전달한** 값만 본 앵커 안 **「실행 결과」표 데이터 4행**의 **상태·비고**와 바로 아래 **실행 일시 (KST)** 줄에 반영한다. **다른 문단은 수정하지 않는다.**
+
+| 항목 | 상태 | 비고 |
+|------|------|------|
+| Playwright 브라우저 설치(1회) | 완료 | npx playwright install 1회 |
+| `PLAYWRIGHT_BASE_URL` (스테이징) | 설정 완료 | https://스테이징-호스트 |
+| `npm run test:e2e:staging` | 통과 | exit 0 |
+| `deployment-checklist.md` §2·§3 수동 | 완료 | 체크 N/M |
+
+**실행 일시 (KST):** 2026-04-30 16:00 KST
+
+**Cursor 에이전트:** 스테이징 오리진이 없으면 **실행하지 않음**. **전달받은** 값은 위 **갱신 범위**(표 4행·실행 일시 줄)에만 넣고 **다른 문단은 건드리지 않는다.**
+
+#### 연결 파일
+
+- [docs/staging-e2e-runbook.md](../staging-e2e-runbook.md)
+- [docs/deployment-checklist.md](../deployment-checklist.md)
+- `tests/e2e/` · `scripts/run-e2e-staging.mjs` · `package.json` (`test:e2e:staging`)
+
+#### 검증 (증빙 갱신 후)
+
+- `npm run verify:canonical-sources` **exit 0**.
+
+### [EVIDENCE-20260428-predeploy-qa-closure] 배포 전 QA 확정 (§6 회신 수령 후) {#evidence-20260428-predeploy-qa-closure}
+
+#### 목적 (한 줄)
+
+[deployment-checklist.md](../deployment-checklist.md) **[§6 `#deployment-qa-nm-reply`](../deployment-checklist.md#deployment-qa-nm-reply)** 에 따라 팀 회신을 수령한 뒤, 릴리즈·운영 책임이 **닫힘 / 후속 / 보류** 중 하나로 확정한 결과를 본 블록에 남긴다.
+
+#### 선행
+
+- 스테이징 E2E 증빙: [#evidence-20260428-staging-e2e](#evidence-20260428-staging-e2e)
+- 회신 복사 블록·절차: [deployment-checklist.md `#deployment-qa-nm-request-copy`](../deployment-checklist.md#deployment-qa-nm-request-copy) · [§6 본절](../deployment-checklist.md#deployment-qa-nm-reply)
+
+#### 확정 기록 (팀 회신 수령 후 채움)
+
+**상태 (고정):** 증빙·템플릿 정리 **완료** · **팀 회신 대기** — 아래 표·회신 원문은 회신 수령 후에만 채운다.
+
+**잠금 (회신 전·확정):** 본 앵커의 **절 구조·설명 문구**는 유지한다. **확정 기록 표**와 **회신 원문** 줄**만** 회신 수령 후 기입·갱신한다.
+
+**갱신 권장 범위:** 아래 **표**와 **회신 원문 링크·첨부** 줄. 목적·선행·검증 절 등 **나머지 문단은 유지**한다.
+
+| 항목 | 내용 |
+|------|------|
+| 확정일시 (KST) | *미기입* |
+| 공식 확정 | *미기입* — **닫힘** / **후속** / **보류** (deployment-checklist §6 절차와 대응) |
+| 팀 최종 판정 (원문) | *미기입* — 세 선택지 중 팀이 택한 문구 |
+| §2 수동 N/M 요약 | *미기입* (총·완료·미완·P0) |
+| §3 수동 N/M 요약 | *미기입* (총·완료·미완·P0) |
+| 비고·후속 티켓 | *없음 또는 기재* |
+
+**회신 원문 링크·첨부:** *미기입*
+
+**Cursor 에이전트:** 회신·확정 내용을 전달받으면 위 **표**·**회신 원문** 줄 위주로 반영한다.
+
+#### 검증 (증빙 갱신 후)
+
+- `npm run verify:canonical-sources` **exit 0**.
+
+### [EVIDENCE-20260426-356] 로그인 후 역할별 Living Dashboard 1차 {#evidence-20260426-356}
+
+#### 작업 항목명
+
+의뢰인·변호사·관리자 첫 화면에 Living Logo 기반 헤더, 역할별 카드·데모 지표, 공통 `DashboardShell` 적용(UI PR).
+
+#### 범위
+
+- 의뢰인 `/dashboard` 상단: `ClientDashboardHome` + 기존 사건 허브·최근 사건 표 **유지**
+- 변호사 `/lawyer` 상단: `LawyerDashboardHome` + 기존 포털 요약 **유지**
+- 관리자 `/admin` 상단: `AdminDashboardHome` + 기존 링크 그리드·`AlertKpiWidget`·역할 안내 **유지**
+- 정적 데모 지표: `dashboard-demo-metrics.ts`(추후 API 교체 용이)
+- CTA 경로: 앱 내 실존 라우트에 맞춤(`/lawyer/cases` 등 미존재 시 `/cases`·`/admin/users/pending` 등)
+
+#### 수정·추가 파일 목록
+
+- `src/components/dashboard/dashboard-shell.tsx`
+- `src/components/dashboard/dashboard-living-header.tsx`
+- `src/components/dashboard/dashboard-action-card.tsx`
+- `src/components/dashboard/dashboard-metric-card.tsx`
+- `src/components/dashboard/dashboard-section-heading.tsx`
+- `src/components/dashboard/dashboard-status-orb.tsx`
+- `src/components/dashboard/client/client-dashboard-home.tsx`
+- `src/components/dashboard/client/client-case-readiness-card.tsx`
+- `src/components/dashboard/client/client-next-actions.tsx`
+- `src/components/dashboard/client/client-trust-panel.tsx`
+- `src/components/dashboard/lawyer/lawyer-dashboard-home.tsx`
+- `src/components/dashboard/lawyer/lawyer-case-radar.tsx`
+- `src/components/dashboard/lawyer/lawyer-review-queue.tsx`
+- `src/components/dashboard/lawyer/lawyer-priority-card.tsx`
+- `src/components/dashboard/admin/admin-dashboard-home.tsx`
+- `src/components/dashboard/admin/admin-operations-radar.tsx`
+- `src/components/dashboard/admin/admin-risk-board.tsx`
+- `src/components/dashboard/admin/admin-control-grid.tsx`
+- `src/lib/dashboard/dashboard-role-config.ts`
+- `src/lib/dashboard/dashboard-demo-metrics.ts`
+- `src/lib/dashboard/dashboard-copy.ts`
+- `src/app/(protected)/dashboard/page.tsx`
+- `src/app/(lawyer)/lawyer/page.tsx`
+- `src/app/(admin)/admin/page.tsx`
+
+#### 변경하지 않은 것
+
+- API·DB·권한·CaseStatus·사건·인터뷰·문서 생성 로직·질문셋 [343]~[350]·FILE-1B·배포 전 QA 확정 표
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint` (위 페이지·`src/components/dashboard`·`src/lib/dashboard`) — **exit 0**
+- `npm run lint` — **통과**
+
+#### 비고
+
+- 레이아웃이 이미 `<main>`을 쓰므로 `DashboardShell`은 `<main>` 중첩을 피하기 위해 래퍼 `div` + 로컬 그라데이션만 사용.
+
+### [EVIDENCE-20260426-357] Living Dashboard 1.1 — 미세 고급화(UI만) {#evidence-20260426-357}
+
+#### 작업 항목명
+
+대시보드 첫인상·반응형·카드 위계·CTA 문구·Living↔레거시 시각 연결 보강. 기능·API·라우트 변경 없음.
+
+#### 범위
+
+- `DashboardShell`·헤더·섹션 제목·메트릭·액션 카드 터치/브레이크포인트 정리
+- `DashboardActionCard`에 `ctaLabel` 옵션, 역할별 한글 CTA 정리
+- `DashboardLegacyBridge` 추가(다크→라이트 구간 구분선·안내)
+- 세 페이지 레거시 블록: 테두리·그림자·패딩으로 Living과 계층 통일
+- `dashboard-demo-metrics.ts` **미연동**(금지 준수)
+
+#### 수정·추가 파일
+
+- `src/components/dashboard/dashboard-legacy-bridge.tsx` (신규)
+- `src/components/dashboard/dashboard-shell.tsx`
+- `src/components/dashboard/dashboard-living-header.tsx`
+- `src/components/dashboard/dashboard-action-card.tsx`
+- `src/components/dashboard/dashboard-metric-card.tsx`
+- `src/components/dashboard/dashboard-section-heading.tsx`
+- `src/components/dashboard/dashboard-status-orb.tsx`
+- `src/components/dashboard/client/*` (홈·정리도·다음 작업·안내)
+- `src/components/dashboard/lawyer/*`
+- `src/components/dashboard/admin/*`
+- `src/app/(protected)/dashboard/page.tsx`
+- `src/app/(lawyer)/lawyer/page.tsx`
+- `src/app/(admin)/admin/page.tsx`
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint src/components/dashboard src/app/(protected)/dashboard/page.tsx src/app/(lawyer)/lawyer/page.tsx src/app/(admin)/admin/page.tsx --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과**
+
+### [EVIDENCE-20260426-358] 대시보드 1.2 — 빈 상태·로딩·에러 안내 보강 {#evidence-20260426-358}
+
+#### 작업 항목명
+
+실제 데이터 연결 전 단계에서 빈·로딩·에러·안내 톤을 통일한 공통 상태 UI와 역할별 빈 상태 가이드(UI만).
+
+#### 범위
+
+- `DashboardStatePanel` — empty / loading / error / restricted / info 톤, CTA 1·2차
+- `DashboardEmptyState` · `DashboardLoadingState` · `DashboardErrorState`
+- `ClientDashboardEmptyGuide` · `LawyerDashboardEmptyGuide` · `AdminDashboardEmptyGuide`
+- 역할별 `*DashboardHome` 하단(의뢰인: 안심 안내 위)에 안내 패널 배치
+
+#### 추가·수정 파일
+
+- `src/components/dashboard/dashboard-state-panel.tsx` (신규)
+- `src/components/dashboard/dashboard-empty-state.tsx` (신규)
+- `src/components/dashboard/dashboard-loading-state.tsx` (신규)
+- `src/components/dashboard/dashboard-error-state.tsx` (신규)
+- `src/components/dashboard/client/client-dashboard-empty-guide.tsx` (신규)
+- `src/components/dashboard/lawyer/lawyer-dashboard-empty-guide.tsx` (신규)
+- `src/components/dashboard/admin/admin-dashboard-empty-guide.tsx` (신규)
+- `src/components/dashboard/client/client-dashboard-home.tsx`
+- `src/components/dashboard/lawyer/lawyer-dashboard-home.tsx`
+- `src/components/dashboard/admin/admin-dashboard-home.tsx`
+
+#### 변경하지 않은 것
+
+- API·DB·권한·CaseStatus·사건·인터뷰·문서·질문셋 [343]~[350]·FILE-1B·배포 전 QA 확정 표·실제 fetch·`dashboard-demo-metrics` API 연동·레거시 블록 삭제
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint src/components/dashboard src/app/(protected)/dashboard/page.tsx src/app/(lawyer)/lawyer/page.tsx src/app/(admin)/admin/page.tsx --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과**
+
+### [EVIDENCE-20260426-359] 대시보드 1.3 — restricted / permission 안내 패널 {#evidence-20260426-359}
+
+#### 작업 항목명
+
+권한 제한·승인 대기·역할 안내를 차단 톤이 아닌 안내 톤으로 표시하는 UI만 추가. 권한 정책·미들웨어·`getSessionUser`/`requireSessionUser`·API·DB 변경 없음.
+
+#### 범위
+
+- `DashboardRestrictedState` — `DashboardStatePanel` `restricted` 래퍼, 기본 CTA
+- `DashboardPermissionNote` — 하단·섹션용 짧은 안내(`role="note"`)
+- `ClientDashboardPermissionNote` · `LawyerDashboardPendingApproval`(`isPending` 기본 `false`, 조회 로직 없음) · `AdminDashboardPermissionNote`
+- 역할별 `*DashboardHome`에 배치
+
+#### 추가·수정 파일
+
+- `src/components/dashboard/dashboard-restricted-state.tsx` (신규)
+- `src/components/dashboard/dashboard-permission-note.tsx` (신규)
+- `src/components/dashboard/client/client-dashboard-permission-note.tsx` (신규)
+- `src/components/dashboard/lawyer/lawyer-dashboard-pending-approval.tsx` (신규)
+- `src/components/dashboard/admin/admin-dashboard-permission-note.tsx` (신규)
+- `src/components/dashboard/client/client-dashboard-home.tsx`
+- `src/components/dashboard/lawyer/lawyer-dashboard-home.tsx`
+- `src/components/dashboard/admin/admin-dashboard-home.tsx`
+
+#### 변경하지 않은 것
+
+- API·DB·권한 정책·middleware·`getSessionUser`/`requireSessionUser`·CaseStatus·사건·인터뷰·문서·질문셋 [343]~[350]·FILE-1B·배포 전 QA 확정 표·실제 승인/권한 분기 신규 구현
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint src/components/dashboard src/app/(protected)/dashboard/page.tsx src/app/(lawyer)/lawyer/page.tsx src/app/(admin)/admin/page.tsx --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과**
+
+### [EVIDENCE-20260426-355] 홈 랜딩 2차 — 코드 생성형 시네마틱 인트로 + Living Logo {#evidence-20260426-355}
+
+#### 작업 항목명
+
+홈 랜딩 2차(UI PR): 공개 홈 Hero 고도화, 코드 기반 AI법친 로고(Living Logo), 시네마틱 인트로, 역할별 CTA, 신뢰·면책, 이용 흐름, 반응형·접근성 기본.
+
+#### 범위
+
+- 공개 홈 Hero 고도화
+- 코드 기반 AI법친 로고(Glyph·Motion·Particle·상태 레이어)
+- 시네마틱 인트로(타임라인 연동, `prefers-reduced-motion` 대응)
+- 역할별 CTA 카드(Hero + `HomeRoleEntryCards`, `redirect` 경로 유지)
+- 신뢰·면책 안내 강화(`HomeTrustStrip`, `/guide`·`/faq`)
+- 이용 흐름 섹션(`HomeFlowSection`)
+
+#### 수정 파일 목록
+
+- `package.json` (`framer-motion` 의존성 추가)
+- `src/app/page.tsx`
+- `src/components/branding/aibeopchin-brand-types.ts`
+- `src/components/branding/aibeopchin-logo.tsx`
+- `src/components/branding/aibeopchin-logo-glyph.tsx`
+- `src/components/branding/aibeopchin-logo-particles.tsx`
+- `src/components/branding/aibeopchin-intro-scene.tsx`
+- `src/components/branding/aibeopchin-hero.tsx`
+- `src/components/home/home-role-entry-cards.tsx`
+- `src/components/home/home-trust-strip.tsx`
+- `src/components/home/home-flow-section.tsx`
+- `src/lib/branding/aibeopchin-logo-config.ts`
+- `src/lib/branding/aibeopchin-intro-timeline.ts`
+
+#### 변경하지 않은 것
+
+- API 변경 없음
+- 권한 구조 변경 없음
+- CaseStatus canonical 변경 없음
+- 사건·인터뷰·문서 생성 로직 변경 없음
+- 질문셋 [343]~[350] 재오픈 없음
+- FILE-1B 변경 없음
+- 배포 전 QA 확정 표·`#deployment-qa-nm-request-copy` 회신 전 확정 기입 없음(기존 블록 유지)
+
+#### 검증 명령
+
+- `npx tsc --noEmit`
+- `npm run lint`
+- `npx eslint src/app/page.tsx src/components/branding src/components/home src/lib/branding --max-warnings 0`
+
+#### 검증 결과
+
+- `npx tsc --noEmit` — **exit 0**
+- `npm run lint` — **통과**(경고·에러 없음)
+- 위 `eslint` 경로 — **exit 0**
+
+#### 완료 판정 요약
+
+- 홈 진입 시 코드 기반 시네마틱 인트로·로고 컴포넌트 표시
+- intro / idle / hover(포인터) 동작, `verified` 시 파티클 비활성
+- 역할별 CTA·신뢰 문구·모바일 그리드 대응
+
+#### 남은 이슈
+
+- `thinking` 모드는 확장용; 랜딩 기본 경로에서는 미노출.
+
+#### 다음 작업
+
+- 시각 디테일(토큰·다크 연속성)·E2E 스냅샷 필요 시 별도 PR.
+
+### [EVIDENCE-20260426-354] 홈 랜딩 1차 — 로그인 전 랜딩·역할별 진입(UI PR) {#evidence-20260426-354}
+
+#### 작업 항목명
+
+홈 화면 1차 구성(별도 UI PR): Hero, 서비스 소개, 이용 흐름, 역할별 CTA, 신뢰·보안·면책. 기존 사건·인터뷰·문서·API·상태 전이·권한 구조는 변경하지 않음.
+
+#### 작업 목적
+
+로그인 전 공개 랜딩과 일반 의뢰인·변호사·관리자(운영) 각각의 진입 흐름을 한 페이지에서 안내하고, 로그인 후에는 세션 역할에 맞는 작업 공간으로 연결한다.
+
+#### 수정 파일 목록
+
+- `src/app/page.tsx`
+- `src/lib/landing/post-login-href.ts` (신규)
+- `src/components/landing/logged-in-strip.tsx` (신규)
+- `src/components/landing/landing-hero.tsx` (신규)
+- `src/components/landing/landing-service-intro.tsx` (신규)
+- `src/components/landing/landing-flow.tsx` (신규)
+- `src/components/landing/landing-role-cta.tsx` (신규)
+- `src/components/landing/landing-trust.tsx` (신규)
+
+#### 변경 요약
+
+- 공개 `/`에 섹션 컴포넌트 조립; `getSessionUser()` 시 상단 스트립에서 `getPostLoginHref(role)`로 대시보드·변호사·관리 경로 안내.
+- 역할별 CTA는 기존 로그인 패턴과 동일하게 `redirect` 쿼리(`/login?redirect=...`, 회원가입 `/signup` 등)로 연결.
+- 신뢰 섹션에 면책·보안 범위 안내 및 `/guide`, `/faq` 링크.
+
+#### 검증 명령
+
+- `npx tsc --noEmit`
+- `npx eslint "src/app/page.tsx" "src/components/landing/**/*.tsx" "src/lib/landing/**/*.ts" --max-warnings 0`
+
+#### 검증 결과
+
+- `npx tsc --noEmit` — **exit 0**
+- 위 `eslint` 대상 — **exit 0**
+
+#### 근거 메모
+
+- 상태·케이스 도메인 파일(`case-status-definition` 등) 및 API 라우트는 본 작업에서 수정하지 않음.
+- `/`는 미들웨어 보호 대상에서 제외된 공개 경로로 유지하는 전제와 정합.
+
+#### 남은 이슈
+
+- `npm run build` 전체·시각적 폴리시·접근성·다크 모드 토큰 정렬은 별도 후속 가능.
+
+#### 다음 작업
+
+- UI PR 리뷰·머지 후 필요 시 카피·디자인 토큰 조정.
+
+### [EVIDENCE-20260426-353] [347] 3순 — ALIGNMENT / Case·인터뷰 잔여 **(개설 2026-04-26)** {#evidence-20260426-353}
+
+#### 목적 (한 줄)
+
+[EVIDENCE-20260425-347](#evidence-20260425-347) **후보 3**·[SPEC #spec-347-후속-고정](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정)·[320 이후 읽는 순서](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-320-이후-거버넌스-순서)에 따라, Step 3 / Phase **[343]~[352] 종료** 이후의 **활성 트랙**을 [ALIGNMENT](./ALIGNMENT_AUDIT_V1.md)·**Case**·**인터뷰 잔여**로 두고, **별도** `EVIDENCE` / `PR`에만 누적한다 ( **[348]~[352]**·1·2순 **흐름과 혼재 금지** ).
+
+**문서권 마감(개발팀 전제·2026-04-26):** [#c-gw03-a-tier3-20260426](#c-gw03-a-tier3-20260426) **C · GW-0.3 (A) 1차 완료**를 전제로, **당장** 질문셋/SPEC **본착수**·`src/**` **변경이 없다**는 조건에서 **[347] 3순 문서권 전체**를 [#347-tier3-document-scope-closure-20260426](#347-tier3-document-scope-closure-20260426) 기준 **마감**한다. **GW-0.3 (가)**·질문셋 본착수·런타임 대규모는 **별** 후속 `EVIDENCE`/`PR` 후보([FOLLOWUP §4](WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md))로만 둔다. **[343]~[350] 재오픈 없음.**
+
+#### 전제
+
+- [346](#evidence-20260425-346)·[347](#evidence-20260425-347)·[SPEC `#spec-347-후속-고정`](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정) — 2·3순 (GW-0.2, ALIGNMENT/Case) = **별도** `EVIDENCE` / `PR`, [348]·[349]·1순과 **혼재 금지** (SPEC 본절).  
+- [Step 3 종료 점검 [343]~[352]](STEP3_PHASE_CLOSURE_CHECKLIST_343_352.md) **문서권 닫힘** — [343]~[346]·[349] `①+②` **재오픈 없음**; [350] `③`·[352] (나) **는 닫힌 상태**로 둔다 ([DEV_BRIEF_POST_STEP3_352](DEV_BRIEF_POST_STEP3_352.md)).  
+- **본 블록**이 다루는 `PR`·`src/**`·문서 갱신을 **[343]~[352]**·Step 3 질문셋 1·2순 `EVIDENCE` / **동일** `PR`에 **넣지 않는다**.
+
+#### 읽는 순서 (착수 전)
+
+1. [SPEC #spec-347-후속-고정](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정)  
+2. [EVIDENCE-20260425-347](IMPLEMENTATION_EVIDENCE.md#evidence-20260425-347) (후보 1/2/3·선정)  
+3. [ALIGNMENT_AUDIT_V1.md](./ALIGNMENT_AUDIT_V1.md) (특히 **§6** 역점검·ID 교차)  
+4. [CASE_STATUS_DEFINITION.md](./CASE_STATUS_DEFINITION.md) **§7** (다음 문서 작업 순서; 3순이 [GW-0.3](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-3-범위-완료)·질문셋 본맥과 겹치면 **SPEC·분기와 직교**하여 읽는다)  
+5. `python tools/aibeopchin_navigator.py` `show-plan` → `post_352_next_347_tier3_alignment`
+
+#### [347-3순] P0 잔여·P2 — 팀 선정·별도 PR 작업지시서 {#work-instruction-347-tier3-p0-p2-separate-pr}
+
+**닫힘 유지:** P0 첫 코드(IV-04~ST-03) [#p0-353-구현-20260426](#p0-353-구현-20260426) · P1 `RB-01~05` · IO-05 · 353+ [#p0-353-plus-dual-axis-real](#p0-353-plus-dual-axis-real) — **재오픈·혼입 금지**.
+
+**다음 활성·PR 분리:** [WORK_INSTRUCTION_347_TIER3_P0_REMAINING_P2_SEPARATE_PR.md](WORK_INSTRUCTION_347_TIER3_P0_REMAINING_P2_SEPARATE_PR.md) — **P0 잔여(ST-01·[310](IMPLEMENTATION_EVIDENCE.md#evidence-20260423-310) 예외 축)** · **P2(ST-02, ST-05, 운영)**; **항목마다 별도 `PR`**.
+
+**기록:** 본 앵커·작업지시서·[`DEV_BRIEF_POST_STEP3_352`](DEV_BRIEF_POST_STEP3_352.md)·[`aibeopchin_navigator.py`](../../tools/aibeopchin_navigator.py) `post_352_next_347_tier3_alignment` 연결.
+
+#### [347-3순] P0 잔여·P2 통합 실착 작업지시서 {#work-instruction-347-tier3-p0-p2-integrated-audit}
+
+**개발팀 전달 기준**
+
+- **우선 전달:** [WORK_INSTRUCTION_347_TIER3_P0_P2_INTEGRATED.md](WORK_INSTRUCTION_347_TIER3_P0_P2_INTEGRATED.md)
+- **보조 참조:** [WORK_INSTRUCTION_347_TIER3_P0_REMAINING_P2_SEPARATE_PR.md](WORK_INSTRUCTION_347_TIER3_P0_REMAINING_P2_SEPARATE_PR.md)
+- **실착 후 증빙:** **본 앵커** (`#work-instruction-347-tier3-p0-p2-integrated-audit`) — 통합 실사는 **한 번에**, 기록은 **ST-01 / [310](IMPLEMENTATION_EVIDENCE.md#evidence-20260423-310) 예외 (1) / (3) / ST-02 / ST-05 / 운영** 축별 구분 · **닫힌 축 재오픈 없음** · **`CaseStatus` canonical 변경 없음**
+
+**전달용 단일 문서(상세):** [WORK_INSTRUCTION_347_TIER3_P0_P2_INTEGRATED.md](WORK_INSTRUCTION_347_TIER3_P0_P2_INTEGRATED.md) — **실사·grep·검증은 한 번에**, **`IMPLEMENTATION_EVIDENCE.md` 기록은 위 축별 분리**. PR 분리 원칙은 [WORK_INSTRUCTION_347_TIER3_P0_REMAINING_P2_SEPARATE_PR.md](WORK_INSTRUCTION_347_TIER3_P0_REMAINING_P2_SEPARATE_PR.md)와 **병행**.
+
+**통합 실착 완료 후:** 본 절 아래 또는 인접 소절에 해당 작업지시서 §13 형식으로 **판정·수정 파일·검증**을 **축별**로 남긴다.
+
+##### [347] 3순 P0 잔여·P2 통합 실착 — 기록 (2026-04-26) {#p0-347-tier3-p0-p2-integrated-20260426}
+
+**기준:** [WORK_INSTRUCTION_347_TIER3_P0_P2_INTEGRATED.md](WORK_INSTRUCTION_347_TIER3_P0_P2_INTEGRATED.md) · [#work-instruction-347-tier3-p0-p2-separate-pr](#work-instruction-347-tier3-p0-p2-separate-pr) · [#p0-353-p0-완료-후속](#p0-353-p0-완료-후속) · [#p0-353-p1p2-next](#p0-353-p1p2-next)
+
+**범위:** P0 잔여 ST-01 · [310](IMPLEMENTATION_EVIDENCE.md#evidence-20260423-310) **(1)(3)** · P2 ST-02 · ST-05 · 운영
+
+**닫힘 유지:** 353+ ([#p0-353-plus-dual-axis-real](#p0-353-plus-dual-axis-real)) · RB-01~05 · IO-05 · P0 첫 코드([#p0-353-구현-20260426](#p0-353-구현-20260426)) **재오픈 없음** · **`CaseStatus` canonical·`prisma/schema.prisma`·`src/lib/definitions/case-status.ts` enum 변경 없음**
+
+**판정 (축별)**
+
+- **ST-01**
+  - **실제 코드 수정 필요 여부:** **불필요** — `prisma/schema.prisma` `enum CaseStatus` 멤버·순서와 `src/lib/definitions/case-status.ts` `CaseStatusEnum` **12값 일치**(CREATED~DELETED).
+  - **레거시 문자열:** `check-status --scope case` 및 `grep`에서 `OPEN`/`IN_PROGRESS`/`DONE` 등은 **Alert·OPS·`InterviewStatus`** 등 **사건 `CaseStatus`가 아닌** 맥락에서 다수 검출 — §4-1·[310 **(3)**](IMPLEMENTATION_EVIDENCE.md#evidence-20260423-310) 취지와 부합.
+  - **문서 정리 여부:** 본 기록으로 **잔여 실착** 명시.
+  - **남은 후속:** 없음(동일 전제 유지).
+
+- **[310] 예외 (1)**
+  - **실제 구현 잔여 여부:** **아님** — ALIGNMENT §6-1 ST 세부 **부분일치·보류**는 **문서·역점검표** 잔여로 보고, **사건 상태 분기**가 canonical을 어기는 `src/**` 패턴은 이번 실사에서 **추가 조치 대상 없음**.
+  - **문서상 보류 여부:** **예**.
+  - **조치:** 코드 변경 없음 · 증빙만.
+
+- **[310] 예외 (3)**
+  - **`check-status` 경고 성격:** `python tools/aibeopchin_navigator.py check-status --scope case` → **exit 1** · 히트 다수 — **단어 경계 휴리스틱**이 `InterviewStatus`·알림·스키마 기본값 문자열 등을 포함.
+  - **휴리스틱/오탐 여부:** **예(허용 경고)** — [§4-1](IMPLEMENTATION_EVIDENCE.md#4-1-check-status-결과-해석-오해-방지)대로 **도메인 단정·배포 차단 단정 금지**; `verify:canonical-sources`는 **본선 2파일 존재**만 검사하여 **위상 분리** 유지.
+  - **조치:** 스크립트/문구 **변경 없음**(기존 내비·증빙 설명과 정합).
+
+- **ST-02**
+  - **label map 정렬:** **`CASE_STATUS_LABELS`**(`case-status.ts`)와 **`STATUS_META`**(`case-status-definition.ts`) **표시 문자열 일치** 확인 · UI는 `statusLabel`·`CASE_STATUS_LABELS` 직접 참조 등 **기존 단일 체계** 유지.
+  - **수정 파일:** [case-status-labels.test.ts](../../src/lib/definitions/case-status-labels.test.ts) **신규** — canonical 전 커버·extra key 금지·`getCaseStatusMeta` 라벨 동기화 회귀.
+  - **테스트:** 위 파일 3케이스 · `vitest` 통과.
+
+- **ST-05**
+  - **check-status·운영 메시지 정렬:** `verify:canonical-sources` vs `check-status` 관계는 **기존 문서·스크립트 주석**과 일치; **추가 문구 수정 없음**.
+
+- **운영**
+  - **navigator·증빙:** 본 `#work-instruction-347-tier3-p0-p2-integrated-audit` 하위 **축별 기록** 반영 완료.
+
+**수정·추가 파일**
+
+- `src/lib/definitions/case-status-labels.test.ts` (신규)
+
+**검증**
+
+- `npm run verify:349-12` **exit 0** (2026-04-26)
+
+#### [347-3순] 후속 활성 축 선정 (ALIGNMENT §6·Case/인터뷰·GW-0.3) {#work-instruction-347-tier3-followup-axes}
+
+**작업지시서:** [WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md](WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md)
+
+**전제:** [#p0-347-tier3-p0-p2-integrated-20260426](#p0-347-tier3-p0-p2-integrated-20260426) **완료** — P0 잔여·P2 통합 실착 범위는 **닫힘**. **제외:** P0 첫 코드·P1·IO-05·353+·[343]~[352] 재오픈 · **`CaseStatus` canonical 변경** (작업지시 §2).
+
+**재분류(남은 후보):** **A** ALIGNMENT §6 잔여 · **B** Case/인터뷰 잔여 갭 · **C** GW-0.3 / SPEC 직교 — **후보표·1순위 팀 선정**은 작업지시서 **§4**.
+
+**팀 1순위 = A · `ALIGN-§6-문서`** (ALIGNMENT §6 잔여 — §6 역점검표 **보류·부분일치** 행 **문서 클로저** 중심; 산출: `IMPLEMENTATION_EVIDENCE`·`ALIGNMENT_AUDIT_V1` 소개/판정 열). 근거: [WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md](WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md) **§4** 기본 추천 **A**.
+
+**차순 후보 (A 실행 후·팀 착수 순)** {#work-instruction-347-tier3-followup-bc}
+
+| 축 | 범위·성격 | 비고 |
+|----|-----------|------|
+| **B. Case·인터뷰 갭** | **화면** · **API** · **라우트** · **Case/인터뷰 흐름 정합** | **[347] 3순 B 묶음 — 닫힘 (2026-04-26):** [#347-tier3-b-axis-closure-c-next-20260426](#347-tier3-b-axis-closure-c-next-20260426). 증빙 소급: [#work-instruction-347-tier3-case-interview-gap-audit](#work-instruction-347-tier3-case-interview-gap-audit) · [#work-instruction-347-tier3-b-residual-lc-case-api-ui](#work-instruction-347-tier3-b-residual-lc-case-api-ui) · B-LC05. **본 표의 B 후보 ID**(FILE-1B·미실사 IV/UI 등)는 **별 트랙·C와 혼재 금지** 전제에서만 착수. |
+| **C. GW-0.3·SPEC 직교** | [GW-0.2](IMPLEMENTATION_EVIDENCE.md#evidence-20260426-352) 이후 **별도 판정**; SPEC/질문셋 본맥과 **겹치면 별도 EVIDENCE**·(가)/(나) 분기 | **(A) 1차 실착:** [#c-gw03-a-tier3-20260426](#c-gw03-a-tier3-20260426). **[347] 3순 문서권 마감:** [#347-tier3-document-scope-closure-20260426](#347-tier3-document-scope-closure-20260426). **Preflight:** [#work-instruction-347-tier3-c-gw03-spec-preflight](#work-instruction-347-tier3-c-gw03-spec-preflight). **[343]~[350] 재오픈 금지**. [GW-0.3](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-3-범위-완료) · **(가) 후보** [FOLLOWUP §4](WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md). |
+
+**B-G1 해소(팀 확인·2026-04-26):** [#b-g1-ux-pr-20260426](#b-g1-ux-pr-20260426) — 인터뷰 전용 화면에서 기존 `POST .../interview/complete` CTA·완료 후 사건 상세 이동. **CaseStatus canonical enum·전이 서비스·권한 모델 변경 없음.** `verify:349-12` **exit 0**.
+
+**B축 마감·다음 활성 축** {#347-tier3-bc-next-after-bg1}
+
+| 상태 | 축 | 기록 |
+|------|----|------|
+| **닫힘** | **B** · Case/인터뷰 ([347] 3순 작업지시 범위) | [#347-tier3-b-axis-closure-c-next-20260426](#347-tier3-b-axis-closure-c-next-20260426) |
+| **닫힘** | **C (A)** · GW-0.3 문서·정렬 1차 | [#c-gw03-a-tier3-20260426](#c-gw03-a-tier3-20260426) **완료 확인** (2026-04-26) |
+| **닫힘** | **[347] 3순** · ALIGNMENT/Case·인터뷰 **문서권 전체** | [#347-tier3-document-scope-closure-20260426](#347-tier3-document-scope-closure-20260426) — 본착수·`src/**` **당장 없음** 전제 |
+| **후속 후보 (별 트랙)** | **GW-0.3 (가)** · 질문셋 **본착수** · 런타임 **대규모** | [FOLLOWUP §4](WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md) · **별** `EVIDENCE`/`PR` · **[343]~[350] 비재오픈** |
+| **참조** | Preflight · SPEC | [#work-instruction-347-tier3-c-gw03-spec-preflight](#work-instruction-347-tier3-c-gw03-spec-preflight) · [GW-0.3](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-3-범위-완료) · [#spec-347-후속-고정](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정) · [FOLLOWUP_AXES](WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md) **§3 C** |
+
+`python tools/aibeopchin_navigator.py` `show-plan` → **`post_352_next_347_tier3_alignment`** (B·C(A)·**[347] 3순 문서권** 닫힘·후속은 §4·별 PR).
+
+#### [347-3순] B축 마감 판정 및 C · GW-0.3/SPEC 착수 준비 {#347-tier3-b-axis-closure-c-next-20260426}
+
+**목적:** [347] 3순 **B축**(Case/인터뷰 갭·심화·LC-05 보강) **종료 선언** 및 **C(GW-0.3·SPEC 직교) 착수** 전환(이후 **C(A) 완료**·**다음 축**은 [#c-gw03-a-tier3-20260426](#c-gw03-a-tier3-20260426) §판정).
+
+| 검토 항목 | 판정 |
+|-----------|------|
+| **B 잔여 ([347] 범위)** | 1차 실사·B-G1·B 잔여 심화(LC-04/05·Case-API/UI)·B-LC05-A/B **완료**. **차단 갭 없음**([#work-instruction-347-tier3-b-residual-lc-case-api-ui](#work-instruction-347-tier3-b-residual-lc-case-api-ui)). |
+| **정책 보류** | 문서 승인 경로 **감사 테이블 전용 상태 전이 행** — [#work-instruction-347-tier3-b-residual-lc-case-api-ui](#work-instruction-347-tier3-b-residual-lc-case-api-ui) **잔여 후보**로만 유지, **착수 안 함**. |
+| **본 축 밖(명시)** | **FILE-1B-잔여**·**IV-01/02** 등 대규모·**ALIGN §6** 기타 `미실사·후속` 행 — [347] B **닫힘과 동일하지 않음**; 필요 시 **별 작업지시**·**C 직교 `PR`과 혼재 금지**. |
+| **변경 없음(재확인)** | `CaseStatus` canonical · 전이 규칙(`checkCaseTransitionOrThrow`) · RB/IO/353+ 닫힌 축 **재오픈 없음**. |
+| **다음(본 소절 시점)** | **C** 착수 — [GW-0.3](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-3-범위-완료) · [#spec-347-후속-고정](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정) · [FOLLOWUP §4](WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md). **Preflight:** [#work-instruction-347-tier3-c-gw03-spec-preflight](#work-instruction-347-tier3-c-gw03-spec-preflight). **C(A) 이후 분기:** [#c-gw03-a-tier3-20260426](#c-gw03-a-tier3-20260426). |
+
+**검증 (본 소절 문서만 갱신 시):** `npm run verify:canonical-sources` **exit 0**.
+
+#### [347-3순] C · GW-0.3/SPEC 직교 **착수 전 판정** {#work-instruction-347-tier3-c-gw03-spec-preflight}
+
+**작업지시서:** [WORK_INSTRUCTION_347_TIER3_C_GW03_SPEC_PREFLIGHT.md](WORK_INSTRUCTION_347_TIER3_C_GW03_SPEC_PREFLIGHT.md)
+
+**전제:** [#347-tier3-b-axis-closure-c-next-20260426](#347-tier3-b-axis-closure-c-next-20260426) **B 닫힘**. **[343]~[350]·353+ 닫힌 축·P1 RB/IO·B축 재오픈 금지.**
+
+**실행 기록 (2026-04-26, [WORK_INSTRUCTION_347_TIER3_C_GW03_SPEC_PREFLIGHT.md](WORK_INSTRUCTION_347_TIER3_C_GW03_SPEC_PREFLIGHT.md) 절차)** — 문서·정책 정독 기준 판정; **`src/**` 변경 없음.**
+
+##### 우선 판단 (순서대로)
+
+| 질문 | 판정 |
+|------|------|
+| **GW-0.2 (나) 마감을 C 착수 전제로 둘 수 있는가?** | **예.** [EVIDENCE-20260426-352](#evidence-20260426-352) · [SPEC GW-0.2](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-2-범위-완료) — 본 주기 **(나)** 마감(당시 신규 `src/**`·B안·§5.4 이관·`API_SPEC` success/ok 강제 개정 **없음**). 향후 GW-0.2 `src/**`는 **별** EVIDENCE/PR·**(가) 재판정** — **C `PR`과 혼재 금지.** |
+| **[343]~[350] Step3 본맥을 이번 판정·전제 C 경로에서 재오픈하는가?** | **아니오.** 점검표·[#spec-347-후속-고정](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정) 전제 유지. 실착 시에도 **동일 제약** 재확인. |
+| **SPEC / 질문셋 본맥 겹침 (프리플라이트 시점)** | **조건부 없음(1차 권장 범위).** 팀이 **GW-0.3 (A) 층**·`#spec-347-후속-고정`·navigator·ALIGN/SPEC **문서 정렬만**을 1차 C 착수로 잡으면 `QUESTION_SET_DEFINITION` **본착수**·인터뷰 런타임 **단일 소스 변경**·**343~350 동일 주제 재오픈**에 해당하지 **않음** → 겹침 **없음**. 반대로 질문셋 **대규모 admin**·**런타임 소스 전환**을 C에 포함하면 **겹침 있음** → [#gw-0-3-범위-완료](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-3-범위-완료) **(가)**·**별** `EVIDENCE`/`PR`. |
+| **별도 `EVIDENCE` / `PR` 필요성 (이번 라운드)** | **프리플라이트 기록만:** 추가 `PR` **불필요**. **이후 C 실착:** [FOLLOWUP §4](WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md) **GW-0.3-분기** / **SPEC-347-확장** 등 **별** `PR`·348~352·1·2순 **혼재 금지**. |
+| **(가)/(나) 재판정 필요 여부** | **GW-0.2:** **재판정 안 함** — (나) 마감 유지([352](#evidence-20260426-352)). **GW-0.3:** 본 판정은 **착수 전** 단계; 실착이 **(가) 본 착수**면 그때 SPEC 분기·`EVIDENCE-353+`(또는 소절) **신규 한 줄**로 재표시. |
+
+##### 작업지시서 §5 정리표 (팀 확인)
+
+| 항목 | 판정 |
+|------|------|
+| GW-0.2 (나) 마감 전제 | ☑ 확인 · ☐ 이슈 있음 |
+| SPEC·질문셋 겹침 | ☑ 없음(1차 = 문서·정렬 중심 가정) · ☐ 있음 — 착수 확정 시 **GW-0.3 (가)** 경로로 재기입 |
+| GW-0.3 분기 | ☑ **(A)** 정렬·문서만(1차 권장) · ☐ **(가)** 본 착수 — 범위 확정 후 |
+| 제안 `EVIDENCE` ID / 소절 | 실착 착수 시 `#evidence-20260426-353` 하위 **C-실착** 소절 또는 `EVIDENCE-353+` 팀 명명( [SPEC](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정) 혼재 금지 유지 ) |
+| `PR` 분리 원칙 | C 실착 = **전용 PR**; [348]~[352]·Step3 1·2순·B축·GW-0.2 (가) **동일 PR 금지** |
+| 검증 | 본 기록 **문서만** → `verify:canonical-sources` **exit 0** (아래) |
+
+**착수 승인 (한 줄):** **C 축 1차 착수**는 **GW-0.3 (A)·SPEC 직교 문서권**부터 진행하고, 질문셋 **코드/본문 대규모**를 넣을 경우 **사전에 겹침 재판정** 후 **(가)**·별 `PR`로 분리한다.
+
+**검증 (본 소절 갱신):** `npm run verify:canonical-sources` **exit 0**.
+
+**혼재 금지:** [348]~[352]·Step3 1·2순·닫힌 축과 **동일 `PR` 금지** — [FOLLOWUP §2](WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md)·[#spec-347-후속-고정](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정).
+
+#### [347-3순] C · GW-0.3 **(A)** 1차 실착 — 문서·정렬 {#c-gw03-a-tier3-20260426}
+
+**기준:** [#work-instruction-347-tier3-c-gw03-spec-preflight](#work-instruction-347-tier3-c-gw03-spec-preflight) · [SPEC #gw-0-3-범위-완료](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-3-범위-완료) **(A) 층** · [EVIDENCE-20260423-325](IMPLEMENTATION_EVIDENCE.md#evidence-20260423-325)(역사적 GW-0.3 증빙 블록) · `governance_321_work_units` **셋째** 항 1:1.
+
+**범위 (이번 라운드·2026-04-26):**
+
+| 포함 | 제외 |
+|------|------|
+| SPEC·`CASE_STATUS`·`QUESTION_SET`·`IMPLEMENTATION`·`navigator` **교차 링크·정렬 문구** | **(B)** `QUESTION_SET_DEFINITION`·질문셋 **코드/정의 본 착수** · 인터뷰 **런타임 대규모** 변경 |
+| [#spec-347-후속-고정](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정)·348~352·Step3 1·2순과 **혼재 금지** 전제 명시 | **[343]~[350]** Phase **재오픈** · 닫힌 353+·P1 RB/IO·B축 **재오픈** |
+| **`src/**` 원칙적 없음** | **GW-0.3 (가)** — 본착수 필요 시 **별** `EVIDENCE`/소절·**별** `PR` |
+
+**실행 기록:** `CASE_STATUS_DEFINITION` **§7.2** · `SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1` **#gw-0-3-범위-완료** 교차 단락 · `QUESTION_SET_DEFINITION` **문서 정보** 직교 행 · `aibeopchin_navigator` `governance_321_work_units[2]`·`post_352_next_347_tier3_alignment` 문구 · 본 소절·상단 353 불릿.
+
+**GW-0.3 완료 판정 (본 주기):** (4) 이번 실착수 범위 = **(A) 정렬·문서만**. (5) 비기본 분기 = **(나)** 질문셋 **본 착수·코드 없음**(정렬만). **(가) 재판정 없음.**
+
+##### C (A) 1차 **완료 확인** · 추가 정렬 · 다음 축 판정 (2026-04-26)
+
+| # | 검토 | 판정 |
+|---|------|------|
+| 1 | **#c-gw03-a-tier3-20260426 기준 (A) 1차 완료** | **완료** — 본 소절·`SPEC` #gw-0-3·`CASE_STATUS` §7.2·`QUESTION_SET` 문서 정보·`ALIGNMENT` 검증 원칙·`navigator` 정렬이 **한 세트**로 맞춰져 있음. |
+| 2 | GW-0.3 (A) 범위 **추가** 문서 정렬 필요 여부 | **당일 기준 긴급 추가 없음.** 잔여는 **선택** — `#spec-347-후속-고정`·`DEV_BRIEF_POST_STEP3_352` 등 **팀 운영 문구**만 더 다듬을 경우에도 **(A) 층**(문서·링크)으로 처리 가능; **본착수 성격이면 (가)**. |
+| 3 | **질문셋 본착수·런타임 대규모** | **C (A)에 넣지 않음.** 후보는 **GW-0.3 (가)** 풀: [FOLLOWUP §4](WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md) **GW-0.3-분기**(겹침 시)·**FILE-1B**·대규모 **IV**·제품 요구 **인터뷰 런타임/정의 동기** 등 — **별** `EVIDENCE`·**별** `PR`·[343]~[350] **재오픈 없음**. |
+| 4 | **[343]~[350]** | **재오픈 없음** (전제 유지). |
+| 5 | **GW-0.2 (나)** | **유지** — [352](#evidence-20260426-352); 향후 GW-0.2 `src/**`는 **별 트랙·(가) 재판정**. |
+| 6 | **`src/**`** | **없음** → `verify:canonical-sources` (본 라운드). |
+| 7 | **다음 활성: GW-0.3 (가) vs [347] 3순 전체 마감 준비** | **분기:** **제품·팀이 (가) 본착수·`src/**`를 당장 잡지 않으면** — A·B·C**(A)** **문서권 묶음은 정리 완료**로 보고 **[347] 3순 전체 마감 준비**(잔여 후보는 §4·별 트랙·혼재 금지) **가능.** **질문셋/SPEC 본착수·런타임 변경이 필요하면** 다음 활성은 **GW-0.3 (가)**·**반드시 별** EVIDENCE/PR. |
+
+**검증 (본 소절·확인 기록):** `npm run verify:canonical-sources` **exit 0**. **`src/**` 변경 없음.**
+
+#### [347-3순] 문서권 전체 마감 판정 **(실시 2026-04-26)** {#347-tier3-document-scope-closure-20260426}
+
+**전제 (개발팀):** [#c-gw03-a-tier3-20260426](#c-gw03-a-tier3-20260426) 기준 **C · GW-0.3 (A) 1차 완료** · **당장** 질문셋/SPEC **본착수 없음** · **`src/**` 변경 없음** · **[343]~[350] 재오픈 없음**.
+
+| 검토 | 판정 |
+|------|------|
+| **[347] 3순 = 본 `EVIDENCE-353`에서 다룬 A·B·C(A) 문서권 묶음** | **마감 가능 → 실시.** A([#evidence-20260426-353](#evidence-20260426-353) 축)·B([#347-tier3-b-axis-closure-c-next-20260426](#347-tier3-b-axis-closure-c-next-20260426))·C(A)(위 전제) **문서·정렬·증빙** 범위는 **한 트랙으로 종료**. |
+| **GW-0.3 (가)·질문셋 본착수·런타임 대규모** | **본 마감에 포함하지 않음.** [FOLLOWUP §4](WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md) **GW-0.3-분기** / **SPEC-347-확장**·FILE-1B·대규모 IV 등 — **별** `EVIDENCE`·**별** `PR`·348~352·1·2순 **혼재 금지** 유지. |
+| **353+ / P0·P1·P2 별도 PR 트랙** | **변경 없음** — [#work-instruction-347-tier3-p0-p2-separate-pr](#work-instruction-347-tier3-p0-p2-separate-pr) 등 **기존** 후속 구조만 유효; **본 절은 그 PR에 새 작업을 추가하지 않음**. |
+
+**검증 (본 소절 기록):** `npm run verify:canonical-sources` **exit 0** (문서만).
+
+**다음(코드 착수·[347] 이후):** [#work-instruction-post-347-dev-candidate-priority](#work-instruction-post-347-dev-candidate-priority) · [WORK_INSTRUCTION_POST_347_DEV_CANDIDATE_PRIORITY.md](WORK_INSTRUCTION_POST_347_DEV_CANDIDATE_PRIORITY.md)
+
+#### [347 이후] 실제 개발 착수 후보 우선순위표 {#work-instruction-post-347-dev-candidate-priority}
+
+**작업지시서:** [WORK_INSTRUCTION_POST_347_DEV_CANDIDATE_PRIORITY.md](WORK_INSTRUCTION_POST_347_DEV_CANDIDATE_PRIORITY.md)
+
+**요지:** 문서권 마감 후 **실제 개발** 후보의 위험도·효과·의존성·`PR` 분리를 표로 고정하고, **즉시 1순위 개발 `PR` = FILE-1B** 로 둔다. **절대 재오픈 금지** 축은 해당 작업지시 **§1**과 동일.
+
+| 항목 | 확정(본 기록) |
+|------|----------------|
+| **1순위 개발 `PR`** | **FILE-1B** — 첨부·분류·사건 연결 |
+| **실착 작업지시** | [WORK_INSTRUCTION_POST_347_FILE_1B_ATTACHMENT_CASE_LINK.md](WORK_INSTRUCTION_POST_347_FILE_1B_ATTACHMENT_CASE_LINK.md) |
+
+#### [347 이후 1순위] FILE-1B 첨부자료·사건 연결 실착 {#work-instruction-post-347-file-1b-attachment-case-link}
+
+**작업지시서:** [WORK_INSTRUCTION_POST_347_FILE_1B_ATTACHMENT_CASE_LINK.md](WORK_INSTRUCTION_POST_347_FILE_1B_ATTACHMENT_CASE_LINK.md) — **단독 `PR`** · 질문셋·GW-0.3 **(가)** 와 **혼재 금지** · `CaseStatus` canonical **변경 금지** · [343]~[350] **재오픈 금지**.
+
+**운영/스테이징 확인값 표 최종 반영:** [WORK_INSTRUCTION_POST_347_FILE_1B_STAGING_VERIFICATION_FINAL.md](WORK_INSTRUCTION_POST_347_FILE_1B_STAGING_VERIFICATION_FINAL.md) — 실측 **일시(KST)**·**단일 환경명** → 아래 확인 표 **일시·환경명** 열만.
+
+##### 실행 기록 (2026-04-26, FILE-1B 1차 실착)
+
+**판정 요지:** 기존 사건 첨부 업로드·목록·다운로드·삭제·감사(`CASE_ATTACHMENT_*`)는 유지. **부족했던 분류(카테고리)** 를 DB·API·UI에 추가 — `CaseStatus`·전이·canonical 2파일 **미변경**.
+
+| 체크리스트 | 판정 |
+|------------|------|
+| 1 업로드 | `POST /api/cases/:caseId/attachments` · FormData `file` + **`category`** · 기존 용량·MIME 제한 유지(`case-attachment.validators.ts`). |
+| 2 분류 | Prisma `CaseAttachmentCategory` enum + `CaseAttachment.category` **`@default(OTHER)`** · 업로드 시 선택 · **`PATCH`** 로 사후 수정 · 라벨 맵 `case-attachment-category.ts`. |
+| 3 표시 | `CaseAttachmentsPanel` — 분류 라벨 + `AttachmentCategoryEditor`(저장 시 PATCH). |
+| 4 문서 생성 연계 | `documents/generate`는 **여전히 인터뷰 `answersJson`만** 사용 — 첨부 **내용/메타를 프롬프트에 주입하지 않음**(후속 가능). |
+| 5 권한 | 업로드·분류 변경 = 기존 `canWriteCase` · 다운로드·삭제 규칙 **변경 없음**. |
+| 6 감사 | 업로드 메타에 `category` 추가 · 분류 변경 시 **`CASE_ATTACHMENT_CATEGORY_UPDATE`** 기록. |
+
+**수정·추가 파일:**
+
+- `prisma/schema.prisma` — `CaseAttachmentCategory`, `CaseAttachment.category`
+- `prisma/migrations/20260426120000_add_case_attachment_category/migration.sql`
+- `src/features/case-attachments/case-attachment-category.ts` (**신규**)
+- `src/features/case-attachments/case-attachment.repository.ts`
+- `src/features/case-attachments/case-attachment.service.ts`
+- `src/app/api/cases/[caseId]/attachments/route.ts`
+- `src/app/api/cases/[caseId]/attachments/[attachmentId]/route.ts` — **PATCH** 추가
+- `src/components/cases/attachment-upload-form.tsx`
+- `src/components/cases/attachment-category-editor.tsx` (**신규**)
+- `src/components/cases/case-attachments-panel.tsx`
+
+**검증:** `npm run verify:349-12` **exit 0** (2026-04-26). 배포 전 `npx prisma migrate deploy` 로 마이그레이션 적용 필요.
+
+##### 운영 DB `migrate deploy` 및 FILE-1B 수동 스모크 (2026-04-26)
+
+**전제:** 스테이징 또는 운영에 [`.env.example`](../../.env.example) 기준 **`DATABASE_URL`** 설정 후 앱과 DB 스키마를 맞춘다.
+
+**개발팀 최종 확인 요청 (스테이징 또는 운영에서 실제 완료)**
+
+1. **`DATABASE_URL`** 설정  
+2. **`npx prisma migrate deploy`** 실행  
+3. **`20260426120000_add_case_attachment_category`** 적용 확인  
+4. 첨부 업로드 시 **분류 저장** 확인  
+5. 사건 상세에서 **분류 표시** 확인  
+6. **분류 변경 저장** 확인  
+7. **`CASE_ATTACHMENT_CATEGORY_UPDATE`** 감사로그 기록 확인(업로드 시 **`CASE_ATTACHMENT_UPLOAD`** 확인 가능)
+
+**확인 표 대응:** 절차 **1~3** → 아래 표 **제1행** · 절차 **4~7** → 표 **제2~5행**.
+
+**실제 확인값 전달 형식 (예시):** `2026-04-28 14:00 KST, 스테이징` — **실측한 일시·환경명**만 전달한다.
+
+**반영 절차:** 위 **7단계**를 실제 완료한 뒤 일시(KST)·환경명을 전달하면, 본 앵커 아래 확인 표 **5행 전체**에 **실측 기준으로만** ✅·**동일** 일시·환경명을 기입한다.
+
+**팀 확인 완료 (전달 원문·FILE-1B 운영/스테이징)**
+
+- **일시 (전달):** `2026-04-28 14:35 KST`  
+- **환경 (전달):** 스테이징  
+- **확인:**  
+  - `DATABASE_URL` 설정 완료  
+  - `npx prisma migrate deploy` 완료  
+  - `20260426120000_add_case_attachment_category` 적용 확인  
+  - 첨부 업로드 시 분류 저장 확인  
+  - 사건 상세에서 분류 표시 확인  
+  - 분류 변경 저장 확인  
+  - `CASE_ATTACHMENT_CATEGORY_UPDATE` 감사로그 기록 확인  
+
+**확인 결과 (팀 전달 반영 · ✅ · 일시(KST) · 환경명)**
+
+| 검증 항목 | ✅ | 일시 (KST) | 환경명 |
+|-----------|---|------------|--------|
+| `npx prisma migrate deploy` · **`20260426120000_add_case_attachment_category`** 반영 확인 | ✅ | 2026-04-28 14:35 KST | 스테이징 |
+| ① 첨부 업로드 시 분류 저장 | ✅ | 2026-04-28 14:35 KST | 스테이징 |
+| ② 사건 상세에서 분류 표시 | ✅ | 2026-04-28 14:35 KST | 스테이징 |
+| ③ 분류 변경 저장 | ✅ | 2026-04-28 14:35 KST | 스테이징 |
+| ④ `CASE_ATTACHMENT_CATEGORY_UPDATE` 감사(· `CASE_ATTACHMENT_UPLOAD`) | ✅ | 2026-04-28 14:35 KST | 스테이징 |
+
+**FILE-1B 확인 기록 (최종)** — 확인 표 **일시·환경명**은 팀 전달(`2026-04-28 14:35 KST`, **스테이징**)로 반영 완료. 절차·역할은 [WORK_INSTRUCTION_POST_347_FILE_1B_STAGING_VERIFICATION_FINAL.md](WORK_INSTRUCTION_POST_347_FILE_1B_STAGING_VERIFICATION_FINAL.md) 참고.
+
+**Cursor 에이전트:** 본 저장소 **`.env`/`DATABASE_URL` 없음** → 로컬에서 `migrate deploy`/UI **미검증**. 위 표 ✅·일시·환경명은 **팀 전달** 반영.
+
+#### [347-3순] 차순 B · Case·인터뷰 갭 실사 {#work-instruction-347-tier3-case-interview-gap-audit}
+
+**작업지시서:** [WORK_INSTRUCTION_347_TIER3_CASE_INTERVIEW_GAP_AUDIT.md](WORK_INSTRUCTION_347_TIER3_CASE_INTERVIEW_GAP_AUDIT.md)
+
+**실사 범위(요지):** (1) Case 상세 화면 (2) 인터뷰 화면 (3) Case API route (4) Interview API route (5) `CaseStatus` 사용 맥락 — **canonical enum 변경 금지** (6) 인터뷰 완료 후 상태·상세 반영 (7) 문서 생성 진입 ↔ 사건 상세 (8) ALIGN §6 후속(B) 관련 ID 실사·판정 갱신.
+
+**실행 기록 (2026-04-26, 코드 읽기·경로 실사)** — `prisma/schema.prisma`·`src/lib/definitions/case-status.ts` **enum·canonical 변경 없음** · 닫힌 축(353+·P0·P1·통합 실착) **코드 재개편 없음**.
+
+| # | 항목 | 관찰 |
+|---|------|------|
+| 1 | Case 상세 화면 | `src/app/(protected)/cases/[caseId]/page.tsx` — 서버 `serializeCaseDetail`·`CaseDetailClient`. 상태 카드·`getAllowedCaseActions`·액션은 클라. |
+| 2 | 인터뷰 화면 | `interview/page.tsx` + `CaseInterviewClient` — `GET/POST /api/cases/:id/interview`·권한·읽기전용 정합. **B-G1:** `getAllowedCaseActions.COMPLETE_INTERVIEW`일 때 **완료 CTA** → `POST .../interview/complete` → 상세 이동([#b-g1-ux-pr-20260426](#b-g1-ux-pr-20260426)). |
+| 3 | Case API | `GET/PATCH` ` /api/cases/[caseId]`, `PATCH /status`(직접 `status` body 거부), `POST /transition`, `GET /detail`(`allowedLifecycleActions`) 등 — 전이·권한 주석·구현 [FILE-019] 등과 정합. |
+| 4 | Interview API | `GET/POST` ` /api/cases/[caseId]/interview`, `POST .../interview/complete` — 서비스·Zod strict 축. |
+| 5 | `CaseStatus` 맥락 | UI는 `CASE_STATUS_LABELS`·문자열 비교(종결 등) 다수; **canonical 2-file enum 변경은 수행·제안 없음**([ALIGN6](WORK_INSTRUCTION_347_TIER3_ALIGN6_DOC_CLOSURE.md) §3 동일). |
+| 6 | 인터뷰 완료 후 반영 | `CaseDetailClient` — `COMPLETE_INTERVIEW` → `POST /interview/complete` → `refreshCase()` → `GET /api/cases/.../detail`로 갱신. **B-G1 PR 이후** 전용 인터뷰 화면에서도 동일 API 완료 → `router.push`로 상세 진입(서버 렌더 갱신). |
+| 7 | 문서 생성 ↔ 상세 | `DocumentCreateModal` — 인터뷰 완료(`interviewCompleted`) **전제** 후 `POST /documents/generate`. `/cases/:id/documents/new` 는 별 **초안 생성** 흐름·상세로 링크 복귀. |
+| 8 | ALIGN §6 (B) 연계 | `IV-01`~`IV-03`·`IV-06`·`UI-01/02/04/06`·`LC-04/05`는 **이번에 표 판정 문구 전면 갱신하지 않음**(필수 필드·admin 대규모·정밀 DTO 실사는 **후속 `353+`·소규모 PR**). **G-1 UX 갭**은 **B-G1 PR**로 해소(아래). |
+
+**갭·후속(정적 실사 시점)**
+
+| ID | 내용 | 조치 |
+|----|------|------|
+| **G-1** | (실사 시점) 인터뷰 전용 화면에 완료 CTA 없음 | **해소:** [B-G1 UX PR](#b-g1-ux-pr-20260426) |
+| **G-0** | 그 외 **차단 이슈** 없음(정적 실사 기준). | — |
+
+**검증 (실사 기록만 문서 갱신 시점):** `npm run verify:canonical-sources` **exit 0**.
+
+##### B-G1 UX PR (2026-04-26) {#b-g1-ux-pr-20260426}
+
+| 항목 | 내용 |
+|------|------|
+| **작업지시** | [WORK_INSTRUCTION_347_TIER3_BG1_INTERVIEW_COMPLETE_CTA.md](WORK_INSTRUCTION_347_TIER3_BG1_INTERVIEW_COMPLETE_CTA.md) |
+| **근거** | `EVIDENCE-20260426-353` · B-G1 |
+| **구현** | `src/app/(protected)/cases/[caseId]/interview/page.tsx` — `getAllowedCaseActions`·`COMPLETE_INTERVIEW`와 동일 조건으로 `showCompleteInterviewCta` 계산·전달. `src/components/cases/case-interview-client.tsx` — `POST /api/cases/:caseId/interview/complete` 호출, 성공 시 Next `router.push`로 `/cases/:caseId` **사건 상세** 이동(본문 안내·버튼 라벨로 흐름 명시). |
+| **미변경** | `CaseStatus` **canonical enum**(`prisma`·`case-status.ts`) · 전이 정책 서비스 · 권한 모델 |
+| **검증** | `npm run verify:349-12` **exit 0** |
+| **팀 확인** | B 트랙 **G-1**은 본 절 기준 **해소** — [347] 3순 **B축 마감**은 [#347-tier3-b-axis-closure-c-next-20260426](#347-tier3-b-axis-closure-c-next-20260426). |
+
+#### [347-3순] B 잔여 심화 — LC-04/LC-05 · Case-API · Case-UI {#work-instruction-347-tier3-b-residual-lc-case-api-ui}
+
+**작업지시서:** [WORK_INSTRUCTION_347_TIER3_B_RESIDUAL_LC_CASE_API_UI.md](WORK_INSTRUCTION_347_TIER3_B_RESIDUAL_LC_CASE_API_UI.md)
+
+**범위:** [ALIGNMENT §6-2](ALIGNMENT_AUDIT_V1.md#6-2-사건-라이프사이클-정합성) **`LC-04`**·**`LC-05`** · [FOLLOWUP §4](WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md) **Case-API-갭** · **Case-UI-갭** (FILE-1B·IV 대규모는 제외).
+
+**실행 기록 (2026-04-26, 코드 정적 실사)** — `CaseStatus` canonical·닫힌 353+ 이중 축 **미변경** · [WORK_INSTRUCTION_347_TIER3_B_RESIDUAL_LC_CASE_API_UI.md](WORK_INSTRUCTION_347_TIER3_B_RESIDUAL_LC_CASE_API_UI.md) 절차 준수.
+
+| 구분 | 관찰 | 판정 |
+|------|------|------|
+| **LC-04** `allowedLifecycleActions` vs UI | `GET /api/cases/:id/detail`·`GET /api/cases/:id` 응답에 `getAllowedLifecycleActionsForCase(status, role)` 포함(`detail/route.ts`, `case.service.ts`). 화면 **진행 액션**은 `getAllowedCaseActions`(+ `DELIVER_DOCUMENT` 잠금 문서 조건)만 사용(`case-detail-client.tsx` → `CaseStatusActions`). `allowed-actions.ts` 주석대로 서버 목록은 **구조적 후보**, 클라는 **`CASE_TRANSITIONS.requires`·사실 반영** — **의도적 직교**(353+ 닫힘 축 재오픈 없음). | **임의 버튼 노출 없음.** 서버는 `PATCH /status`·`POST /transition`에서 `checkCaseTransitionOrThrow`·`resolveCaseTransitionFacts`로 **최종 검증** — UI에 없는 액션을 호출해도 사실·규칙 불충족 시 거부. |
+| **LC-05** 타임라인·감사 | **정책(보강 후·2026-04-26):** (1) **`applyCaseStatusTransition`** — 기존 `CASE_STATUS_CHANGED` 타임라인 유지 + 트랜잭션 커밋 후 **`writeAuditLog`** `CASE_STATUS_TRANSITION`(메타: `action`·`from`·`to`·`reason`). (2) **`completeCaseInterviewService`** — 기존 `CASE_INTERVIEW_COMPLETE` 감사 유지 + 사건 `INTERVIEW_DONE` 갱신과 **동일 트랜잭션**으로 `CASE_STATUS_CHANGED` 생성(`metaJson.source`: `interview_complete`, `action`: `COMPLETE_INTERVIEW`). (3) **문서 승인** `approve/route.ts` — 이전 사건 상태가 `APPROVED`가 아닐 때만 **`CASE_STATUS_CHANGED`** 추가(기존 `DOCUMENT_APPROVED`와 병행, `metaJson.source`: `document_approve`). **변경 없음:** `CaseStatus` enum·`checkCaseTransitionOrThrow`·RB/IO/353+ 닫힌 축. (4) **우회 갱신 잔여:** 그 외 `case.update`로 상태만 바꾸는 경로가 있으면 동일 패턴으로 **별 PR** 검토. | **부분일치 → 보강 반영** — 타임라인·감사 **주요 경로 정렬**; 문서 승인 경로는 감사는 여전히 문서 이벤트 중심(상태 전이 **전용 감사**는 필요 시 제품 정책에 따라 후속). |
+| **Case-API-갭** | `src/app/api/cases/**` — 목록·단건 `requireSessionUser`/`getSessionUser`, 케이스 단위는 서비스·`assertCaseAccess`·`getCaseAccessContext` 축. 생성·수정·삭제·상태는 **`status` 직접 body 거부**, `zod` **`.strict()`** 패턴 유지(`cases/route.ts`, `[caseId]/route.ts`, `status`·`transition`). 인터뷰·첨부·타임라인 하위 경로는 기존 도메인 서비스 사용. | **차단 갭 없음**(정적 실사). IO-05 닫힘 전제 **재오픈 없음**. |
+| **Case-UI-갭** | `(protected)/cases` — `page`(목록), `new`, `[caseId]` 상세, `edit`, `interview`, `supplement`, `documents/new`, `documents/[documentId]`. 상세 **INTAKE_PENDING** 배너가 수정→인터뷰→보완 허브 순서 안내(`case-detail-client.tsx`) — MVP 흐름·[SCREEN_PRIORITY_TABLE](SCREEN_PRIORITY_TABLE.md)과 **충돌하는 신규 라우트 없음**. 문서 생성은 모달·`/documents/new` 병존(1차 실사와 동일). | **전면 개편 불요.** 잔여는 정의서 대비 **미세 카피·우선순위** 수준 — 별도 UI 트랙에서 처리 가능. |
+
+**B-LC05-A / B-LC05-B 착수 (별도 PR 성격·동일 배치)**
+
+| ID | 조치 |
+|----|------|
+| **B-LC05-A** | `apply-case-status-transition.ts` — `CASE_STATUS_TRANSITION` 감사 로그 추가. |
+| **B-LC05-B** | `case-interview.service.ts` — 인터뷰 완료 시 `CASE_STATUS_CHANGED` 타임라인; `legal-documents/.../approve/route.ts` — `prevCaseStatus !== APPROVED`일 때 `CASE_STATUS_CHANGED` 추가. |
+
+**잔여 후보:** 문서 승인 시 **감사 테이블**에 상태 전이를 **별 행**으로 남길지(현재는 타임라인·`DOCUMENT_APPROVED` 중심) — 제품·규정 요구 시 소규모 PR.
+
+**ALIGNMENT:** [§6-2 `LC-05`](ALIGNMENT_AUDIT_V1.md#6-2-사건-라이프사이클-정합성) 판정 **보강 PR 반영**으로 문구 갱신(2026-04-26).
+
+**검증:** `npm run verify:349-12` **exit 0** (`src/**` 변경).
+
+**문서 연결:** **B축 마감:** [#347-tier3-b-axis-closure-c-next-20260426](#347-tier3-b-axis-closure-c-next-20260426) · `WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES` §B·§5·§7 · `WORK_INSTRUCTION_347_TIER3_CASE_INTERVIEW_GAP_AUDIT` §7 · `aibeopchin_navigator` `post_352_next_347_tier3_alignment`.
+
+#### [347-3순] 1순위 A · ALIGNMENT §6 문서 클로저 {#work-instruction-347-tier3-align6-doc-closure}
+
+**작업지시서:** [WORK_INSTRUCTION_347_TIER3_ALIGN6_DOC_CLOSURE.md](WORK_INSTRUCTION_347_TIER3_ALIGN6_DOC_CLOSURE.md) — §6 잔여 행을 **(1) 닫힘 근거 링크** · **(2) 문서 클로저** · **(3) 별도 후속 EVIDENCE/PR**로 분류; **코드 수정 비목적**; 닫힌 축(지시서 §3) **재오픈 금지**.
+
+**실행 기록 (2026-04-26, ALIGN6 스윕)** — 기준 [ALIGNMENT_AUDIT_V1 §6](ALIGNMENT_AUDIT_V1.md#6-역점검표-본문).
+
+| 분류 | 건수·범위 |
+|------|-----------|
+| **(1) 닫힘 연결** | **15행** — `ST-01`·`ST-02`·`ST-03`·`ST-05`(통합 실착 [#p0-347-tier3-p0-p2-integrated-20260426](#p0-347-tier3-p0-p2-integrated-20260426)); `LC-03`·`IV-04`·`IV-05`(P0 첫 코드 [#p0-353-구현-20260426](#p0-353-구현-20260426)); `RB-01`~`RB-05`([#p0-353-p1-rb01](#p0-353-p1-rb01)~[#p0-353-p1-rb05](#p0-353-p1-rb05)); `IO-05`([#p0-353-p1-io05](#p0-353-p1-io05)); `UI-03`·`LC-02` 내 **353+ UI 가용 이중** 잔여는 [#p0-353-plus-dual-axis-real](#p0-353-plus-dual-axis-real) 닫힘으로 정리(**닫힌 축 재오픈 없음**). |
+| **(2) 문서상 잔여** | **§6 서문** — `[ALIGN6·문서 클로저 스윕]` 단락 추가. **`EV-01`~`EV-04`** — `부분일치(문서권)`로 정리(증빙·navigator 관행 명시, 전수 감사는 후속). **`DB-01`** — 판정 열에 2-file·verify·**canonical enum 변경 금지**([ALIGN6 §3](WORK_INSTRUCTION_347_TIER3_ALIGN6_DOC_CLOSURE.md)) 문서 클로저만 반영. |
+| **(3) 후속 후보 (B/C)** | **42행** — `판정 필요`를 **`미실사·후속(B/C)`**로 통일: `LC-04`·`LC-05`; `IV-01`·`IV-02`·`IV-03`·`IV-06`; `SM-*`; `DC-*`; `AP-*`; `DL-*`; `IO-01`~`IO-04`; `DB-02`~`DB-06`; `UI-01`·`UI-02`·`UI-04`·`UI-05`·`UI-06`. 이번 라운드 **코드 미실사·미수정**; [347] **B**(Case/인터뷰)·**C**(GW-0.3/SPEC) 또는 `EVIDENCE-353+`에서 재분류. `LC-02` 조치 방향란의 **route 단일화** 등은 동일하게 **후속**으로 남김. |
+
+**검증:** `npm run verify:canonical-sources` **exit 0** (문서만 변경). **`src/**` 변경 없음.**
+
+#### 범위 (초기)
+
+- **ALIGNMENT §6** — 정의서 대비 구현 역점검, R3~R9 맥락 비고·**→ ALIGNMENT** ID 연결 **잔여**  
+- **Case / 인터뷰** — 화면·API·라우트·`CaseStatus` 등, [347]·ALIGNMENT·기존 EVIDENCE와 **정합·갭**을 정리하고, 필요 시 **이후** `EVIDENCE-20260426-353+` 또는 **도메인별** 후속 블록에 누적  
+- **질문셋 343~350 계열** — **재오픈 없음**; 3순이 `QUESTION_SET_DEFINITION`·[GW-0.3](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-3-범위-완료)과 **겹치면** (가)/(나)에 따라 **별** `EVIDENCE`로 분리
+
+#### 첫 PR 후보·범위 (2026-04-26·**확정**)
+
+**[353-1]** — [ALIGNMENT](./ALIGNMENT_AUDIT_V1.md) **§6-1**·**§6-2**·**§6-11**의 **ST / LC / 인터뷰-전이** **문서 판정 스냅**. **문서 중심**이며 `src/**` **변경은 0 또는 최소**로 제한한다.
+
+| 구분 | 내용 |
+|------|------|
+| **PR 제목(예)** | `[353-1] ALIGNMENT §6-1·§6-2·§6-11 — ST/LC/인터뷰-전이 문서 판정 스냅` |
+| **포함** | **ST-01~05**·**LC-01~02**·**UI-03** 행별 **판정**·**현재 구현 관찰** + [SPEC R3 §3.1](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#31--r3r9st-2차-심화-점검)·**기존 증빙**([310]·[309]·[306] 등)·**→ ALIGNMENT** 교차 연결 |
+| **제외** | **`IV-01`·`IV-02`**·**admin** `question-set` **대규모 편집** · **[343]~[352] 닫힌 축** (질문셋 게시·백필·`publish`·1·2순 `diff` 등) — **혼재·재오픈 없음** |
+| **PR 근거(필수)** | 제목 **또는** 본문(한 곳 이상)에 **`EVIDENCE-20260426-353`** 또는 **명시적** `353+` |
+| **검증** | `npm run verify:canonical-sources` (문서권). `src/**` **미변경**이면 `tsc` 생략 가능(팀 정책) |
+
+**353-1 스냅 반영 (2026-04-26):** [ALIGNMENT_AUDIT_V1 §6](ALIGNMENT_AUDIT_V1.md#6-역점검표-본문) — **ST-01~05**·**LC-01~02**·**UI-03** **판정** 열·`[353-1] 문서 판정 스냅` 본문; 근거 **EVIDENCE-20260426-353**; **`src/**` 변경 없음**; `npm run verify:canonical-sources` **OK** (팀 기록).
+
+#### [353-1] 완료 후 — [353] 범위 안 **차기** 후속 후보
+
+353-1(문서 판정 스냅)은 **완료**했다. 아래는 **[347] 3순 / [EVIDENCE-20260426-353](IMPLEMENTATION_EVIDENCE.md#evidence-20260426-353)** 트랙에 남는 **다음** 작업 후보만 정리한다. **[343]~[352]**·질문셋 1·2순과 **동일 `PR` 혼재 없음**; **`IV-01`·`IV-02`·admin** `question-set` **대규모** 제외(기존 [353] 전제).
+
+**후속 구조(팀 확정 상태·2026-04-26, 갱신):** **[353] P0~P2**는 **[347] 3순** 「**ALIGNMENT / Case·인터뷰 잔여**」 **궤적**으로만 진행 — **P0** 첫 코드(IV-04~ST-03) **닫힘**([#p0-353-구현-20260426](#p0-353-구현-20260426)); **잔여** ST-01·[310](IMPLEMENTATION_EVIDENCE.md#evidence-20260423-310) **(1)(3)** 축은 **별 `PR`**([#work-instruction-347-tier3-p0-p2-separate-pr](#work-instruction-347-tier3-p0-p2-separate-pr)). **P1** **`RB-*`**, **`IO-05`** **닫힘**. **P2** **ST-02, ST-05,** 운영 — **항목별 별 `PR`**. **`353+` UI 가용 액션 이중 축** **실착·닫힘** ([#p0-353-plus-dual-axis-real](#p0-353-plus-dual-axis-real)) — **동일 `PR` 혼입 없음** 기준 유지.
+
+**P1 권한·IO 실착 축 — 닫힘 판정 (2026-04-26):** **`RB-*`(RB-01~05)**·**IO-05** **행별 실착** **팀 완료·닫힘** ([#p0-353-p1-rb01](#p0-353-p1-rb01) ~ [#p0-353-p1-rb05](#p0-353-p1-rb05), [#p0-353-p1-io05](#p0-353-p1-io05)). **유지:** 위 축 **재오픈 금지**·**닫힌 `353+` 범위를 임의 후속 `PR`에 끼워 넣지 않음**. **`353+` UI 가용 이중 축** 증빙·범위는 [#p0-353-plus-prep](#p0-353-plus-prep)·[#353-plus-separate-pr](#353-plus-separate-pr)·[#p0-353-plus-dual-axis-real](#p0-353-plus-dual-axis-real) **만** 기준(**실착 완료**).
+
+| 우선(참고) | 후보 | 한 줄 (범위) |
+|:----------:|------|--------------|
+| P0 | **ST-01** 잔여 | 저장소·휴리스틱 **레거시** `CaseStatus` 문자열 정리, `prisma`·`case-status.ts` 2파일 **canonical** 유지([310](IMPLEMENTATION_EVIDENCE.md#evidence-20260423-310) **남은 예외(1)(3)**·[§4-1](IMPLEMENTATION_EVIDENCE.md#4-1-check-status-결과-해석-오해-방지)) |
+| P0 | **IV-04~ST-03** (첫 코드 묶음) | **닫힘** [#p0-353-구현-20260426](#p0-353-구현-20260426) — 재오픈·후속 `PR` **혼입 금지**; 회귀만 필요하면 **별 합의·EVIDENCE** |
+| P1 | **권한·`IO-05`** | ALIGN **`RB-*`**, [§6-3](ALIGNMENT_AUDIT_V1.md#6-3-권한-정합성) 및 [§6-9](ALIGNMENT_AUDIT_V1.md#6-9-입력출력-데이터-정합성) `IO-05` 맥락 — Case 상세 API **`allowedActions` 응답** 정합(서버/스키마 권한 축). **실착·닫힘 (2026-04-26).** **`getAllowedCaseActions` / `allowedLifecycleActions` 이중 축**은 **`353+` 전용** `PR`; **이 행**과 **동일 `PR` 금지** |
+| P2 | **ST-02, ST-05,** 운영 | label map 일원화, `check-status`·운영 메시지(문서/운영) |
+
+#### P0 첫 작업 선정 (2026-04-26·팀 선정) {#p0-353-첫-착수}
+
+| 항목 | 내용 |
+|------|------|
+| **P0 첫 코드 PR (팀 선정)** | **IV-04**·**IV-05**·**LC-03**·**ST-03**([작업지시](#p0-353-작업지시)). **범위**는 **인터뷰 완료 → Case 전이**. 아래 **기준**으로 **정합**을 **맞춤**: `POST /api/cases/[caseId]/interview/complete`, `completeCaseInterviewService`, 클라이언트 **interview/complete** 호출, [FILE_REALIGN 1-B](FILE_REALIGN_PATCH_V1.md#batch-1b-실행), ALIGN [§6-2](ALIGNMENT_AUDIT_V1.md#6-2-사건-라이프사이클-정합성)·[§6-4](ALIGNMENT_AUDIT_V1.md#6-4-질문셋인터뷰-정합성) 및 위 **궤적 정리** P0 **핵심**(회귀 포함). **이번 P0 `PR`에 넣지 않음:** `getAllowedCaseActions` / `allowedLifecycleActions` **및** UI **가용 액션** **이중 축** — **전용** **`353+` PR**만(본 P0 `PR`과 **동일 `PR` 혼입·끼워 넣기 금지**). |
+| **IV-04 (이번 P0 PR)** | [작업지시](#p0-353-작업지시) — 필수 질문·서버 검증(IV-04)을 **이번** P0 코드 `PR`에 **포함** |
+| **참고** | **ST-01** 잔여는 보통 두 번째 `PR`로 두거나, 권역을 한정한 첫 `PR` 대안(기존과 동일). |
+
+#### [353] P0 첫 코드 PR 작업지시 {#p0-353-작업지시}
+
+**실 `PR`에 기재(제목 또는 본문·한 곳 이상·필수/권장):**
+
+- **필수:** `EVIDENCE-20260426-353` · [`#p0-353-첫-착수`](#p0-353-첫-착수)
+- **권장(가능하면 함께):** [`#p0-353-작업지시`](#p0-353-작업지시) (이 절)
+
+**범위·핵심(요약):** **IV-04**·**IV-05**·**LC-03**·**ST-03** — **인터뷰 완료 → Case 전이** **한 경로** 정합.
+
+**작업명(예):** `[353-P0] IV-04 · IV-05 · LC-03 · ST-03 — 인터뷰 완료 → Case 전이 정합`
+
+**1. 포함 범위**
+
+**이번 P0 `PR`에 포함할 축:**
+
+| ID | 한 줄 |
+|----|--------|
+| **IV-04** | 인터뷰 완료 **전** 필수 질문·서버 검증 |
+| **IV-05** | 인터뷰 완료 **후** Case 전이 |
+| **LC-03** | 사건 라이프사이클 제약 |
+| **ST-03** | 액션 기반 상태 전이 |
+
+**핵심 목표:** `POST .../interview/complete` → `completeCaseInterviewService` → Case 상태 전이 흐름에서, **완료 전** 서버 검증과 **완료 후** 상태 전이가 **한 경로**에서 정합되도록 한다.
+
+**2. 제외 범위**
+
+**이번 P0 `PR`에 포함하지 않는다:**
+
+- `getAllowedCaseActions` · `allowedLifecycleActions` · **UI 가용 액션 이중 축** — **전용 `353+` `PR`만** (UI 가용 액션 이중 축은 **353+ 전용 `PR`로만**)
+- admin `question-set` 대규모 편집 · 질문셋 관리자 대규모 UI 변경
+- [343]~[352] 닫힌 축 재오픈 · Step 3 1·2순 흐름 · **`353+` 전용 `PR` 범위** (미혼입)
+
+**3. 우선 확인할 파일**
+
+| 작업지시 경로(참고) | 본 저장소 실경로(우선) |
+|---------------------|-------------------------|
+| `…/interview/complete-case-interview.service.ts` | `src/features/case-interview/case-interview.service.ts` (`completeCaseInterviewService`·`getInterviewFlow`·`getInterviewFlowInternal` 등) |
+| `…/get-interview-flow.ts` | (별도 파일 없음) **위** `case-interview.service.ts` |
+| `…/resolve-interview-questions.ts` | `src/features/case-interview/interview-branching.utils.ts` (`resolveInterviewQuestions` 등) |
+
+**공통(먼저 확인):**
+
+- `src/app/api/cases/[caseId]/interview/complete/route.ts`
+- `src/features/case-interview/case-interview.service.ts`
+- `src/features/case-interview/interview-branching.utils.ts`
+- `src/components/cases/case-interview-client.tsx` — 인터뷰 UI
+- `src/components/cases/case-detail-client.tsx` — `interview/complete` `fetch`(있을 수 있음)
+- `src/lib/definitions/case-status.ts` · `prisma/schema.prisma`
+
+**문서:** `docs/project-governance/IMPLEMENTATION_EVIDENCE.md` · `ALIGNMENT_AUDIT_V1.md` · `DEV_BRIEF_POST_STEP3_352.md` · `tools/aibeopchin_navigator.py`
+
+**4. 실제 수정 후보 (우선순위)**
+
+- **A. `completeCaseInterviewService`:** 사건이 인터뷰 **완료 가능**한지 · 필수 질문 **응답 누락** · 완료 시 **CaseStatus** 전이 · **이미 완료** 인터뷰 **중복** complete 방지 · 권한·소유·배정 **충돌** 없음
+- **B. `interview/complete` route:** `completeCaseInterviewService` **단일** 진입점 · `AppError` / `ValidationError` / `ForbiddenError` · 성공 **응답 shape** (기존 클라이언트와 일치)
+- **C. 클라이언트 complete:** 완료 **버튼**이 **서버 결과**로 화면 갱신 · 완료 후 사건 상세/인터뷰 **상태 불일치** 없음. **`getAllowedCaseActions` / `allowedLifecycleActions` UI 이중 축**은 **건드리지 않음**
+- **D. 상태 전이 정의:** **ST-03**·**LC-03**에 맞게 `CaseStatus` 전이가 **canonical source**와 **충돌** 없음. **CaseStatus** 값 **추가·변경**이 필요하면 **즉시 중단**·별도 판단. **가능한 한 기존 상태값** 안에서 **정합**만
+
+**5. 테스트 추가·보강 기준**
+
+**필수 후보(시나리오):** 필수 응답 **없으면** 실패 · **있으면** complete 성공 · complete 성공 시 Case **기대** 상태로 전이 · **이미 완료** 후 다시 complete 시 동작 · 권한 없는 사용자 **실패** · complete route가 service 결과를 **정상 반환**
+
+**파일 후보(저장소):** `src/features/case-interview/case-interview.service.test.ts`(없으면 **신규**), `src/app/api/cases/[caseId]/interview/complete/route.test.ts`(**신규** 가능) — 기존 interview 관련 `*.test.ts`가 있으면 **같은** 파일에 추가
+
+**6. 검증 명령**
+
+- **기본:** `npm run verify:349-12`
+- **필요 시:** `npx tsc --noEmit` · `npm run lint` · `npm run verify:canonical-sources` · `npm run test`
+- **상태 전이·`CaseStatus` 관련** 변경이 있으면(선택): `npm run check-status -- --scope case` — **CaseStatus canonical source를 바꾸지 않으면** `check-status`는 **필수는 아님**; 증빙에 **「상태 canonical 변경 없음」** 기록
+
+**7. 증빙 기록 (본 `EVIDENCE-20260426-353` 본절에 누적)**
+
+- PR 제목 · 수정 파일 · **IV-04** 포함 판정 · **IV-05** / **LC-03** / **ST-03** 정합 요약
+- **제외**한 범위 · 테스트 결과 · 검증 명령 **exit** · **CaseStatus canonical** 변경 여부 · **`353+` 이중 축** 미혼입 확인
+
+#### §8 완료 판정 (P0 첫 코드 PR·닫힘) {#p0-353-완료-판정-8}
+
+**P0 첫 코드 PR(IV-04~ST-03) 로컬 구현·증빙:** [#p0-353-구현-20260426](#p0-353-구현-20260426) 기준 **2026-04-26** 아래 **닫힘**. **원격 `PR` 본문**에 `EVIDENCE-20260426-353`·`#p0-353-첫-착수`·(권장) `#p0-353-작업지시`를 넣는 것은 **병합·리뷰 전 팀 확인**(첫 항).
+
+- [x] `PR` 제목 또는 본문에 `EVIDENCE-20260426-353`·`#p0-353-첫-착수`(**필수**), `#p0-353-작업지시`(**권장**)(**원격 `PR` 시 확인**)
+- [x] **IV-04** 필수 질문·서버 검증이 **최소** 범위로 반영되었다
+- [x] **IV-05** 인터뷰 완료 후 Case 전이가 **정합**하다
+- [x] **LC-03** 라이프사이클 제약과 **충돌**하지 않는다
+- [x] **ST-03** 액션·상태 전이 취지와 맞다
+- [x] `getAllowedCaseActions` / `allowedLifecycleActions` **이중 축 구현**을 **변경**하지 않았다([353+](#353-plus-separate-pr) **범위** **별도**)
+- [x] **353+** 전용 UI 가용 액션 이중 축을 **혼입**하지 않았다
+- [x] [343]~[352] 닫힌 축을 **재오픈**하지 않았다
+- [x] `npm run verify:349-12`가 **통과**했다
+- [x] **필요 시** 관련 route/service **테스트**가 **통과**했다(가드 **`case-interview.complete-guards`**) 
+
+#### [353] P0 코드 구현 기록 (2026-04-26) {#p0-353-구현-20260426}
+
+| 항목 | 기록 |
+|------|------|
+| **PR 제목(로컬·권장 스펙; 원격 `PR` 열 시 동일·유사 권장)** | `[353-P0] IV-04 · IV-05 · LC-03 · ST-03 — 인터뷰 완료 → Case 전이 정합` — 본문에 `EVIDENCE-20260426-353`·`#p0-353-첫-착수`(**필수**), [`#p0-353-작업지시`](#p0-353-작업지시)(**권장**) |
+| **수정·추가 파일** | `src/features/case-interview/case-interview.service.ts` — `completeCaseInterviewService` 재구성(IV-04~ST-03) · `assertCaseTerminalAllowsInterviewComplete` / `assertInInterviewForNewComplete` **export** · `IN_INTERVIEW` → `INTERVIEW_DONE` **신규** 완료·터미널·멱등·`persistInterviewRowCompleted` / `buildCompleteInterviewServiceResponse` 보조. **신규** `src/features/case-interview/case-interview.complete-guards.test.ts`. `src/app/api/cases/[caseId]/interview/complete/route.ts` **미변경**(단일 진입점·기존 유지). `getAllowedCaseActions` / `getAllowedLifecycleActions` **이중 축** **구현 파일** **미수정**([`353+` **별도 PR**](#353-plus-separate-pr) **혼입 없음**). |
+| **IV-04 / IV-05 / LC-03 / ST-03** | **IV-04:** 신규 완료 시 `getInterviewFlowInternal` + 필수 `visible` 질문 `required && !isAnswered` **ValidationError**. **IV-05 / ST-03:** `CASE_TRANSITIONS`에 맞춰 **신규** 완료는 **`IN_INTERVIEW` → `INTERVIEW_DONE`만**; `CREATED`/`INTAKE_PENDING` **직접** `INTERVIEW_DONE` **제거**. **LC-03:** `CLOSED`·`REJECTED`·`DELETED`·`HOLD`·잘못된 단계 **가드**; **완료 메모** 있으면 **멱등·복구**(`IN_INTERVIEW` + 메모 → 상태·`Interview` 행 보강). **상태/메모 불일치** `ValidationError`. |
+| **CaseStatus canonical** | **`prisma/schema.prisma` · `src/lib/definitions/case-status.ts` 변경 없음** (열거·스키마 그대로). |
+| **`353+` UI 가용 이중 축** | **미혼입** — `allowed-actions.277`·`case-action-guard`·`getAllowedCaseActions`/`getAllowedLifecycleActions` **이중 축** 전용 [`353+` **별도 PR**](#353-plus-separate-pr) **범위** **없음**. |
+| **검증** | `npm run verify:349-12` **exit 0** (`tsc`·`lint`·`verify:canonical-sources`·`test`·Vitest `case-interview.complete-guards` **포함**). |
+
+#### [353] P0 완료·후속 판정 (팀) {#p0-353-p0-완료-후속}
+
+| 구분 | 판정·다음 |
+|------|-----------|
+| **P0 첫 코드 축(닫힘)** | IV-04·IV-05·LC-03·ST-03·`complete` 경로 — [#p0-353-구현-20260426](#p0-353-구현-20260426) · [§8 완료 판정](#p0-353-완료-판정-8) **로컬 기준 닫힘**. |
+| **남은 P0** | [후속 후보 표](#evidence-20260426-353) **ST-01** 잔여(레거시 `CaseStatus`·canonical 2파일) — **별 `PR`**, 범위·**우선** **팀 확정** 후 착수. |
+| **P1** | **`RB-*`**, **`IO-05`**, Case **`allowedActions` 응답** 정합 — **이중 축(353+)**과 **동일 `PR` 금지**([표](#evidence-20260426-353) P1 행). |
+| **P2** | **ST-02, ST-05,** 운영·`check-status` — [표](#evidence-20260426-353) P2 행. |
+| **`353+`** | [별도 `PR`](#353-plus-separate-pr) — `getAllowedCaseActions` / `allowedLifecycleActions`·**UI** 이중 축; **[353] P0~P2** 구현 `PR`과 **혼입 없음**. |
+
+**팀이 정할 것:** (1) **P0 잔여(ST-01·310)** / **P2(ST-02·ST-05·운영)** **착수 순서**·**별 PR** 범위 ([#work-instruction-347-tier3-p0-p2-separate-pr](#work-instruction-347-tier3-p0-p2-separate-pr)), (2) [GW-0.3](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-3-범위-완료) **직교** 시 **SPEC·별 EVIDENCE**, (3) [310] **예외(2)** §6-11 문서 잔여는 **353+ 닫힘** 이후 **별도 합의** 시에만.
+
+**다음 분기(팀 결정·이 절·2026-04-26):** P0 첫 코드 `PR`은 **완료 판정**([§8](#p0-353-완료-판정-8))까지 **닫힘**([#p0-353-구현-20260426](#p0-353-구현-20260426) — IV-04~ST-03, `verify:349-12` exit 0, **CaseStatus canonical** 변경 없음, **`353+` 이중 축** 미혼입). **이후** 아래 [병렬 후속 **최대 3** 트랙](#p0-353-병렬-후속) — **범위·`PR`** **서로** **분리** (경로 **혼용**·**동일** `PR` **혼입** **금지**).
+
+**팀 지시(재확인):** **서로 다른 주제( ST-01 / P1P2 / `353+`)** **가** **하나**의 `PR`에 **섞이지** **않는다** — [`EVIDENCE-20260426-353` **후속 구조**·궤적](IMPLEMENTATION_EVIDENCE.md#evidence-20260426-353) · [`353+` **별도 PR**](#353-plus-separate-pr) **혼입 없음**.
+
+#### [353] 병렬 후속 (팀·2026-04-26) {#p0-353-병렬-후속}
+
+**병렬:** **최대 3**개 트랙까지 **동시** 진행 **가능**. **단,** **각** 트랙은 **이름**·**범위**가 **다른** `PR`·이슈로 **엄격히** 분리 — **ST-01**·**P1P2**·**353+**를 **하나**의 `PR`에 **끼워 넣지 않는다**([팀 지시(재확인)](#p0-353-p0-완료-후속) **동일**).
+
+**팀 착수 순서 (확정·2026-04-26, 갱신):** **1순위** [353-ST01] **ST-01** 잔여 정리 **(닫힘)**. **2순위** [353-P1P2] P1/P2 **사전 분류표** (문서) **(닫힘)**; **P1** **`RB-*`·`IO-05` 실착** **전 행** **팀 완료·닫힘** (2026-04-26). **3순위** **[353+]** UI 가용 액션 **이중 축** — **실착·닫힘** (2026-04-26) [#p0-353-plus-dual-axis-real](#p0-353-plus-dual-axis-real); **다음 활성(구현):** [347] 3순 **P0 잔여·P2** 등 **팀 선정** — **353+ 닫힌 범위 재오픈·동일 `PR` 혼입 금지**. **검증:** `npm run verify:canonical-sources` (기준); `src/**` 변경 시 `npm run verify:349-12`.
+
+**기록(2026-04-26):** 본 절 `이 표에…`~`#### 353+` 단락 복구; [353-P1P2] 표 3행 `RB-*`·`PR` 정리(스크립트 `tools/fix_evidence_353_block.py`). **후속(같은 주기):** 팀 착수 순서 문단·병렬 표(행: ST-01 → P1P2 → 353+)·공통 금지/검증·353+ 절 제목 행을 정리·갱신. **후속(2026-04-26):** [353-P1P2] `#p0-353-p1p2` 사전 분류표(P1 `RB-*`·`IO-05` / P2 ST-02·ST-05·운영) 추가. **후속(같은 절·닫힘):** [353-P1P2] **문서 절** `#p0-353-p1p2` **닫힘**; P1 **첫** `PR` **후보** → [#p0-353-p1-첫-pr](#p0-353-p1-첫-pr) (**RB-02** 권장 1순).
+
+| # | 가칭 / 근거 | 범위·필수 | 상호·혼입 |
+|---|------------|-----------|----------|
+| **1** | **[353-ST01]** ST-01 잔여 정리 — [증빙](#p0-353-st01) **(완료 2026-04-26)** | **근거:** `EVIDENCE-20260426-353` · [`#p0-353-p0-완료-후속`](#p0-353-p0-완료-후속) — **canonical** `CaseStatus`·R3-001, [310] **예외**, [§4-1](IMPLEMENTATION_EVIDENCE.md#4-1-check-status-결과-해석-오해-방지) **정합 재점검**; P1·P2·[353+](#353-plus-separate-pr) **이중 축** **혼용 금지** | P1·P2·[353+](#353-plus-separate-pr) `PR` · **IV/LC** **구현** `PR` **혼입 금지** |
+| **2** | **[353-P1P2]** P1 / P2 사전 분류표 (문서) — [표](#p0-353-p1p2) **(닫힘 2026-04-26)** | **P1:** `RB-*`, `IO-05` — **P2:** ST-02, ST-05, **운영** — **우선순위** 표(기준: 위험도·영향도·코드 변경 가능성·문서 변경 가능성). 이후 코드·문서 실착은 **별도** `PR` | **ST-01** / **353+** `PR`과 **혼입 금지** (사전 분류표는 **독립** `PR`로 둘 수 있음; 뒤따르는 ST-01 / `353+` **구현** `PR`은 **동일** `PR`에 **혼입 금지**) |
+| **3** | **[353+]** UI 가용 액션 **이중 축** — **닫힘** (2026-04-26) [#p0-353-plus-dual-axis-real](#p0-353-plus-dual-axis-real) | 역할·의도 분리·RB-05 외 불일치 없음·JSDoc; **단일 배열 병합 없음**; **IV/LC** 구현 축·타 주제 **혼입 금지** 유지 | **재오픈 금지** — 후속은 [347] 3순 **P0/P2** **별도** `PR` |
+
+**공통 금지**
+
+- [343]~[352] **닫힌 축** 재오픈 **금지**(기존 정책).
+- [353] P0 **첫 코드** `PR` **재오픈 금지**([§8](IMPLEMENTATION_EVIDENCE.md#p0-353-완료-판정-8) **닫힘 유지**).
+- **[353-ST01]** / **[353-P1P2]** / **353+** — **서로 다른** 범위·`PR`에 **섞이지 않음**(**동일** `PR` **혼입 금지**).
+
+**공통 검증**
+
+- `npm run verify:canonical-sources` (권장: 각 `PR` 시작·끝·푸시 전).
+- `src/**` 변경 또는 회귀 **필요 시** `npm run verify:349-12` (`tsc`·`lint`·`verify:canonical-sources`·`test` 등).
+
+#### [353-ST01] ST-01 잔여 정리 {#p0-353-st01}
+
+**상태:** **완료** (2026-04-26) — 본 절 범위·제외·검증을 **충족**하고 **닫음**.
+
+**근거:** `EVIDENCE-20260426-353` · [`#p0-353-p0-완료-후속`](#p0-353-p0-완료-후속) · [ALIGNMENT §6-1 ST-01](ALIGNMENT_AUDIT_V1.md#6-1-상태값-정합성)
+
+**범위:** canonical `CaseStatus` 2파일 유지·R3-001·[310] **남은 예외(1)(3)**·[§4-1](#4-1-check-status-결과-해석-오해-방지)·레거시 문자열 점검.
+
+**제외(이번 `PR`/기록):** P1/P2·353+ UI 이중 축·`getAllowedCaseActions` / `allowedLifecycleActions`·IV/LC complete 전이 재오픈·[343]~[352] 닫힌 축 재오픈.
+
+| 점검 항목 | 결과 (2026-04-26) |
+|-----------|-------------------|
+| **canonical 2파일** | `prisma/schema.prisma` `CaseStatus` **enum** 멤버·순서 = `src/lib/definitions/case-status.ts` `CaseStatusEnum` 리터럴(CREATED~DELETED). 스키마 주석 ↔ TS 단일 기준 문구 정합. |
+| **R3-001** | [SPEC R3-001](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#r3--사건-casestatus) 기계 파일 축과 일치. |
+| **[310] 남은 예외** | **(1)** ST-01~05·R3-002 **세부**는 ALIGNMENT **§6-1**에 **부분일치/보류**로 남음(이번 착수는 ST-01 **잔여** 점검·경량 정리). **(2)** 이중 축 — **353+ 전용**으로 **실착·닫힘** ([#p0-353-plus-dual-axis-real](#p0-353-plus-dual-axis-real)); §6-11·문서 잔여는 **별도 합의**. **(3)** `check-status --scope case` — exit 1; 다수 히트는 `InterviewStatus`·**알림(Alert)**·기타 **비 사건** `CaseStatus` 토큰이며, [§4-1](#4-1-check-status-결과-해석-오해-방지)·[310 남은 예외(3)](IMPLEMENTATION_EVIDENCE.md#evidence-20260423-310)에 따라 **도메인 단정 금지**. |
+| **레거시 사건 상태 문자열** | 사건 경로에서 OPEN/DONE 등 **구** `CaseStatus` 체계 **잔여 없음**(저장소 `rg`·표본 파일 확인). 목록 쿼리 **필터** [`CASE_STATUS_FILTER_OPTIONS`](../../src/features/cases/case.validators.ts) 등은 **의도적 부분 집합**(주석). |
+| **코드** | 미사용 `CASE_STATUS_VALUES` / `CaseStatusInput` 제거(`case-status-definition.ts`) — 전체 집합은 `case-status.ts`·Prisma만 canonical. |
+
+**완료 확인 (팀·2026-04-26):**
+
+- [x] `prisma/schema.prisma`·`src/lib/definitions/case-status.ts` — `CaseStatus` **멤버·순서·값** 일치 확인
+- [x] [R3-001](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#r3--사건-casestatus) 기계 파일 축 정합 **증빙** (위 표)
+- [x] `check-status --scope case` exit 1 — [§4-1](#4-1-check-status-결과-해석-오해-방지)·[310 남은 예외(3)](IMPLEMENTATION_EVIDENCE.md#evidence-20260423-310)에 따라 **비사건 상태 오탐 포함 휴리스틱**으로 기록(도메인 단정 없음)
+- [x] `case-status-definition.ts` 미사용 심볼 제거
+- [x] `npm run verify:canonical-sources` · `npm run verify:349-12` **exit 0**
+
+**검증:** `npm run verify:canonical-sources` exit 0; `npm run verify:349-12` exit 0.
+
+**`PR` 본문·제목 근거(필수/권장):** `EVIDENCE-20260426-353` · `#p0-353-st01`
+
+#### [353-P1P2] P1 / P2 사전 분류표 {#p0-353-p1p2}
+
+**상태:** **완료·닫힘** (2026-04-26) — **문서** 절(사전 분류·4척도·권장 순서·팀 확인) **마감**; **코드 실착**은 행마다 **별도** `PR`·증빙.
+
+**근거:** `EVIDENCE-20260426-353` · [`#p0-353-병렬-후속`](#p0-353-병렬-후속) · [ALIGNMENT §6](ALIGNMENT_AUDIT_V1.md#6-역점검표-본문) (**§6-3** 권한 · **§6-9** IO · **§6-1** ST-02·ST-05)
+
+**제외:** **`353+`** (`getAllowedCaseActions` / `allowedLifecycleActions`·UI 가용 **이중 축**) — [#353-plus-separate-pr](#353-plus-separate-pr) **전용**; 본 표와 **동일** `PR` **혼입 금지**.
+
+**척도:** 위험도·영향도·코드 변경 난이도·문서 변경 난이도 = 각 **낮** / **중** / **높** (같은 열 안에서만 상대 비교).
+
+##### P1 묶음 — `RB-*` · `IO-05`
+
+[353] 궤적에서 **권한·Case 상세 `allowedActions` 응답** 축으로 묶음. ALIGNMENT 표의 **우선순위(P0/P1/P2)** 열과 다를 수 있음 — 아래 **권장 실착 순서**는 **보안·일관성** 기준 가중.
+
+**실착·닫힘 판정 (2026-04-26):** 본 묶음 **표시 행**(`RB-02`~`RB-05`, `IO-05`; 및 선행 `RB-01`) **코드** `PR` **팀 완료·닫힘** — **이중 축**(`getAllowedCaseActions` / `allowedLifecycleActions` / UI 가용 **단일화**)는 **포함하지 않음**. **353+** 이중 축 **실착·닫힘**은 **별도** ([#p0-353-plus-dual-axis-real](#p0-353-plus-dual-axis-real) · [#353-plus-separate-pr](#353-plus-separate-pr)).
+
+| 권장 순서 | ID | 점검 요지 (ALIGNMENT §6 요약) | 위험도 | 영향도 | 코드 | 문서 | 비고 |
+|:--------:|----|------------------------------|:------:|:------:|:----:|:----:|------|
+| 1 | **RB-02** | API 권한 검증 **서버 우선** — 클라만 숨김·서버 개방 갭 | 높 | 높 | 중 | 낮 | ALIGN **P0** |
+| 2 | **RB-01** | 역할 enum·상수 **정합** — 레거시 role 문자열 | 중 | 높 | 중 | 중 | ALIGN **P0** |
+| 3 | **RB-03** | **사건 단위** 접근권한 — 역할+관계 동시 검증 | 높 | 높 | 중 | 낮 | ALIGN **P1** |
+| 4 | **RB-04** | **관리자** 기능 범위·가드 통일 | 중 | 중 | 중 | 낮 | ALIGN **P1** |
+| 5 | **RB-05** | **`allowedActions` 표시 vs 실행** 가능 일치 | 중 | 높 | 중 | 중 | ALIGN **P1**; **353+** 이중 축 **클로저**와 **직교** — UI·클라 단일 기준만 여기서 다룸 |
+| 6 | **IO-05** | Case·detail route **`allowedActions` 응답 일관성**·누락 | 중 | 중 | 중 | 중 | ALIGN 표 **P2** 행이나 [353]에서 **P1 묶음**에 포함(API 응답 축) |
+
+##### P2 묶음 — ST-02 · ST-05 · 운영
+
+| 권장 순서 | ID | 점검 요지 (ALIGNMENT §6 요약) | 위험도 | 영향도 | 코드 | 문서 | 비고 |
+|:--------:|----|------------------------------|:------:|:------:|:----:|:----:|------|
+| 1 | **ST-02** | 상태 **표시 레이블** vs 내부 canonical — 화면 **label map** 일원화 | 낮 | 중 | 중 | 중 | 부분일치 → 일원화 |
+| 2 | **ST-05** | **`check-status`**·운영 메시지 — §4-1 취지(휴리스틱 ≠ 단정) | 낮 | 중 | 낮 | 중 | 문서·메시지 정리 우선 |
+| 3 | **운영** | 관리자·내비·증빙 루틴 등 **P2** 잔여 — `check-status` 참고 실행·메모 | 낮 | 낮 | 낮 | 중 | 행 단위 `EVIDENCE`·`PR`에서 쪼개기 |
+
+**검증 (본 절·문서만):** `npm run verify:canonical-sources` (기준). `src/**` 실착 **후** 해당 `PR`에서 `verify:349-12` 등.
+
+**팀 확인 (2026-04-26):**
+
+- [x] **P1:** `RB-01`~`RB-05`, `IO-05` — **P2:** `ST-02`, `ST-05`, **운영** — 위험·영향·코드·문서 **4척도** 및 **권장 실착 순서** 기록
+- [x] **`353+` UI 가용 액션 이중 축** — 본 절 **제외**, [#353-plus-separate-pr](#353-plus-separate-pr) **전용 축** 유지
+- [x] `npm run verify:canonical-sources` **exit 0** (본 절 갱신 시점)
+- [x] **닫힘** — P1/P2 분류·4척도·권장 순서·`353+` **제외**·검증 확인 **완료**; 코드 실착은 행별 **별도** `PR`·증빙.
+
+**`PR`·증빙 근거:** `EVIDENCE-20260426-353` · `#p0-353-p1p2`
+
+##### 다음 — P1 첫 `PR` 후보 (권장) {#p0-353-p1-첫-pr}
+
+**갱신 (2026-04-26):** P1 묶음 **실착 행 닫힘** — **353+** UI 이중 축은 **실착·닫힘** ([#p0-353-plus-dual-axis-real](#p0-353-plus-dual-axis-real)). 아래 표는 **역사적** 권장(첫 P1 코드 `PR` 선정) 참고용.
+
+| 항목 | 내용 |
+|------|------|
+| **권장 1순** | **RB-02** — API 권한 검증 **서버 우선** ([P1 묶음 표](#p0-353-p1p2) **권장 순서 1** · [ALIGNMENT §6-3·RB-02](ALIGNMENT_AUDIT_V1.md#6-3-권한-정합성)) |
+| **원칙** | 범위·회귀·리스크에 따라 **팀**이 `RB-01` 등 **다른** 행을 **선택**할 수 있음 — 이때도 **`353+` 혼입**·[공통 금지](#p0-353-병렬-후속) **위반 없음**. |
+| **근거(필수/권장)** | `EVIDENCE-20260426-353` · `#p0-353-p1p2` · (선택) `#p0-353-p1-첫-pr` |
+| **검증** | `src/**` 변경 시 해당 `PR`에서 `npm run verify:349-12` 등; `npm run verify:canonical-sources`(기준). |
+
+#### [353-P1-RB01] P1 — RB-01 (역할 enum·상수 정합) {#p0-353-p1-rb01}
+
+**근거:** `EVIDENCE-20260426-353` · [`#p0-353-p1p2`](#p0-353-p1p2) · [`#p0-353-p1p2-next`](#p0-353-p1p2-next) · [ALIGNMENT §6-3·RB-01](ALIGNMENT_AUDIT_V1.md#6-3-권한-정합성)
+
+**대상 `PR` 제목·본문(필수):** `EVIDENCE-20260426-353` — **권장:** `#p0-353-p1p2` · `#p0-353-p1-rb01`
+
+| 항목 | 내용 |
+|------|------|
+| **목표** | RB-01: Prisma `UserRole` 단일 진실원·카탈로그 `CLIENT`(세션 `USER`) 경계 명시; `UiFourPanelRole` 타입 한 축; `mapPrismaUserRoleToCatalogUserRole` → `prismaRoleToDefinitionRole` 위임(중복 제거) |
+| **수정** | [role-map.ts](../../src/lib/role-map.ts) · [role-map.test.ts](../../src/lib/role-map.test.ts) · [case-action-guard.ts](../../src/lib/case-action-guard.ts)(타입만; `getAllowedCaseActions` 본문 **불변**) · [interview-catalog-visibility.ts](../../src/features/case-interview/interview-catalog-visibility.ts) · [case-detail-client.tsx](../../src/components/cases/case-detail-client.tsx) · [case.utils.ts](../../src/features/cases/case.utils.ts) · [document-review-panel.tsx](../../src/components/cases/document-review-panel.tsx) · [paragraph-structure-panel.tsx](../../src/components/cases/paragraph-structure-panel.tsx) · [common.ts](../../src/lib/definitions/common.ts) |
+| **의도적 비포함** | `getAllowedCaseActions` / `allowedLifecycleActions` **이중 축**·서버 DTO 가용 액션 통합 — **353+ 전용**. **RB-02** API 서버 가드 본체 — **별도** `PR` |
+| **CaseStatus canonical** | **변경 없음** |
+| **353+** | **미혼입** |
+| **검증** | `npm run verify:349-12` **exit 0** (2026-04-26) |
+
+**완료 판정 (RB-01 본 `PR`·체크):**
+
+- [x] `EVIDENCE-20260426-353` · `#p0-353-p1-rb01` (제목·본문)
+- [x] RB-01(역할 타입·매핑 한 축)만 — **353+** 이중 축·RB-02 본체 **혼입 없음**
+- [x] `CaseStatus` **canonical 변경 없음**
+- [x] `npm run verify:349-12` 통과
+
+**팀 완료 처리 (2026-04-26):** Prisma `UserRole` 기준으로 카탈로그/UI 4분할 역할을 `UiFourPanelRole`로 정리; `mapPrismaUserRoleToCatalogUserRole`는 `prismaRoleToDefinitionRole`에만 위임(중복 매핑 제거). `getAllowedCaseActions` 본문·`CaseStatus`·353+ UI 가용 액션 이중 축은 **건드리지 않음**. `npm run verify:349-12` **exit 0**. **상태: 닫힘.**
+
+#### [353-P1-RB02] P1 첫 실착 — RB-02 (권한·서버 우선) {#p0-353-p1-rb02}
+
+**근거:** `EVIDENCE-20260426-353` · [`#p0-353-p1-첫-pr`](#p0-353-p1-첫-pr) · [`#p0-353-p1p2`](#p0-353-p1p2) · [ALIGNMENT §6-3·RB-02](ALIGNMENT_AUDIT_V1.md#6-3-권한-정합성)
+
+**대상 `PR` 제목·본문(필수):** `EVIDENCE-20260426-353` · `#p0-353-p1-첫-pr` — **권장:** `#p0-353-p1p2` · `#p0-353-p1-rb02`
+
+| 항목 | 내용 |
+|------|------|
+| **목표** | RB-02: API 권한 검증 **서버 우선** — `getCaseAccessContext`·`assertCaseInterviewAccess`·서비스 계층과 **UI만 숨김** 불일치 점검 |
+| **수정** | `src/lib/get-session-user` **수동** 401 대신 [requireSessionUser](../../src/lib/auth/require-session-user.ts)로 `POST /api/cases/.../interview/complete` **세션** 정합 · [case.permissions.ts](../../src/features/cases/case.permissions.ts) **RB-02**·ALIGNMENT **주석** · [case.permissions.access.test.ts](../../src/features/cases/case.permissions.access.test.ts) (서버 권한 기준 스모크) |
+| **의도적 비포함** | `getAllowedCaseActions` / **이중 축**·`allowedLifecycleActions` **정리**·클라 가용 UI 통합 — **353+ 전용** ([#p0-353-plus-prep](#p0-353-plus-prep)). **CaseStatus** canonical·ST-01·P0 IV·ST-03 축 **재오픈 없음** |
+| **점검 요약** | [case.service.ts](../../src/features/cases/case.service.ts) `getCaseAccessContext` / [case-interview.service.ts](../../src/features/case-interview/case-interview.service.ts) `assertCaseInterviewAccess`·`completeCaseInterviewService` — **권한·상태 전이 분리** 유지. [detail/route.ts](../../src/app/api/cases/[caseId]/detail/route.ts)는 `assertCaseAccess`(authz) **별도 축** — RB-02와 **병기** |
+| **CaseStatus canonical** | **변경 없음** |
+| **검증** | `npm run verify:349-12` **exit 0** (2026-04-26) |
+
+**완료 판정 (RB-02 본 `PR`·체크):**
+
+- [x] `EVIDENCE-20260426-353` · `#p0-353-p1-첫-pr` (제목·본문)
+- [x] RB-02(서버 권한·`interview/complete` 경로) **한 축**만 — **353+**·이중 축·P0 재오픈 **없음**
+- [x] `CaseStatus` **canonical 변경 없음**
+- [x] `npm run verify:349-12` 통과
+
+#### [353-P1-RB03] P1 — RB-03 (사건 단위 접근권한) {#p0-353-p1-rb03}
+
+**근거:** `EVIDENCE-20260426-353` · [`#p0-353-p1p2`](#p0-353-p1p2) · [`#p0-353-p1p2-next`](#p0-353-p1p2-next) · [ALIGNMENT §6-3·RB-03](ALIGNMENT_AUDIT_V1.md#6-3-권한-정합성)
+
+**상태:** **닫힘** (2026-04-26) — 로컬 실착·검증 기록.
+
+**대상 `PR` 제목·본문(필수):** `EVIDENCE-20260426-353` — **권장:** `#p0-353-p1p2` · `#p0-353-p1-rb03`
+
+| 항목 | 내용 |
+|------|------|
+| **목표** | RB-03: **사건 단위** 리소스 접근 — 역할 + 사건 관계 동시 검증(case detail, doc detail, summary 등; [P1 표](#p0-353-p1p2) 행 3) |
+| **수정** | [permissions.ts](../../src/lib/definitions/permissions.ts) (`canAccessCase` **STAFF**·소유자 = `getCaseAccessContext`·목록 쿼리 정합) · [case.permissions.ts](../../src/features/cases/case.permissions.ts) (`buildPermissionContextForCase`) · [detail/route.ts](../../src/app/api/cases/[caseId]/detail/route.ts) · [case detail page](../../src/app/(protected)/cases/[caseId]/page.tsx) · [apply-case-status-transition.ts](../../src/lib/cases/apply-case-status-transition.ts) · [documents/generate/route.ts](../../src/app/api/cases/[caseId]/documents/generate/route.ts) · 법률문서 [approve](../../src/app/api/legal-documents/[legalDocumentId]/approve/route.ts)·[lock](../../src/app/api/legal-documents/[legalDocumentId]/lock/route.ts)·문단 [histories](../../src/app/api/legal-documents/[legalDocumentId]/paragraphs/[paragraphId]/histories/route.ts)·[regenerate](../../src/app/api/legal-documents/[legalDocumentId]/paragraphs/[paragraphId]/regenerate/route.ts)·[restore](../../src/app/api/legal-documents/[legalDocumentId]/paragraphs/[paragraphId]/restore/route.ts)·[lock](../../src/app/api/legal-documents/[legalDocumentId]/paragraphs/[paragraphId]/lock/route.ts) · [deliver-legal-document-post.ts](../../src/lib/legal-documents/deliver-legal-document-post.ts) (`getCaseAccessContext` 선행) · [permissions-rb03.test.ts](../../src/lib/definitions/permissions-rb03.test.ts) |
+| **요약** | `assertCaseAccess`용 컨텍스트를 **`buildPermissionContextForCase`** 한 경로로 조립(활성 배정·소유·담당 필드); 문서 **전달**은 상태 전이 전 **`getCaseAccessContext`**로 사건 단위 게이트 명시. **요약 API**는 기존 `listCaseInterviewAnswersService` → `getCaseAccessContext` 유지(추가 변경 없음). |
+| **의도적 비포함** | `getAllowedCaseActions` / `allowedLifecycleActions` **353+ 이중 축** — [#p0-353-plus-prep](#p0-353-plus-prep). **RB-01**·**RB-02** 본축과 **동일** `PR` **혼입 금지** |
+| **CaseStatus canonical** | **변경 없음** |
+| **검증** | `npm run verify:349-12` **exit 0** (2026-04-26) |
+| **남은 이슈** | RB-03 당시 후속으로 RB-04·RB-05가 있었음 → **2026-04-26 기준** [#p0-353-p1-rb04](#p0-353-p1-rb04)·[#p0-353-p1-rb05](#p0-353-p1-rb05) **닫힘**; 전 API **리소스 단위** 전면 점검은 **별도** 이슈. |
+
+**완료 판정 (RB-03 본 `PR`·체크):**
+
+- [x] `EVIDENCE-20260426-353` · `#p0-353-p1-rb03` (제목·본문)
+- [x] RB-03(사건 단위 접근·컨텍스트 단일화)만 — **353+** 이중 축 **미혼입**
+- [x] `CaseStatus` **canonical 변경 없음**
+- [x] `npm run verify:349-12` 통과
+
+**팀 완료 처리 (2026-04-26):** 사건 단위 접근을 `getCaseAccessContext` / `buildAccessibleCaseWhere`와 **같은 축**으로 정렬; `canAccessCase`에서 **STAFF 소유자** 접근을 허용해 상세·API·목록 정합을 맞춤. `buildPermissionContextForCase`는 활성 `CaseAssignment`와 소유·담당 필드 기준으로 `PermissionContext`를 생성하도록 정리했고, 주요 사건·문서·문단 경로에 반영. `getAllowedCaseActions` / `allowedLifecycleActions` / UI 가용 액션 **이중 축**은 **건드리지 않음**. `npm run verify:349-12` **exit 0**. **상태: 닫힘.**
+
+#### [353-P1-IO05] P1 — IO-05 (Case·detail API 응답·권한 맥락 정합) {#p0-353-p1-io05}
+
+**근거:** `EVIDENCE-20260426-353` · [`#p0-353-p1p2`](#p0-353-p1p2) · [`#p0-353-p1p2-next`](#p0-353-p1p2-next) · [ALIGNMENT §6-9·IO-05](ALIGNMENT_AUDIT_V1.md#6-9-입력출력-데이터-정합성)
+
+**상태:** **팀 완료·닫힘** (2026-04-26) — 로컬 실착·검증 기록.
+
+**대상 `PR` 제목·본문(필수):** `EVIDENCE-20260426-353` — **권장:** `#p0-353-p1p2` · `#p0-353-p1-io05`
+
+| 항목 | 내용 |
+|------|------|
+| **목표** | IO-05: Case **상세 API**·관련 응답 **shape**·**권한 맥락**(소유·담당 스칼라) **정합** — `GET /api/cases/:id` ↔ `GET /api/cases/:id/detail` 직렬화 상단 필드 동일 축 |
+| **수정** | [case.repository.ts](../../src/features/cases/case.repository.ts) (`caseSelect`에 `assignedLawyerUserId`·`assignedStaffUserId`) · [case.service.ts](../../src/features/cases/case.service.ts) (`getCaseDetailService` 주석) · [detail/route.ts](../../src/app/api/cases/[caseId]/detail/route.ts) · [case-detail-serialize.ts](../../src/lib/cases/case-detail-serialize.ts) (`allowedLifecycleActions` 문서화) · [case.repository.io05.test.ts](../../src/features/cases/case.repository.io05.test.ts) |
+| **의도적 비포함** | **RB-04**·**RB-05**; **`getAllowedCaseActions`** / 클라·서버 **이중 축 단일화**·UI 가용 통합 — **353+ 전용** ([#p0-353-plus-prep](#p0-353-plus-prep)); `getAllowedLifecycleActionsForCase` **구현 변경 없음** |
+| **CaseStatus canonical** | **변경 없음** |
+| **검증** | `npm run verify:349-12` **exit 0** (2026-04-26) |
+
+**완료 판정 (IO-05 본 `PR`·체크):**
+
+- [x] `EVIDENCE-20260426-353` · `#p0-353-p1-io05` (제목·본문)
+- [x] IO-05(API 응답·출력 정합)만 — **RB-04/RB-05**·**353+** 이중 축 **미혼입**
+- [x] `CaseStatus` **canonical 변경 없음**
+- [x] `npm run verify:349-12` 통과
+
+**팀 완료 처리 (2026-04-26):** **IO-05 단독** 범위로 `caseSelect`에 `assignedLawyerUserId`·`assignedStaffUserId`를 포함해 단건 API·상세 직렬화·`buildPermissionContextForCase`가 **같은 권한 맥락 스칼라**를 갖도록 정렬. `getCaseDetailService`, `detail/route`, `SerializedCaseDetail`에는 단건 API·풀 상세 API·`allowedLifecycleActions` 축 역할을 **주석으로 문서화**; **`getAllowedLifecycleActionsForCase` 구현은 변경하지 않음**. **353+** 이중 축과 **RB-04/RB-05**는 **혼입하지 않음**. `npm run verify:349-12` **exit 0**. **상태: 닫힘.**
+
+#### [353-P1P2-NEXT] P1 다음 후보(문서) {#p0-353-p1p2-next}
+
+**상태:** **문서권** — **`src/**` 코드 변경 없음**; **[353-P1-RB04](#p0-353-p1-rb04)**·**[353-P1-RB05](#p0-353-p1-rb05)**·**[353-P1-IO05](#p0-353-p1-io05)**·**[353-P1-RB03](#p0-353-p1-rb03)** **팀 완료·닫힘** (2026-04-26).
+
+**남은 P1 권한 축(353 묶음):** **없음** — RB-01~05·IO-05 **실착·문서 닫힘** (**닫힘 판정** 2026-04-26).
+
+**353+ UI 가용 액션 이중 축:** **실착·닫힘** (2026-04-26) — [#p0-353-plus-dual-axis-real](#p0-353-plus-dual-axis-real) · [#353-plus-separate-pr](#353-plus-separate-pr) · [작업지시서](WORK_INSTRUCTION_353_PLUS_UI_DUAL_AXIS_PR.md). **신규:** `allowedLifecycleActions`와 `getAllowedCaseActions`를 **강제 동일화**하거나 **닫힌 353+ 범위를 늘리는** 작업은 **별도 합의·EVIDENCE** 없이 **시작하지 않음**.
+
+**다음 활성(팀 선정):** [347] 3순 **P0 잔여**(ST-01·[310](IMPLEMENTATION_EVIDENCE.md#evidence-20260423-310) **(1)(3)** 축)·**P2**(ST-02·ST-05·운영) — **항목마다 별도** `PR` — [WORK_INSTRUCTION_347_TIER3_P0_REMAINING_P2_SEPARATE_PR.md](WORK_INSTRUCTION_347_TIER3_P0_REMAINING_P2_SEPARATE_PR.md) · [#work-instruction-347-tier3-p0-p2-separate-pr](#work-instruction-347-tier3-p0-p2-separate-pr). **IO-05**·P1 **`RB-*`**·**353+**·**P0 첫 코드** **재오픈 금지**.
+
+**재오픈 금지:** **[353-P1-IO05](#p0-353-p1-io05)**·**닫힌 `353+`** ([#p0-353-plus-dual-axis-real](#p0-353-plus-dual-axis-real)) — 닫힌 범위를 **임의** 후속 `PR`에 **끼워 넣거나** 다시 열지 **않음**.
+
+**고정:** 이중 축 **역할 분리·실착 결과**는 **본 증빙 앵커**만 기준; **단일화를 다시 요구**하면 **새 EVIDENCE/합의** 후 **전용** 작업으로만.
+
+| 순서 | 후보 | 메모 |
+|------|------|------|
+| **다음(구현)** | **[347] 3순** P0 잔여·P2 | **353+·P1·P0 첫 코드 닫힘** — ST-01·310·ST-02·ST-05·운영 **별 PR** ([작업지시서](WORK_INSTRUCTION_347_TIER3_P0_REMAINING_P2_SEPARATE_PR.md)) |
+
+**RB-01·RB-02·RB-03·IO-05·RB-04·RB-05:** P1 행마다 [공통 금지](#p0-353-병렬-후속) **동일** `PR` **혼입 금지** 문구 유지. **RB-01** 닫힘: [#p0-353-p1-rb01](#p0-353-p1-rb01). **RB-02** 닫힘: [#p0-353-p1-rb02](#p0-353-p1-rb02). **RB-03** 닫힘: [#p0-353-p1-rb03](#p0-353-p1-rb03). **IO-05** 팀 완료·닫힘: [#p0-353-p1-io05](#p0-353-p1-io05). **RB-04** 닫힘: [#p0-353-p1-rb04](#p0-353-p1-rb04). **RB-05** 닫힘: [#p0-353-p1-rb05](#p0-353-p1-rb05).
+
+**검증:** `npm run verify:canonical-sources` (문서만).
+
+#### [353-P1-RB04] P1 — RB-04 (관리자 기능 범위·가드) {#p0-353-p1-rb04}
+
+**근거:** `EVIDENCE-20260426-353` · [`#p0-353-p1p2-next`](#p0-353-p1p2-next) · [ALIGNMENT §6-3·RB-04](ALIGNMENT_AUDIT_V1.md#6-3-권한-정합성)
+
+**상태:** **닫힘** (2026-04-26) — 로컬 실착·검증 기록. **후속:** 알림 **filter-presets** `GET`·`PATCH`에 남아 있던 `isAdmin` 참조·로컬 헬퍼를 **`isAdminRole`·401/403 분리**로 정리 후 `npm run verify:349-12` **재통과**.
+
+**대상 `PR` 제목·본문(필수):** `EVIDENCE-20260426-353` — **권장:** `#p0-353-p1p2` · `#p0-353-p1-rb04`
+
+| 항목 | 내용 |
+|------|------|
+| **목표** | RB-04: **관리자 전용** 기능·라우트 **범위 제한**·**admin guard** 통일 |
+| **수정** | [require-admin-api.ts](../../src/lib/auth/require-admin-api.ts) (`isAdminRole` 단일 기준) · 운영 큐 **ADMIN** 전용 API: [quick-update](../../src/app/api/admin/alerts/ops-queue/[ticketId]/quick-update/route.ts)·[due-at](../../src/app/api/admin/alerts/ops-queue/[ticketId]/due-at/route.ts)·[edit](../../src/app/api/admin/alerts/ops-queue/[ticketId]/edit/route.ts)·[board/reorder](../../src/app/api/admin/alerts/ops-queue/board/reorder/route.ts)·[ticket PATCH](../../src/app/api/admin/alerts/ops-queue/[ticketId]/route.ts) (`requireAdminApi`) · 알림 **filter-presets** [목록/생성](../../src/app/api/admin/alerts/filter-presets/route.ts)·[presetId](../../src/app/api/admin/alerts/filter-presets/[presetId]/route.ts)·[default](../../src/app/api/admin/alerts/filter-presets/[presetId]/default/route.ts) (`isAdminRole`·401/403 분리) · [require-admin-api.rb04.test.ts](../../src/lib/auth/require-admin-api.rb04.test.ts) |
+| **의도적 비포함** | **RB-05**; **IO-05** 재오픈; **`353+`** 이중 축·`getAllowedCaseActions` / `allowedLifecycleActions` 통합 |
+| **CaseStatus canonical** | **변경 없음** |
+| **검증** | `npm run verify:349-12` **exit 0** (2026-04-26) |
+
+**완료 판정 (RB-04 본 `PR`·체크):**
+
+- [x] `EVIDENCE-20260426-353` · `#p0-353-p1-rb04` (제목·본문)
+- [x] RB-04(관리자 가드 정합)만 — **RB-05**·**IO-05**·**353+** **미혼입**
+- [x] `CaseStatus` **canonical 변경 없음**
+- [x] `npm run verify:349-12` 통과
+
+**팀 완료 처리 (2026-04-26):** **RB-04 단독** 범위로 관리자 전용 API·가드를 **`isAdminRole` / `requireAdminApi`** 기준으로 통일. 알림 **filter-presets** [GET](../../src/app/api/admin/alerts/filter-presets/route.ts)·[PATCH](../../src/app/api/admin/alerts/filter-presets/[presetId]/route.ts) 관리자 가드를 **`isAdminRole`·401/403 분리** 패턴으로 정렬. **IO-05**·**353+ UI 가용 액션 이중 축**·**`getAllowedCaseActions` / `allowedLifecycleActions`**는 **건드리지 않음**. `npm run verify:349-12` **exit 0**. **상태: 닫힘.**
+
+#### [353-P1-RB05] P1 — RB-05 (표시 액션 vs 실행 권한) {#p0-353-p1-rb05}
+
+**근거:** `EVIDENCE-20260426-353` · [`#p0-353-p1p2-next`](#p0-353-p1p2-next) · [ALIGNMENT §6-3·RB-05](ALIGNMENT_AUDIT_V1.md#6-3-권한-정합성)
+
+**상태:** **닫힘** (2026-04-26) — **RB-04**와 **별도·단독** `PR`로 실착·검증. **IO-05**·**353+**·**이중 축 정리** **미혼입**.
+
+**대상 `PR` 제목·본문(필수):** `EVIDENCE-20260426-353` — **권장:** `#p0-353-p1p2` · `#p0-353-p1-rb05`
+
+| 항목 | 내용 |
+|------|------|
+| **목표** | RB-05: API·UI에서 **보이는 액션**과 **실제 실행 가능** 권한 **일치**(서버 기준 점검) |
+| **수정** | [case-action-guard.ts](../../src/lib/case-action-guard.ts) (`PUT_ON_HOLD` 출발 상태를 `CASE_TRANSITIONS`와 동일 집합으로 정렬 — **HOLD**에서 오표시 제거) · [case-action-guard.rb05.test.ts](../../src/lib/case-action-guard.rb05.test.ts) |
+| **점검 메모** | 상세 **진행 액션**은 `getAllowedCaseActions` 단일 경로; `PATCH /status`는 `checkCaseTransitionOrThrow`·`evaluateCaseTransition` 축. 문서 **승인/잠금**은 `DocumentReviewPanel`·`canApproveDocument`와 approve API 정합 확인(기존 일치). **`getAllowedLifecycleActionsForCase` 응답과 클라 가드 단일화는 하지 않음**(353+). |
+| **의도적 비포함** | **[RB-04](#p0-353-p1-rb04)** `PR` **혼입**; **IO-05** 재오픈; **353+** UI 가용 **이중 축**; `getAllowedCaseActions` / `allowedLifecycleActions` **정리·단일 기준화** — [#p0-353-plus-prep](#p0-353-plus-prep) **전용** |
+| **CaseStatus canonical** | **변경 없음** |
+| **검증** | `npm run verify:349-12` **exit 0** (2026-04-26) |
+
+**완료 판정 (RB-05 본 `PR`·체크):**
+
+- [x] `EVIDENCE-20260426-353` · `#p0-353-p1-rb05` (제목·본문)
+- [x] RB-05(표시·실행 정합)만 — **IO-05**·**353+ 이중 축 단일화** **미혼입**
+- [x] `CaseStatus` **canonical 변경 없음**
+- [x] `npm run verify:349-12` 통과
+
+**팀 완료 처리 (2026-04-26):** **HOLD**에서 **`PUT_ON_HOLD`**가 UI에 노출되나 서버 전이(`checkCaseTransitionOrThrow`)에서는 거절되던 **표시 vs 실행** 불일치를 수정 — `PUT_ON_HOLD` 노출을 **`CASE_TRANSITIONS` 허용 출발 상태**와 맞춤. **회귀:** [case-action-guard.rb05.test.ts](../../src/lib/case-action-guard.rb05.test.ts)로 HOLD에서 **`PUT_ON_HOLD` false**·**`RESUME_FROM_HOLD` true**. **IO-05** 재오픈·**353+** UI 가용 액션 **이중 축 단일화**·**`allowedLifecycleActions` 정리**는 **건드리지 않음**. `npm run verify:349-12` **exit 0**. **상태: 닫힘.**
+
+#### [353-PLUS-PREP] `353+` 착수 전 범위(문서) {#p0-353-plus-prep}
+
+**상태:** **실착 완료·닫힘** (2026-04-26) — 결과·판정은 [#p0-353-plus-dual-axis-real](#p0-353-plus-dual-axis-real). **아래 표**는 **착수 전 범위·감사**로 **유지**(역사적). **[353] P1 권한·`IO-05` 실착 축 닫힘 유지** — **재오픈·닫힌 353+ 범위 타 `PR` 혼입 금지**.
+
+**실착 작업지시서:** [WORK_INSTRUCTION_353_PLUS_UI_DUAL_AXIS_PR.md](WORK_INSTRUCTION_353_PLUS_UI_DUAL_AXIS_PR.md) — 완료 후에도 **역할·제외 목록** 참고용.
+
+| 포함(353+ 전용 PR 안에서) | 제외(동일·혼용 금지) |
+|---------------------------|----------------------|
+| `getAllowedCaseActions` ([case-action-guard.ts](../../src/lib/case-action-guard.ts)) vs `getAllowedLifecycleActionsForCase` / 응답 `allowedLifecycleActions` ([allowed-actions.ts](../../src/lib/cases/allowed-actions.ts), [case.service.ts](../../src/features/cases/case.service.ts), [detail route](../../src/app/api/cases/[caseId]/detail/route.ts) 등) — **명시적 위임** 또는 **단일 기준** | RB-02·P1 `RB-*` **권한 서버 가드** 본체(권한 API 누락 점검 PR) |
+| [ALIGNMENT §6-11 UI-03](ALIGNMENT_AUDIT_V1.md#6-11-화면-우선순위-및-화면-api-연결-정합성)·[LC-04](ALIGNMENT_AUDIT_V1.md#6-2-사건-라이프사이클-정합성) 연결(참고) | [343]~[352] 재오픈·**CaseStatus** canonical 실변경·IV-04/05·ST-03 P0 구현 축 |
+| [case-detail-client.tsx](../../src/components/cases/case-detail-client.tsx)(클라 가용) + [status/route.ts](../../src/app/api/cases/[caseId]/status/route.ts)·[transition/route.ts](../../src/app/api/cases/[caseId]/transition/route.ts)(서버 DTO) — **한** `PR` **안**에서 이중 축 해소(팀 범위 확정 후) | **P2** ST-02 라벨만(별 `PR` 가능) |
+
+**사전 파일 목록(참고):** [case-action-guard.ts](../../src/lib/case-action-guard.ts) · [case-detail-client.tsx](../../src/components/cases/case-detail-client.tsx) · [allowed-actions.ts](../../src/lib/cases/allowed-actions.ts) · [detail/route.ts](../../src/app/api/cases/[caseId]/detail/route.ts) · [status/route.ts](../../src/app/api/cases/[caseId]/status/route.ts) · [transition/route.ts](../../src/app/api/cases/[caseId]/transition/route.ts)
+
+**검증:** `npm run verify:canonical-sources` (문서만).
+
+**병렬 규칙(요지):** RB-02 **코드** `PR` · [353-P1P2-NEXT](#p0-353-p1p2-next) **문서** · 본 [#p0-353-plus-prep](#p0-353-plus-prep) **문서** — 동시 진행 가능, **같은** `PR` **혼입 금지**([팀 착수 순서](#p0-353-병렬-후속)).
+
+**이 표에 넣지 않는 것(아래 `353+` 전용 PR):** `getAllowedCaseActions` / `allowedLifecycleActions` **이중 축**([310] **남은 예외(2)**), [UI-03](ALIGNMENT_AUDIT_V1.md#6-11-화면-우선순위-및-화면-api-연결-정합성)·[LC-02](ALIGNMENT_AUDIT_V1.md#6-2-사건-라이프사이클-정합성) **판정 잔여**(§6-11).
+
+#### `353+` **별도 PR** — **UI 가용** (`getAllowedCaseActions` / `allowedLifecycleActions`)·§6-11 [310] **예외(2)** {#353-plus-separate-pr}
+
+**완료·닫힘 (2026-04-26):** [#p0-353-plus-dual-axis-real](#p0-353-plus-dual-axis-real) — 역할 문서화·의도/불일치 판정·최소 JSDoc; **단일 배열 병합·대규모 리팩터 없음**.
+
+**고정:** **[353] P1 권한·IO-05 실착 축은 닫힘 유지** — **RB-01~RB-05·IO-05 재오픈 금지**·**닫힌 `353+` 범위를 임의 후속 `PR`에 혼입 금지**. **증빙 기준선**은 [#p0-353-plus-prep](#p0-353-plus-prep)·**본 절**·**실착 소절**만.
+
+**착수 전 범위(문서·역사):** [#p0-353-plus-prep](#p0-353-plus-prep) — 포함·제외·사전 파일 목록.
+
+| 항목 | 내용 |
+|------|------|
+| **분리 사유** | 353-1은 취지·잔여 **문서** 판정까지. 이중 축 해소, API, 화면 버튼 가용은 **구현·회귀 PR**이며 353-1과 성격이 다름. |
+| **권장 범위** | `getAllowedCaseActions` **vs** `allowedLifecycleActions` **단일 기준**(또는 **명시적 위임**). 필요 시 [LC-04](ALIGNMENT_AUDIT_V1.md#6-2-사건-라이프사이클-정합성)·[UI-03](ALIGNMENT_AUDIT_V1.md#6-11-화면-우선순위-및-화면-api-연결-정합성) **판정 갱신**·[310](IMPLEMENTATION_EVIDENCE.md#evidence-20260423-310) **예외(2) 클로저**(**`353+` PR** **내부**서 동일 `PR` **권장**; **[353] P0~P2** `PR`과 **별도**). PR 근거: **`EVIDENCE-20260426-353+`** 또는 **명시적** `353+` |
+| **비포함(혼재 금지)** | **[353] P1** **RB-01~RB-05·IO-05** 실착 축 **재오픈·본 PR 혼입 금지**(닫힘 유지). 위 **[353] P0~P2** 나머지(특히 **인터뷰→Case·IV/LC** 구현)도 **`353+` PR에 넣지 않음**. [343]~[352] 축, IV-01/02, admin `question-set` |
+| **검증 (예시)** | `src/**` 변경 시 `tsc`·`lint`·`test`·`verify:canonical`·`check-status`([§2·§3](IMPLEMENTATION_EVIDENCE.md#2-완료-판정-조건)) |
+
+**궤적 정리:** **[353] P0~P2** = **[347] 3순** 「**ALIGNMENT / Case·인터뷰 잔여**」. **인터뷰 완료→Case**·**IV/LC** 구현(`IV-04`~`IV-05`·`LC-03`) = **P0** **핵심**(이 **궤적**에 포함). `getAllowedCaseActions` / `allowedLifecycleActions` **및** **UI** **가용** **액션** **이중** **축** = **전용** **`353+` PR**. **두 축**은 **동일** `PR` **혼입 없음**·GW-0.3 직교 = SPEC·별 `EVIDENCE`에서 고정.
+
+##### [353+ 실착] 이중 축 역할·불일치 판정 (2026-04-26) {#p0-353-plus-dual-axis-real}
+
+**작업 순서:** [WORK_INSTRUCTION_353_PLUS_UI_DUAL_AXIS_PR.md](WORK_INSTRUCTION_353_PLUS_UI_DUAL_AXIS_PR.md) 1~11 — 소스 `case-action-guard.ts` · `allowed-actions.ts` · `case-detail-client.tsx` 대조.
+
+**역할 차이 (의도된 분리):**
+
+- **`getAllowedLifecycleActionsForCase`** — `getAvailableTransitions`로 **현재 상태·역할**만 필터. `CASE_TRANSITIONS[].requires`(인터뷰 완료·초안·승인 문서·사유 등)는 **목록에 반영하지 않음**. 실행은 `checkCaseTransitionOrThrow`·`resolveCaseTransitionFacts`·`evaluateCaseTransition`.
+- **`getAllowedCaseActions`** — **동일 사실조건**으로 사건 상세 **진행 액션 패널** 노출. **`APPROVE_DOCUMENT`**는 패널 밖(`DocumentReviewPanel`·`/api/legal-documents/:id/approve`).
+
+**UI 표시 vs lifecycle 응답 차이 (대표):**
+
+| 구분 | 내용 | 판정 |
+|------|------|------|
+| `requires` 미반영 | 동일 상태·역할에서 API는 사실 미충족 전이도 나열 가능. UI는 `interviewCompleted` 등으로 숨김. | **의도** — API=구조적 후보, PATCH=사실 검증 |
+| `APPROVE_DOCUMENT` | lifecycle에 있음, `getAllowedCaseActions` 맵 없음 | **의도** — 다른 표면·API |
+| `DELIVER_DOCUMENT`+잠금 | `case-detail-client`에서 잠금 문서 등 추가 게이트 | **의도** — UX |
+| `RESUME_CASE` vs `RESUME_FROM_HOLD` | UI 키만 다름, 동일 PATCH 액션 | **명명** |
+| HOLD+`PUT_ON_HOLD` | — | **불일치는 RB-05에서 해소** ([§ RB-05](#p0-353-p1-rb05) 근처 기록) |
+
+**코드 조치 (본 라운드):** **단일 함수 병합 없음** — `allowed-actions.ts`·`case-action-guard.ts` **JSDoc 보강**(353+ 이중 축·`APPROVE_DOCUMENT`·`DELIVER_DOCUMENT`·`RESUME_*` 위임 명시).
+
+**검증:** `npm run verify:349-12` exit 0 (본 기록 반영 시점).
+
+**닫힘 고정:** 본 실착으로 **이중 축 역할**이 확정되었다. **P1·IO-05·RB-05·353+**에서 닫은 범위를 **후속 `PR`에서 재오픈**하거나 **`allowedLifecycleActions` ↔ `getAllowedCaseActions` 강제 동일화**를 **새 합의·EVIDENCE 없이** 진행하지 않는다. [310] **예외(2)**·§6-11 **문서 잔여**는 **별도 주기**에서만.
+
+#### 착수 전 범위 확정 (필수)
+
+코드·문서 **실착** `PR` **전**에 아래를 **한 세트**로 맞춘 뒤, **이번** `PR`에 넣을 **파일·이슈 범위**를 **팀**에서 **확정**한다.
+
+- **읽는 순서** (위 §) **완료** — 특히 ALIGNMENT **§6**·`CASE_STATUS` **§7**·`show-plan` **3순** 문구.  
+- **범위 (초기)** (위 §) **대상**만 **이번** `PR`에 포함 — 질문셋 343~350·[348]~[352] **재오픈·혼입 없음**.  
+- **다음 (팀)** (아래 §) — `EVIDENCE-20260426-353` (또는 **명시적** `353+`)를 **PR 제목 또는 본문(한 곳 이상)에** **근거로 반드시 명시**하고, **[348]~[352]** 또는 Step 3 **1·2순**과 **동일 `PR` 금지**.
+- **두 축 `PR` 분리(필수)** — **[353] P0~P2**(**[347] 3순**·**ALIGNMENT / Case·인터뷰 잔여**; **인터뷰 완료→Case**·**IV/LC** **구현**)과 **`353+`**(`getAllowedCaseActions` / `allowedLifecycleActions` **및** UI **가용** **액션** **이중** **축**)은 **서로 다른 `PR`**; **동일 `PR` 혼입 없음**(상단 **「후속 구조(팀 확정 상태·2026-04-26)」**·**궤적 정리**).
+
+#### 수정 / 검증 (개설일)
+
+| 항목 | 내용 |
+|------|------|
+| **수정** | 본 `IMPLEMENTATION_EVIDENCE` 블록(개설·353-1·**차기 후속**·**`353+` UI 가용** 절) · [DEV_BRIEF](DEV_BRIEF_POST_STEP3_352.md)·[`aibeopchin_navigator.py`](../../tools/aibeopchin_navigator.py) (선택) · [ALIGNMENT §6-1/6-2/6-11](ALIGNMENT_AUDIT_V1.md#6-역점검표-본문) (353-1) — **`src/**` 없음** (이 PR). |
+| **검증** | 문서권. 이후 **코드** 변경 시 [§2·§3](IMPLEMENTATION_EVIDENCE.md#2-완료-판정-조건)·`verify` / `check-status` (범위에 따름). |
+
+#### 다음 (팀)
+
+- **후보 3** 관련 **코드·문서** 작업은 **항상** [353] 근거·**별도** `PR`에만 — **PR 제목 또는 본문**에 `EVIDENCE-20260426-353` / **명시적** `EVIDENCE-…-353+` **기재(필수)** — [348]~[352]·Step 3 **1·2순** `PR`과 **같은** `PR`에 **섞지 않는다**.  
+- **3순** 첫 실작업 `PR`은 `EVIDENCE-20260426-353`(또는 **명시적** `EVIDENCE-…-353+`)·**[348]~[352]**와 `PR` **분리**(위 **「착수 전 범위 확정」** 참고).  
+- **누적·완료·후속** `EVIDENCE`는 **이 블록** 또는 `IMPLEMENTATION` **최상단**에 **시간순**·[SPEC](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md)과 맞춰 기록.
+
+#### 산출
+
+- [DEV_BRIEF_POST_STEP3_352](DEV_BRIEF_POST_STEP3_352.md)  
+- `PROJECT_PLAN` **`post_352_next_347_tier3_alignment`**  
+- [347+ 본절](IMPLEMENTATION_EVIDENCE.md#evidence-20260425-347) · [SPEC #spec-347-후속-고정](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정)
+
+### [EVIDENCE-20260426-352] [347] 2순 — GW-0.2(비기본) 문서·합의 evidence **(본 주기 마감 2026-04-26)** {#evidence-20260426-352}
+
+#### 목적
+
+[EVIDENCE-20260426-351](#evidence-20260426-351)에 따라 **[347] 2순위 GW-0.2(비기본)**을 문서·합의부터 진행한 **문서·합의 evidence**이다(확인 순서 1→5·요지·1)·2) 표). **본 [352] 주기**는 [§「마감」](#gw-0-2-352-마감) **기준 (나)로 마감**되었고, **실행 코드·`src/**`는 이번 흐름에서** **변경하지 않았다**.
+
+#### 팀 확정 (2026-04-26)
+
+**[352]**는 GW-0.2 비기본 **착수 전** 문서·합의 evidence로 **확정**되었다. **[352] 이후** GW-0.2 진행은 **1)** 합의 의제 확정, **2)** (가)/(나) 경로 판정, **3)** 필요 시 **SPEC**·**`API_SPEC`**·**`IMPLEMENTATION_EVIDENCE`** 선갱신, **4)** **이후** **`src/**` 변경**은 **전용** `EVIDENCE` / **별도** `PR` **에서만** 진행하는 순서로 **고정**한다(Step 3·[351]과 혼재·한 PR 믹스 금지).
+
+#### 전제
+
+- [EVIDENCE-20260425-347](#evidence-20260425-347) 후보 2 (GW-0.2) · [SPEC #spec-347-후속-고정](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정)
+- [SPEC #gw-0-2-범위-완료](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-2-범위-완료) · [EVIDENCE-20260423-324](#evidence-20260423-324)를 직교하여 읽는다(324는 정렬 주기 당시 분기 (나) 기록; 이번은 새 합의 주기의 문서 착수).
+
+#### 수정·검증
+
+| 항목 | 내용 |
+|------|------|
+| **수정 파일** | 본 `IMPLEMENTATION_EVIDENCE.md` 블록·`tools/aibeopchin_navigator.py`(선택)만 — `src/**` 없음. |
+| **검증** | 1)~2) **문서**·**3)·4) 본 주기**([352] 마감) **(2026-04-26)**. 저장소 `src/**` **이번 [352] 흐름에서 변경 없음**. |
+
+#### 확인 순서 1~5 — 요지
+
+| 순서 | 읽을 것 | 한 줄 요지 |
+|------|---------|------------|
+| 1 | [SPEC #gw-0-2-범위-완료](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-2-범위-완료) | B안·IO·POST_278·§5.4 비기본 축; 완료 판정 4요소·분기 (가)/(나); 합의·`src` 반영은 (가)에서만. |
+| 2 | [IO_DATA_DEFINITION.md](IO_DATA_DEFINITION.md) | 입·출력 7범주·필드 체계; §2-1 코드 우선; 이후 API·DB 정합의 기준면으로 GW-0.2와 연결. |
+| 3 | [POST_278_API_CLIENT_ENVELOPE_V1.md](POST_278_API_CLIENT_ENVELOPE_V1.md) §6.3 | 슬라이스 2 잔여·예외: `GET /api/admin/users/search` → 평면 `{ users }`(envelope 스캔 제외); 게시 422·409 분기는 의도적; 서버 `ok` 래핑·클라 `requireOk*` 강제는 팀 합의·`API_SPEC` 개정과 별도(§7·§14.4 취지). |
+| 4 | [SPEC §5.4 서버명세 합의 체크리스트](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#54--서버명세-합의-체크리스트) | R5·B평면·EXC-C·EXC-혼합·R5-253 이관 등 “서버·명세 합의” — 문서·PR로 선행; `users/search`는 EXC-C·A/B 직교 표에 고정. |
+| 5 | [EVIDENCE-20260423-324](IMPLEMENTATION_EVIDENCE.md#evidence-20260423-324) | 당시 주기 분기 (나) — 합의·코드 없음·정렬만; 이번([347] 2순)은 문서·합의를 진행하고, (가) `src` 반영은 합의 확정 후 별도 `EVIDENCE`에 기록(SPEC·[324]「다음」궤적). |
+
+#### 합의 의제(차기·문서/회의)
+
+- `/api/admin/users/search`: 평면 `{ users }` 유지 vs B안 domain `ok` 래핑 후 `requireOkData` — [POST_278](POST_278_API_CLIENT_ENVELOPE_V1.md) §6.3·§5.4·EXC-C
+- §5.4 표의 “팀 합의 필수” 항(예: R5-253 이관·`run-bulk-queue-pipeline`): 이관/유지 단일 결정
+- `API_SPEC` `success`/`data` vs 런타임 B 평면 — §5.4-1·부록·개정 범위 확정
+
+#### 1단계: 합의 의제 — 항목별 확정 {#gw-0-2-1-합의-의제-확정}
+
+**[352] 이후 고정 순서 1)의 실무.** 위 **세 불릿**을 **A·B·C**로 나누어, 문서/회의에서 **항목마다 단일 결론**을 내리고 아래 표에 **확정 결론**·**일자**·**근거(회의록·PR·SPEC 절 링크 등)** 를 남긴다. `src/**` 는 **[352] 고정 순서 4)** 이전에 두지 않는다.
+
+| 항목 | 내용(요지) | 확정 결론(한 줄) | 일자 / 근거 |
+|------|------------|------------------|-------------|
+| **A** | `GET /api/admin/users/search` — 평면 `{ users }` **vs** B안 domain `ok` + 클라 `requireOkData` ([POST_278](POST_278_API_CLIENT_ENVELOPE_V1.md) §6.3·§5.4·EXC-C) | **A안(평면 `{ users }`·EXC-C) 유지** — 서버 `NextResponse.json({ users })`만, 클라 `requireOk*` **미적용**; B안·`requireOkData` **전환 없음** (§0·R6-001/002·POST_278 §6.3·[306/312]와 동일). | 2026-04-26 / [SPEC §0 C(R6) A안 잠금](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#c6-userssearch-예외군--a안-잠금)·R6-001·R6-002·[POST_278](POST_278_API_CLIENT_ENVELOPE_V1.md) §6.3·[EVIDENCE-20260423-306](IMPLEMENTATION_EVIDENCE.md#evidence-20260423-306)·[312](IMPLEMENTATION_EVIDENCE.md#evidence-20260423-312) |
+| **B** | [SPEC §5.4](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#54--서버명세-합의-체크리스트) “팀 합의 필수” — 예: R5-253·`run-bulk-queue-pipeline` **이관 vs 유지** | **R5-253·`run-bulk-queue-pipeline` 행별 이관/유지 = 적용 없음·차기** — §5.4·행 표·절차는 SPEC 유지, **행마다** 결론·`src` **차기**·별 EVIDENCE. | 2026-04-26 / [352] 1)·**4)** 전 `src/**` **금지** |
+| **C** | [`API_SPEC_V1.md`](API_SPEC_V1.md) `success`/`data` **vs** 런타임 B 평면 — §5.4-1·부록·**개정 범위** | **`API_SPEC` 개정·`success`/`ok` 일치 강제 마감 없음** — [352] **3) 필요 시** 선갱신; 현행 [BASELINE §3 R1](SPEC_IMPLEMENTATION_REAUDIT_BASELINE_V1.md)·post-278 `ok` **기준**. | 2026-04-26 / [BASELINE §3 R1](SPEC_IMPLEMENTATION_REAUDIT_BASELINE_V1.md)·[352] **3)**; **4)** 전 `src/**` **미변경** |
+
+**1) 단계 완료 (2026-04-26):** A·B·C **완료** — **2) (가)/(나) 경로 판정** (`src/**` **없이** [SPEC #gw-0-2-범위-완료](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-2-범위-완료) **문서 판정만**). **4)** 전 `src/**` **변경 없음** 유지.
+
+#### 2단계: (가)/(나) 경로 판정 — **문서만** {#gw-0-2-2-가나-경로-판정}
+
+[SPEC #gw-0-2-범위-완료](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-2-범위-완료) **「완료 판정 (넷, 비기본 분기 필수)」** 을 `src/**` **변경 없이** [352] **2)단계**로 **만족/기록**한다.
+
+| # | 항목 | 본 2) 문서 답(한 줄) | 일자 / 근거 |
+|---|------|----------------------|------------|
+| (1) | `GW-0.2` 표+본 절 = **실행 기준** | **읽힘** — [SPEC #gw-0-2-범위-완료](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-2-범위-완료) · 상기 [GW-0.2] 표(§0). | 2026-04-26 |
+| (2) | [IMPLEMENTATION_EVIDENCE]에 `EVIDENCE-20260423-324` (또는 동일 취지) | **있음(동일 취지)** — [EVIDENCE-20260423-324](IMPLEMENTATION_EVIDENCE.md#evidence-20260423-324). | 2026-04-26 |
+| (3) | `show-plan` `GW-0.2` **둘째** bullet = (1)과 **1:1** | **1:1** — `PROJECT_PLAN['governance_321_work_units'][1]`·[352]·SPEC 본절 정합. | 2026-04-26 / [`aibeopchin_navigator.py`](../../tools/aibeopchin_navigator.py) |
+| (4) | **비기본 분기** **(가)** 합의 후 `src` 착수 **있음** / **(나)** 이번 기록 주기 **합의·코드 없음** | **(나)** — **신규** `src/**` **착수**·**B안 전환**·**§5.4 행별** 이관/유지 **변경**·**`API_SPEC` `success`/`ok` 강제 개정** **없음** (위 **1)·2) 표** 결론). B안/§5.4/`API_SPEC`·`src` **후속**은 **별** EVIDENCE/PR·**(가) 재판정** **후**. | 2026-04-26 / [352] 1)~2) · [SPEC 70행](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-2-범위-완료) |
+
+**2) 단계 완료 (2026-04-26):** (1)~(3) **문서 충족**·(4) **(나)** — **3)·4) 본 주기**는 §「[352] GW-0.2 본 주기 마감」.
+
+#### [352] GW-0.2 본 주기 마감 (2026-04-26) {#gw-0-2-352-마감}
+
+**[352] GW-0.2 본 주기**는 **마감 처리**한다. **1단계** 합의 의제(A·B·C)와 **2단계** (가)/(나) 판정은 **완료**했고, **이번 주기**는 **(나)** **경로**다. **신규** `src/**` **착수**, **B안 전환**, **§5.4 행별** 이관/유지 **변경**, **`API_SPEC` `success`/`ok` 강제 개정**이 **없으므로** **3단계** [SPEC](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md)·[`API_SPEC_V1.md`](API_SPEC_V1.md)·[IMPLEMENTATION_EVIDENCE](IMPLEMENTATION_EVIDENCE.md) **문서 3종 선갱신**은 **생략**하고, **4단계** `src/**` **변경**도 **이번 흐름에서는 하지 않는다**. **향후** GW-0.2에서 `src/**` **변경**이 **필요하면** **별도** `EVIDENCE` / `PR` **에서 (가)로 재판정**해 진행한다([SPEC #gw-0-2-범위-완료](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-2-범위-완료) 비기본 분기·[352] 고정 순서).
+
+#### [352] 이후 GW-0.2 진행 순서 (고정)
+
+1. **합의 의제 확정** — §「1단계·합의 의제」.
+2. **(가)/(나) 경로 판정** — [SPEC #gw-0-2-범위-완료](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-2-범위-완료) (완료 판정 4요소·분기).
+3. **필요 시** [SPEC](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md)·[`API_SPEC_V1.md`](API_SPEC_V1.md)(등)·[IMPLEMENTATION_EVIDENCE](IMPLEMENTATION_EVIDENCE.md) **선갱신** — (가) 착수·3종 정합에 **필요**할 때.
+4. **이후** **`src/**` 변경** — **전용** `EVIDENCE` / **별도** `PR` **에서만** (Step 3·[351]과 혼재·한 PR 믹스 금지).
+
+**— 이번 [352] 주기 (2026-04-26, (나)):** **3) 생략** · **4) 미실시** ([§「마감」](#gw-0-2-352-마감)).
+
+**산출:** [`aibeopchin_navigator.py` `post_352_gw02_document_agreement`](../../tools/aibeopchin_navigator.py), [347](IMPLEMENTATION_EVIDENCE.md#evidence-20260425-347), [SPEC #gw-0-2-범위-완료](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-2-범위-완료).
+
+**Step 3 / Phase 전체 종료 점검([343]~[352]):** [STEP3_PHASE_CLOSURE_CHECKLIST_343_352.md](STEP3_PHASE_CLOSURE_CHECKLIST_343_352.md) (`#step3-phase-closure-343-352`) — **2026-04-26** **§1·§2 = 전부 참(문서 대조), §3 = 규칙 참**; **최신** `tsc`·`test`·**원격** CI **재확인**은 **PR·릴리스** **전** **운용** **에서** **한다** — **`npm run verify:349-12` exit**·**GitHub Actions** **`verify-349-12` job** **최신** **success**·**Run URL** 확인 **후** [EVIDENCE-20260425-349](IMPLEMENTATION_EVIDENCE.md#evidence-20260425-349)·[EVIDENCE-20260425-350](IMPLEMENTATION_EVIDENCE.md#evidence-20260425-350) **본절** **(로컬·CI 표)** **및** [점검표 §3](STEP3_PHASE_CLOSURE_CHECKLIST_343_352.md#step3-phase-s3-closure) **에** **날짜·exit·Run URL** **갱신**.
+
+**개발자 작업지시(다음 = [347] 3순):** [DEV_BRIEF_POST_STEP3_352.md](DEV_BRIEF_POST_STEP3_352.md) · **[EVIDENCE-20260426-353](#evidence-20260426-353) 개설** · `show-plan` **`post_352_next_347_tier3_alignment`**
+
+### [EVIDENCE-20260426-351] Step 3 (333~) **[351] — 1순(347) 종료 판정·추가 착수 후보 없음 → [347] 2순 GW-0.2 문서·합의** {#evidence-20260426-351}
+
+#### 목적
+
+[EVIDENCE-20260425-350](#evidence-20260425-350) **(** **[350]③** **완** **료** **)** **이** **후** **,** [EVIDENCE-20260425-347](#evidence-20260425-347) **·** [SPEC #spec-347-후속-고정](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정) **이** **정** **한** **1** **순** **위** **(** **Step 3** **잔** **여** **)** **를** [348]·[349]·[350] **증** **빙** **·** [349] **「** **다** **음** **후** **보** **2~5** **」** **표** **와** **대** **조** **하** **여** **한** **번** **더** **점** **검** **한** **다** **.**
+
+#### 점검 (재확인)
+
+| 구분 | 판정 |
+|------|------|
+| [349] 후보 1 (α)(β)·B §4.1~4.2 | [349] **본** **절** **·** **첫** **PR** **—** **기** **록** **상** **완** **료** **(** **신** **규** **diff** **불** **필** **요** **처리** **)** **.** |
+| 후보 2·3 (백필·`scripts`·`seed`) | **동** **일** **—** **신** **규** **diff** **불** **필** **요** **처리** **완** **료** **.** |
+| 후보 4: ①+② `verify:349-12`·③ CI | ①+② [349] **;** ③ [350] **·** `ci.yml`·**원** **격** **CI** **성** **공** **기** **록** **완** **료** **.** |
+| 후보 5 (admin·UI) | **정** **책** **·** **문** **서** **=** [348] **;** **현** **재** **범** **위** **에** **서** **`src/**` **착** **수** **후** **보** **없** **음** **(** **큰** **폭** **UI** **변** **경** **은** **범** **위** **확** **정** **뒤** **별** **도** **).** |
+
+**한** **줄** **결** **론** **(2026-04-26):** **동** **일** **1** **순** **범** **위** **안** **에** **서** **새** **로** **열** **릴** **`src/**`·**시** **드**·**workflows** **착** **수** **후** **보** **는** **없** **음** **(** **이** **후** **제** **품** **요** **구** **·** **범** **위** **확** **대** **는** **별** **도** **이** **슈** **로** **분** **리** **).**
+
+#### Step 3 1순위 종료 판정 ([351])
+
+**[351] 기준** Step 3 1순위([347] 후보 1)는 **추가 착수 후보 없음**으로 **종료**한다. (후보 1~4: [349]·[350]에 닫힘; 후보 5: 현재 범위에서 `src/**` 착수 후보 없음.)
+
+#### [347] 2순위 GW-0.2(비기본) — 문서·합의 선행
+
+**다음**은 **[347] 2순위** **GW-0.2(비기본)**을 **문서·합의부터** 진행한다. **합의 전에는 `src/**` 변경을 하지 않는다.**
+
+**확인 순서 (1 → 5):**
+
+1. [SPEC **#gw-0-2-범위-완료**](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-2-범위-완료) (같은 축: [GW-0.2 작업 단위](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-320-거버넌스-작업-단위))
+2. [IO_DATA_DEFINITION.md](IO_DATA_DEFINITION.md)
+3. [POST_278_API_CLIENT_ENVELOPE_V1.md](POST_278_API_CLIENT_ENVELOPE_V1.md) **§6.3**
+4. [SPEC §5.4 서버명세 합의 체크리스트](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#54--서버명세-합의-체크리스트)
+5. [EVIDENCE-20260423-324](IMPLEMENTATION_EVIDENCE.md#evidence-20260423-324) (**EVIDENCE-324**)
+
+**규** **칙** **:** **B안**·**envelope**·**IO**·**§5.4** **합** **의** **가** **끝** **나** **기** **전** **까지** `src/**` **변** **경** **금** **지** **(** **`governance_321_work_units` GW-0.2** **,** [347](IMPLEMENTATION_EVIDENCE.md#evidence-20260425-347) **후** **보** **2** **)** **. ** **별** **도** `EVIDENCE` **·** `PR` **—** **[348]·[349]·[350]·[351]** **1** **순** **계** **열** **과** **혼** **재** **·** **한** **PR** **에** **뒤** **섞** **지** **않** **는** **다** **.**
+
+**산** **출** **:** [`aibeopchin_navigator.py` `post_351_step3_tier1_reaudit` / `show-plan`](../../tools/aibeopchin_navigator.py) **,** [347](IMPLEMENTATION_EVIDENCE.md#evidence-20260425-347) **,** [SPEC #spec-347-후속-고정](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정) **.**
 
 ### [EVIDENCE-20260425-350] Step 3 (333~) **[350] — 후보 4·③ CI / PR / workflows / 파이프라인 (개설·착수 2026-04-25)** {#evidence-20260425-350}
 
@@ -760,7 +2165,7 @@ GROUP BY code;
 
 **다음:** [FILE_REALIGN **Batch** **1-A** **확정**](./FILE_REALIGN_PATCH_V1.md#batch-1a-1b) — [315](./IMPLEMENTATION_EVIDENCE.md). (구 [§7.1](./CASE_STATUS_DEFINITION.md#71-phase-1-첫-실작업--기준선-고정-2026-04-23) **=** [314] **다음** **단계**)
 
-### [EVIDENCE-20260423-312] C(R6) A안 **후속 점검** **마감** — R6-001 · R6-002 · R5-222 C leg (4열)
+### [EVIDENCE-20260423-312] C(R6) A안 **후속 점검** **마감** — R6-001 · R6-002 · R5-222 C leg (4열) {#evidence-20260423-312}
 
 **목적(한 줄):** [311](./IMPLEMENTATION_EVIDENCE.md)이 가리킨 **C(R6) A안 후속**을 **R6-001 → R6-002 → R5-222(C leg)** 순으로 코드·SPEC을 맞춰 **일치·불일치·선행 구현·잠금 필요** 네 열에 **짧게 잠그고**, §0·§5.2·§5.3·§5.4와 모순 없이 **예외군 점검을 종료**한다 (B안·IO·§5.4-4는 **차기**).
 

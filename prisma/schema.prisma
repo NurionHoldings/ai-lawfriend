@@ -79,6 +79,17 @@ enum AttachmentStatus {
   DELETED
 }
 
+/// 사건 첨부자료 분류 (FILE-1B) — CaseStatus·전이와 무관
+enum CaseAttachmentCategory {
+  EVIDENCE
+  IDENTITY_DOC
+  CONTRACT
+  CORRESPONDENCE
+  COURT_FILING
+  FINANCIAL
+  OTHER
+}
+
 enum TimelineMemoType {
   USER_NOTE
   STAFF_NOTE
@@ -394,9 +405,10 @@ model Case {
 }
 
 model CaseAttachment {
-  id             String           @id @default(cuid())
+  id             String                  @id @default(cuid())
   caseId         String
   uploaderUserId String
+  category       CaseAttachmentCategory  @default(OTHER)
   originalName   String
   storedName     String
   mimeType       String

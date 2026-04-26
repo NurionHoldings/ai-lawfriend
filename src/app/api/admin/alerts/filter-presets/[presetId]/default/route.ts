@@ -1,18 +1,18 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/auth/session";
-
-function isAdmin(role: string | undefined) {
-  return role === "ADMIN" || role === "SUPER_ADMIN";
-}
+import { isAdminRole } from "@/lib/auth/roles";
 
 type Params = { params: Promise<{ presetId: string }> };
 
 export async function POST(_req: Request, { params }: Params) {
   const user = await getSessionUser();
 
-  if (!user || !isAdmin(user.role)) {
-    return NextResponse.json({ ok: false, error: "권한이 없습니다." }, { status: 401 });
+  if (!user) {
+    return NextResponse.json({ ok: false, error: "로그인이 필요합니다." }, { status: 401 });
+  }
+  if (!isAdminRole(user.role)) {
+    return NextResponse.json({ ok: false, error: "권한이 없습니다." }, { status: 403 });
   }
 
   const { presetId } = await params;

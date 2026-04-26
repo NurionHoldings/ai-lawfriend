@@ -1,4 +1,7 @@
-export type GuardRole = "ADMIN" | "LAWYER" | "STAFF" | "CLIENT";
+import type { UiFourPanelRole } from "@/lib/role-map";
+
+/** `getAllowedCaseActions` 입력 역할 — Prisma `USER`는 페이지에서 `prismaRoleToUiRole` 후 전달 */
+export type GuardRole = UiFourPanelRole;
 
 type GuardInput = {
   role: GuardRole;
@@ -11,10 +14,27 @@ type GuardInput = {
   };
 };
 
+/** `PUT_ON_HOLD` 출발 상태 — `CASE_TRANSITIONS`(evaluateCaseTransition)와 동일. [353-P1-RB05] */
+const PUT_ON_HOLD_FROM = [
+  "CREATED",
+  "INTAKE_PENDING",
+  "IN_INTERVIEW",
+  "INTERVIEW_DONE",
+  "DRAFTING",
+  "REVIEW_PENDING",
+  "APPROVED",
+  "DELIVERED",
+] as const;
+
 /**
- * 사건 상단 액션 버튼 노출 — PATCH /api/cases/:id/status 의 LifecycleAction 과 동일한 전제.
- * 문서 승인은 /api/legal-documents/:id/approve 등 별도 API에서 처리한다.
- * `DELETED`·서버 `getAllowedLifecycleActionsForCase`와 같이 **전이 없음(전부 숨김)**.
+ * 사건 상세 **진행 액션** 패널 노출 — `PATCH /api/cases/:id/status`·`checkCaseTransitionOrThrow` **사실조건**과 맞출 것.
+ *
+ * **353+ 이중 축:** `getAllowedLifecycleActionsForCase` / 응답 `allowedLifecycleActions`는 **상태·역할**만으로 **구조적 후보**를 내며
+ * `CASE_TRANSITIONS.requires`는 반영하지 않는다. 본 함수는 **UI에서 실행 가능한지**에 맞춘다.
+ * - **`APPROVE_DOCUMENT`**: 패널 없음 — `DocumentReviewPanel`·`/api/legal-documents/:id/approve` 축.
+ * - **`DELIVER_DOCUMENT`**: `case-detail-client`에서 잠금 문서 등 **추가 조건**.
+ * - **`RESUME_CASE`**: UI 키 `RESUME_FROM_HOLD`로 동일 액션을 `PATCH`에 전달.
+ * `DELETED`는 전 항목 false(서버 lifecycle와 같이 **전이 없음**).
  */
 export function getAllowedCaseActions(input: GuardInput) {
   if (input.caseStatus === "DELETED") {
@@ -58,7 +78,8 @@ export function getAllowedCaseActions(input: GuardInput) {
 
     CLOSE_CASE: canApprove && caseStatus === "DELIVERED",
 
-    PUT_ON_HOLD: canManage && !["CLOSED", "REJECTED"].includes(caseStatus),
+    PUT_ON_HOLD:
+      canManage && (PUT_ON_HOLD_FROM as readonly string[]).includes(caseStatus),
 
     REJECT_CASE:
       canApprove &&

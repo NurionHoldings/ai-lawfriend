@@ -1,7 +1,9 @@
 "use client";
 /* 답변 저장은 `POST /api/cases/:id/interview` — 서버 `saveInterviewAnswerBodySchema`·`.strict()`([Batch B]). */
+/* B-G1: `POST /api/cases/:id/interview/complete` — 상세와 동일 `getAllowedCaseActions.COMPLETE_INTERVIEW`일 때만 CTA. */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { requireOkData } from "@/lib/client/api-error";
 
 type QuestionOption = {
@@ -53,6 +55,8 @@ type Props = {
    * (안 A: OWNER / ADMIN / ASSIGNED_LAWYER / ASSIGNED_STAFF일 때 true)
    */
   canEditInterview?: boolean;
+  /** 서버 `getAllowedCaseActions`·`COMPLETE_INTERVIEW` — 사건 상세 액션 패널과 동일 조건 */
+  showCompleteInterviewCta?: boolean;
 };
 
 function renderInputValue(value: unknown, type: Question["type"]) {
@@ -66,7 +70,9 @@ export default function CaseInterviewClient({
   initialFlow,
   caseStatus,
   canEditInterview = true,
+  showCompleteInterviewCta = false,
 }: Props) {
+  const router = useRouter();
   const isTerminalCase =
     caseStatus === "CLOSED" || caseStatus === "REJECTED" || caseStatus === "DELETED";
   /** 권한 없음·종결·반려·삭제 중 하나라면 읽기 전용 (service `assert`와 화면 일치) */
@@ -76,6 +82,7 @@ export default function CaseInterviewClient({
   const [drafts, setDrafts] = useState<Record<string, unknown>>(initialFlow?.answers ?? {});
   const [loading, setLoading] = useState(!initialFlow);
   const [savingKey, setSavingKey] = useState<string | null>(null);
+  const [completingInterview, setCompletingInterview] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchFlow = useCallback(async () => {
@@ -107,6 +114,23 @@ export default function CaseInterviewClient({
   }, [caseId, initialFlow, fetchFlow]);
 
   const visibleQuestions = useMemo(() => flow?.visibleQuestions ?? [], [flow]);
+
+  const handleCompleteInterview = useCallback(async () => {
+    setCompletingInterview(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/cases/${caseId}/interview/complete`, {
+        method: "POST",
+      });
+      const raw = await res.json().catch(() => null);
+      requireOkData(res, raw, "인터뷰 완료 처리에 실패했습니다.");
+      router.push(`/cases/${caseId}`);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "인터뷰 완료 처리 중 오류가 발생했습니다.");
+    } finally {
+      setCompletingInterview(false);
+    }
+  }, [caseId, router]);
 
   async function saveAnswer(questionKey: string, value: unknown) {
     setSavingKey(questionKey);
@@ -354,6 +378,24 @@ export default function CaseInterviewClient({
           );
         })}
       </section>
+
+      {showCompleteInterviewCta && !interviewReadOnly && flow ? (
+        <section className="rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-sm">
+          <h2 className="text-base font-semibold text-slate-900">인터뷰 완료</h2>
+          <p className="mt-2 text-sm text-slate-600">
+            필수 항목을 저장한 뒤 아래를 누르면 인터뷰가 완료되고, <strong>사건 상세</strong> 화면으로
+            이동합니다. 상세에서 갱신된 사건 상태·다음 단계를 확인할 수 있습니다.
+          </p>
+          <button
+            type="button"
+            disabled={completingInterview}
+            onClick={() => void handleCompleteInterview()}
+            className="mt-4 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {completingInterview ? "완료 처리 중…" : "인터뷰 완료하고 사건 상세로 이동"}
+          </button>
+        </section>
+      ) : null}
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { ParagraphHistoryModal } from "@/components/cases/paragraph-history-modal";
+import type { UiFourPanelRole } from "@/lib/role-map";
 import { requireOkData } from "@/lib/client/api-error";
 
 type Paragraph = {
@@ -28,7 +29,7 @@ type Props = {
     status: string;
     paragraphs: Paragraph[];
   };
-  currentRole: "ADMIN" | "LAWYER" | "STAFF" | "CLIENT";
+  currentRole: UiFourPanelRole;
   onRefresh: () => Promise<void> | void;
 };
 

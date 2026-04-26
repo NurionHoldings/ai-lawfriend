@@ -2,7 +2,8 @@ import { NextRequest } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/get-session-user";
-import { assertCaseAccess, permissionContextFromSession } from "@/lib/authz";
+import { assertCaseAccess } from "@/lib/authz";
+import { buildPermissionContextForCase } from "@/features/cases/case.permissions";
 import {
   ForbiddenError,
   NotFoundError,
@@ -48,21 +49,8 @@ export async function POST(
     }
 
     const c = paragraph.document.case;
-    const assignments = await prisma.caseAssignment.findMany({
-      where: { caseId: c.id, isActive: true },
-      select: { assigneeUserId: true },
-    });
-    const isCaseParticipant = assignments.some((a) => a.assigneeUserId === sessionUser.id);
-
-    assertCaseAccess(
-      "paragraph.restore",
-      permissionContextFromSession(sessionUser, {
-        caseOwnerUserId: c.ownerUserId,
-        assignedLawyerUserId: c.assignedLawyerUserId,
-        assignedStaffUserId: c.assignedStaffUserId,
-        isCaseParticipant,
-      }),
-    );
+    const permCtx = await buildPermissionContextForCase(sessionUser, c);
+    assertCaseAccess("paragraph.restore", permCtx);
 
     if (!paragraph.supportsRestore) {
       throw new ValidationError("이 문단은 복원을 지원하지 않습니다.");

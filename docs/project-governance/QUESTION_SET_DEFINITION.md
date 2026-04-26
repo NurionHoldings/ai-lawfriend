@@ -8,6 +8,7 @@
 | 기준 문서 | [CASE_STATUS_DEFINITION.md](./CASE_STATUS_DEFINITION.md), [CASE_LIFECYCLE_DEFINITION.md](./CASE_LIFECYCLE_DEFINITION.md), [PERMISSION_DEFINITION.md](./PERMISSION_DEFINITION.md) |
 | 적용 범위 | 사건 인터뷰용 질문셋, 조건 분기, 답변 저장, 문서 문단 매핑 |
 | 후속 문서 | [DOCUMENT_TEMPLATE_DEFINITION.md](./DOCUMENT_TEMPLATE_DEFINITION.md)(초안 0.1), 입력·출력 데이터 정의서 |
+| 거버넌스 직교 | [SPEC GW-0.3 범위·완료](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-3-범위-완료) · [347] 3순 C **문서·정렬 1차 (A)** [#c-gw03-a-tier3-20260426](IMPLEMENTATION_EVIDENCE.md#c-gw03-a-tier3-20260426) — **본착수·런타임 대규모 변경은 (가) 별 PR**; [343]~[350] **재오픈 없음** |
 
 본 문서는 AI법친의 **질문셋(question set)** 이 무엇으로 구성되고,  
 어떻게 사건 인터뷰 흐름과 연결되며,  

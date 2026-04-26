@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/get-session-user";
-import { assertCaseAccess, permissionContextFromSession } from "@/lib/authz";
+import { assertCaseAccess } from "@/lib/authz";
+import { buildPermissionContextForCase } from "@/features/cases/case.permissions";
 import { ok, toErrorResponse } from "@/lib/domain-api-response";
 import {
   ForbiddenError,
@@ -32,22 +33,11 @@ export async function POST(
     }
 
     const c = document.case;
-    const assignments = await prisma.caseAssignment.findMany({
-      where: { caseId: c.id, isActive: true },
-      select: { assigneeUserId: true },
-    });
-    const isCaseParticipant = assignments.some((a) => a.assigneeUserId === sessionUser.id);
-
-    assertCaseAccess(
-      "document.lock",
-      permissionContextFromSession(sessionUser, {
-        caseOwnerUserId: c.ownerUserId,
-        assignedLawyerUserId: c.assignedLawyerUserId,
-        assignedStaffUserId: c.assignedStaffUserId,
-        isCaseParticipant,
-        isDocumentLocked: document.status === "LOCKED",
-      }),
-    );
+    const permCtx = {
+      ...(await buildPermissionContextForCase(sessionUser, c)),
+      isDocumentLocked: document.status === "LOCKED",
+    };
+    assertCaseAccess("document.lock", permCtx);
 
     /** Batch A-3: UI `document-review-panel`과 동일 축 — ADMIN / LAWYER / SUPER_ADMIN */
     if (!["ADMIN", "LAWYER", "SUPER_ADMIN"].includes(sessionUser.role)) {

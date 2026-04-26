@@ -2,17 +2,15 @@ import type { UserRole } from "@prisma/client";
 import type { SessionUser } from "@/lib/auth/require-session-user";
 import type { QuestionVisibility } from "@/lib/definitions/question-set";
 import type { CaseAccessContext } from "@/features/cases/case.permissions";
+import { prismaRoleToDefinitionRole, type UiFourPanelRole } from "@/lib/role-map";
 
 /**
  * Zod/정의 `visibleToRoles`·`UserRoleEnum`(CLIENT 등) — Prisma `UserRole`(USER) 대응.
  * 질문셋 메타 `visibleToRoles` JSON 배열·질문 `visibility(=audience)` 판정에 사용.
+ * 구현은 `prismaRoleToDefinitionRole` 단일 경로(RB-01).
  */
-export function mapPrismaUserRoleToCatalogUserRole(role: UserRole): "ADMIN" | "LAWYER" | "STAFF" | "CLIENT" {
-  if (role === "USER") return "CLIENT";
-  if (role === "SUPER_ADMIN" || role === "ADMIN") return "ADMIN";
-  if (role === "LAWYER") return "LAWYER";
-  if (role === "STAFF") return "STAFF";
-  return "CLIENT";
+export function mapPrismaUserRoleToCatalogUserRole(role: UserRole): UiFourPanelRole {
+  return prismaRoleToDefinitionRole(role);
 }
 
 /** 활성 `QuestionSet.visibleToRoles` — 비어 있으면 전체 허용(기존 DB 호환) */

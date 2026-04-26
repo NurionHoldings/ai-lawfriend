@@ -1,4 +1,4 @@
-import type { Prisma } from "@prisma/client";
+import type { CaseStatus, Prisma } from "@prisma/client";
 import { writeAuditLog } from "@/lib/audit-log";
 import { ForbiddenError, NotFoundError, ValidationError } from "@/lib/errors";
 import type { SessionUser } from "@/lib/auth/require-session-user";
@@ -334,72 +334,82 @@ export async function listCaseInterviewAnswersService(
   };
 }
 
-export async function completeCaseInterviewService(
-  currentUser: SessionUser,
-  caseId: string,
-) {
-  await assertCaseInterviewAccess(currentUser, caseId);
-  const access = await getCaseAccessContext(currentUser, caseId);
+const TERMINAL_NO_INTERVIEW_COMPLETE: readonly CaseStatus[] = [
+  "CLOSED",
+  "REJECTED",
+  "DELETED",
+];
 
-  const found = await findCaseById(caseId);
-  if (!found) {
-    throw new NotFoundError("사건을 찾을 수 없습니다.");
-  }
-
-  const flow = await getInterviewFlowInternal(caseId, access, currentUser);
-  const missingRequired = flow.visibleQuestions.filter((q) => q.required && !q.isAnswered);
-
-  if (missingRequired.length > 0) {
+/**
+ * IV-04/LC-03: 인터뷰 완료 API **공통** — 종결·반려·삭제는 거부.
+ * (테스트에서 직접 호출 가능)
+ */
+export function assertCaseTerminalAllowsInterviewComplete(status: CaseStatus) {
+  if (TERMINAL_NO_INTERVIEW_COMPLETE.includes(status)) {
     throw new ValidationError(
-      `필수 질문 응답이 부족합니다. 미완료 항목: ${missingRequired.map((item) => item.label).join(", ")}`,
+      "종결·반려·삭제된 사건에서는 인터뷰를 완료할 수 없습니다.",
     );
   }
+}
 
-  /** 인터뷰 레코드에 붙이는 ID·코드·버전. 질문 내용/필수 여부는 위 `getInterviewFlowInternal`과 동일 소스. */
-  const activeQsRow = await prisma.questionSet.findFirst({
-    where: { isActive: true },
-    orderBy: { updatedAt: "desc" },
-    select: { id: true, code: true, version: true },
-  });
-
-  let completionCreatedAt: Date | null = null;
-  const existingCompletion = await findInterviewCompletionByCaseId(caseId);
-  if (!existingCompletion) {
-    const completion = await markInterviewCompleted({
-      caseId,
-      authorUserId: currentUser.id,
-    });
-    completionCreatedAt = completion.createdAt;
-
-    await writeAuditLog({
-      actorUserId: currentUser.id,
-      action: "CASE_INTERVIEW_COMPLETE",
-      entityType: "CASE",
-      entityId: caseId,
-      message: "사건 인터뷰 완료 처리",
-      metadata: { completionMemoId: completion.id },
-    });
-  } else {
-    completionCreatedAt = existingCompletion.createdAt;
+/**
+ * ST-03 / LC-03: `CASE_TRANSITIONS` — `IN_INTERVIEW` → `INTERVIEW_DONE`(`COMPLETE_INTERVIEW`)와 동일 **상태** 전제.
+ * (역할·권한은 기존 `assertCaseInterviewAccess` / `canPerformCaseInterview` 축 유지)
+ */
+export function assertInInterviewForNewComplete(status: CaseStatus) {
+  if (status === "HOLD") {
+    throw new ValidationError("보류 사건은 재개된 뒤 인터뷰를 완료할 수 있습니다.");
   }
-
-  const completedAt = completionCreatedAt ?? new Date();
-
-  const fromInterviewFlow = ["CREATED", "INTAKE_PENDING", "IN_INTERVIEW"] as const;
-  if ((fromInterviewFlow as readonly string[]).includes(found.status)) {
-    // applyCaseStatusTransition은 `case.change_status`(CLIENT 미부여)를 요구하므로,
-    // 소유 의뢰인이 직접 완료하는 경로에서는 여기서만 상태를 갱신한다.
-    await updateCaseById(caseId, { status: "INTERVIEW_DONE" });
+  if (status === "IN_INTERVIEW") {
+    return;
   }
+  if (status === "CREATED" || status === "INTAKE_PENDING") {
+    throw new ValidationError(
+      "인터뷰를 완료하려면 사건이 '인터뷰 진행 중'이어야 합니다. 답변을 저장하거나 '인터뷰 시작'을 먼저 진행하세요.",
+    );
+  }
+  throw new ValidationError("현재 사건 단계에서 인터뷰를 완료할 수 없습니다.");
+}
 
+type CaseRow = NonNullable<Awaited<ReturnType<typeof findCaseById>>>;
+
+async function buildCompleteInterviewServiceResponse(
+  currentUser: SessionUser,
+  caseId: string,
+  found: CaseRow,
+  completedAt: Date,
+) {
+  const afterCase = await findCaseById(caseId);
   const memo = await getInterviewAnswerMemo(caseId);
   const answersMap = parseStoredAnswers(memo?.content);
 
+  return {
+    completed: true as const,
+    caseId,
+    status: afterCase?.status ?? found.status,
+    completedAt: completedAt.toISOString(),
+    summary: buildInterviewSummary(
+      found.title,
+      found.category,
+      interviewAnswerMapToSummaryRows(answersMap),
+    ),
+    allowedLifecycleActions: afterCase
+      ? getAllowedLifecycleActionsForCase(afterCase.status, currentUser.role)
+      : [],
+  };
+}
+
+/**
+ * `Interview` 행 `COMPLETED`·`answersJson`·활성 질문셋 메타(IV-05 / [330] A안 축, `getInterviewFlowInternal`과 동일).
+ */
+async function persistInterviewRowCompleted(
+  caseId: string,
+  completedAt: Date,
+  activeQsRow: { id: string; code: string | null; version: string } | null,
+) {
+  const memo = await getInterviewAnswerMemo(caseId);
+  const answersMap = parseStoredAnswers(memo?.content);
   const answersJson = answersMap as Prisma.InputJsonValue;
-  const latestInterview = await prisma.interview.findFirst({
-    where: { caseId },
-    orderBy: { createdAt: "desc" },
-  });
   const qsPersist = activeQsRow
     ? {
         questionSetId: activeQsRow.id,
@@ -411,6 +421,11 @@ export async function completeCaseInterviewService(
         questionSetCode: null as string | null,
         questionSetVersion: null as string | null,
       };
+
+  const latestInterview = await prisma.interview.findFirst({
+    where: { caseId },
+    orderBy: { createdAt: "desc" },
+  });
 
   if (latestInterview) {
     await prisma.interview.update({
@@ -433,22 +448,132 @@ export async function completeCaseInterviewService(
       },
     });
   }
+}
 
-  const afterCase = await findCaseById(caseId);
+export async function completeCaseInterviewService(
+  currentUser: SessionUser,
+  caseId: string,
+) {
+  await assertCaseInterviewAccess(currentUser, caseId);
+  const access = await getCaseAccessContext(currentUser, caseId);
 
-  return {
-    completed: true,
+  const found = await findCaseById(caseId);
+  if (!found) {
+    throw new NotFoundError("사건을 찾을 수 없습니다.");
+  }
+
+  assertCaseTerminalAllowsInterviewComplete(found.status);
+
+  const activeQsRow = await prisma.questionSet.findFirst({
+    where: { isActive: true },
+    orderBy: { updatedAt: "desc" },
+    select: { id: true, code: true, version: true },
+  });
+
+  const existingCompletion = await findInterviewCompletionByCaseId(caseId);
+
+  if (existingCompletion) {
+    if (found.status === "CREATED" || found.status === "INTAKE_PENDING") {
+      throw new ValidationError(
+        "인터뷰 완료 기록은 있으나 사건 단계가 맞지 않습니다. 운영자에게 문의하세요.",
+      );
+    }
+    if (found.status === "IN_INTERVIEW") {
+      const completedAt = existingCompletion.createdAt;
+      await prisma.$transaction(async (tx) => {
+        await tx.case.update({
+          where: { id: caseId },
+          data: { status: "INTERVIEW_DONE" },
+        });
+        await tx.caseTimelineEvent.create({
+          data: {
+            caseId,
+            type: "CASE_STATUS_CHANGED",
+            title: `사건 상태 변경: ${found.status} → INTERVIEW_DONE`,
+            description: null,
+            metaJson: {
+              action: "COMPLETE_INTERVIEW",
+              from: found.status,
+              to: "INTERVIEW_DONE",
+              reason: null,
+              source: "interview_complete",
+            },
+            actorUserId: currentUser.id,
+          },
+        });
+      });
+      await persistInterviewRowCompleted(caseId, completedAt, activeQsRow);
+      return buildCompleteInterviewServiceResponse(
+        currentUser,
+        caseId,
+        found,
+        completedAt,
+      );
+    }
+    return buildCompleteInterviewServiceResponse(
+      currentUser,
+      caseId,
+      found,
+      existingCompletion.createdAt,
+    );
+  }
+
+  assertInInterviewForNewComplete(found.status);
+
+  const flow = await getInterviewFlowInternal(caseId, access, currentUser);
+  const missingRequired = flow.visibleQuestions.filter((q) => q.required && !q.isAnswered);
+
+  if (missingRequired.length > 0) {
+    throw new ValidationError(
+      `필수 질문 응답이 부족합니다. 미완료 항목: ${missingRequired.map((item) => item.label).join(", ")}`,
+    );
+  }
+
+  const completion = await markInterviewCompleted({
     caseId,
-    /** 사건 `CaseStatus` — `fromInterviewFlow` 밖(이미 DRAFTING 이후 등)이면 갱신 없이도 실제 `afterCase.status`와 맞춘다. */
-    status: afterCase?.status ?? found.status,
-    completedAt: completedAt.toISOString(),
-    summary: buildInterviewSummary(
-      found.title,
-      found.category,
-      interviewAnswerMapToSummaryRows(answersMap),
-    ),
-    allowedLifecycleActions: afterCase
-      ? getAllowedLifecycleActionsForCase(afterCase.status, currentUser.role)
-      : [],
-  };
+    authorUserId: currentUser.id,
+  });
+  const completionCreatedAt = completion.createdAt;
+
+  await writeAuditLog({
+    actorUserId: currentUser.id,
+    action: "CASE_INTERVIEW_COMPLETE",
+    entityType: "CASE",
+    entityId: caseId,
+    message: "사건 인터뷰 완료 처리",
+    metadata: { completionMemoId: completion.id },
+  });
+
+  const completedAt = completionCreatedAt;
+
+  await prisma.$transaction(async (tx) => {
+    await tx.case.update({
+      where: { id: caseId },
+      data: { status: "INTERVIEW_DONE" },
+    });
+    await tx.caseTimelineEvent.create({
+      data: {
+        caseId,
+        type: "CASE_STATUS_CHANGED",
+        title: `사건 상태 변경: ${found.status} → INTERVIEW_DONE`,
+        description: null,
+        metaJson: {
+          action: "COMPLETE_INTERVIEW",
+          from: found.status,
+          to: "INTERVIEW_DONE",
+          reason: null,
+          source: "interview_complete",
+        },
+        actorUserId: currentUser.id,
+      },
+    });
+  });
+  await persistInterviewRowCompleted(caseId, completedAt, activeQsRow);
+
+  return buildCompleteInterviewServiceResponse(
+    currentUser,
+    caseId,
+    found,
+    completedAt,
+  );
 }

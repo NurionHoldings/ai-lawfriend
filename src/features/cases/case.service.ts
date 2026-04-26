@@ -87,6 +87,10 @@ export async function listCasesService(
   };
 }
 
+/**
+ * `GET /api/cases/:id` — `caseSelect` 스칼라 + `allowedLifecycleActions`(서버 `getAllowedLifecycleActionsForCase` 단일 함수).
+ * 풀 상세(문서·인터뷰·타임라인)는 `GET /api/cases/:id/detail` → `serializeCaseDetail` ([353-P1-IO05] 응답 shape·권한 맥락 필드 정합).
+ */
 export async function getCaseDetailService(
   currentUser: SessionUser,
   caseId: string

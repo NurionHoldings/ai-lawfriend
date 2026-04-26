@@ -2,6 +2,10 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import {
+  CASE_ATTACHMENT_CATEGORY_LABELS,
+  CASE_ATTACHMENT_CATEGORY_VALUES,
+} from "@/features/case-attachments/case-attachment-category";
 
 type Props = {
   caseId: string;
@@ -14,6 +18,8 @@ export default function AttachmentUploadForm({ caseId }: Props) {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
+  const [category, setCategory] =
+    useState<(typeof CASE_ATTACHMENT_CATEGORY_VALUES)[number]>("OTHER");
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,6 +37,7 @@ export default function AttachmentUploadForm({ caseId }: Props) {
     try {
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("category", category);
 
       const result = await new Promise<{
         httpOk: boolean;
@@ -98,6 +105,27 @@ export default function AttachmentUploadForm({ caseId }: Props) {
 
   return (
     <form onSubmit={onSubmit} className="space-y-3">
+      <div>
+        <label className="mb-1 block text-xs font-medium text-slate-600">
+          자료 분류
+        </label>
+        <select
+          value={category}
+          onChange={(e) =>
+            setCategory(
+              e.target.value as (typeof CASE_ATTACHMENT_CATEGORY_VALUES)[number],
+            )
+          }
+          className="w-full max-w-md rounded-xl border px-4 py-2 text-sm"
+          disabled={loading}
+        >
+          {CASE_ATTACHMENT_CATEGORY_VALUES.map((value) => (
+            <option key={value} value={value}>
+              {CASE_ATTACHMENT_CATEGORY_LABELS[value]}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="flex flex-col gap-3 md:flex-row md:items-center">
         <input
           ref={inputRef}

@@ -106,7 +106,11 @@ PROJECT_PLAN = {
         "[343][345] 재오픈 금지. 다음: [347]+·[348] 1순위(EVIDENCE-347·348·SPEC#spec-347-후속-고정). "
         "이전(338): 2차 동기 EV(EVIDENCE_STEP3_B §1~4). "
         "비기본(별도 증빙): B안/IO/§5.4/ALIGNMENT 보감 - §0 '이후 분기'/313/320과 직교. "
-        "이후 착수: 정의·스키마·코드 실변경 등 필요 항목만 별도 단위·EVIDENCE."
+        "이후 착수: 정의·스키마·코드 실변경 등 필요 항목만 별도 단위·EVIDENCE. "
+        "Step3 1순([351] EVIDENCE-20260426-351) 종료·2순 GW-0.2 [352] (나) 마감(EVIDENCE-20260426-352) → [347]3순 "
+        "ALIGNMENT/Case/인터뷰 잔여(post_352_next_347_tier3_alignment, DEV_BRIEF_POST_STEP3_352.md). "
+        "SPEC#spec-347-후속-고정. 348·349·1순 흐름과 3순 혼재 금지. "
+        "GW-0.2 차기 (가) 시 확인: SPEC#gw-0-2-범위-완료 → IO_DATA → POST_278 §6.3 → SPEC §5.4 → EVIDENCE-324. 합의 전 src/** 금지."
     ),
     "next_work_unit_step3_question_set": (
         "Step 3 질문셋 본착수 (EVIDENCE-20260423-328) - SPEC #step-3-질문셋-본착수, "
@@ -135,8 +139,9 @@ PROJECT_PLAN = {
     "post_347_step3_followup": (
         "EVIDENCE-20260425-347: [347]+ 본절·SPEC#spec-347-후속-고정. [343][345][346] 재오픈 금지(346 종료·345 잠금 유지). "
         "선정(2026-04-25): 1) Step3 잔여·운용 2) GW-0.2 B안/IO/§5.4 3) ALIGNMENT§6·Case/인터뷰 잔여. "
-        "1순: [348] 회귀 확정. 문서·스냅·운용로그·회귀=[348] 갱신. src·시드·자동검·런타임=[EVIDENCE-20260425-349+](개설) post_349. "
-        "2·3순(GW-0.2, ALIGNMENT/Case)=[347]·SPEC#spec-347-후속-고정·[320]이후-읽는순서→별도 EVIDENCE/PR만(348·349·1순과 혼재 금지). show-plan: post_348, post_349."
+        "1순 [348]·①+② [349]·③ [350]·[352] 2순 GW-0.2(나) 마감 = 문서권 Step3/Phase 종료(점검표 [343]~[352]). "
+        "3순: EVIDENCE-20260426-353 — 문서권 마감 #347-tier3-document-scope-closure-20260426; 후속(가)·본착수=별 PR(post_352_next_347_tier3_alignment). "
+        "348·349·1순·352 흐름과 3순 혼재·한 PR 금지. show-plan: post_348, post_349, post_352_next_347_tier3_alignment."
     ),
     "post_348_step3_tier1": (
         "EVIDENCE-20260425-348(확정): [347] 1순위 Step3 잔여·운용 회귀 검증. [343][345][346] 재오픈 없음. "
@@ -152,6 +157,37 @@ PROJECT_PLAN = {
         "[349]에는 ③·workflow를 혼입하지 않습니다. "
         "2·3순/348=별트랙. [343]~[346] 비재오픈."
     ),
+    "post_351_step3_tier1_reaudit": (
+        "EVIDENCE-20260426-351: [351] Step3 1순위 종료 판정 — 추가 착수 후보 없음. "
+        "당시 다음은 [347] 2순 GW-0.2·이후 [352] (나)로 2순 마감(EVIDENCE-20260426-352). "
+        "다음(현재): [347] 3순 ALIGNMENT/Case/인터뷰 — post_352_next_347_tier3_alignment. "
+        "GW-0.2 (가) 재착수 시: SPEC#gw-0-2-범위-완료·IO·POST_278 §6.3·SPEC §5.4·EVIDENCE-324, 합의 전 src/** 금지."
+    ),
+    "post_352_gw02_document_agreement": (
+        "EVIDENCE-20260426-352: GW-0.2 본 주기 마감. 1·2단계 완료, 이번 (나). "
+        "신규 src/**·B안·§5.4 행 이관/유지·API_SPEC success/ok 강제 없음 → 3) 문서 3종 생략, 4) 이번 흐름 src/** 없음. "
+        "Step3/Phase [343]~[352] 점검표·문서권 완료. 향후 GW-0.2 src/** = 별도 EVIDENCE/PR (가) 재판정. "
+        "다음: [347] 3순 — post_352_next_347_tier3_alignment, docs/project-governance/DEV_BRIEF_POST_STEP3_352.md."
+    ),
+    "post_352_next_347_tier3_alignment": (
+        "[347]3순 #evidence-20260426-353 — A·B·C(A)·**문서권 전체** 닫힘 — #347-tier3-document-scope-closure-20260426 "
+        "(전제 #c-gw03-a-tier3-20260426·당장 본착수·src 없음). "
+        "**후속만:** GW-0.3 **(가)**·질문셋 본착수·런타임 대규모=FOLLOWUP §4·**별** EVIDENCE/PR·343~350 비재오픈. "
+        "[347]이후 코드 1순위 FILE-1B: #work-instruction-post-347-file-1b-attachment-case-link · "
+        "WORK_INSTRUCTION_POST_347_DEV_CANDIDATE_PRIORITY.md · WORK_INSTRUCTION_POST_347_FILE_1B_ATTACHMENT_CASE_LINK.md. "
+        "B축 마감·C 전환 기록: #347-tier3-b-axis-closure-c-next-20260426 · 표 #347-tier3-bc-next-after-bg1. "
+        "B 증빙 소급: #work-instruction-347-tier3-case-interview-gap-audit · #work-instruction-347-tier3-b-residual-lc-case-api-ui · B-G1 #b-g1-ux-pr-20260426 · B-LC05. "
+        "문서승인 전용 감사행=보류 후보만(착수 안 함). FILE-1B·IV대규모=별 트랙, C PR과 혼재 금지. "
+        "C: 착수 전 판정 #work-instruction-347-tier3-c-gw03-spec-preflight · WORK_INSTRUCTION_347_TIER3_C_GW03_SPEC_PREFLIGHT.md "
+        "(GW-0.2(나) 마감 전제·SPEC/질문셋 겹침·별도 EVIDENCE/PR). "
+        "GW-0.3 (A) 1차 완료 확인: #c-gw03-a-tier3-20260426 (문서·정렬·src 없음·verify:canonical-sources). "
+        "질문셋 본착수·런타임 대규모=(가)만; (A)에 넣지 않음. SPEC#gw-0-3-범위-완료 · #spec-347-후속-고정 · FOLLOWUP §3·§4 · GW-0.3-분기/SPEC-347-확장. "
+        "전제·닫힘: P0첫코드 #p0-353-구현-20260426 · P0잔여·P2통합 #p0-347-tier3-p0-p2-integrated-20260426 · "
+        "P1·IO-05·353+ #p0-353-plus-dual-axis-real — 재오픈·canonical CaseStatus 변경 금지. "
+        "SPEC#spec-347-후속-고정, 348/349/1·2순(352)과 PR 혼재·한PR 금지. GW-0.2 src/** 필요 시 별 EVIDENCE (가) 재판정. "
+        "고정: [343]~[346]·[349]①+② 재오픈 금지, [350]③, [352] (나) 마감. "
+        "PR/릴리스 전: verify:349-12·CI. DEV_BRIEF: DEV_BRIEF_POST_STEP3_352.md · #p0-353-p1p2-next."
+    ),
     "governance_gw0_cycle1_closed": (
         "GW-0.1~0.4 문서·증빙·show-plan 정렬 주기 1차 완료·잠금 - "
         "EVIDENCE-20260423-327 · SPEC#gw-0-정렬-주기-1차-완료. "
@@ -163,11 +199,15 @@ PROJECT_PLAN = {
     ),
     "governance_321_work_units": [
         "GW-0.1: §0 훑기 - 이후-분기-고정, C(R6) 닫힘(참조만), B안/IO/ROWS 비기본 표시; 범위·완료 판정 SPEC#gw-0-1-범위-완료; IMPLEMENTATION GW-0.1 EVIDENCE + show-plan 첫 bullet 1:1 (도메인 구현 없음).",
-        "GW-0.2 (비기본): B안(서버 ok·envelope)·IO·POST_278 §6.3·§5.4 합의; 합의 전 src/** 변경 금지; "
-        "범위·완료 판정 SPEC#gw-0-2-범위-완료; EVIDENCE-324 + 비기본 분기(가)/(나) + show-plan 둘째 bullet 1:1; 코드·src는 합의 후만.",
+        "GW-0.2 (비기본): B안·IO·POST_278 §6.3·§5.4; 합의 전 src/** 변경 금지; "
+        "[352] 본 주기 마감: 1·2 완료·(나); 신규 src·B안·§5.4 행·API_SPEC 강제 없음; 3 생략 4 미실시; "
+        "SPEC#gw-0-2-범위-완료; EVIDENCE-324 + (가)/(나) + show-plan 둘째 1:1; "
+        "향후 src 필요 시 별 EVIDENCE/PR (가) 재판정.",
         "GW-0.3 (비기본): §7 Step 3 질문셋·QUESTION_SET_DEFINITION·[320] 이후 궤도; "
         "범위·완료 판정 SPEC#gw-0-3-범위-완료; EVIDENCE-325 + 이번 주기 실착수(A)/(B) + 분기(가)/(나) + show-plan 셋째 bullet 1:1; "
-        "질문셋 본 착수·src는 (가)에서만.",
+        "질문셋 본 착수·src는 (가)에서만. "
+        "[347] C 1차: #c-gw03-a-tier3-20260426 — (A) 문서·정렬만·(나) 분기·343~350 재오픈 없음. "
+        "[347]3순 문서권 마감: #347-tier3-document-scope-closure-20260426.",
         "GW-0.4 (검증·조건부): 정의서·스키마·CaseStatus 실수정 시 verify + check-status --scope case (§4-1); "
         "범위·완료 판정 SPEC#gw-0-4-범위-완료; EVIDENCE-326 + 이번 주기 실착수(A)/(B) + 분기(가)/(나) + show-plan 넷째 bullet 1:1; "
         "수정 없으면 (나)·(A) 정렬만.",
@@ -516,6 +556,30 @@ def render_plan() -> str:
             "## [349] 1순위 — 코드·시드·자동검·런타임 전용 (EVIDENCE-20260425-349, post_349_step3_tier1_code)"
         )
         lines.append(p349c)
+
+    p351r = PROJECT_PLAN.get("post_351_step3_tier1_reaudit")
+    if p351r:
+        lines.append("")
+        lines.append(
+            "## [351] — 1순 종료 판정 (이후 2순 [352] 마감·3순으로 이동) (EVIDENCE-20260426-351, post_351_step3_tier1_reaudit)"
+        )
+        lines.append(p351r)
+
+    p352g = PROJECT_PLAN.get("post_352_gw02_document_agreement")
+    if p352g:
+        lines.append("")
+        lines.append(
+            "## [352] — [347] 2순 GW-0.2 본 주기 (나) 마감 (EVIDENCE-20260426-352, post_352_gw02_document_agreement)"
+        )
+        lines.append(p352g)
+
+    p352t3 = PROJECT_PLAN.get("post_352_next_347_tier3_alignment")
+    if p352t3:
+        lines.append("")
+        lines.append(
+            "## [347] 3순위 — ALIGNMENT / Case·인터뷰 잔여 (post_352_next_347_tier3_alignment)"
+        )
+        lines.append(p352t3)
 
     p345r = PROJECT_PLAN.get("post_345_step3_remaining")
     if p345r:

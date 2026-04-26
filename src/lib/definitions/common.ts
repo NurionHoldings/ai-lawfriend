@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+/**
+ * 질문셋·카탈로그 `visibleToRoles` 등에 쓰는 역할 문자열(의뢰인 = `CLIENT`).
+ * DB·세션은 `@prisma/client` `UserRole`(동일 인물은 `USER`) — 경계 매핑은 `@/lib/role-map`.
+ */
 export const UserRoleEnum = z.enum(["ADMIN", "LAWYER", "STAFF", "CLIENT"]);
 export type UserRole = z.infer<typeof UserRoleEnum>;
 

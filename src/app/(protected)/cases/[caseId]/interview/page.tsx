@@ -1,4 +1,5 @@
 /* [FILE-016] `canPerformCaseInterview`·`CASE_STATUS_LABELS` — 인터뷰 POST body는 API에서 `.strict()`(Batch B). */
+/* B-G1: `getAllowedCaseActions`·`COMPLETE_INTERVIEW` — 상세 `CaseStatusActions`와 동일 조건으로 전용 화면 완료 CTA. */
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
@@ -9,6 +10,8 @@ import {
 } from "@/features/cases/case.permissions";
 import CaseInterviewClient from "@/components/cases/case-interview-client";
 import { CASE_STATUS_LABELS, INTERVIEW_STATUS_LABELS } from "@/lib/definitions";
+import { getAllowedCaseActions } from "@/lib/case-action-guard";
+import { prismaRoleToUiRole } from "@/lib/role-map";
 
 type PageProps = {
   params: Promise<{
@@ -52,6 +55,18 @@ export default async function CaseInterviewPage({ params }: PageProps) {
       ] ?? latestInterview.status
     : null;
 
+  const interviewCompleted = latestInterview?.status === "COMPLETED";
+  const showCompleteInterviewCta = getAllowedCaseActions({
+    role: prismaRoleToUiRole(currentUser.role),
+    caseStatus: found.status,
+    facts: {
+      interviewCompleted,
+      hasDraftDocument: false,
+      hasApprovedDocument: false,
+      hasLockedDocument: false,
+    },
+  }).COMPLETE_INTERVIEW;
+
   return (
     <div className="space-y-6 p-6">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -82,6 +97,7 @@ export default async function CaseInterviewPage({ params }: PageProps) {
         caseId={found.id}
         caseStatus={found.status}
         canEditInterview={canEditInterview}
+        showCompleteInterviewCta={showCompleteInterviewCta}
       />
     </div>
   );

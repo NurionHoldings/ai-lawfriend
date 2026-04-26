@@ -3,7 +3,8 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/get-session-user";
-import { assertCaseAccess, permissionContextFromSession } from "@/lib/authz";
+import { assertCaseAccess } from "@/lib/authz";
+import { buildPermissionContextForCase } from "@/features/cases/case.permissions";
 import { CaseDetailClient } from "@/components/cases/case-detail-client";
 import { serializeCaseDetail } from "@/lib/cases/case-detail-serialize";
 import { prismaRoleToUiRole } from "@/lib/role-map";
@@ -52,21 +53,13 @@ export default async function CaseDetailPage({
     notFound();
   }
 
-  const assignments = await prisma.caseAssignment.findMany({
-    where: { caseId, isActive: true },
-    select: { assigneeUserId: true },
+  const permCtx = await buildPermissionContextForCase(sessionUser, {
+    id: caseId,
+    ownerUserId: caseRecord.ownerUserId,
+    assignedLawyerUserId: caseRecord.assignedLawyerUserId,
+    assignedStaffUserId: caseRecord.assignedStaffUserId,
   });
-  const isCaseParticipant = assignments.some((a) => a.assigneeUserId === sessionUser.id);
-
-  assertCaseAccess(
-    "case.read",
-    permissionContextFromSession(sessionUser, {
-      caseOwnerUserId: caseRecord.ownerUserId,
-      assignedLawyerUserId: caseRecord.assignedLawyerUserId,
-      assignedStaffUserId: caseRecord.assignedStaffUserId,
-      isCaseParticipant,
-    }),
-  );
+  assertCaseAccess("case.read", permCtx);
 
   const serialized = serializeCaseDetail(caseRecord);
   const showSoftDelete = canRequestSoftDelete(sessionUser, {

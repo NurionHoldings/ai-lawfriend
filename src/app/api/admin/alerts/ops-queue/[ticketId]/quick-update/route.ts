@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import type { OpsQueuePriority } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { requireRole } from "@/lib/auth/require-role";
+import { requireAdminApi } from "@/lib/auth/require-admin-api";
 import { writeAuditLog } from "@/lib/audit-log";
 import { createTimelineMemo } from "@/features/case-timeline/case-timeline.repository";
 
@@ -18,7 +18,7 @@ type RouteContext = {
 
 export async function POST(req: NextRequest, ctx: RouteContext) {
   try {
-    const admin = await requireRole("ADMIN");
+    const admin = await requireAdminApi();
     const { ticketId } = await ctx.params;
 
     const parsed = BodySchema.safeParse(await req.json());

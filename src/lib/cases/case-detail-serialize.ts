@@ -66,7 +66,10 @@ export type SerializedCaseDetail = {
     actorUserId: string | null;
     createdAt: string;
   }>;
-  /** 서버 계산 허용 액션 — PATCH /api/cases/:id/status 의 LifecycleAction 과 동일 규칙 */
+  /**
+   * 서버 계산 허용 액션 — `getAllowedLifecycleActionsForCase` 단일 함수(`GET /api/cases/:id`·status·transition과 동일 축).
+   * [353-P1-IO05] 클라 `getAllowedCaseActions`와의 단일화·이중 축 해소는 **353+ 전용** — 본 필드 계산식은 변경하지 않음.
+   */
   allowedLifecycleActions?: LifecycleAction[];
 };
 

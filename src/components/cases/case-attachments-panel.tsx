@@ -1,6 +1,8 @@
+import AttachmentCategoryEditor from "@/components/cases/attachment-category-editor";
 import AttachmentDownloadLink from "@/components/cases/attachment-download-link";
 import AttachmentUploadForm from "@/components/cases/attachment-upload-form";
 import DeleteAttachmentButton from "@/components/cases/delete-attachment-button";
+import { CASE_ATTACHMENT_CATEGORY_LABELS } from "@/features/case-attachments/case-attachment-category";
 import { listCaseAttachmentsService } from "@/features/case-attachments/case-attachment.service";
 import { MAX_ATTACHMENTS_PER_CASE } from "@/features/case-attachments/case-attachment.validators";
 import { formatDate } from "@/features/cases/case.utils";
@@ -53,9 +55,21 @@ export default async function CaseAttachmentsPanel({
                   {item.originalName}
                 </AttachmentDownloadLink>
                 <p className="mt-1 text-xs text-slate-500">
+                  분류:{" "}
+                  <span className="font-medium text-slate-700">
+                    {CASE_ATTACHMENT_CATEGORY_LABELS[item.category]}
+                  </span>
+                  {" · "}
                   업로더: {item.uploader.name ?? item.uploader.email} /{" "}
                   {formatDate(item.createdAt)}
                 </p>
+                <div className="mt-3 max-w-md">
+                  <AttachmentCategoryEditor
+                    caseId={caseId}
+                    attachmentId={item.id}
+                    initialCategory={item.category}
+                  />
+                </div>
               </div>
 
               <div className="flex items-center gap-3">

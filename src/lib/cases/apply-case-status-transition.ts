@@ -1,6 +1,8 @@
 import type { CaseStatus as PrismaCaseStatus } from "@prisma/client";
+import { writeAuditLog } from "@/lib/audit-log";
 import { prisma } from "@/lib/prisma";
-import { assertCaseAccess, permissionContextFromSession } from "@/lib/authz";
+import { assertCaseAccess } from "@/lib/authz";
+import { buildPermissionContextForCase } from "@/features/cases/case.permissions";
 import { checkCaseTransitionOrThrow } from "@/lib/case-transition";
 import type { LifecycleAction } from "@/lib/definitions";
 import type { CaseStatus } from "@/lib/definitions/case-status";
@@ -31,23 +33,8 @@ export async function applyCaseStatusTransition(args: {
     throw new NotFoundError("사건을 찾을 수 없습니다.");
   }
 
-  const assignments = await prisma.caseAssignment.findMany({
-    where: { caseId, isActive: true },
-    select: { assigneeUserId: true },
-  });
-  const isCaseParticipant = assignments.some(
-    (a) => a.assigneeUserId === sessionUser.id,
-  );
-
-  assertCaseAccess(
-    "case.change_status",
-    permissionContextFromSession(sessionUser, {
-      caseOwnerUserId: caseRecord.ownerUserId,
-      assignedLawyerUserId: caseRecord.assignedLawyerUserId,
-      assignedStaffUserId: caseRecord.assignedStaffUserId,
-      isCaseParticipant,
-    }),
-  );
+  const permCtx = await buildPermissionContextForCase(sessionUser, caseRecord);
+  assertCaseAccess("case.change_status", permCtx);
 
   const checked = await checkCaseTransitionOrThrow({
     caseId,
@@ -82,6 +69,20 @@ export async function applyCaseStatusTransition(args: {
     });
 
     return updatedCase;
+  });
+
+  await writeAuditLog({
+    actorUserId: sessionUser.id,
+    action: "CASE_STATUS_TRANSITION",
+    entityType: "CASE",
+    entityId: caseId,
+    message: `사건 상태 전이: ${caseRecord.status} → ${checked.nextStatus}`,
+    metadata: {
+      action,
+      from: caseRecord.status,
+      to: checked.nextStatus,
+      reason: reason ?? null,
+    },
   });
 
   return updated;

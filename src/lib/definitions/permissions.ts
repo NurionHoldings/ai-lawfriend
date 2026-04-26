@@ -166,7 +166,11 @@ export function canAccessCase(permission: PermissionKey, ctx: PermissionContext)
   }
 
   if (ctx.actorRole === "STAFF") {
-    return ctx.assignedStaffUserId === ctx.actorUserId || !!ctx.isCaseParticipant;
+    return (
+      ctx.assignedStaffUserId === ctx.actorUserId ||
+      ctx.caseOwnerUserId === ctx.actorUserId ||
+      !!ctx.isCaseParticipant
+    );
   }
 
   if (ctx.actorRole === "CLIENT") {

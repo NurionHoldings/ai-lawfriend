@@ -6,6 +6,7 @@ import {
   NotFoundError,
 } from "@/lib/errors";
 import type { SessionUser } from "@/lib/get-session-user";
+import { getCaseAccessContext } from "@/features/cases/case.permissions";
 
 export const LegalDocumentDeliveryBodySchema = z.object({
   channel: z.string().trim().min(1),
@@ -53,6 +54,8 @@ export async function deliverLegalDocumentPost(
   if (document.case.status === "DELIVERED" || document.case.status === "CLOSED") {
     throw new AppError("이미 전달 완료된 사건의 문서는 다시 전달할 수 없습니다.", 409, "CONFLICT");
   }
+
+  await getCaseAccessContext(sessionUser, document.caseId);
 
   const c = document.case;
 

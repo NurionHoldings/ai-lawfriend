@@ -152,4 +152,8 @@
 
 **한 줄:** §7 **문서** **줄** **쓰기** **에** **앞서** **상태**·**삭제**·`allowedLifecycleActions` **정합** **한** **번** **확인** **→** **그** **스냅**을 **FILE_REALIGN** **Batch**·`show-plan` **시작** **선**으로 **쓴다**.
 
+### 7.2 Step 3 · GW-0.3 직교 (증빙, 2026-04-26)
+
+**Step 3** 질문셋·인터뷰 **본 궤도**는 [328]~[350]·점검표로 **문서권 닫힘**을 전제로 한다 — **[343]~[350] 재오픈 없음.** [320](./IMPLEMENTATION_EVIDENCE.md#evidence-20260423-320) 이후 **GW-0.3** 비기본 축은 [SPEC **#gw-0-3-범위-완료**](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-3-범위-완료)와 직교하며, **[347] 3순 C**의 **문서·정렬 1차**는 [#c-gw03-a-tier3-20260426](./IMPLEMENTATION_EVIDENCE.md#c-gw03-a-tier3-20260426)에 기록한다. **질문셋 본착수·런타임 대규모 변경**은 **GW-0.3 (가)**·별 `EVIDENCE`/`PR`.
+
 **Step 0** **다음** **첫** **실** **파일** **묶음** — [FILE_REALIGN **§2** **Batch** **1-A** / **1-B**](./FILE_REALIGN_PATCH_V1.md#batch-1a-1b) ([EVIDENCE-20260423-315](./IMPLEMENTATION_EVIDENCE.md)); **확정** **문안**·**현행** **경로** **대응** **은** **해당** **절** **본문**.

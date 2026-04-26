@@ -3,7 +3,8 @@ import { z } from "zod";
 import type { LegalDocumentType, LegalParagraphStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/get-session-user";
-import { assertCaseAccess, permissionContextFromSession } from "@/lib/authz";
+import { assertCaseAccess } from "@/lib/authz";
+import { buildPermissionContextForCase } from "@/features/cases/case.permissions";
 import { buildParagraphDraftSeeds } from "@/lib/document-template-engine";
 import { generateParagraphContent } from "@/lib/document-ai";
 import { getQuestionSetDefinitionByCodeVersion } from "@/lib/question-set-registry";
@@ -56,21 +57,8 @@ export async function POST(
       );
     }
 
-    const assignments = await prisma.caseAssignment.findMany({
-      where: { caseId, isActive: true },
-      select: { assigneeUserId: true },
-    });
-    const isCaseParticipant = assignments.some((a) => a.assigneeUserId === sessionUser.id);
-
-    assertCaseAccess(
-      "document.generate",
-      permissionContextFromSession(sessionUser, {
-        caseOwnerUserId: caseRecord.ownerUserId,
-        assignedLawyerUserId: caseRecord.assignedLawyerUserId,
-        assignedStaffUserId: caseRecord.assignedStaffUserId,
-        isCaseParticipant,
-      }),
-    );
+    const permCtx = await buildPermissionContextForCase(sessionUser, caseRecord);
+    assertCaseAccess("document.generate", permCtx);
 
     const interview = await prisma.interview.findFirst({
       where: { caseId },

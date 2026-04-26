@@ -1,6 +1,7 @@
 "use client";
 
 import { DOCUMENT_STATUS_LABELS } from "@/lib/definitions";
+import type { UiFourPanelRole } from "@/lib/role-map";
 
 type Props = {
   document: {
@@ -17,7 +18,7 @@ type Props = {
       status: string;
     }>;
   };
-  currentRole: "ADMIN" | "LAWYER" | "STAFF" | "CLIENT";
+  currentRole: UiFourPanelRole;
   onApprove: () => Promise<void> | void;
   onLock: () => Promise<void> | void;
   busy?: boolean;

@@ -1,4 +1,5 @@
 import { CASE_STATUS_LABELS, type CaseStatus } from "@/lib/definitions";
+import type { UiFourPanelRole } from "@/lib/role-map";
 
 export function formatDate(date: Date | string | null | undefined) {
   if (!date) return "-";
@@ -28,7 +29,7 @@ export function isSupplementHubCaseStatus(status: string): boolean {
 }
 
 /** 보완 허브 링크 툴팁용 역할(표시 전용). */
-export type SupplementHubUiRole = "ADMIN" | "LAWYER" | "STAFF" | "CLIENT";
+export type SupplementHubUiRole = UiFourPanelRole;
 
 /**
  * 보완 안내 링크용 짧은 설명(툴팁·`title`). 표시 전용이며 `case-status.ts` 정의를 바꾸지 않는다.

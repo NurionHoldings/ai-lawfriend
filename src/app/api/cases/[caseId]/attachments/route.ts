@@ -2,6 +2,7 @@ import { ok, toErrorResponse } from "@/lib/domain-api-response";
 import { requireSessionUser } from "@/lib/auth/require-session-user";
 import { ValidationError } from "@/lib/errors";
 import { caseIdParamSchema } from "@/features/cases/case.validators";
+import { parseCaseAttachmentCategoryInput } from "@/features/case-attachments/case-attachment-category";
 import {
   listCaseAttachmentsService,
   uploadCaseAttachmentService,
@@ -39,10 +40,13 @@ export async function POST(request: Request, context: RouteContext) {
       throw new ValidationError("파일이 필요합니다.");
     }
 
+    const category = parseCaseAttachmentCategoryInput(formData.get("category"));
+
     const result = await uploadCaseAttachmentService(
       currentUser,
       caseId,
-      fileEntry
+      fileEntry,
+      category,
     );
     return ok(result, { status: 201 });
   } catch (error) {

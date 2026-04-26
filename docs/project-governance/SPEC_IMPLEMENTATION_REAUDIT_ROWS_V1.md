@@ -82,6 +82,10 @@
 
 **이번 주기 실착수 범위 (기록 필수):** **(A)** SPEC·`#gw-0-3-범위-완료`·`EVIDENCE-20260423-325`·`show-plan` **셋째** bullet **정렬만** / **(B)** `QUESTION_SET_DEFINITION`·질문셋 **코드/정의 본 착수** **포함**. — 이번 기록에서는 **(A)** 를 실착수로 둔다.
 
+**[347] 3순 C — GW-0.3 (A) 1차 (2026-04-26):** 문서·정렬만(본 절·`CASE_STATUS_DEFINITION` §7.2·`QUESTION_SET_DEFINITION` 문서 정보·`aibeopchin_navigator` 정합) · **(B) 제외** · [343]~[350]·Step3 닫힌 Phase **재오픈 없음** · `src/**` 없음 — [IMPLEMENTATION_EVIDENCE #c-gw03-a-tier3-20260426](./IMPLEMENTATION_EVIDENCE.md#c-gw03-a-tier3-20260426). 질문셋 **본착수**·런타임 대규모 변경은 **GW-0.3 (가)** 로 **별** `EVIDENCE`/`PR`.
+
+**[347] 3순 문서권 전체 마감 (개발팀 전제·2026-04-26):** 위 (A) 완료·**당장** 본착수·`src/**` 없음을 전제로, ALIGNMENT/Case·인터뷰 **문서권** 트랙을 **종료** — [IMPLEMENTATION_EVIDENCE #347-tier3-document-scope-closure-20260426](./IMPLEMENTATION_EVIDENCE.md#347-tier3-document-scope-closure-20260426). **(가)**·본착수·대규모 런타임은 **별** 후속만.
+
 **완료 판정 (다섯, 실착수·비기본 분기 필수):** (1) 위 `GW-0.3` 표 + 본 절이 **실행 기준**으로 읽힌다. (2) [IMPLEMENTATION_EVIDENCE](./IMPLEMENTATION_EVIDENCE.md#evidence-20260423-325)에 `EVIDENCE-20260423-325` (또는 동일 취지)가 있다. (3) `show-plan`의 `GW-0.3` **셋째** bullet이 (1)과 **같은 뜻(1:1)** 이다. (4) **이번 주기 실착수 범위**를 한 줄로 남긴다 — 위 **(A)/(B)** 중 **어느 층**까지 착수했는지. (5) **비기본 분기**를 한 줄로 남긴다 — **(가)** Step 3·질문셋 **본 착수**·관련 **산출** **있음** / **(나)** **이번 기록 주기**에서 질문셋 **본 착수·코드 없음** (정렬·대기만).
 
 `show-plan` **「[321] 기준」**의 `GW-0.3` bullet = `PROJECT_PLAN['governance_321_work_units'][2]` = 본 `GW-0.3` 표·[#gw-0-3-범위-완료](#gw-0-3-범위-완료)와 **같은 뜻(1:1)** 이어야 한다.

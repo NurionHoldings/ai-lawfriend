@@ -10,9 +10,14 @@ export type CaseListFilters = {
   status?: "CREATED" | "IN_INTERVIEW" | "CLOSED" | "ALL";
 };
 
+/**
+ * 목록·단건(`GET /api/cases/:id`)·생성/수정 응답 공통 선택 — [353-P1-IO05] `buildPermissionContextForCase`·상세 직렬화와 동일한 담당 필드 축.
+ */
 export const caseSelect = {
   id: true,
   ownerUserId: true,
+  assignedLawyerUserId: true,
+  assignedStaffUserId: true,
   title: true,
   description: true,
   category: true,

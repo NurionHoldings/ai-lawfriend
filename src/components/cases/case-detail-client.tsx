@@ -26,12 +26,13 @@ import {
   supplementHubLinkTitle,
   type SupplementHubUiRole,
 } from "@/features/cases/case.utils";
+import type { UiFourPanelRole } from "@/lib/role-map";
 
 type CaseDetailClientProps = {
   caseRecord: SerializedCaseDetail;
   currentUser: {
     id: string;
-    role: "ADMIN" | "LAWYER" | "STAFF" | "CLIENT";
+    role: UiFourPanelRole;
   };
 };
 

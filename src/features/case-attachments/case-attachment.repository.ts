@@ -1,8 +1,10 @@
+import type { CaseAttachmentCategory } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
 export async function createCaseAttachment(data: {
   caseId: string;
   uploaderUserId: string;
+  category: CaseAttachmentCategory;
   originalName: string;
   storedName: string;
   mimeType: string;
@@ -15,6 +17,7 @@ export async function createCaseAttachment(data: {
       id: true,
       caseId: true,
       uploaderUserId: true,
+      category: true,
       originalName: true,
       storedName: true,
       mimeType: true,
@@ -46,6 +49,7 @@ export async function findActiveAttachmentsByCaseId(caseId: string) {
       id: true,
       caseId: true,
       uploaderUserId: true,
+      category: true,
       originalName: true,
       mimeType: true,
       sizeBytes: true,
@@ -70,6 +74,7 @@ export async function findAttachmentById(attachmentId: string) {
       id: true,
       caseId: true,
       uploaderUserId: true,
+      category: true,
       originalName: true,
       storedName: true,
       mimeType: true,
@@ -77,6 +82,22 @@ export async function findAttachmentById(attachmentId: string) {
       storagePath: true,
       status: true,
       createdAt: true,
+    },
+  });
+}
+
+export async function updateCaseAttachmentCategory(
+  attachmentId: string,
+  category: CaseAttachmentCategory,
+) {
+  return prisma.caseAttachment.update({
+    where: { id: attachmentId },
+    data: { category },
+    select: {
+      id: true,
+      caseId: true,
+      category: true,
+      originalName: true,
     },
   });
 }

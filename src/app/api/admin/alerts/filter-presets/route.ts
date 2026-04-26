@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/auth/session";
+import { isAdminRole } from "@/lib/auth/roles";
 
 const createSchema = z.object({
   name: z.string().min(1).max(100),
@@ -18,15 +19,14 @@ const createSchema = z.object({
   q: z.string().optional(),
 });
 
-function isAdmin(role: string | undefined) {
-  return role === "ADMIN" || role === "SUPER_ADMIN";
-}
-
 export async function GET() {
   const user = await getSessionUser();
 
-  if (!user || !isAdmin(user.role)) {
-    return NextResponse.json({ ok: false, error: "권한이 없습니다." }, { status: 401 });
+  if (!user) {
+    return NextResponse.json({ ok: false, error: "로그인이 필요합니다." }, { status: 401 });
+  }
+  if (!isAdminRole(user.role)) {
+    return NextResponse.json({ ok: false, error: "권한이 없습니다." }, { status: 403 });
   }
 
   const presets = await prisma.alertBoardFilterPreset.findMany({
@@ -40,8 +40,11 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   const user = await getSessionUser();
 
-  if (!user || !isAdmin(user.role)) {
-    return NextResponse.json({ ok: false, error: "권한이 없습니다." }, { status: 401 });
+  if (!user) {
+    return NextResponse.json({ ok: false, error: "로그인이 필요합니다." }, { status: 401 });
+  }
+  if (!isAdminRole(user.role)) {
+    return NextResponse.json({ ok: false, error: "권한이 없습니다." }, { status: 403 });
   }
 
   const parsed = createSchema.safeParse(await req.json());

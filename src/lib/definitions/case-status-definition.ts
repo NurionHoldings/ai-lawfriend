@@ -158,9 +158,6 @@ export function canEditCaseStatusByRole(
   return false;
 }
 
-export const CASE_STATUS_VALUES = ["CREATED", "IN_INTERVIEW", "CLOSED"] as const;
-export type CaseStatusInput = (typeof CASE_STATUS_VALUES)[number];
-
 export function exportCaseStatusDefinitionsSnapshot() {
   return Object.values(STATUS_META);
 }

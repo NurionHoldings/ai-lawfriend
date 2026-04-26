@@ -1,8 +1,47 @@
+/**
+ * 사건·인터뷰 **서버** 권한 판정 — ALIGNMENT **§6-3 RB-02**·**RB-03** (API **서버 우선**·**사건 단위** 접근).
+ * `docs/project-governance/ALIGNMENT_AUDIT_V1.md` 표 참고.
+ * UI만 숨기지 말고, `GET/PATCH/DELETE /api/cases/...`·인터뷰 서비스는 `getCaseAccessContext` 등으로
+ * **라우트·서비스**에서 동일 기준을 적용한다.
+ * `buildPermissionContextForCase`는 `assertCaseAccess`용 **역할 + 배정 + 소유** 축을 `getCaseAccessContext`·목록 쿼리와 맞춘다.
+ */
 import { Prisma, type UserRole } from "@prisma/client";
 import type { SessionUser } from "@/lib/auth/require-session-user";
+import { permissionContextFromSession } from "@/lib/authz";
+import type { PermissionContext } from "@/lib/definitions";
 import { ForbiddenError, NotFoundError } from "@/lib/errors";
 import { prisma } from "@/lib/prisma";
 import { hasDefinedPermission } from "@/lib/definitions/permission-definition";
+
+/** RB-03: `assertCaseAccess`·배정 조회에 공통으로 쓰는 사건 행 최소 필드 */
+export type CaseRowForPermission = {
+  id: string;
+  ownerUserId: string;
+  assignedLawyerUserId: string | null;
+  assignedStaffUserId: string | null;
+};
+
+/**
+ * 활성 `CaseAssignment`와 소유·담당 필드로 `PermissionContext` 조립 — 라우트의 `findMany` 중복 제거.
+ */
+export async function buildPermissionContextForCase(
+  currentUser: SessionUser,
+  caseRow: CaseRowForPermission,
+): Promise<PermissionContext> {
+  const assignments = await prisma.caseAssignment.findMany({
+    where: { caseId: caseRow.id, isActive: true },
+    select: { assigneeUserId: true },
+  });
+  const isCaseParticipant = assignments.some(
+    (a) => a.assigneeUserId === currentUser.id,
+  );
+  return permissionContextFromSession(currentUser, {
+    caseOwnerUserId: caseRow.ownerUserId,
+    assignedLawyerUserId: caseRow.assignedLawyerUserId,
+    assignedStaffUserId: caseRow.assignedStaffUserId,
+    isCaseParticipant,
+  });
+}
 
 export function isPlatformAdmin(role: UserRole) {
   return role === "ADMIN" || role === "SUPER_ADMIN";

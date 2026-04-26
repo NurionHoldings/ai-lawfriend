@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import type { OpsQueueBoardColumn } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { requireRole } from "@/lib/auth/require-role";
+import { requireAdminApi } from "@/lib/auth/require-admin-api";
 import { writeAuditLog } from "@/lib/audit-log";
 import { createTimelineMemo } from "@/features/case-timeline/case-timeline.repository";
 
@@ -48,7 +48,7 @@ function getColumnLabel(column: string) {
 
 export async function POST(req: NextRequest) {
   try {
-    const admin = await requireRole("ADMIN");
+    const admin = await requireAdminApi();
 
     const parsed = BodySchema.safeParse(await req.json());
     if (!parsed.success) {

@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { ClientDashboardHome } from "@/components/dashboard/client/client-dashboard-home";
+import { DashboardLegacyBridge } from "@/components/dashboard/dashboard-legacy-bridge";
+import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { requireSessionUser } from "@/lib/auth/require-session-user";
 import { getDashboardCasesService } from "@/features/cases/case.service";
 import {
@@ -17,189 +20,206 @@ export default async function DashboardPage() {
   const uiRole = prismaRoleToUiRole(currentUser.role);
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8">
-      <section className="rounded-3xl border bg-white p-8 shadow-sm">
-        <p className="text-sm text-slate-500">AI법친 대시보드 · 사건 진입 허브</p>
-        <h1 className="mt-2 text-3xl font-bold text-slate-900">
-          안녕하세요, {currentUser.name ?? currentUser.email}님
-        </h1>
-        <p className="mt-2 text-slate-600">
-          사건 목록·생성으로 이동하고, 아래에서 최근 등록된 사건을 확인할 수 있습니다. 상태별
-          필터는{" "}
-          <Link href="/cases" className="font-medium text-slate-800 underline">
-            사건 목록
-          </Link>
-          에서 사용합니다.
-        </p>
+    <DashboardShell>
+      <div className="flex flex-col gap-10 pb-8">
+        <ClientDashboardHome />
 
-        <div className="mt-6 flex flex-wrap gap-3">
-          <Link
-            href="/cases"
-            className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white"
-          >
-            사건 목록 보기
-          </Link>
-          <Link
-            href="/cases/new"
-            className="rounded-xl border px-5 py-3 text-sm font-semibold text-slate-700"
-          >
-            새 사건 등록
-          </Link>
-          {isPlatformAdmin(currentUser.role) ? (
-            <Link
-              href="/admin/audit-logs"
-              className="rounded-xl border px-5 py-3 text-sm font-semibold text-slate-700"
-            >
-              감사로그 조회
-            </Link>
-          ) : null}
-        </div>
+        <DashboardLegacyBridge />
 
-        {["LAWYER", "STAFF", "ADMIN", "SUPER_ADMIN"].includes(currentUser.role) ? (
-          <p className="mt-6 border-t border-slate-100 pt-6 text-sm leading-relaxed text-slate-500">
-            <span className="font-medium text-slate-700">의뢰인 연결</span> — 이메일 초대·수락
-            전용 화면은 아직 없습니다. 현재는 의뢰인이 가입·승인된 뒤{" "}
-            <span className="font-medium text-slate-700">본인 명의로 사건을 등록해 소유자(owner)</span>
-            로 연결되거나, 운영 절차로 소유자를 맞추는 방식을 전제로 합니다. 플랫폼 관리자가 쓰는
-            사건 <span className="font-medium text-slate-700">담당 변호사 배정</span> API는{" "}
-            <span className="font-medium text-slate-700">변호사 계정만</span> 대상이며, 의뢰인을 그
-            배정 대상에 넣지는 않습니다. (다중 초대·재발송·소유자 이전 UI는 고도화 범위)
-          </p>
-        ) : (
-          <p className="mt-6 border-t border-slate-100 pt-6 text-sm leading-relaxed text-slate-500">
-            배정된 사건은 아래 「최근 내 사건」과{" "}
-            <Link href="/cases" className="font-medium text-slate-700 underline">
-              사건 목록
-            </Link>
-            에서 이어서 확인할 수 있습니다.
-          </p>
-        )}
-      </section>
+        <section
+          aria-labelledby="dashboard-legacy-hub-heading"
+          className="mx-auto w-full max-w-6xl space-y-6 rounded-2xl border border-slate-200/90 bg-white p-5 text-slate-900 shadow-[0_8px_40px_-12px_rgba(15,23,42,0.18)] ring-1 ring-slate-200/80 sm:space-y-8 sm:rounded-[2rem] sm:p-6 md:p-8"
+        >
+          <h2 id="dashboard-legacy-hub-heading" className="sr-only">
+            사건 진입 허브
+          </h2>
 
-      <section className="rounded-3xl border bg-white p-8 shadow-sm">
-        <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <h2 className="text-xl font-semibold text-slate-900">최근 내 사건</h2>
-            <p className="mt-1 text-sm text-slate-500">
-              등록일 최신 순으로 최대 5건입니다.
+          <section className="rounded-3xl border bg-white p-8 shadow-sm">
+            <p className="text-sm text-slate-500">AI법친 대시보드 · 사건 진입 허브</p>
+            <h3 className="mt-2 text-3xl font-bold text-slate-900">
+              안녕하세요, {currentUser.name ?? currentUser.email}님
+            </h3>
+            <p className="mt-2 text-slate-600">
+              사건 목록·생성으로 이동하고, 아래에서 최근 등록된 사건을 확인할 수 있습니다. 상태별
+              필터는{" "}
+              <Link href="/cases" className="font-medium text-slate-800 underline">
+                사건 목록
+              </Link>
+              에서 사용합니다.
             </p>
-            <p className="mt-2 text-xs leading-relaxed text-slate-500">
-              「{statusLabel("INTAKE_PENDING")}」은 사건 수정 → AI 인터뷰 → 사건 상세 「진행 액션」
-              순이 일반적입니다. 「{statusLabel("REVIEW_PENDING")}」은 사건 상세에서 문서·문단을 다루는
-              단계이며, 의뢰인은 담당 측 검토를 기다리는 경우가 많습니다. 표의{" "}
-              <span className="font-medium text-slate-700">보완 안내</span> 열은 같은 내용을 한 페이지(
-              <span className="whitespace-nowrap">/supplement</span>)로 묶어 둔 링크이며, 접수·검토
-              단계별 섹션으로 스크롤됩니다. 행 위에 마우스를
-              올리면 역할에 맞는 다음 단계 힌트가 보입니다.
-            </p>
-            {uiRole === "CLIENT" ? (
-              <p className="mt-1 text-xs text-slate-500">
-                의뢰인: 접수 보완 중에는 본인이 수정·인터뷰를 진행하는 경우가 많습니다.
-              </p>
-            ) : (
-              <p className="mt-1 text-xs text-slate-500">
-                담당(관리자·변호사·스태프): 대리 입력하거나 이 표의 보완 안내 링크를 의뢰인과 공유할 수
-                있습니다.
-              </p>
-            )}
-          </div>
-          <Link
-            href="/cases"
-            className="text-sm font-medium text-slate-600 underline sm:shrink-0"
-          >
-            전체 보기
-          </Link>
-        </div>
 
-        {recentCases.length === 0 ? (
-          <div className="mt-6 rounded-2xl border border-dashed p-8 text-center text-slate-600">
-            <p className="text-slate-700">아직 등록된 사건이 없습니다.</p>
-            <p className="mt-2 text-sm text-slate-500">
-              새 사건을 등록하거나 사건 목록에서 전체를 확인하세요.
-            </p>
-            <p className="mt-2 text-xs text-slate-400">
-              접수 보완·검토 대기 사건이 생기면 아래 목록(또는 사건 목록)에서 보완 안내 링크가
-              표시됩니다.
-            </p>
-            <div className="mt-4 flex flex-wrap justify-center gap-3">
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                href="/cases"
+                className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white"
+              >
+                사건 목록 보기
+              </Link>
               <Link
                 href="/cases/new"
-                className="rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white"
+                className="rounded-xl border px-5 py-3 text-sm font-semibold text-slate-700"
               >
                 새 사건 등록
               </Link>
+              {isPlatformAdmin(currentUser.role) ? (
+                <Link
+                  href="/admin/audit-logs"
+                  className="rounded-xl border px-5 py-3 text-sm font-semibold text-slate-700"
+                >
+                  감사로그 조회
+                </Link>
+              ) : null}
+            </div>
+
+            {["LAWYER", "STAFF", "ADMIN", "SUPER_ADMIN"].includes(currentUser.role) ? (
+              <p className="mt-6 border-t border-slate-100 pt-6 text-sm leading-relaxed text-slate-500">
+                <span className="font-medium text-slate-700">의뢰인 연결</span> — 이메일 초대·수락
+                전용 화면은 아직 없습니다. 현재는 의뢰인이 가입·승인된 뒤{" "}
+                <span className="font-medium text-slate-700">
+                  본인 명의로 사건을 등록해 소유자(owner)
+                </span>
+                로 연결되거나, 운영 절차로 소유자를 맞추는 방식을 전제로 합니다. 플랫폼 관리자가 쓰는
+                사건 <span className="font-medium text-slate-700">담당 변호사 배정</span> API는{" "}
+                <span className="font-medium text-slate-700">변호사 계정만</span> 대상이며, 의뢰인을 그
+                배정 대상에 넣지는 않습니다. (다중 초대·재발송·소유자 이전 UI는 고도화 범위)
+              </p>
+            ) : (
+              <p className="mt-6 border-t border-slate-100 pt-6 text-sm leading-relaxed text-slate-500">
+                배정된 사건은 아래 「최근 내 사건」과{" "}
+                <Link href="/cases" className="font-medium text-slate-700 underline">
+                  사건 목록
+                </Link>
+                에서 이어서 확인할 수 있습니다.
+              </p>
+            )}
+          </section>
+
+          <section className="rounded-3xl border bg-white p-8 shadow-sm">
+            <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <h3 className="text-xl font-semibold text-slate-900">최근 내 사건</h3>
+                <p className="mt-1 text-sm text-slate-500">
+                  등록일 최신 순으로 최대 5건입니다.
+                </p>
+                <p className="mt-2 text-xs leading-relaxed text-slate-500">
+                  「{statusLabel("INTAKE_PENDING")}」은 사건 수정 → AI 인터뷰 → 사건 상세 「진행 액션」
+                  순이 일반적입니다. 「{statusLabel("REVIEW_PENDING")}」은 사건 상세에서 문서·문단을 다루는
+                  단계이며, 의뢰인은 담당 측 검토를 기다리는 경우가 많습니다. 표의{" "}
+                  <span className="font-medium text-slate-700">보완 안내</span> 열은 같은 내용을 한 페이지(
+                  <span className="whitespace-nowrap">/supplement</span>)로 묶어 둔 링크이며, 접수·검토
+                  단계별 섹션으로 스크롤됩니다. 행 위에 마우스를
+                  올리면 역할에 맞는 다음 단계 힌트가 보입니다.
+                </p>
+                {uiRole === "CLIENT" ? (
+                  <p className="mt-1 text-xs text-slate-500">
+                    의뢰인: 접수 보완 중에는 본인이 수정·인터뷰를 진행하는 경우가 많습니다.
+                  </p>
+                ) : (
+                  <p className="mt-1 text-xs text-slate-500">
+                    담당(관리자·변호사·스태프): 대리 입력하거나 이 표의 보완 안내 링크를 의뢰인과 공유할 수
+                    있습니다.
+                  </p>
+                )}
+              </div>
               <Link
                 href="/cases"
-                className="rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700"
+                className="text-sm font-medium text-slate-600 underline sm:shrink-0"
               >
-                사건 목록
+                전체 보기
               </Link>
             </div>
-          </div>
-        ) : (
-          <div className="mt-6 overflow-hidden rounded-2xl border">
-            <table className="min-w-full divide-y">
-              <thead className="bg-slate-50">
-                <tr className="text-left text-sm text-slate-600">
-                  <th scope="col" className="px-4 py-3">
-                    사건명
-                  </th>
-                  <th scope="col" className="px-4 py-3">
-                    상태
-                  </th>
-                  <th scope="col" className="px-4 py-3">
-                    등록일
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-4 py-3"
-                    title="접수 보완·검토 대기일 때만 링크(/supplement). 마우스를 올리면 역할별 다음 단계 힌트"
+
+            {recentCases.length === 0 ? (
+              <div className="mt-6 rounded-2xl border border-dashed p-8 text-center text-slate-600">
+                <p className="text-slate-700">아직 등록된 사건이 없습니다.</p>
+                <p className="mt-2 text-sm text-slate-500">
+                  새 사건을 등록하거나 사건 목록에서 전체를 확인하세요.
+                </p>
+                <p className="mt-2 text-xs text-slate-400">
+                  접수 보완·검토 대기 사건이 생기면 아래 목록(또는 사건 목록)에서 보완 안내 링크가
+                  표시됩니다.
+                </p>
+                <div className="mt-4 flex flex-wrap justify-center gap-3">
+                  <Link
+                    href="/cases/new"
+                    className="rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white"
                   >
-                    보완 안내
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y bg-white">
-                {recentCases.map((item) => (
-                  <tr key={item.id}>
-                    <td className="px-4 py-3">
-                      <Link
-                        href={`/cases/${item.id}`}
-                        className="font-medium text-slate-900 underline"
+                    새 사건 등록
+                  </Link>
+                  <Link
+                    href="/cases"
+                    className="rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700"
+                  >
+                    사건 목록
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <div className="mt-6 overflow-hidden rounded-2xl border">
+                <table className="min-w-full divide-y">
+                  <thead className="bg-slate-50">
+                    <tr className="text-left text-sm text-slate-600">
+                      <th scope="col" className="px-4 py-3">
+                        사건명
+                      </th>
+                      <th scope="col" className="px-4 py-3">
+                        상태
+                      </th>
+                      <th scope="col" className="px-4 py-3">
+                        등록일
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-4 py-3"
+                        title="접수 보완·검토 대기일 때만 링크(/supplement). 마우스를 올리면 역할별 다음 단계 힌트"
                       >
-                        {item.title}
-                      </Link>
-                    </td>
-                    <td className="px-4 py-3 text-slate-700">
-                      <span className="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800">
-                        {statusLabel(item.status)}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-slate-500">
-                      {formatDate(item.createdAt)}
-                    </td>
-                    <td className="px-4 py-3 text-sm">
-                      {isSupplementHubCaseStatus(item.status) ? (
-                        <Link
-                          href={supplementHubHref(item.id, item.status, uiRole)}
-                          className="font-medium text-slate-800 underline"
-                          title={supplementHubLinkTitle(item.status, uiRole)}
-                        >
-                          보완 안내
-                        </Link>
-                      ) : (
-                        <span className="text-slate-300" title="이 상태에서는 허브 링크 없음">
-                          —
-                        </span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
-    </div>
+                        보완 안내
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y bg-white">
+                    {recentCases.map((item) => (
+                      <tr key={item.id}>
+                        <td className="px-4 py-3">
+                          <Link
+                            href={`/cases/${item.id}`}
+                            className="font-medium text-slate-900 underline"
+                          >
+                            {item.title}
+                          </Link>
+                        </td>
+                        <td className="px-4 py-3 text-slate-700">
+                          <span className="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800">
+                            {statusLabel(item.status)}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-slate-500">
+                          {formatDate(item.createdAt)}
+                        </td>
+                        <td className="px-4 py-3 text-sm">
+                          {isSupplementHubCaseStatus(item.status) ? (
+                            <Link
+                              href={supplementHubHref(item.id, item.status, uiRole)}
+                              className="font-medium text-slate-800 underline"
+                              title={supplementHubLinkTitle(item.status, uiRole)}
+                            >
+                              보완 안내
+                            </Link>
+                          ) : (
+                            <span className="text-slate-300" title="이 상태에서는 허브 링크 없음">
+                              —
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
+        </section>
+      </div>
+    </DashboardShell>
   );
 }

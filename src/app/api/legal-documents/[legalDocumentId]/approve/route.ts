@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/get-session-user";
-import { assertCaseAccess, permissionContextFromSession } from "@/lib/authz";
+import { assertCaseAccess } from "@/lib/authz";
+import { buildPermissionContextForCase } from "@/features/cases/case.permissions";
 import { canApproveDocument } from "@/lib/definitions";
 import { ok, toErrorResponse } from "@/lib/domain-api-response";
 import {
@@ -55,19 +56,11 @@ export async function POST(
     }
 
     const c = document.case;
-    const assignments = await prisma.caseAssignment.findMany({
-      where: { caseId: c.id, isActive: true },
-      select: { assigneeUserId: true },
-    });
-    const isCaseParticipant = assignments.some((a) => a.assigneeUserId === sessionUser.id);
-
-    const permCtx = permissionContextFromSession(sessionUser, {
-      caseOwnerUserId: c.ownerUserId,
-      assignedLawyerUserId: c.assignedLawyerUserId,
-      assignedStaffUserId: c.assignedStaffUserId,
-      isCaseParticipant,
+    const prevCaseStatus = c.status;
+    const permCtx = {
+      ...(await buildPermissionContextForCase(sessionUser, c)),
       isDocumentLocked: false,
-    });
+    };
 
     assertCaseAccess("document.approve", permCtx);
 
@@ -138,6 +131,25 @@ export async function POST(
           status: "APPROVED" as PrismaCaseStatus,
         },
       });
+
+      if (prevCaseStatus !== "APPROVED") {
+        await tx.caseTimelineEvent.create({
+          data: {
+            caseId: document.caseId,
+            type: "CASE_STATUS_CHANGED",
+            title: `사건 상태 변경: ${prevCaseStatus} → APPROVED`,
+            description: null,
+            metaJson: {
+              from: prevCaseStatus,
+              to: "APPROVED",
+              reason: null,
+              source: "document_approve",
+              legalDocumentId,
+            },
+            actorUserId: sessionUser.id,
+          },
+        });
+      }
 
       await tx.caseTimelineEvent.create({
         data: {
