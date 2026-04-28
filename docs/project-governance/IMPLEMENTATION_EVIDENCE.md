@@ -67,14 +67,74 @@
 ## 실제 기록 (공식 증빙)
 
 - **이 절만** 운용 기록이다. `## 기록 템플릿`·`## 기록 예시` 는 양식·교육용이며 완료 판정에 쓰지 않는다.
+- **AI법친 6.11 — 홈페이지 진입 홍보/안내 팝업 및 변호사법 준수 안내 반영 (코드·문서·완료):** [EVIDENCE-20260429-418](#evidence-20260429-418) — `src/components/marketing/aibeopchin-intro-popup.tsx`·`src/components/brand/aibeopchin-logo.tsx`·`src/components/layout/site-footer.tsx`·`src/app/page.tsx`·`src/app/globals.css`·`tailwind.config.ts`·`docs/project-governance/AIBEOPCHIN_6_11_PROMOTION_POPUP_AND_LEGAL_COMPLIANCE_NOTICE.md`; **홈페이지 진입 홍보/안내 팝업**, **변호사법 준수 안내**, **업무지원 범위 고지**, **오늘 하루 보지 않기 localStorage 정책**, **홈/보호 화면 공통 텍스트 기반 브랜드 헤더 보강** 반영; **브라우저 홈 팝업·닫기·24시간 미노출 확인 필요** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260429-418-now)).
+- **AI법친 6.10 — 홈 로고 한글 깨짐 점검 / 전역 서체·색상 정리 / 데모 프리패스 로그인 / 푸터 생성 (코드·완료):** [EVIDENCE-20260429-417](#evidence-20260429-417) — `src/app/globals.css`·`src/components/branding/aibeopchin-intro-scene.tsx`·`src/components/branding/aibeopchin-hero.tsx`·`src/components/branding/aibeopchin-logo.tsx`·`src/components/branding/aibeopchin-logo-v2.tsx`·`src/components/home/home-trust-strip.tsx`·`src/components/home/home-role-entry-cards.tsx`·`src/app/layout.tsx`·`src/components/layout/site-footer.tsx`·`src/app/api/auth/login/route.ts`·`src/lib/auth/demo-access.ts`·`.env.example`; **홈 브랜드 락업과 공통 로고 컴포넌트를 심볼 + HTML 한글 텍스트로 전환**, **Pretendard + aibeop 색상 토큰 적용**, **protected/lawyer/admin 공통 톤 정리**, **데모 프리패스 로그인 및 AUTH_LOGIN_SUCCESS 감사로그 추가**, **공용 푸터 추가** 완료; **홈/대시보드 등 보호 화면 브라우저 확인 완료**; **데모 프리패스 실로그인 검증은 실제 환경변수와 DB 사용자 ID 설정 후 필요** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260429-417-now)).
+- **AI법친 6.9-2 — 개인정보 / 보안 / 동의문구 카피 확정 (문서·완료):** [EVIDENCE-20260429-415](#evidence-20260429-415) — `AIBEOPCHIN_6_9_2_NOTICE_COPY_CANONICAL.md`; **의뢰인 공유 동의문구**, **변호사 고유번호 조회 고지문**, **변호사 사건 패키지 열람 고지문**, **첨부파일 다운로드 허용/차단 문구**, **사건 패키지 요약본 출력 고지문**, **공유 취소 후 접근 제한 문구**, **접근 로그 / 다운로드 로그 보관 고지**, **AI 생성 요약·문서 책임 고지**, **개인정보 제3자 제공 / 열람 동의 문구**, **전자소송 제출 보조 패키지 예정 고지문**의 canonical copy set 확정; **UI 반영 원칙 / 서버 차단 메시지 반영 원칙 분리 고정**; **6.9 최종 반영 단계 진입 기준 정리** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260429-415-now)).
+- **AI법친 6.9-1 — 개인정보 / 보안 / 동의문구 노출 위치 매핑 (문서·완료):** [EVIDENCE-20260429-414](#evidence-20260429-414) — `AIBEOPCHIN_6_9_1_NOTICE_EXPOSURE_MAPPING.md`; **의뢰인 공유 설정 화면**, **공유 상세 화면**, **변호사 고유번호 조회 화면**, **변호사 사건 패키지 열람 화면**, **첨부파일 다운로드 버튼/차단 메시지**, **사건 패키지 요약본 출력 화면**, **공유 취소 화면**, **접근 로그/다운로드 로그 표시 영역**, **AI 생성 문서/요약본 고지 영역**, **전자소송 제출 보조 패키지 예정 고지 영역**의 실제 노출 위치와 현재 문구 매핑 완료; **전자소송 제출 보조 고지의 현재 런타임 노출면 없음 확인**; **6.9-2 카피 확정 우선순위 도출** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260429-414-now)).
+- **AI법친 6.9 — 개인정보 / 보안 / 동의문구 최종 정리 착수 (문서·완료):** [EVIDENCE-20260429-413](#evidence-20260429-413) — `AIBEOPCHIN_6_9_PRIVACY_SECURITY_NOTICE_FINALIZATION_START.md`; **사건 패키지 공유 동의문구**, **변호사 열람 고지문**, **첨부파일 다운로드 고지문**, **사건 패키지 요약본 출력 고지문**, **공유 취소 후 접근 제한 문구**, **접근/다운로드 로그 보관 고지**, **AI 생성 문서 법률 책임 고지**, **변호사 최종 검토 책임 문구**, **개인정보 제3자 제공/열람 동의 구조**, **전자소송 제출 보조 책임 제한 문구** 정리 범위 고정; **코드/DB 변경 없음**; **다음 큰 축 7.0 예고** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260429-413-now)).
+- **AI법친 6.8 — 사건 패키지 PDF / 요약본 출력 (코드·완료 / 런타임 검증 완료):** [EVIDENCE-20260428-412](#evidence-20260428-412) — `src/lib/case-package/case-package-pdf-policy.ts`·`src/lib/case-package/case-package-summary-renderer.ts`·`src/app/api/lawyer/case-packages/[shareId]/package-summary/route.ts`·`src/components/lawyer/case-package/lawyer-case-package-lookup-client.tsx`·`src/components/case-package/case-package-share-detail-client.tsx`; **allowPackagePdf 검증**, **인쇄 가능한 HTML 요약본 renderer**, **요약본 출력 API**, **출력 성공/실패 로그**, **변호사 화면 출력 버튼** 구현 완료; **실제 요약본 출력 응답 200 및 로그 적재 확인 완료**; **실제 PDF 바이너리 생성은 후속 6.8a 후보** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-412-now)).
+- **AI법친 6.7 — 열람 로그 / 다운로드 로그 / 공유 취소 고도화 (코드·완료 / 런타임 검증 완료):** [EVIDENCE-20260428-411](#evidence-20260428-411) — `src/lib/case-package/case-package-access-log-serializer.ts`·`src/app/api/cases/[caseId]/package-shares/[shareId]/access-logs/route.ts`·`src/app/(protected)/cases/[caseId]/share/[shareId]/page.tsx`·`src/components/case-package/case-package-share-detail-client.tsx`·`src/components/case-package/case-package-share-client.tsx`; **접근 로그 serializer**, **공유 상세 / 열람 이력 페이지**, **열람·다운로드 통계**, **공유 취소 사유 선택 UI**, **공유 목록 상세 링크** 구현 완료; **열람·다운로드 로그 적재와 revoke 후 차단 확인 완료** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-411-now)).
+- **AI법친 6.6 — 첨부파일 열람 / 다운로드 권한 분리 (코드·완료 / 런타임 검증 완료):** [EVIDENCE-20260428-410](#evidence-20260428-410) — `src/app/api/lawyer/case-packages/[shareId]/attachments/[attachmentId]/download/route.ts`·`src/lib/case-package/case-package-download-policy.ts`·`src/lib/case-package/shared-attachment-file.ts`·`src/components/lawyer/case-package/lawyer-case-package-lookup-client.tsx`; **공유 전용 첨부 다운로드 API**, **allowAttachmentDownload 검증**, **shareId/attachmentId 소속 검증**, **다운로드 성공/실패 로그**, **변호사 화면 다운로드 버튼** 구현 완료; **비허용 403 / 허용 200 및 로그 적재 확인 완료**; **기존 사건 첨부 다운로드 API 완화 없음** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-410-now)).
+- **AI법친 6.5 — 변호사 고유번호 조회 / 열람 화면 구현 (코드·완료 / 런타임 검증 완료):** [EVIDENCE-20260428-409](#evidence-20260428-409) — `src/app/(lawyer)/lawyer/case-packages/lookup/page.tsx`·`src/components/lawyer/case-package/lawyer-case-package-lookup-client.tsx`·`src/app/(lawyer)/lawyer/page.tsx`; **고유번호 입력 UI**, **lookup API 연결**, **사건 패키지 열람 카드**, **오류 안내**, **변호사 포털 진입 링크** 구현 완료; **실제 고유번호 조회 성공과 revoke 후 차단 확인 완료**; **Prisma schema / UserRole / CaseStatus 미변경** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-409-now)).
+- **AI법친 6.4 — 의뢰인 공유 설정 화면 구현 (코드·완료 / 런타임 검증 완료):** [EVIDENCE-20260428-408](#evidence-20260428-408) — `src/app/(protected)/cases/[caseId]/share/page.tsx`·`src/components/case-package/case-package-share-client.tsx`·`src/app/(protected)/cases/[caseId]/page.tsx`; **공유 범위 설정**, **고유번호 발급 UI**, **공유 목록 조회**, **공유 취소**, **변호사 전달 문구 복사** 화면 연결 완료; **실제 공유 생성·목록·상세·취소 흐름 확인 완료**; **Prisma schema / UserRole / CaseStatus 미변경** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-408-now)).
+- **AI법친 6.3 — CasePackageShare Prisma 모델 / API 구현 (코드·완료 / migration 완료·런타임 검증 완료):** [EVIDENCE-20260428-407](#evidence-20260428-407) — `prisma/schema.prisma`·`src/lib/case-package/*`·`src/app/api/cases/[caseId]/package-shares/*`·`src/app/api/lawyer/case-packages/lookup/route.ts`; **CasePackageShare / CasePackageAccessLog** 모델, **고유번호 생성**, **공유 생성·목록·상세·취소 API**, **변호사 고유번호 조회** 구현 완료; **로컬 개발 DB에 `add-case-package-share` schema 반영 완료**; **6.4~6.8 런타임 검증 완료**; **첨부 다운로드 완화 없음**·**문서 PDF API 변경 없음**·**CaseStatus / UserRole 미변경** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-407-now)).
+- **AI법친 6.2 — 고유번호 발급 정책 / 공유 동의 구조 설계 (문서·완료):** [EVIDENCE-20260428-406](#evidence-20260428-406) — `AIBEOPCHIN_6_2_PUBLIC_CODE_AND_SHARE_CONSENT_RULES.md`; **publicCode / accessToken / PIN / 공유 동의 / 만료 / 취소 / 조회 전 검증** 기준 **고정**; **Prisma/API/UI 구현 없음**; **CaseStatus / UserRole / 다운로드 정책 미변경** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-406-now)).
+- **AI법친 6.1 — 사건 패키지 데이터 구조 / 생성 기준 설계 (문서·완료):** [EVIDENCE-20260428-405](#evidence-20260428-405) — `AIBEOPCHIN_6_1_CASE_PACKAGE_DATA_STRUCTURE_AND_GENERATION_RULES.md`; **Case / Attachment / LegalDocument / Interview / Summary** 기반 **패키지 데이터 구조**·**생성 조건**·**공유 가능/비공유 기준** **고정**; **Prisma/API/UI 구현 없음**; **CaseStatus / UserRole / 다운로드 정책 미변경** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-405-now)).
+- **AI법친 6.0 — 사건 패키지 / 고유번호 공유 / 변호사 열람 연계 기획서 (문서·완료):** [EVIDENCE-20260428-404](#evidence-20260428-404) — `AIBEOPCHIN_6_0_CASE_PACKAGE_SHARE_LAWYER_ACCESS_PLAN.md`; **Case / Attachment / LegalDocument** 기반 **사건 패키지**·**고유번호 공유**·**변호사 열람** 구조 **고정**; **Prisma/API/UI 구현 없음**; **기존 사건 상태·권한·다운로드 정책 미변경** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-404-now)).
+- **배포 전 QA — QA 회신 대기 → 수신 → closure 반영 1~4단계 절차 정리 (완료·최종 정돈·고정·확정·닫기):** [EVIDENCE-20260428-398](#evidence-20260428-398) · [승인·고정](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-frozen) — `IMPLEMENTATION_EVIDENCE.md` [`#evidence-20260428-predeploy-qa-closure`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-predeploy-qa-closure) 내부·문서 전용; 앱 코드 미변경; **다음: QA 실측 전문 수신·공식 확정 갱신 대기** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-now) · [다음 실제 작업](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-next)).
+- **대시보드 4.6 — QA 회신 대기 중 후속 보완 항목 분리표 (문서·완료·잠김):** [EVIDENCE-20260428-399](#evidence-20260428-399) — `DASHBOARD_4_6_QA_PENDING_FOLLOWUP_TRACKER.md` **개설** **완료**; FAIL/BLOCKED/N/A·문서/기능/운영 **후보** 분류 **틀**; **closure·회신·최종/배포 판정** 은 **미기입** **유지**; 앱·API·DB·권한·집계 **미변경**; 3.x 봉인·4.0~4.5 흐름 유지 ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-399-now)).
+- **대시보드 4.7 — QA/운영 실측 결과 AI 자동 반영 설계서 (문서·완료·잠김):** [EVIDENCE-20260428-400](#evidence-20260428-400) — `DASHBOARD_4_7_AI_ASSISTED_QA_EVIDENCE_REFLECTION_DESIGN.md` **§0~§24**; AI **초안·분류**·**사람** **승인** **후** **반영** **기준** **고정**; **구현·API·DB** **없음**; **closure** **미기입** **유지** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-400-now) · [잠김](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-400-snap)).
+- **대시보드 5.0 — AI Evidence Assistant MVP 착수 기준서 (문서·완료):** [EVIDENCE-20260428-401](#evidence-20260428-401) — `DASHBOARD_5_0_AI_EVIDENCE_ASSISTANT_MVP_START.md`; 5.1 **전** **MVP** **범위**·**화면·API·데이터** **기준** **고정**; **코드·신규 API·DB** **구현** **없음**; **3.x** **봉인**·**closure** **미기입** **유지** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-401-now)).
+- **대시보드 5.1 — AI Evidence Assistant MVP 1차 구현 세트 (완료):** [EVIDENCE-20260428-402](#evidence-20260428-402) — `/(protected)/admin/qa-evidence`·`POST /api/admin/qa-evidence/analyze`·`src/lib/qa-evidence/*`; **규칙** **기반** **분석**·**Markdown** **초안**; **DB·문서** **자동** **수정** **없음**; **closure** **미기입** **유지** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-402-now)).
 - **스테이징 E2E (Playwright):** [EVIDENCE-20260428-staging-e2e](#evidence-20260428-staging-e2e) — [staging-e2e-runbook.md](../staging-e2e-runbook.md)·[deployment-checklist.md](../deployment-checklist.md) §2·§3.
-- **배포 전 QA 확정 (§6 회신 후):** [EVIDENCE-20260428-predeploy-qa-closure](#evidence-20260428-predeploy-qa-closure) — [deployment-checklist.md](../deployment-checklist.md#deployment-qa-nm-reply) §6.
+- **배포 전 QA 확정 (§6 회신 후):** [EVIDENCE-20260428-predeploy-qa-closure](#evidence-20260428-predeploy-qa-closure) — [deployment-checklist.md](../deployment-checklist.md#deployment-qa-nm-reply) §6. **1~4단계 절차** [#predeploy-qa-1-4](#predeploy-qa-1-4) · **Message 복사** [#predeploy-qa-message-copy](#predeploy-qa-message-copy). **사전 회신**(문서·증빙 정합·실측 미실시)은 본 앵커 **`사전 회신 수신 기록`** 절에만 둔다(최종 통과·공식 확정 표와 혼동 금지).
 - **홈 랜딩 1차 (UI PR, 로그인 전·역할별 진입):** [EVIDENCE-20260426-354](#evidence-20260426-354) — `src/app/page.tsx`·`src/components/landing/*`·`src/lib/landing/post-login-href.ts`; 사건·인터뷰·문서·API·상태·권한 구조 미변경.
 - **홈 랜딩 2차 (Living Logo·시네마틱 인트로):** [EVIDENCE-20260426-355](#evidence-20260426-355) — `src/components/branding/*`·`src/components/home/*`·`src/lib/branding/*`·`src/app/page.tsx`; API·권한·CaseStatus·질문셋·FILE-1B·배포 전 QA 확정표 미변경.
 - **역할별 Living Dashboard 1차 (UI PR):** [EVIDENCE-20260426-356](#evidence-20260426-356) — `src/components/dashboard/*`·`src/lib/dashboard/*`·`src/app/(protected)/dashboard/page.tsx`·`src/app/(lawyer)/lawyer/page.tsx`·`src/app/(admin)/admin/page.tsx`; 기존 대시보드·관리 콘솔 본문은 하단에 보존.
 - **Living Dashboard 1.1 (미세 고급화):** [EVIDENCE-20260426-357](#evidence-20260426-357) — 반응형·대비·CTA·레거시 브리지 UI만; API·라우트·데모 지표 연동 없음.
 - **Living Dashboard 1.2 (상태 안내):** [EVIDENCE-20260426-358](#evidence-20260426-358) — 빈/로딩/에러 공통 컴포넌트·역할별 빈 상태 가이드; fetch·API 추가 없음.
 - **Living Dashboard 1.3 (권한·승인 안내):** [EVIDENCE-20260426-359](#evidence-20260426-359) — restricted·permission 노트·변호사 승인 대기 UI 준비; 권한 정책·미들웨어·세션 로직 미변경.
+- **Living Logo 2.0 (SVG 획 생성):** [EVIDENCE-20260426-360](#evidence-20260426-360) — path·glyph·파티클·orbit·홈 Hero V2; 대시보드는 `useV2Logo` 옵션(기본 false); 1차 로고 파일 유지.
+- **대시보드 V2 점진 적용(1단계):** [EVIDENCE-20260426-361](#evidence-20260426-361) — 의뢰인 `/dashboard`만 `useV2Logo`; 변호사·관리자 V1 유지; V2 `md`/`lg` 폭 소폭 조정.
+- **Living Logo 2.1 (상태별 의미):** [EVIDENCE-20260426-362](#evidence-20260426-362) — mode·역할 config 단일화; particles/orbit/pulse/opacity/glow; 헤더 role 매핑 설정 파일화; restricted 노트 컴포넌트(미배선).
+- **Living Logo 2.2 (reduced motion):** [EVIDENCE-20260426-363](#evidence-20260426-363) — motion policy; V2 `reducedMotion` prop; intro draw·particles·orbit·hover 억제; thinking은 soft pulse만.
+- **Living Logo 2.3 (restricted 연결):** [EVIDENCE-20260426-364](#evidence-20260426-364) — `DashboardRestrictedState`에 로고; 승인 대기 경로 구조만; 권한 로직·API 미변경.
+- **대시보드 V2 점진 적용(2차·변호사):** [EVIDENCE-20260426-365](#evidence-20260426-365) — `/lawyer` `useV2Logo`; idle 유지; 레이더 모션 소폭 완화; `/admin` V1 유지.
+- **대시보드 V2 점진 적용(3차·관리자):** [EVIDENCE-20260426-366](#evidence-20260426-366) — `/admin` `useV2Logo`; verified 유지; 운영 화면 안정감.
+- **Living Logo V2 전체 적용 마감 판정:** [EVIDENCE-20260426-367](#evidence-20260426-367) — 홈·역할별 대시보드·restricted 경로 V2 1차 마감; V1 유지.
+- **대시보드 4.6 — QA 회신 대기 중 후속 보완 항목 분리표 (완료·잠김):** [EVIDENCE-20260428-399](#evidence-20260428-399) — `DASHBOARD_4_6_QA_PENDING_FOLLOWUP_TRACKER.md` **개설** **완료**; 실측 **전** **후보** **틀**; closure·공식 확정·회신·최종/배포 판정 **미기입** **유지**; 앱·API·DB·권한·집계 **미변경**; 3.x 봉인·4.0~4.5 흐름 유지.
+- **대시보드 4.7 — QA/운영 실측 결과 AI 자동 반영 설계서 (완료·잠김):** [EVIDENCE-20260428-400](#evidence-20260428-400) — `DASHBOARD_4_7_AI_ASSISTED_QA_EVIDENCE_REFLECTION_DESIGN.md` **완료**; AI **보조**·**초안**·**사람** **승인** **후** **반영**; **구현·API·DB** **없음**; **closure** **미기입** **유지**.
+- **대시보드 5.0 — AI Evidence Assistant MVP 착수 기준서 (완료):** [EVIDENCE-20260428-401](#evidence-20260428-401) — `DASHBOARD_5_0_AI_EVIDENCE_ASSISTANT_MVP_START.md`; 5.1 **착수** **전** **MVP** **기준** **고정**; **구현** **없음**; **closure** **미기입** **유지** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-401-now)).
+- **대시보드 5.1 — AI Evidence Assistant MVP 1차 구현 (완료):** [EVIDENCE-20260428-402](#evidence-20260428-402) — 관리자 **QA** **Evidence** **화면**·**분석** **API**; **초안** **복사** **전용**; **DB**·`IMPLEMENTATION`·`DASHBOARD_4_6` **자동** **갱신** **없음** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-402-now)).
+- **대시보드 4.5 — QA 회신 수신 후 closure 반영 준비표:** [EVIDENCE-20260426-397](#evidence-20260426-397) — `DASHBOARD_4_5_QA_CLOSURE_REFLECTION_PREP.md`; 회신 후 closure 절차·판정·템플릿; 실제 closure·회신 미작성.
+- **대시보드 4.4 — 배포 전 운영자 최종 체크리스트:** [EVIDENCE-20260426-396](#evidence-20260426-396) — `DASHBOARD_4_4_PREDEPLOY_OPERATOR_FINAL_CHECKLIST.md`; 4.0~4.3 통합·배포 직전 한 장; 코드·정책 미변경.
+- **대시보드 4.3 — 빈 상태 / 오류 상태 수동 점검표:** [EVIDENCE-20260426-395](#evidence-20260426-395) — `DASHBOARD_4_3_EMPTY_ERROR_STATE_MANUAL_CHECKLIST.md`; 4.2 보완·빈·제한·로딩·오류·demo 경계; 코드·오류 로직 미변경.
+- **대시보드 4.2 — 배포 전 수동 QA 시나리오표:** [EVIDENCE-20260426-394](#evidence-20260426-394) — `DASHBOARD_4_2_PREDEPLOY_MANUAL_QA_SCENARIOS.md`; 4.1 기반 브라우저 수동 QA·결과 칸; 자동화·코드 미변경.
+- **대시보드 4.1 — 역할별 접근 / 권한 점검표 세분화:** [EVIDENCE-20260426-393](#evidence-20260426-393) — `DASHBOARD_4_1_ROLE_ACCESS_PERMISSION_CHECKLIST.md`; 4.0 하위·접근·권한 수동 점검표; 코드·정책·미들웨어 미변경.
+- **대시보드 4.0 — 배포 전 운영 점검 Phase 착수:** [EVIDENCE-20260426-392](#evidence-20260426-392) — `DASHBOARD_4_0_PREDEPLOY_OPERATION_CHECK_PHASE.md`; 3.x 봉인 유지·QA closure 미기입·운영 점검만 별도 Phase; 앱·집계·API 미변경.
+- **대시보드 3.11 — 대시보드 3.x 최종 봉인 요약표:** [EVIDENCE-20260426-391](#evidence-20260426-391) — `DASHBOARD_3_11_FINAL_SEAL_SUMMARY.md`(§12 최종 확인 순서·§13 봉인 이후 진행 기준); 3.0~3.10 요약·봉인; 배포 전 QA 확정표와 분리; 앱·집계 미변경.
+- **대시보드 3.10 — dashboard-demo-metrics 유지 기준 / 데모 경로 안전 점검:** [EVIDENCE-20260426-390](#evidence-20260426-390) — `DASHBOARD_3_10_DEMO_METRICS_SAFETY_CHECK.md`; 실서비스·demo 경계·배포 전 QA 확정표와 분리; metric 로직·파일 삭제 미변경.
+- **대시보드 3.9 — 역할별 대시보드 최종 회귀 체크리스트:** [EVIDENCE-20260426-389](#evidence-20260426-389) — `DASHBOARD_3_9_ROLE_REGRESSION_CHECKLIST.md`; 3.8 스냅샷 대조·배포 전 QA 확정표와 분리; 앱 코드·집계 미변경.
+- **대시보드 3.8 — 역할별 대시보드 최종 문구 스냅샷:** [EVIDENCE-20260426-388](#evidence-20260426-388) — `DASHBOARD_3_8_ROLE_COPY_SNAPSHOT.md`; 배포 전 QA 확정표와 분리; 앱 코드·집계 미변경.
+- **대시보드 3.7 — 관리자 대시보드 마감 점검표 / 회귀 체크리스트 정리:** [EVIDENCE-20260426-387](#evidence-20260426-387) — `DASHBOARD_ADMIN_3_7_REGRESSION_CHECKLIST.md`; 배포 전 QA 확정표와 분리; 코드·집계 미변경.
+- **대시보드 3.6 — 관리자 PreviewCard 빈 상태/로딩 문구 정리:** [EVIDENCE-20260426-386](#evidence-20260426-386) — `AdminRiskBoard` 빈 목록·장기 미진행 0건 문구; 공용 PreviewCard 구조 미변경; 집계·API 미변경.
+- **대시보드 3.5 — 관리자 상태별 운영 확인 문구 정리:** [EVIDENCE-20260426-385](#evidence-20260426-385) — HOLD·접수·검토 대기 reason 통일; `staleReason` 우선 유지; `AdminRiskBoard` 안내 문장 정리; 집계·API 미변경.
+- **대시보드 3.4b — 관리자 장기 미진행 보조 count:** [EVIDENCE-20260426-384](#evidence-20260426-384) — `staleCaseCount`(7일+ 미변경·동일 cutoff); `AdminRiskBoard` 보조 지표 표시; `attentionNeeded` 미변경.
+- **대시보드 3.4 — 관리자 장기 미진행 후보:** [EVIDENCE-20260426-383](#evidence-20260426-383) — `admin-stale-case`(7/14/30)·Map 병합·stale 우선 정렬·배지(확인/우선/장기)·`staleReason`; `attentionNeeded` 유지; 신규 API 없음.
+- **대시보드 3.3 — 변호사 검토 우선순위 badge:** [EVIDENCE-20260426-382](#evidence-20260426-382) — `getLawyerReviewPriority`·업무 순서 pill; preview 정렬 `updatedAt desc` 유지; 신규 API 없음.
+- **대시보드 3.2 — 의뢰인 최근 사건 정리도 badge:** [EVIDENCE-20260426-381](#evidence-20260426-381) — 최근 5건 preview에 `buildClientCaseReadiness`·정리도 pill; `client-readiness-badge`; 신규 API 없음.
+- **대시보드 3.1 — 데이터 고도화 후보 우선순위표:** [EVIDENCE-20260426-380](#evidence-20260426-380) — `WORK_INSTRUCTION_DASHBOARD_3_1_DATA_ENHANCEMENT_PRIORITY.md`; 구현 없음; 배포 전 QA 확정 보류 유지.
+- **대시보드 3.0 — 역할별 대시보드 실데이터 1차 마감 판정:** [EVIDENCE-20260426-379](#evidence-20260426-379) — 2.0~2.8 범위 1차 마감·판정; 공통 PreviewCard·display·empty-state; `dashboard-demo-metrics` fallback 유지.
+- **대시보드 2.0 — 실제 데이터 연결 1차:** [EVIDENCE-20260426-368](#evidence-20260426-368) — metrics 타입·Prisma 집계; demo metrics fallback 유지; 신규 API 없음.
+- **대시보드 2.1 — 사건 정리도 실제 계산:** [EVIDENCE-20260426-369](#evidence-20260426-369) — 대표 사건·첨부·인터뷰 JSON 기준 readiness; 법률 판단 아님.
+- **대시보드 2.7b — 의뢰인 preview / EmptyGuide 밀도 조정:** [EVIDENCE-20260426-377](#evidence-20260426-377) — 사건 0건 시 `ClientRecentCasesPreview` 숨김; `EmptyGuide`만 메인 빈 안내; metrics 미변경.
+- **대시보드 2.7 — 의뢰인 최근 사건 preview 추가:** [EVIDENCE-20260426-376](#evidence-20260426-376) — `ClientCasePreviewItem`·`recentCasesPreview`; `ClientRecentCasesPreview`; readiness용 `findMany` 재사용; 신규 API 없음.
+- **대시보드 2.6 — 공통 날짜/상태 표시 유틸 정리:** [EVIDENCE-20260426-375](#evidence-20260426-375) — `dashboard-display`; preview 날짜·상태·href·CTA·reason 통일; metrics 조회·PreviewCard 구조 유지.
+- **대시보드 2.5 — 빈 상태 조건부 정리:** [EVIDENCE-20260426-374](#evidence-20260426-374) — `dashboard-empty-state` 유틸; 역할별 EmptyGuide 조건부 표시; metrics 미변경.
+- **대시보드 2.4 — 공통 PreviewCard 추출:** [EVIDENCE-20260426-373](#evidence-20260426-373) — `DashboardPreviewCard`·`DashboardPreviewEmpty`; 변호사·관리자 preview UI 통일; metrics 미변경.
+- **대시보드 2.3b — 관리자 상태별 사건 분포 미니바:** [EVIDENCE-20260426-372](#evidence-20260426-372) — `AdminStatusDistributionBar`; 기존 `statusBreakdown`만 UI 연결; 신규 API 없음.
+- **대시보드 2.3 — 관리자 운영 지표 실제 고도화:** [EVIDENCE-20260426-371](#evidence-20260426-371) — `statusBreakdown`·`attentionPreview`; 운영 확인 후보·레이더 카피; 신규 API 없음.
+- **대시보드 2.2 — 변호사 검토 큐 고도화:** [EVIDENCE-20260426-370](#evidence-20260426-370) — `reviewQueuePreview`; HOLD·INTAKE 보완 count; 상태 라벨·날짜.
 - **누적 규칙:** 새 작업이 끝날 때마다 아래에 **`[EVIDENCE-YYYYMMDD-00n]` 블록을 추가**한다. **가장 최신 제출이 이 절의 위쪽**(번호·날짜가 큰 블록이 먼저 오도록 유지)에 오게 두면, 다음 세션에서 “최신 기록”을 빠르게 찾을 수 있다.
 - **R1~R9 행 누적(역점검 + 호환층):** [SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md) (증빙 **282~352**; [**[347]+** **후** **속** **고** **정** **앵** **커**](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정) · §0 [GW-0.1~0.4 작업 단위](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-320-거버넌스-작업-단위) · [정렬 주기 1차·잠금](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#gw-0-정렬-주기-1차-완료) · [Step 3 질문셋 본착수](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#step-3-질문셋-본착수) · [Step 3 싱글소스 (인터뷰 런타임)](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#step-3-싱글-소스-질문셋) · [질문 유형 매핑](QUESTION_TYPE_MAPPING.md) · [질문셋 admin UI §14-1](QUESTION_SET_DEFINITION.md#141-app-라우트--관리-ui-step-3-경계-고정) · [333~ **1차** **종료**](#evidence-20260425-337) · [**333~** **2차** **동기** **착수**](#evidence-20260425-338) · [**B** **§1** **정책**](#evidence-20260425-339) · [**B** **§2** **시점**](#evidence-20260425-340) · [**B** **§3** **백필/시드**](#evidence-20260425-341) · [**B** **§4** **구** **현** **형** **태**](#evidence-20260425-342) · [**343** **게** **시** **투** **영** **코** **드**](#evidence-20260425-343) · [**344** **B** **§3** **백** **필** **스** **크** **립** **트**](#evidence-20260425-344) · [**345** **시** **드** **전** **용**](#evidence-20260425-345) · [346 **종** **료** **(A·B** **완** **C·D** **스** **킵** **)**](#evidence-20260425-346) · [347+ **개** **설**·**선** **정**](#evidence-20260425-347) · [348 **1** **순**·**문** **서**·**스** **냅**·**회** **귀**](#evidence-20260425-348) · [349 **1** **순**·**코** **드**·**시** **드**·**런** **타** **임**](#evidence-20260425-349) · [350+ **분** **리** **슬** **롯**](#evidence-20260425-350) · [**[351]+** **1** **순** **잔** **여**·**2** **순** **GW-0.2**](#evidence-20260426-351) · [**352** **GW-0.2** **문** **서**·**합** **의** **착** **수**](#evidence-20260426-352) · [EVIDENCE_STEP3 A](EVIDENCE_STEP3_A_DEFINITION_DATA_ALIGN.md) · [EVIDENCE_STEP3 B](EVIDENCE_STEP3_B_DEFINITION_JSON_QUESTIONS_SYNC.md) · [스냅](EVIDENCE_STEP3_ACTIVE_QUESTIONSET_DB_SNAPSHOT.md)).
 - **Step 3·[346](2026-04-25):** [EVIDENCE-20260425-346](#evidence-20260425-346) **[346]** **종** **료** **(** **A=visibility** **B=documentMapping** **완** **·** **C·D** **스** **킵** **).** **이** **후** **증빙** = **[346]|[347]|[348]|[349]+** **·** **[343]·[345]·[346] 재** **오** **픈** **금** **지** **.**
@@ -87,7 +147,1318 @@
 - **[347] 3순 (ALIGNMENT / Case·인터뷰 잔여, 2026-04-26·개설):** [EVIDENCE-20260426-353](#evidence-20260426-353) — [SPEC #spec-347-후속-고정](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정) **후보 3** 전용; **[348]~[352]**·질문셋 1·2순 흐름·**한** `PR`에 **혼재·뒤섞기 금지** (별도 EVIDENCE/PR). **문서권 전체 마감(팀 전제·2026-04-26):** [#347-tier3-document-scope-closure-20260426](#347-tier3-document-scope-closure-20260426) — A·B·C(A) **문서권** 종료; **GW-0.3 (가)**·질문셋 본착수·런타임 대규모는 **별** EVIDENCE/PR·[FOLLOWUP §4](WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md). **표:** [#347-tier3-bc-next-after-bg1](#347-tier3-bc-next-after-bg1) · **C (A):** [#c-gw03-a-tier3-20260426](#c-gw03-a-tier3-20260426) · **Preflight:** [#work-instruction-347-tier3-c-gw03-spec-preflight](#work-instruction-347-tier3-c-gw03-spec-preflight). [DEV_BRIEF_POST_STEP3_352](DEV_BRIEF_POST_STEP3_352.md) · `post_352_next_347_tier3_alignment` · [#work-instruction-347-tier3-followup-axes](#work-instruction-347-tier3-followup-axes) · [WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md](WORK_INSTRUCTION_347_TIER3_FOLLOWUP_AXES.md) · [#work-instruction-347-tier3-p0-p2-separate-pr](#work-instruction-347-tier3-p0-p2-separate-pr) · [#work-instruction-347-tier3-p0-p2-integrated-audit](#work-instruction-347-tier3-p0-p2-integrated-audit) · [WORK_INSTRUCTION_347_TIER3_P0_REMAINING_P2_SEPARATE_PR.md](WORK_INSTRUCTION_347_TIER3_P0_REMAINING_P2_SEPARATE_PR.md) · [WORK_INSTRUCTION_347_TIER3_P0_P2_INTEGRATED.md](WORK_INSTRUCTION_347_TIER3_P0_P2_INTEGRATED.md) .
 - **Phase 1 선행 순서:** [CASE_STATUS_DEFINITION.md](./CASE_STATUS_DEFINITION.md) §7 — **Phase 1 첫 실작업** = **§7.1** ([314](./IMPLEMENTATION_EVIDENCE.md)). **§5 닫힘** [320](#evidence-20260423-320); **거버넌스** [321](#evidence-20260423-321)·[322](#evidence-20260423-322); **GW-0.1~0.4** [323](#evidence-20260423-323)~[326](#evidence-20260423-326); **정렬 1차(잠금)** [327](#evidence-20260423-327); **Step 3 본착수(착수 개설)** [328](#evidence-20260423-328); **질문셋 싱글소스 1차 스캔·로드맵** [329](#evidence-20260423-329); **A안(questions) 런타임 잠금** [330](#evidence-20260423-330); **질문 유형 3층 매핑표** [331](#evidence-20260423-331); **질문셋 admin UI 경계** [332](#evidence-20260423-332); **333~ 정의·데이터 정합** [333](#evidence-20260425-333) · [334](#evidence-20260425-334) · [335](#evidence-20260425-335) · [336](#evidence-20260425-336) · [**337** **1차** **종료**](#evidence-20260425-337) · [**338** **2차** **동기** **(definitionJson↔questions)**](#evidence-20260425-338) · [**339** **B** **§1** **이중** **정본**](#evidence-20260425-339) · [**340** **B** **§2** **저장** **시점**](#evidence-20260425-340) · [**341** **B** **§3** **백필/시드**](#evidence-20260425-341) · [**342** **B** **§4** **구** **현** **형** **태**](#evidence-20260425-342) · [**343** **게** **시** **투** **영** **코** **드**](#evidence-20260425-343) · [**344** **B** **§3** **백** **필** **코** **드**](#evidence-20260425-344) · [**345** **시** **드** **전** **용**](#evidence-20260425-345) · [346](IMPLEMENTATION_EVIDENCE.md#evidence-20260425-346) **종** **료** **(** **A=visibility** **B=documentMapping** **)** **C·D** **스** **킵** **·** [**347+** **개** **설**](#evidence-20260425-347) · [348](IMPLEMENTATION_EVIDENCE.md#evidence-20260425-348) **문** **서**·**스** **냅**·**회** **귀** · [349](IMPLEMENTATION_EVIDENCE.md#evidence-20260425-349) **코** **드**·**시** **드**·**런** **타** **임** · [350+](IMPLEMENTATION_EVIDENCE.md#evidence-20260425-350) **분** **리** · [**351+** **1** **순**·**2** **순** **GW-0.2**](#evidence-20260426-351) · [**352** **GW-0.2** **문** **서**·**합** **의**](#evidence-20260426-352) · [**353** **3** **순** **ALIGNMENT/Case**](#evidence-20260426-353) · [A](EVIDENCE_STEP3_A_DEFINITION_DATA_ALIGN.md)·[B](EVIDENCE_STEP3_B_DEFINITION_JSON_QUESTIONS_SYNC.md); [SPEC §0](./SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-320-거버넌스-작업-단위) · [#spec-347-후속-고정](SPEC_IMPLEMENTATION_REAUDIT_ROWS_V1.md#spec-347-후속-고정) · [`aibeopchin_navigator.py` `show-plan`](../../tools/aibeopchin_navigator.py).
 
+### [EVIDENCE-20260428-398] 배포 전 QA — QA 회신 대기 → 수신 → closure 반영 절차 정리 (문서) {#evidence-20260428-398}
+
+**상태:** [EVIDENCE-20260428-398] QA closure 증빙은 **최종 정돈·고정·확정 완료** 기준으로 **닫힌 상태**로 **본다**. **기준:** **「최종 정돈·고정·확정 상태로 본다.」** **문장:** 「QA closure 증빙은 최종 정돈·고정본이고 닫아도 되는 상태로 확정한다.」 (**증빙** = **최종 정돈·고정본**·**닫아도 됨**.) **정본 링크 (고정):** [`#evidence-20260428-398-now`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-now) — [최종 확인 순서 (고정)](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-now) · **8개** 앵커. **흐름 (읽기):** [`#evidence-20260428-398-frozen`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-frozen) → [`#evidence-20260428-398`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398) → [`#evidence-20260428-398-snap`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-snap) → [`#evidence-20260428-398-next`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-next).
+
+#### 작업 항목명
+
+`#evidence-20260428-predeploy-qa-closure` 안에 **QA 회신 대기 → 수신 → closure 반영** 1~4단계·Message 정본·앵커·상단 목록 링크를 **정식** 정리 (거버넌스·문서 전용, 앱 코드 없음).
+
+#### 작업 목적
+
+실측 QA **전**에도 **누가 어디를 갱신하는지**를 혼동 없이 남기고, QA팀·에테르니언·저장소 **동일 기준**을 유지한다.
+
+#### 수정 파일 목록
+
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md` (`#evidence-20260428-predeploy-qa-closure` 내 `#predeploy-qa-1-4` · `#predeploy-qa-message-copy` · `#predeploy-qa-official-confirm` · 사전 회신·실제 기록 상단)
+- (참고) `tools/aibeopchin_navigator.py` — `show-plan`에 배포 전 QA closure 절차 한 절
+
+#### 변경 요약
+
+- `#predeploy-qa-1-4` 절: 1(메시지 전달)~4(PASS / FAIL·BLOCKED 분기) **완료**
+- `#predeploy-qa-message-copy` 절: QA팀 **Message** 정본(파일명 3줄·회신 형식·`#evidence-20260428-predeploy-qa-closure` 문장) **완료**
+- 사전 회신 절: 「QA팀에 다시 보낼 요청」= Message **정본 참조** **완료**
+- `#### 확정 기록 (팀 회신 수령 후 채움) {#predeploy-qa-official-confirm}` **완료**; 사전·3단계 링크 **연결**
+- 실제 기록 **상단** 목록: 1~4 / Message / 본 398 **완료**
+
+#### 검증
+
+- `npm run verify:canonical-sources` — **exit 0** (2026-04-28)
+
+#### 완료 판정 (최종 — 승인 기준) {#evidence-20260428-398-frozen}
+
+| 기준 | 결과 |
+| --- | --- |
+| 본문 머리: **「최종 정돈·고정·확정 상태로 본다.」** | **완료** |
+| **문장:** 「QA closure 증빙은 최종 정돈·고정본이고 닫아도 되는 상태로 확정한다.」 | **완료** |
+| 괄호: (**증빙** = **최종 정돈·고정본**·**닫아도 됨**.) **유지** | **완료** |
+| [정본 링크](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-now) `#evidence-20260428-398-now` **고정** | **완료** |
+| [최종 확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-now) **8개** 앵커 | **완료** |
+| **읽기 흐름:** [frozen](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-frozen) → [본 #evidence-20260428-398](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398) → [snap](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-snap) → [next](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-next) | **완료** |
+| [`#evidence-20260428-398-frozen`](#evidence-20260428-398-frozen) **표** 재정리 | **완료** |
+| **흐름** 행: [frozen](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-frozen) → [본 398](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398) → [완료 판정 표](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-frozen) → [snap](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-snap) → [next](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-next) | **완료** |
+| [`#evidence-20260428-398-snap`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-snap) **첫 줄** = 「QA closure 증빙 최종 정돈·고정·확정 완료」 | **완료** |
+| [`#evidence-20260428-398-next`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-next) **다음** 실제 작업 **기준** **유지** | **완료** |
+| [2번](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-now): `predeploy_qa_closure_procedure` + `render_plan()` **의** **배포 전 QA closure** | **완료** |
+| [실제 기록](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398) 최상단 398 — **최종 정돈·고정·확정**·**닫기** | **완료** |
+| `npm run verify:canonical-sources` | **exit 0** |
+
+#### 남은 이슈 (운영 — **두 가지로 한정**)
+
+- **(1) 실측 전문 수신** — QA팀/운영자의 **스테이징·브라우저·역할별 계정** 기반 **수동 QA 전문** 수신 **대기**
+- **(2) 공식 확정 갱신** — (1) 수신 **후**에만 [`#predeploy-qa-official-confirm`](IMPLEMENTATION_EVIDENCE.md#predeploy-qa-official-confirm) 의 **확정 기록 표** + **회신 원문** **만** 갱신. 그 전까지 **공식** 최종 통과·배포 가능·§2/§3 수치 **기입·임의 판정 금지** ([4단계 분기](#predeploy-qa-1-4) 준수).
+
+#### 최종 확인 순서 (고정) {#evidence-20260428-398-now}
+
+1. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`  
+   - [`#evidence-20260428-398-frozen`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-frozen)  
+   - [`#evidence-20260428-398-now`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-now) (본 절)  
+   - [`#evidence-20260428-398-snap`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-snap)  
+   - [`#evidence-20260428-398-next`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-next)  
+   - [`#evidence-20260428-predeploy-qa-closure`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-predeploy-qa-closure)  
+   - [`#predeploy-qa-1-4`](IMPLEMENTATION_EVIDENCE.md#predeploy-qa-1-4)  
+   - [`#predeploy-qa-message-copy`](IMPLEMENTATION_EVIDENCE.md#predeploy-qa-message-copy)  
+   - [`#predeploy-qa-official-confirm`](IMPLEMENTATION_EVIDENCE.md#predeploy-qa-official-confirm)  
+2. `tools/aibeopchin_navigator.py`  
+   - **`predeploy_qa_closure_procedure`**  
+   - `render_plan()` **의** **배포 전 QA closure** 절차
+
+**작업창 권장 순서:** `docs/project-governance/IMPLEMENTATION_EVIDENCE.md` — [`#evidence-20260428-398-now`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-now) (본 절) → [`#evidence-20260428-398-snap`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398-snap) → [`#evidence-20260428-predeploy-qa-closure`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-predeploy-qa-closure) → [`#predeploy-qa-1-4`](IMPLEMENTATION_EVIDENCE.md#predeploy-qa-1-4) → [`aibeopchin_navigator.py`](../../tools/aibeopchin_navigator.py) (`predeploy_qa_closure_procedure`·`show-plan`).
+
+#### 현재 상태 (잠김) {#evidence-20260428-398-snap}
+
+**QA closure 증빙 최종 정돈·고정·확정 완료**
+
+- [EVIDENCE-20260428-398] **닫힘**
+- **절차** **최종** 정돈·고정·확정 **완료**
+- **공식** **표** 미기입 **유지**
+- **회신** 원문 미기입 **유지**
+- **최종** 통과 / **배포** **가능** **판정** **금지** **유지**
+
+#### 다음 실제 작업 (하나) {#evidence-20260428-398-next}
+
+**실측** 수동 QA **전문**을 수신하면,
+
+[`#evidence-20260428-predeploy-qa-closure`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-predeploy-qa-closure) 의
+
+**공식 확정 표**와 **회신 원문** **만** 갱신한다.
+
+**판정 분기**는 [`#predeploy-qa-1-4`](IMPLEMENTATION_EVIDENCE.md#predeploy-qa-1-4) 의 **3~4단계**를 따른다.
+
+### [EVIDENCE-20260429-418] AI법친 6.11 — 홈페이지 진입 홍보/안내 팝업 및 변호사법 준수 안내 {#evidence-20260429-418}
+
+#### 범위
+
+- 홈페이지 진입 홍보/안내 팝업 추가
+- AI법친 핵심 기능 안내
+- 변호사법 준수 안내 문구 반영
+- 업무지원 범위 고지
+- 특정 변호사 추천·순위화·자동매칭 배제 문구 반영
+- 전자소송 자동 제출이 아닌 제출 보조 패키지 구조 고지
+- 오늘 하루 보지 않기 localStorage 정책 반영
+
+#### 추가/수정 파일
+
+- `src/components/marketing/aibeopchin-intro-popup.tsx`
+- `src/components/brand/aibeopchin-logo.tsx`
+- `src/components/layout/site-footer.tsx`
+- `src/app/page.tsx`
+- `src/app/globals.css`
+- `tailwind.config.ts`
+- `docs/project-governance/AIBEOPCHIN_6_11_PROMOTION_POPUP_AND_LEGAL_COMPLIANCE_NOTICE.md`
+
+#### 완료 기준
+
+- 홈페이지 접속 시 안내 팝업이 표시됨.
+- 팝업에 AI법친의 주요 기능이 표시됨.
+- 팝업에 변호사법 준수 안내 문구가 표시됨.
+- AI 생성 자료가 변호사의 검토용 초안 및 참고자료임을 명시함.
+- 최종 법률판단, 문서 확정, 전자소송 제출은 변호사가 직접 수행함을 명시함.
+- 특정 변호사 추천·순위화·자동매칭 및 수임료 분배 구조를 배제함을 명시함.
+
+#### 확인 순서 {#evidence-20260429-418-now}
+
+1. `npx tsc --noEmit`
+2. `npm run lint`
+3. `npm run verify:canonical-sources`
+4. 브라우저에서 홈 접속 후 팝업 표시 여부, X 닫기, 오늘 하루 보지 않기, 변호사법 준수 문구, 푸터를 확인한다.
+
+### [EVIDENCE-20260429-417] AI법친 6.10 — 홈 로고 한글 깨짐 점검 / 전역 서체·색상 정리 / 데모 프리패스 로그인 / 푸터 생성 {#evidence-20260429-417}
+
+#### 상태
+
+이번 작업은 홈 화면 로고 한글 깨짐 위험을 줄이고,
+AI법친 전역 UI의 서체·색상 톤을 정리하며,
+홍보·데모용 프리패스 로그인과 공용 푸터를 추가하는 코드 반영 단계다.
+
+핵심은 아래 네 가지다.
+
+- 홈 브랜드 락업에서 한글 텍스트를 SVG 내부가 아닌 HTML 텍스트로 안전하게 렌더링한다.
+- Pretendard 기반 전역 서체와 aibeop 색상 토큰을 적용해 장시간 업무 화면의 피로도를 낮춘다.
+- 기존 로그인 쿠키 발급 경로를 그대로 타는 데모 프리패스 로그인을 추가하고 성공 이력을 감사로그에 남긴다.
+- 홈/보호 화면 공통 푸터를 추가한다.
+
+#### 범위
+
+- `src/app/globals.css`에 Pretendard import, 전역 CSS 변수, `@theme inline` 토큰, 선택 색상 규칙을 추가했다.
+- `src/app/layout.tsx`에 공용 푸터를 연결하고 전역 body 클래스를 aibeop 토큰 기반으로 바꿨다.
+- `src/components/layout/site-footer.tsx`를 추가했다.
+- `src/components/branding/aibeopchin-intro-scene.tsx`에서 홈 브랜드 락업을 심볼 + HTML `AI법친` 텍스트 구조로 바꿨다.
+- `src/components/branding/aibeopchin-logo.tsx`, `src/components/branding/aibeopchin-logo-v2.tsx`를 공통 HTML 텍스트 락업 기반으로 바꿔 상세 페이지 로고 렌더링도 같은 구조를 타게 했다.
+- `src/components/branding/aibeopchin-hero.tsx`의 히어로 색조를 저채도 그린 계열로 정리했다.
+- `src/components/home/home-trust-strip.tsx`, `src/components/home/home-role-entry-cards.tsx`에 aibeop 색상 토큰을 적용했다.
+- `src/components/auth/auth-input.tsx`, `src/app/login/login-page-client.tsx`, `src/app/signup/page.tsx`의 인증 화면 톤을 정리했다.
+- `src/app/(protected)/layout.tsx`, `src/app/(lawyer)/lawyer/layout.tsx`, `src/app/(admin)/admin/layout.tsx` 배경/헤더/푸터 톤을 정리했다.
+- `src/lib/validators/auth.ts`에서 로그인 입력을 `이메일 또는 데모 로그인 ID`로 받을 수 있게 조정했다.
+- `src/lib/auth/demo-access.ts`를 추가했다.
+- `src/app/api/auth/login/route.ts`에 데모 프리패스 로그인과 `AUTH_LOGIN_SUCCESS` 감사로그 적재를 추가했다.
+- `.env.example`에 `DEMO_ACCESS_*` 환경변수 예시를 추가했다.
+
+#### 변경하지 않은 것
+
+- 실제 `.env.local` 비밀번호 값 주입 없음.
+- 실제 배포 환경변수 설정 없음.
+- DB에 데모 전용 사용자 생성 없음.
+- 홈 이외의 브랜딩 SVG 컴포넌트 자체 삭제 없음.
+- 권한 정책 / 미들웨어 분기 구조 변경 없음.
+
+#### 검증
+
+- `npx tsc --noEmit`
+- `npm run lint`
+- `npm run verify:canonical-sources`
+- 브라우저 홈 화면 확인: `AI` 심볼 + `AI법친` HTML 텍스트 + 공용 푸터 노출 확인
+- 브라우저 보호 화면 확인: 대시보드 공통 로고가 HTML 텍스트 락업으로 노출되는 것 확인
+
+#### 완료 판정
+
+| 항목 | 결과 |
+| --- | --- |
+| 홈 로고 한글 텍스트 HTML 렌더링 전환 | 완료 |
+| Pretendard 전역 서체 적용 | 완료 |
+| aibeop 전역 색상 토큰 적용 | 완료 |
+| home / protected / lawyer / admin 톤 정리 | 완료 |
+| 공용 푸터 추가 | 완료 |
+| 데모 프리패스 로그인 코드 추가 | 완료 |
+| AUTH_LOGIN_SUCCESS 감사로그 추가 | 완료 |
+| `.env.example` 데모 환경변수 예시 추가 | 완료 |
+| 데모 프리패스 실로그인 런타임 검증 | 환경값 필요 |
+
+#### 확인 순서 {#evidence-20260429-417-now}
+
+1. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+  - `#evidence-20260429-417`
+  - `#evidence-20260429-417-now`
+2. `src/app/globals.css`
+3. `src/app/layout.tsx`
+4. `src/components/layout/site-footer.tsx`
+5. `src/components/branding/aibeopchin-intro-scene.tsx`
+5. `src/components/branding/aibeopchin-hero.tsx`
+6. `src/components/branding/aibeopchin-logo.tsx`
+7. `src/components/branding/aibeopchin-logo-v2.tsx`
+8. `src/components/home/home-trust-strip.tsx`
+9. `src/components/home/home-role-entry-cards.tsx`
+10. `src/components/auth/auth-input.tsx`
+11. `src/app/login/login-page-client.tsx`
+12. `src/app/signup/page.tsx`
+13. `src/app/api/auth/login/route.ts`
+14. `src/lib/auth/demo-access.ts`
+15. `.env.example`
+
+### 다음 실제 작업
+
+다음 작업은 환경값을 실제로 주입한 뒤 데모 프리패스 실로그인을 검증하고,
+필요하면 6.10 후속으로 로그인 화면 안내문과 보호 레이아웃의 세부 색 대비를 미세 조정하는 것이다.
+
+### [EVIDENCE-20260429-415] AI법친 6.9-2 — 개인정보 / 보안 / 동의문구 카피 확정 {#evidence-20260429-415}
+
+#### 상태
+
+AI법친 6.9-2는 6.9-1에서 고정한 실제 노출면을 기준으로,
+owner 화면, lawyer 화면, 출력물, 서버 차단 메시지에 들어갈 canonical 문구를 확정하는 단계다.
+
+이번 작업은 코드 반영이 아니라,
+같은 의미의 고지문이 여러 버전으로 흩어지지 않도록 기준 문장을 먼저 잠그는 문서화 작업이다.
+
+#### 범위
+
+- `AIBEOPCHIN_6_9_2_NOTICE_COPY_CANONICAL.md`를 추가했다.
+- 의뢰인 사건 패키지 공유 동의문구 canonical copy를 확정했다.
+- 변호사 고유번호 조회 고지문 canonical copy를 확정했다.
+- 변호사 사건 패키지 열람 고지문 canonical copy를 확정했다.
+- 첨부파일 다운로드 허용/차단 문구 canonical copy를 확정했다.
+- 사건 패키지 요약본 출력 고지문 canonical copy를 확정했다.
+- 공유 취소 후 접근 제한 문구 canonical copy를 확정했다.
+- 접근 로그 / 다운로드 로그 보관 고지 canonical copy를 확정했다.
+- AI 생성 요약·문서 책임 고지 canonical copy를 확정했다.
+- 개인정보 제3자 제공 / 열람 동의 문구 canonical copy를 확정했다.
+- 전자소송 제출 보조 패키지 예정 고지문 canonical copy를 확정했다.
+- UI 반영 원칙과 서버 차단 메시지 반영 원칙을 분리해 고정했다.
+- 개발팀 전달용 한 줄 지시문을 고정했다.
+
+#### 변경하지 않은 것
+
+- owner 화면 실제 카피 변경 없음.
+- lawyer 화면 실제 카피 변경 없음.
+- 서버 차단 메시지 실제 변경 없음.
+- 요약본 renderer 실제 문구 변경 없음.
+- Prisma schema 변경 없음.
+- API 동작 로직 변경 없음.
+- 7.0 전자소송 제출 보조 기능 구현 없음.
+
+#### 완료 판정
+
+| 항목 | 결과 |
+| --- | --- |
+| 6.9-2 canonical 문서 추가 | 완료 |
+| 10개 노출면 canonical copy 확정 | 완료 |
+| UI 반영 원칙 분리 | 완료 |
+| 서버 차단 메시지 반영 원칙 분리 | 완료 |
+| AI 생성물 책임 / 최종 책임 문구 분리 | 완료 |
+| 개인정보 제3자 제공 / 열람 동의 문구 확정 | 완료 |
+| 전자소송 제출 보조 예정 고지문 7.0 분리 기준 | 완료 |
+| 개발팀 한 줄 지시문 고정 | 완료 |
+| 실제 코드 반영 없음 | 유지 |
+
+#### 확인 순서 {#evidence-20260429-415-now}
+
+1. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+  - `#evidence-20260429-415`
+  - `#evidence-20260429-415-now`
+2. `docs/project-governance/AIBEOPCHIN_6_9_2_NOTICE_COPY_CANONICAL.md`
+3. `docs/project-governance/AIBEOPCHIN_6_9_1_NOTICE_EXPOSURE_MAPPING.md`
+4. `docs/project-governance/AIBEOPCHIN_6_9_PRIVACY_SECURITY_NOTICE_FINALIZATION_START.md`
+5. `docs/project-governance/NOTICE_AND_DISCLAIMER_DEFINITION.md`
+
+### 다음 실제 작업
+
+다음 작업명은 아래로 고정한다.
+
+`AI법친 6.9 — 개인정보 / 보안 / 동의문구 최종 정리 완료`
+
+실제 반영 범위는 아래 순서로 고정한다.
+
+1. owner 화면 문구 반영
+2. lawyer 화면 문구 반영
+3. 첨부 다운로드 허용/차단 문구 반영
+4. 사건 패키지 요약본 HTML 고지문 반영
+5. 공유 취소 후 접근 제한 문구 반영
+6. 접근 로그 / 다운로드 로그 보관 고지 반영
+7. 전자소송 제출 보조 패키지 예정 고지는 7.0 예정 항목으로 유지
+8. `IMPLEMENTATION_EVIDENCE.md` 414~416 연결 완료
+
+### [EVIDENCE-20260429-414] AI법친 6.9-1 — 개인정보 / 보안 / 동의문구 노출 위치 매핑 {#evidence-20260429-414}
+
+#### 상태
+
+AI법친 6.9-1은 6.9-2 카피 확정 전에,
+사건 패키지 공유 기능에서 실제로 어떤 문구가 어디에 노출되는지 먼저 고정하는 단계다.
+
+이번 작업은 문구 수정이 아니라,
+owner 화면, lawyer 화면, 출력물, 차단 메시지, 예정 영역을 한 표면으로 매핑해
+6.9-2에서 충돌 없이 카피를 확정할 수 있도록 기준을 만드는 문서화 작업이다.
+
+#### 범위
+
+- `AIBEOPCHIN_6_9_1_NOTICE_EXPOSURE_MAPPING.md`를 추가했다.
+- 의뢰인 공유 설정 화면의 고지문/동의문 노출 위치를 정리했다.
+- 공유 상세 화면의 revoke/로그/범위 노출 위치를 정리했다.
+- 변호사 고유번호 조회 화면의 열람 고지 노출 위치를 정리했다.
+- 변호사 사건 패키지 열람 화면의 검토 안내 노출 위치를 정리했다.
+- 첨부 다운로드 버튼과 서버 차단 메시지 노출 위치를 정리했다.
+- 사건 패키지 요약본 출력 버튼과 HTML 요약본 고지 위치를 정리했다.
+- 공유 취소 confirm/성공/차단 메시지 노출 위치를 정리했다.
+- 접근 로그/다운로드 로그 표시 영역과 관련 고지 위치를 정리했다.
+- AI 생성 문서/요약본 고지 영역의 중복 표면을 정리했다.
+- 전자소송 제출 보조 패키지 예정 고지 영역은 현재 `src/**` 런타임 노출면이 없음을 확인했다.
+- 6.9-2에서 바로 사용할 우선순위를 정리했다.
+
+#### 변경하지 않은 것
+
+- UI 카피 실제 수정 없음.
+- Prisma schema 변경 없음.
+- API 응답 문구 변경 없음.
+- 공유 정책 로직 변경 없음.
+- 다운로드 정책 로직 변경 없음.
+- 요약본 renderer 변경 없음.
+- 전자소송 제출 보조 기능 구현 없음.
+
+#### 완료 판정
+
+| 항목 | 결과 |
+| --- | --- |
+| 6.9-1 매핑 문서 추가 | 완료 |
+| owner 공유 설정 화면 매핑 | 완료 |
+| 공유 상세 화면 매핑 | 완료 |
+| lawyer 조회 화면 매핑 | 완료 |
+| lawyer 열람 화면 매핑 | 완료 |
+| 첨부 다운로드 버튼/차단 메시지 매핑 | 완료 |
+| 요약본 출력 표면 매핑 | 완료 |
+| revoke 표면 매핑 | 완료 |
+| 로그 표시 영역 매핑 | 완료 |
+| AI 생성물 고지 영역 매핑 | 완료 |
+| 전자소송 제출 보조 예정 영역 확인 | 완료 |
+| 6.9-2 우선순위 도출 | 완료 |
+| 코드 기능 변경 없음 | 유지 |
+
+#### 확인 순서 {#evidence-20260429-414-now}
+
+1. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+  - `#evidence-20260429-414`
+  - `#evidence-20260429-414-now`
+2. `docs/project-governance/AIBEOPCHIN_6_9_1_NOTICE_EXPOSURE_MAPPING.md`
+3. `src/app/(protected)/cases/[caseId]/share/page.tsx`
+4. `src/components/case-package/case-package-share-client.tsx`
+5. `src/components/case-package/case-package-share-detail-client.tsx`
+6. `src/app/(lawyer)/lawyer/case-packages/lookup/page.tsx`
+7. `src/components/lawyer/case-package/lawyer-case-package-lookup-client.tsx`
+8. `src/lib/case-package/case-package-download-policy.ts`
+9. `src/lib/case-package/case-package-share-policy.ts`
+10. `src/lib/case-package/case-package-summary-renderer.ts`
+
+### 다음 실제 작업
+
+다음 작업명은 아래로 고정한다.
+
+`AI법친 6.9-2 — 개인정보 / 보안 / 동의문구 카피 확정`
+
+우선 순서는 아래로 고정한다.
+
+1. 공유 동의문구
+2. 변호사 열람 고지문
+3. 첨부파일 다운로드 고지문
+4. 요약본 출력 고지문
+5. 공유 취소 후 접근 제한 문구
+6. 접근 로그 보관 고지
+7. AI 생성물 책임 고지
+8. 변호사 최종 검토 책임 문구
+9. 개인정보 제3자 제공 / 열람 동의 구조
+10. 전자소송 제출 보조 패키지 책임 제한 문구
+
+### [EVIDENCE-20260429-413] AI법친 6.9 — 개인정보 / 보안 / 동의문구 최종 정리 착수 {#evidence-20260429-413}
+
+#### 상태
+
+AI법친 6.9는 6.3~6.8에서 구현·검증한 사건 패키지 공유 기능에 대해,
+개인정보·보안·동의문구를 최종 정리하기 위한 착수 단계다.
+
+이번 작업은 실제 기능 확장이 아니라,
+이미 동작하는 공유/조회/다운로드/출력 흐름에 어떤 고지문과 책임 경계를 붙일지 기준을 고정하는 문서화 작업이다.
+
+#### 범위
+
+- `AIBEOPCHIN_6_9_PRIVACY_SECURITY_NOTICE_FINALIZATION_START.md`를 추가했다.
+- 사건 패키지 공유 동의문구 정리 범위를 고정했다.
+- 변호사 열람 고지문 정리 범위를 고정했다.
+- 첨부파일 다운로드 고지문 정리 범위를 고정했다.
+- 사건 패키지 요약본 출력 고지문 정리 범위를 고정했다.
+- 공유 취소 후 접근 제한 문구 정리 범위를 고정했다.
+- 접근 로그 / 다운로드 로그 보관 고지 범위를 고정했다.
+- AI 생성 문서의 법률 책임 고지 범위를 고정했다.
+- 변호사 최종 검토·승인 책임 문구 범위를 고정했다.
+- 개인정보 제3자 제공 / 열람 동의 구조 정리 범위를 고정했다.
+- 전자소송 제출 보조 패키지 관련 책임 제한 문구 범위를 고정했다.
+- 6.9 완료 후 7.0으로 이어지는 전환 축을 명시했다.
+
+#### 변경하지 않은 것
+
+- 사건 패키지 공유 scope 필드 변경 없음.
+- Prisma schema 변경 없음.
+- 신규 migration 생성 없음.
+- 다운로드 정책 로직 변경 없음.
+- 변호사 조회 권한 로직 변경 없음.
+- 접근 로그 저장 로직 변경 없음.
+- 요약본 출력 로직 변경 없음.
+- 전자소송 제출 자동화 구현 없음.
+- 문서 자동 승인 기능 없음.
+- 7.0 상세 기능 설계 완료 없음.
+
+#### 완료 판정
+
+| 항목 | 결과 |
+| --- | --- |
+| 6.9 착수 기준서 추가 | 완료 |
+| 공유 동의문구 범위 고정 | 완료 |
+| 변호사 열람 고지 범위 고정 | 완료 |
+| 첨부 다운로드 고지 범위 고정 | 완료 |
+| 요약본 출력 고지 범위 고정 | 완료 |
+| revoke 접근 제한 문구 범위 고정 | 완료 |
+| 로그 보관 고지 범위 고정 | 완료 |
+| AI 법률 책임 고지 범위 고정 | 완료 |
+| 변호사 최종 검토 책임 문구 범위 고정 | 완료 |
+| 개인정보 제3자 제공/열람 동의 구조 범위 고정 | 완료 |
+| 전자소송 제출 보조 책임 제한 범위 고정 | 완료 |
+| 코드 기능 변경 없음 | 유지 |
+| DB 변경 없음 | 유지 |
+| 다음 큰 축 7.0 명시 | 완료 |
+
+#### 확인 순서 {#evidence-20260429-413-now}
+
+1. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+  - `#evidence-20260429-413`
+  - `#evidence-20260429-413-now`
+2. `docs/project-governance/AIBEOPCHIN_6_9_PRIVACY_SECURITY_NOTICE_FINALIZATION_START.md`
+3. `docs/project-governance/NOTICE_AND_DISCLAIMER_DEFINITION.md`
+4. `docs/project-governance/AIBEOPCHIN_6_2_PUBLIC_CODE_AND_SHARE_CONSENT_RULES.md`
+
+### 다음 실제 작업
+
+다음 작업명은 아래로 고정한다.
+
+`AI법친 6.9 — 개인정보 / 보안 / 동의문구 최종 정리`
+
+우선 순서는 아래 4단계로 고정한다.
+
+1. 사건 패키지 공유 흐름의 실제 노출 문구 위치를 owner/lawyer/출력물 기준으로 매핑한다.
+2. 공유 동의, 열람 고지, 다운로드 고지, 로그 보관, revoke 차단 문구를 공통 원칙에 맞춰 정리한다.
+3. AI 생성 문서 책임, 변호사 최종 검토 책임, 개인정보 제3자 제공/열람 동의 구조를 문서와 UI 카피 기준으로 수렴시킨다.
+4. 전자소송 제출 보조 패키지 책임 제한 문구를 정리한 뒤 7.0 기획으로 넘긴다.
+
+### 다음 큰 축
+
+`AI법친 7.0 — 변호사 AI 업무실 / 법률문서 작성 / 전자소송 제출 보조 패키지 기획서`
+
+### [EVIDENCE-20260428-412] AI법친 6.8 — 사건 패키지 PDF / 요약본 출력 {#evidence-20260428-412}
+
+### 상태
+
+AI법친 6.8은 공유된 사건 패키지를 변호사 검토용 요약본으로 출력할 수 있도록 하는 단계다.
+
+이번 작업은 실제 PDF 바이너리 생성이 아니라,
+서버리스 환경에서 안정적으로 동작할 수 있는 인쇄 가능한 HTML 요약본 출력 API를 먼저 구현하고,
+공유 상태와 권한 검증을 통과한 경우에만 요약본을 내려받을 수 있도록 하는 작업이다.
+
+6.3 `add-case-package-share` migration 적용 후,
+실제 요약본 출력 응답 200과 `CasePackageAccessLog` DOWNLOAD 적재를 확인했다.
+
+### 범위
+
+- 사건 패키지 요약본 출력 정책 유틸을 추가했다.
+- allowPackagePdf 검증을 추가했다.
+- 공유 상태 ACTIVE / 만료 / 취소 검증을 유지했다.
+- 지정 변호사 조건 검증을 유지했다.
+- 사건 패키지 요약본 HTML renderer를 추가했다.
+- 사건 패키지 요약본 출력 API를 추가했다.
+- 요약본 출력 성공 / 실패 로그 기록을 추가했다.
+- 변호사 사건 패키지 열람 화면에 요약본 출력 버튼을 연결했다.
+- 의뢰인 공유 상세 화면의 패키지 PDF 표시 문구를 요약본 출력으로 정리했다.
+
+### 변경하지 않은 것
+
+- 실제 PDF 바이너리 생성 없음.
+- Puppeteer / Playwright 의존성 추가 없음.
+- 첨부파일 ZIP 다운로드 없음.
+- 문서 PDF 다운로드 구현 없음.
+- 전자서명 없음.
+- 사건 결과 예측 없음.
+- 법률 의견 확정 문구 없음.
+- CaseStatus 변경 없음.
+- UserRole 변경 없음.
+- 대시보드 3.x 재오픈 없음.
+- QA closure 작성 없음.
+
+### 수정 / 추가 파일
+
+| 파일 | 내용 |
+| --- | --- |
+| `src/lib/case-package/case-package-pdf-policy.ts` | 사건 패키지 요약본 출력 권한 검증 |
+| `src/lib/case-package/case-package-summary-renderer.ts` | 인쇄 가능한 HTML 요약본 renderer |
+| `src/app/api/lawyer/case-packages/[shareId]/package-summary/route.ts` | 사건 패키지 요약본 출력 API |
+| `src/components/lawyer/case-package/lawyer-case-package-lookup-client.tsx` | 요약본 출력 버튼 연결 |
+| `src/components/case-package/case-package-share-detail-client.tsx` | 패키지 PDF 표시 문구 보강 |
+
+### 완료 판정
+
+| 항목 | 결과 |
+| --- | --- |
+| 요약본 출력 정책 유틸 | 완료 |
+| allowPackagePdf 검증 | 완료 |
+| ACTIVE / 만료 / 취소 검증 | 유지 |
+| 지정 변호사 검증 | 유지 |
+| HTML 요약본 renderer | 완료 |
+| 요약본 출력 API | 완료 |
+| 출력 성공 / 실패 로그 | 완료 |
+| 변호사 화면 버튼 연결 | 완료 |
+| 의뢰인 상세 화면 문구 보강 | 완료 |
+| 실제 PDF 바이너리 생성 | 후속 6.8a 후보 |
+| DB migration 런타임 검증 | 완료 |
+| 대시보드 3.x 봉인 | 유지 |
+
+### 확인 순서 {#evidence-20260428-412-now}
+
+1. `src/lib/case-package/case-package-pdf-policy.ts`
+2. `src/lib/case-package/case-package-summary-renderer.ts`
+3. `src/app/api/lawyer/case-packages/[shareId]/package-summary/route.ts`
+4. `src/components/lawyer/case-package/lawyer-case-package-lookup-client.tsx`
+5. `src/components/case-package/case-package-share-detail-client.tsx`
+6. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+  - `#evidence-20260428-412`
+  - `#evidence-20260428-412-now`
+7. `tools/aibeopchin_navigator.py`
+  - `aibeopchin_6_8_case_package_summary_output`
+  - `render_plan()`의 AI법친 6.8 절
+
+### 런타임 검증 결과
+
+- 6.3 `add-case-package-share` migration 완료.
+- 6.4~6.8 런타임 검증 완료.
+- 의뢰인 공유 설정, 변호사 고유번호 조회, 첨부 다운로드 권한 분리, 접근 로그, 사건 패키지 요약본 출력 흐름 확인 완료.
+
+### 검증 결과
+
+- `npx tsc --noEmit` exit 0.
+- `npm run lint` 통과.
+- `npm run verify:canonical-sources` exit 0.
+- `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0.
+
+---
+
+### [EVIDENCE-20260428-411] AI법친 6.7 — 열람 로그 / 다운로드 로그 / 공유 취소 고도화 {#evidence-20260428-411}
+
+### 상태
+
+AI법친 6.7은 6.6에서 기록하기 시작한 사건 패키지 열람 / 다운로드 / 거부 / 만료 / 취소 로그를
+의뢰인이 공유 상세 화면에서 확인할 수 있도록 고도화하는 단계다.
+
+이번 작업은 공유 상세 화면, 접근 로그 조회 API, 접근 로그 serializer, 공유 취소 사유 선택 UI,
+공유 상태 / 공유 범위 / 열람·다운로드 통계 표시를 추가하는 구현 작업이다.
+
+6.3 `add-case-package-share` migration 적용 후,
+실제 열람 / 다운로드 로그 적재와 revoke 후 접근 차단을 확인했다.
+
+### 범위
+
+- 공유 접근 로그 serializer를 추가했다.
+- 의뢰인 공유 접근 로그 조회 API를 추가했다.
+- `/cases/[caseId]/share/[shareId]` 공유 상세 화면을 추가했다.
+- 공유 상태 / 공유 방식 / 만료일 / 지정 변호사 정보를 표시했다.
+- 공유 범위 허용 / 비허용 상태를 표시했다.
+- 열람 / 다운로드 / 거부 / 만료 / 취소 차단 통계를 표시했다.
+- 최근 접근 로그 목록을 표시했다.
+- IP 마스킹 표시를 적용했다.
+- 공유 취소 사유 선택 UI를 추가했다.
+- 공유 목록 카드에서 상세 / 열람 이력 화면으로 이동할 수 있게 했다.
+
+### 변경하지 않은 것
+
+- 신규 Prisma 모델 추가 없음.
+- CaseStatus 변경 없음.
+- UserRole 변경 없음.
+- 기존 첨부 다운로드 API 완화 없음.
+- 접근 실패 횟수 기반 LOCKED 실제 구현 없음.
+- 알림 발송 없음.
+- 대시보드 3.x 재오픈 없음.
+- QA closure 작성 없음.
+
+### 수정 / 추가 파일
+
+| 파일 | 내용 |
+| --- | --- |
+| `src/lib/case-package/case-package-access-log-serializer.ts` | 접근 로그 serializer |
+| `src/app/api/cases/[caseId]/package-shares/[shareId]/access-logs/route.ts` | 의뢰인 공유 접근 로그 조회 API |
+| `src/app/(protected)/cases/[caseId]/share/[shareId]/page.tsx` | 공유 상세 / 열람 이력 페이지 |
+| `src/components/case-package/case-package-share-detail-client.tsx` | 공유 상세, 로그, 취소 사유 UI |
+| `src/components/case-package/case-package-share-client.tsx` | 공유 상세 화면 링크 추가 |
+
+### 완료 판정
+
+| 항목 | 결과 |
+| --- | --- |
+| 접근 로그 serializer | 완료 |
+| 접근 로그 조회 API | 완료 |
+| 공유 상세 화면 | 완료 |
+| 공유 상태 표시 | 완료 |
+| 공유 범위 표시 | 완료 |
+| 열람 / 다운로드 통계 | 완료 |
+| 접근 로그 목록 | 완료 |
+| IP 마스킹 | 완료 |
+| 공유 취소 사유 선택 UI | 완료 |
+| 공유 목록 상세 링크 | 완료 |
+| DB migration 런타임 검증 | 완료 |
+| 대시보드 3.x 봉인 | 유지 |
+
+### 확인 순서 {#evidence-20260428-411-now}
+
+1. `src/lib/case-package/case-package-access-log-serializer.ts`
+2. `src/app/api/cases/[caseId]/package-shares/[shareId]/access-logs/route.ts`
+3. `src/app/(protected)/cases/[caseId]/share/[shareId]/page.tsx`
+4. `src/components/case-package/case-package-share-detail-client.tsx`
+5. `src/components/case-package/case-package-share-client.tsx`
+6. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+  - `#evidence-20260428-411`
+  - `#evidence-20260428-411-now`
+7. `tools/aibeopchin_navigator.py`
+  - `aibeopchin_6_7_case_package_access_log_and_revoke_hardening`
+  - `render_plan()`의 AI법친 6.7 절
+
+### 런타임 검증 결과
+
+- 6.3 `add-case-package-share` migration 완료.
+- 6.4~6.8 런타임 검증 완료.
+- 의뢰인 공유 설정, 변호사 고유번호 조회, 첨부 다운로드 권한 분리, 접근 로그, 사건 패키지 요약본 출력 흐름 확인 완료.
+
+### 검증 결과
+
+- `npx tsc --noEmit` exit 0.
+- `npm run lint` 통과.
+- `npm run verify:canonical-sources` exit 0.
+- `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0.
+
+---
+
+### [EVIDENCE-20260428-410] AI법친 6.6 — 첨부파일 열람 / 다운로드 권한 분리 {#evidence-20260428-410}
+
+### 상태
+
+AI법친 6.6은 6.2에서 정의한 열람 권한과 다운로드 권한 분리 원칙을 실제 API로 구현하는 단계다.
+
+이번 작업은 변호사가 사건 패키지에서 첨부자료 목록을 볼 수 있더라도,
+의뢰인이 첨부파일 다운로드를 허용한 경우에만 별도 공유 다운로드 API를 통해 원본 파일을 내려받을 수 있도록 구현하는 작업이다.
+
+6.3 `add-case-package-share` migration 적용 후,
+실제 첨부파일 다운로드 비허용 403과 허용 200, `CasePackageAccessLog` DENIED / DOWNLOAD 적재를 확인했다.
+
+### 범위
+
+- 공유 사건 패키지 첨부파일 다운로드 API를 추가했다.
+- `shareId` / `attachmentId` 기반 다운로드 경로를 추가했다.
+- 변호사 로그인 검증을 유지했다.
+- 공유 상태 ACTIVE 검증을 적용했다.
+- 만료 / 취소 공유 접근 차단을 적용했다.
+- 지정 변호사 조건 검증을 적용했다.
+- `allowAttachmentList` 검증을 적용했다.
+- `allowAttachmentDownload` 검증을 적용했다.
+- 첨부파일이 해당 공유 사건의 `caseId`에 속하는지 검증했다.
+- 첨부파일 상태가 ACTIVE인지 검증했다.
+- 다운로드 성공 / 실패 로그 기록을 추가했다.
+- 변호사 사건 패키지 열람 화면에서 다운로드 버튼을 연결했다.
+- 다운로드 비허용 시 비허용 안내를 유지했다.
+
+### 변경하지 않은 것
+
+- 기존 사건 첨부 다운로드 API 완화 없음.
+- 비로그인 다운로드 허용 없음.
+- publicCode만으로 다운로드 허용 없음.
+- 문서 PDF 다운로드 구현 없음.
+- 패키지 PDF 다운로드 구현 없음.
+- CaseStatus 변경 없음.
+- UserRole 변경 없음.
+- 대시보드 3.x 재오픈 없음.
+- QA closure 작성 없음.
+
+### 수정 / 추가 파일
+
+| 파일 | 내용 |
+| --- | --- |
+| `src/lib/case-package/case-package-share-schema.ts` | 공유 첨부 다운로드 route params schema 추가 |
+| `src/lib/case-package/case-package-download-policy.ts` | 첨부파일 다운로드 권한 검증 유틸 |
+| `src/lib/case-package/shared-attachment-file.ts` | 공유 첨부파일 응답 생성 유틸 |
+| `src/app/api/lawyer/case-packages/[shareId]/attachments/[attachmentId]/download/route.ts` | 변호사 공유 첨부 다운로드 API |
+| `src/components/lawyer/case-package/lawyer-case-package-lookup-client.tsx` | 다운로드 버튼 연결 |
+
+### 완료 판정
+
+| 항목 | 결과 |
+| --- | --- |
+| 공유 첨부 다운로드 API | 완료 |
+| 변호사 로그인 검증 | 유지 |
+| ACTIVE 상태 검증 | 완료 |
+| 만료 / 취소 차단 | 완료 |
+| 지정 변호사 검증 | 완료 |
+| allowAttachmentList 검증 | 완료 |
+| allowAttachmentDownload 검증 | 완료 |
+| attachment-case 소속 검증 | 완료 |
+| ACTIVE 첨부파일 검증 | 완료 |
+| 다운로드 로그 기록 | 완료 |
+| 다운로드 버튼 연결 | 완료 |
+| 비로그인 다운로드 차단 | 유지 |
+| publicCode만으로 다운로드 차단 | 유지 |
+| DB migration 런타임 검증 | 완료 |
+| 대시보드 3.x 봉인 | 유지 |
+
+### 확인 순서 {#evidence-20260428-410-now}
+
+1. `src/app/api/lawyer/case-packages/[shareId]/attachments/[attachmentId]/download/route.ts`
+2. `src/lib/case-package/case-package-download-policy.ts`
+3. `src/lib/case-package/shared-attachment-file.ts`
+4. `src/components/lawyer/case-package/lawyer-case-package-lookup-client.tsx`
+5. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+  - `#evidence-20260428-410`
+  - `#evidence-20260428-410-now`
+6. `tools/aibeopchin_navigator.py`
+  - `aibeopchin_6_6_shared_attachment_download_permission`
+  - `render_plan()`의 AI법친 6.6 절
+
+### 런타임 검증 결과
+
+- 6.3 `add-case-package-share` migration 완료.
+- 6.4~6.8 런타임 검증 완료.
+- 의뢰인 공유 설정, 변호사 고유번호 조회, 첨부 다운로드 권한 분리, 접근 로그, 사건 패키지 요약본 출력 흐름 확인 완료.
+
+### 검증 결과
+
+- `npx tsc --noEmit` exit 0.
+- `npm run lint` 통과.
+- `npm run verify:canonical-sources` exit 0.
+- `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0.
+
+---
+
+### [EVIDENCE-20260428-409] AI법친 6.5 — 변호사 고유번호 조회 / 열람 화면 구현 {#evidence-20260428-409}
+
+### 상태
+
+AI법친 6.5는 6.3에서 구현한 변호사 고유번호 조회 API를 변호사 화면에 연결하는 단계다.
+
+이번 작업은 변호사가 의뢰인에게 받은 사건 고유번호를 입력하고,
+공유 상태와 권한 검증을 통과한 사건 패키지를 열람할 수 있는 화면을 구현하는 작업이다.
+
+6.3 `add-case-package-share` migration 적용 후,
+실제 변호사 고유번호 조회 성공과 revoke 후 403 차단을 확인했다.
+
+### 범위
+
+- `/lawyer/case-packages/lookup` 화면을 추가했다.
+- 변호사 사건 고유번호 입력 UI를 추가했다.
+- 선택 PIN 입력 UI 후보를 추가했다.
+- `POST /api/lawyer/case-packages/lookup` API 연결을 추가했다.
+- 조회 성공 시 사건 패키지 열람 화면을 추가했다.
+- 사건 기본 정보 표시를 추가했다.
+- 의뢰인 / 상대방 정보 표시를 추가했다.
+- 사건 요약 표시를 추가했다.
+- 첨부자료 목록 표시를 추가했다.
+- 문서 초안 목록 표시를 추가했다.
+- 공유 범위와 다운로드 허용 여부 표시를 추가했다.
+- 만료 / 취소 / 권한 없음 / 고유번호 없음 오류 안내를 추가했다.
+- AI 정리 결과는 법률 자문이나 최종 판단이 아니라는 안내를 유지했다.
+
+### 변경하지 않은 것
+
+- Prisma schema 변경 없음.
+- 신규 migration 생성 없음.
+- CaseStatus 변경 없음.
+- UserRole 변경 없음.
+- 첨부파일 다운로드 구현 없음.
+- 문서 PDF 다운로드 구현 없음.
+- 보완 요청 API 구현 없음.
+- 변호사 검토 메모 저장 없음.
+- 사건 수임 / 상담 제안 기능 없음.
+- 대시보드 3.x 재오픈 없음.
+- QA closure 작성 없음.
+
+### 수정 / 추가 파일
+
+| 파일 | 내용 |
+| --- | --- |
+| `src/app/(lawyer)/lawyer/case-packages/lookup/page.tsx` | 변호사 사건 고유번호 조회 페이지 |
+| `src/components/lawyer/case-package/lawyer-case-package-lookup-client.tsx` | 고유번호 입력, API 연결, 사건 패키지 열람 UI |
+| `src/app/(lawyer)/lawyer/page.tsx` | 변호사 포털 진입 링크 |
+
+### 완료 판정
+
+| 항목 | 결과 |
+| --- | --- |
+| 변호사 고유번호 조회 화면 추가 | 완료 |
+| 고유번호 입력 UI | 완료 |
+| PIN 입력 후보 | 완료 |
+| lookup API 연결 | 완료 |
+| 사건 기본 정보 표시 | 완료 |
+| 의뢰인 / 상대방 정보 표시 | 완료 |
+| 사건 요약 표시 | 완료 |
+| 첨부자료 목록 표시 | 완료 |
+| 문서 초안 목록 표시 | 완료 |
+| 공유 범위 / 다운로드 허용 표시 | 완료 |
+| 오류 안내 | 완료 |
+| 법률 자문 아님 안내 | 유지 |
+| DB migration 런타임 검증 | 완료 |
+| 대시보드 3.x 봉인 | 유지 |
+
+### 확인 순서 {#evidence-20260428-409-now}
+
+1. `src/app/(lawyer)/lawyer/case-packages/lookup/page.tsx`
+2. `src/components/lawyer/case-package/lawyer-case-package-lookup-client.tsx`
+3. `src/app/(lawyer)/lawyer/page.tsx`
+4. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+  - `#evidence-20260428-409`
+  - `#evidence-20260428-409-now`
+5. `tools/aibeopchin_navigator.py`
+  - `aibeopchin_6_5_lawyer_case_package_lookup_screen`
+  - `render_plan()`의 AI법친 6.5 절
+
+### 런타임 검증 결과
+
+- 6.3 `add-case-package-share` migration 완료.
+- 6.4~6.8 런타임 검증 완료.
+- 의뢰인 공유 설정, 변호사 고유번호 조회, 첨부 다운로드 권한 분리, 접근 로그, 사건 패키지 요약본 출력 흐름 확인 완료.
+
+### 검증 결과
+
+- `npx tsc --noEmit` exit 0.
+- `npm run lint` 통과.
+- `npm run verify:canonical-sources` exit 0.
+- `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0.
+
+---
+
+### [EVIDENCE-20260428-408] AI법친 6.4 — 의뢰인 공유 설정 화면 구현 {#evidence-20260428-408}
+
+### 상태
+
+AI법친 6.4는 6.3에서 구현한 CasePackageShare API를 의뢰인이 사용할 수 있도록
+사건별 공유 설정 화면을 추가하는 단계다.
+
+이번 작업은 의뢰인이 사건 패키지 공유 범위, 다운로드 허용 여부, 공유 만료일,
+공유 동의문을 확인한 뒤 사건 고유번호를 발급하고 기존 공유를 확인·취소할 수 있는 화면을 구현하는 작업이다.
+
+6.3 `add-case-package-share` migration 적용 후,
+실제 공유 생성 / 목록 / 상세 / 취소 흐름을 확인했다.
+
+### 범위
+
+- `/cases/[caseId]/share` 화면을 추가했다.
+- 의뢰인 사건 공유 설정 화면을 추가했다.
+- 공유 방식 선택을 추가했다.
+- 지정 변호사 ID 입력 후보를 추가했다.
+- 공유 만료일 입력을 추가했다.
+- 사건 요약 / AI 인터뷰 / 첨부자료 목록 / 문서 초안 열람 범위 체크박스를 추가했다.
+- 첨부파일 다운로드 / 문서 PDF / 패키지 PDF 다운로드 허용 체크박스를 추가했다.
+- 의뢰인 연락처 / 상대방 상세 정보 공유 체크박스를 추가했다.
+- 공유 동의문 확인 영역을 추가했다.
+- 사건 고유번호 발급 버튼을 추가했다.
+- 공유 목록 조회를 추가했다.
+- 공유 취소 버튼을 추가했다.
+- 변호사 전달 문구 복사 기능을 추가했다.
+- 사건 상세 화면에서 공유 설정 화면으로 이동하는 링크를 추가했다.
+
+### 변경하지 않은 것
+
+- Prisma schema 변경 없음.
+- 신규 migration 생성 없음.
+- CaseStatus 변경 없음.
+- UserRole 변경 없음.
+- 변호사 고유번호 조회 화면 구현 없음.
+- 첨부파일 다운로드 정책 변경 없음.
+- 문서 PDF 다운로드 정책 변경 없음.
+- 대시보드 3.x 재오픈 없음.
+- QA closure 작성 없음.
+
+### 수정 / 추가 파일
+
+| 파일 | 내용 |
+| --- | --- |
+| `src/app/(protected)/cases/[caseId]/share/page.tsx` | 의뢰인 사건 패키지 공유 설정 페이지 |
+| `src/components/case-package/case-package-share-client.tsx` | 공유 범위 설정, 고유번호 발급, 목록, 취소, 복사 UI |
+| `src/app/(protected)/cases/[caseId]/page.tsx` | 공유 설정 화면 이동 링크 |
+
+### 완료 판정
+
+| 항목 | 결과 |
+| --- | --- |
+| 공유 설정 화면 추가 | 완료 |
+| 공유 범위 체크박스 | 완료 |
+| 다운로드 권한 체크박스 | 완료 |
+| 공유 만료일 입력 | 완료 |
+| 동의문 확인 | 완료 |
+| 고유번호 발급 API 연결 | 완료 |
+| 공유 목록 조회 API 연결 | 완료 |
+| 공유 취소 API 연결 | 완료 |
+| 변호사 전달 문구 복사 | 완료 |
+| DB migration 런타임 검증 | 완료 |
+| 대시보드 3.x 봉인 | 유지 |
+
+### 확인 순서 {#evidence-20260428-408-now}
+
+1. `src/app/(protected)/cases/[caseId]/share/page.tsx`
+2. `src/components/case-package/case-package-share-client.tsx`
+3. `src/app/(protected)/cases/[caseId]/page.tsx`
+4. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+  - `#evidence-20260428-408`
+  - `#evidence-20260428-408-now`
+5. `tools/aibeopchin_navigator.py`
+  - `aibeopchin_6_4_client_case_package_share_screen`
+  - `render_plan()`의 AI법친 6.4 절
+
+### 런타임 검증 결과
+
+- 6.3 `add-case-package-share` migration 완료.
+- 6.4~6.8 런타임 검증 완료.
+- 의뢰인 공유 설정, 변호사 고유번호 조회, 첨부 다운로드 권한 분리, 접근 로그, 사건 패키지 요약본 출력 흐름 확인 완료.
+
+### 검증 결과
+
+- `npx tsc --noEmit` exit 0.
+- `npm run lint` 통과.
+- `npm run verify:canonical-sources` exit 0.
+- `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0.
+
+---
+
+### [EVIDENCE-20260428-407] AI법친 6.3 — CasePackageShare Prisma 모델 / API 구현 {#evidence-20260428-407}
+
+### 상태
+
+AI법친 6.3은 6.0~6.2에서 고정한 사건 패키지, 고유번호, 공유 동의 정책을
+실제 Prisma 모델과 API로 연결하는 첫 구현 단계다.
+
+이번 작업에서는 `CasePackageShare`, `CasePackageAccessLog` 모델을 추가하고,
+의뢰인 공유 생성·목록·상세·취소 API와 변호사 고유번호 조회 API를 구현했다.
+
+코드 구현과 정적 검증 이후,
+로컬 개발 DB 기준 `add-case-package-share` schema 반영과 6.4~6.8 런타임 검증까지 완료했다.
+
+### 범위
+
+- `CasePackageShareStatus`, `CasePackageShareMode`, `CasePackageAccessAction` enum을 추가했다.
+- `CasePackageShare` 모델을 추가했다.
+- `CasePackageAccessLog` 모델을 추가했다.
+- `User`, `Case` relation을 연결했다.
+- 고유번호 생성 유틸을 추가했다.
+- 공유 입력/취소/조회 스키마를 추가했다.
+- 공유 정책 검증 유틸을 추가했다.
+- 공유 직렬화 유틸을 추가했다.
+- 접근 로그 저장 유틸을 추가했다.
+- 의뢰인용 공유 목록 API를 추가했다.
+- 의뢰인용 공유 생성 API를 추가했다.
+- 공유 상세 API를 추가했다.
+- 공유 취소 API를 추가했다.
+- 변호사용 고유번호 조회 API를 추가했다.
+- 조회 성공/거부/만료/취소 로그 기록 흐름을 추가했다.
+
+### 변경하지 않은 것
+
+- 첨부파일 다운로드 허용 기본값 완화 없음.
+- 문서 PDF 다운로드 API 구현 없음.
+- 사건 패키지 PDF 생성 API 구현 없음.
+- 변호사 열람 UI 구현 없음.
+- 의뢰인 공유 설정 UI 구현 없음.
+- 대시보드 3.x 재오픈 없음.
+- `CaseStatus` 변경 없음.
+- `UserRole` 변경 없음.
+- 기존 첨부파일 다운로드 정책 직접 변경 없음.
+
+### 완료 판정
+
+| 항목 | 결과 |
+| --- | --- |
+| Prisma enum 추가 | 완료 |
+| `CasePackageShare` 모델 추가 | 완료 |
+| `CasePackageAccessLog` 모델 추가 | 완료 |
+| 공유 생성/목록 API | 완료 |
+| 공유 상세 API | 완료 |
+| 공유 취소 API | 완료 |
+| 변호사 고유번호 조회 API | 완료 |
+| 접근 로그 기록 | 완료 |
+| `add-case-package-share` migration 반영 | 완료 |
+| 6.4~6.8 런타임 검증 | 완료 |
+| 다운로드 완화 없음 | 유지 |
+| CaseStatus / UserRole 미변경 | 유지 |
+
+### 확인 순서 {#evidence-20260428-407-now}
+
+1. `prisma/schema.prisma`
+2. `src/lib/case-package/case-package-share-schema.ts`
+3. `src/lib/case-package/public-code.ts`
+4. `src/lib/case-package/case-package-access-log.ts`
+5. `src/lib/case-package/case-package-share-policy.ts`
+6. `src/lib/case-package/case-package-share-serializer.ts`
+7. `src/app/api/cases/[caseId]/package-shares/route.ts`
+8. `src/app/api/cases/[caseId]/package-shares/[shareId]/route.ts`
+9. `src/app/api/cases/[caseId]/package-shares/[shareId]/revoke/route.ts`
+10. `src/app/api/lawyer/case-packages/lookup/route.ts`
+11. `tools/aibeopchin_navigator.py`
+  - `aibeopchin_6_3_case_package_share_prisma_api`
+  - `render_plan()`의 AI법친 6.3 절
+12. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+  - `#evidence-20260428-407`
+  - `#evidence-20260428-407-now`
+
+### 런타임 검증 결과
+
+- 6.3 `add-case-package-share` migration 완료.
+- 6.4~6.8 런타임 검증 완료.
+- 의뢰인 공유 설정, 변호사 고유번호 조회, 첨부 다운로드 권한 분리, 접근 로그, 사건 패키지 요약본 출력 흐름 확인 완료.
+
+### 검증 결과
+
+- `npx prisma generate` exit 0.
+- `npx tsc --noEmit` exit 0.
+- `npm run lint` 통과.
+- `npm run verify:canonical-sources` exit 0.
+- `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0.
+- 로컬 개발 DB 기준 `CasePackageShare` / `CasePackageAccessLog` schema 반영 확인.
+- 의뢰인 공유 생성 / 변호사 조회 / 첨부 다운로드 정책 / 접근 로그 / 요약본 출력 런타임 검증 완료.
+
+---
+
+### [EVIDENCE-20260428-406] AI법친 6.2 — 고유번호 발급 정책 / 공유 동의 구조 설계 {#evidence-20260428-406}
+
+### 상태
+
+AI법친 6.2는 6.1에서 정의한 사건 패키지 데이터 구조를 기준으로,
+의뢰인이 변호사에게 사건 패키지를 안전하게 공유하기 위한 고유번호 발급 정책,
+접근 검증 구조, 공유 동의 절차, 공유 범위, 만료일, 취소 기준을 설계하는 단계다.
+
+이번 작업은 실제 코드 구현이 아니라,
+`publicCode` / `accessToken` / PIN / 공유 동의 / 만료 / 취소 / 변호사 조회 전 검증 조건을 문서로 고정하는 설계 작업이다.
+
+### 범위
+
+- 고유번호 개념을 정의했다.
+- `publicCode` 발급 규칙을 정의했다.
+- `accessToken` / PIN 정책을 정의했다.
+- 공유 상태값을 정의했다.
+- 공유 범위 구조를 정의했다.
+- 다운로드 권한 분리 기준을 정의했다.
+- 공유 기간 / 만료일 정책을 정의했다.
+- 공유 취소 정책을 정의했다.
+- 의뢰인 공유 동의 구조를 정의했다.
+- 공유 동의 문구를 작성했다.
+- 변호사 조회 전 검증 조건을 정의했다.
+- 변호사 지정 방식과 최초 열람 귀속 정책을 정의했다.
+- 공유 알림 문구를 작성했다.
+- 접근 로그 설계 기준을 작성했다.
+- 신규 데이터 구조 후보를 작성했다.
+- 신규 API 후보를 작성했다.
+- 신규 화면 후보를 작성했다.
+- 개인정보 / 보안 기준을 정리했다.
+
+### 변경하지 않은 것
+
+- 실제 Prisma schema 변경 없음.
+- 마이그레이션 생성 없음.
+- 신규 API 구현 없음.
+- 신규 화면 구현 없음.
+- `accessToken` 실제 발급 없음.
+- PIN 실제 검증 없음.
+- 변호사 조회 실제 구현 없음.
+- 공유 동의 실제 저장 없음.
+- 열람 로그 실제 구현 없음.
+- 첨부파일 다운로드 정책 실제 변경 없음.
+- CaseStatus 변경 없음.
+- UserRole 변경 없음.
+- 대시보드 3.x 재오픈 없음.
+- QA closure 작성 없음.
+
+### 완료 판정
+
+| 항목 | 결과 |
+| --- | --- |
+| 고유번호 개념 정의 | 완료 |
+| `publicCode` 발급 규칙 | 완료 |
+| `accessToken` / PIN 정책 | 완료 |
+| 공유 상태값 | 완료 |
+| 공유 범위 구조 | 완료 |
+| 다운로드 권한 분리 | 완료 |
+| 공유 기간 / 만료일 정책 | 완료 |
+| 공유 취소 정책 | 완료 |
+| 의뢰인 공유 동의 구조 | 완료 |
+| 공유 동의 문구 | 완료 |
+| 변호사 조회 전 검증 조건 | 완료 |
+| 변호사 지정 방식 | 완료 |
+| 최초 열람 귀속 정책 | 완료 |
+| 공유 알림 문구 | 완료 |
+| 접근 로그 기준 | 완료 |
+| 데이터 구조 후보 | 완료 |
+| API / 화면 후보 | 완료 |
+| 보안 기준 | 완료 |
+| 코드 기능 변경 없음 | 유지 |
+
+### 확인 순서 {#evidence-20260428-406-now}
+
+1. `docs/project-governance/AIBEOPCHIN_6_2_PUBLIC_CODE_AND_SHARE_CONSENT_RULES.md`
+2. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+  - `#evidence-20260428-406`
+  - `#evidence-20260428-406-now`
+3. `tools/aibeopchin_navigator.py`
+  - `aibeopchin_6_2_public_code_and_share_consent_rules`
+  - `render_plan()`의 AI법친 6.2 절
+
+### 다음 실제 작업
+
+1. AI법친 6.3 — CasePackageShare Prisma 모델 / API 구현
+2. AI법친 6.4 — 의뢰인 공유 설정 화면 구현
+3. AI법친 6.5 — 변호사 고유번호 조회 / 열람 화면 구현
+
+### 검증
+
+```bash
+npm run verify:canonical-sources
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
+
+검증 결과:
+
+- `npm run verify:canonical-sources` exit 0.
+- `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0.
+
+### [EVIDENCE-20260428-405] AI법친 6.1 — 사건 패키지 데이터 구조 / 생성 기준 설계 {#evidence-20260428-405}
+
+### 상태
+
+AI법친 6.1은 6.0에서 정의한 사건 패키지 / 고유번호 공유 / 변호사 열람 연계 구조를 실제 구현 전에 데이터 기준으로 세분화하는 단계다.
+
+이번 작업은 실제 코드 구현이 아니라,
+기존 Case / Attachment / LegalDocument / Interview / Summary 데이터를 기준으로
+사건 패키지에 포함할 데이터, 생성 조건, 공유 가능 / 비공유 데이터, 변호사 열람용 데이터 구조를 설계하는 문서화 작업이다.
+
+### 범위
+
+- 사건 패키지 데이터 구성을 정의했다.
+- 패키지 기본 정보를 정의했다.
+- 사건 기본 정보를 정의했다.
+- 의뢰인 / 상대방 정보 공유 기준을 정의했다.
+- AI 인터뷰 / 답변 정보 기준을 정의했다.
+- 사건 요약 / 쟁점 후보 기준을 정의했다.
+- 첨부자료 정보 기준을 정의했다.
+- 문서 초안 / 문서 상태 정보 기준을 정의했다.
+- 사건 패키지 생성 조건을 정의했다.
+- 사건 패키지 생성 시점 기준을 정의했다.
+- 변호사 열람용 패키지 화면 데이터 기준을 정의했다.
+- 공유 가능 / 선택 공유 / 기본 비공유 데이터를 분리했다.
+- 사건 패키지 데이터 스냅샷 기준을 정의했다.
+- 신규 데이터 구조 후보를 작성했다.
+- 신규 API 후보를 작성했다.
+- 신규 화면 후보를 작성했다.
+- 개인정보 / 보안 기준을 정리했다.
+
+### 변경하지 않은 것
+
+- 실제 Prisma schema 변경 없음.
+- 마이그레이션 생성 없음.
+- CaseStatus 변경 없음.
+- UserRole 변경 없음.
+- 신규 API 구현 없음.
+- 신규 화면 구현 없음.
+- 첨부파일 다운로드 정책 변경 없음.
+- 변호사 고유번호 조회 구현 없음.
+- 공유 동의 실제 구현 없음.
+- 열람 로그 실제 구현 없음.
+- 대시보드 3.x 재오픈 없음.
+- QA closure 작성 없음.
+
+### 완료 판정
+
+| 항목 | 결과 |
+| --- | --- |
+| 사건 패키지 데이터 구성 정의 | 완료 |
+| 패키지 기본 정보 정의 | 완료 |
+| 사건 기본 정보 정의 | 완료 |
+| 의뢰인 / 상대방 정보 공유 기준 | 완료 |
+| AI 인터뷰 / 답변 정보 기준 | 완료 |
+| 사건 요약 / 쟁점 후보 기준 | 완료 |
+| 첨부자료 정보 기준 | 완료 |
+| 문서 초안 / 문서 상태 정보 기준 | 완료 |
+| 사건 패키지 생성 조건 | 완료 |
+| 생성 시점 기준 | 완료 |
+| 변호사 열람용 데이터 기준 | 완료 |
+| 공유 가능 / 비공유 데이터 분리 | 완료 |
+| 스냅샷 기준 | 완료 |
+| 데이터 구조 후보 | 완료 |
+| API / 화면 후보 | 완료 |
+| 보안 기준 | 완료 |
+| 코드 기능 변경 없음 | 유지 |
+
+### 확인 순서 {#evidence-20260428-405-now}
+
+1. `docs/project-governance/AIBEOPCHIN_6_1_CASE_PACKAGE_DATA_STRUCTURE_AND_GENERATION_RULES.md`
+2. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+  - `#evidence-20260428-405`
+  - `#evidence-20260428-405-now`
+3. `tools/aibeopchin_navigator.py`
+  - `aibeopchin_6_1_case_package_data_structure_and_generation_rules`
+  - `render_plan()`의 AI법친 6.1 절
+
+### 다음 실제 작업
+
+1. AI법친 6.2 — 고유번호 발급 정책 / 공유 동의 구조 설계
+2. AI법친 6.3 — CasePackageShare Prisma 모델 / API 구현
+3. AI법친 6.4 — 의뢰인 공유 설정 화면 구현
+
+### 검증
+
+```bash
+npm run verify:canonical-sources
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
+
+검증 결과:
+
+- `npm run verify:canonical-sources` exit 0.
+- `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0.
+
 ### [EVIDENCE-20260428-staging-e2e] 스테이징 E2E (Playwright) — 실행 지시·증빙 {#evidence-20260428-staging-e2e}
+
+### [EVIDENCE-20260428-404] AI법친 6.0 — 사건 패키지 / 고유번호 공유 / 변호사 열람 연계 기획서 {#evidence-20260428-404}
+
+### 상태
+
+AI법친 6.0은 일반 사용자가 사건을 AI 질문 흐름으로 정리하고,
+변호사가 고유번호와 권한 승인으로 사건 패키지를 열람·다운로드할 수 있는 구조를 설계하는 단계다.
+
+이번 작업은 실제 코드 구현이 아니라,
+기존 Case / Attachment / LegalDocument / UserRole / AuditLog 구조를 기반으로
+사건 패키지, 고유번호 공유, 변호사 열람 연계 구조를 기획서로 고정하는 문서화 작업이다.
+
+### 범위
+
+- 사건 패키지 개념을 정의했다.
+- 일반 사용자가 로그인해서 얻는 가치를 정리했다.
+- 변호사가 고유번호로 사건 패키지를 조회하는 흐름을 정의했다.
+- 의뢰인 공유 동의 구조를 정의했다.
+- 열람 / 다운로드 권한 분리 기준을 정리했다.
+- 첨부자료 / 문서 초안 / 사건 요약 연계 기준을 정리했다.
+- 개인정보 / 보안 / 열람 로그 / 만료일 정책을 정리했다.
+- 기존 코드 기준 변경 필요 파일을 정리했다.
+- 신규 DB 모델 후보를 작성했다.
+- 신규 API 후보를 작성했다.
+- 신규 화면 후보를 작성했다.
+- 단계별 구현 로드맵을 작성했다.
+- 홈페이지 문구 개선안을 작성했다.
+- 개발팀 전달용 작업지시서를 작성했다.
+
+### 변경하지 않은 것
+
+- 실제 Prisma schema 변경 없음.
+- 마이그레이션 생성 없음.
+- 신규 API 구현 없음.
+- 신규 화면 구현 없음.
+- 첨부파일 다운로드 정책 변경 없음.
+- 기존 CaseStatus 변경 없음.
+- 기존 UserRole 변경 없음.
+- 대시보드 3.x 재오픈 없음.
+- QA closure 공식 확정 표 작성 없음.
+- 배포 가능 판정 작성 없음.
+
+### 완료 판정
+
+| 항목 | 결과 |
+| --- | --- |
+| 사건 패키지 개념 정의 | 완료 |
+| 고유번호 공유 구조 정의 | 완료 |
+| 변호사 열람 흐름 정의 | 완료 |
+| 공유 동의 구조 정의 | 완료 |
+| 열람 / 다운로드 권한 분리 | 완료 |
+| 보안 / 로그 / 만료일 정책 | 완료 |
+| 신규 DB 모델 후보 | 완료 |
+| 신규 API 후보 | 완료 |
+| 신규 화면 후보 | 완료 |
+| 구현 로드맵 | 완료 |
+| 홈페이지 문구 개선안 | 완료 |
+| 코드 기능 변경 없음 | 유지 |
+
+### 확인 순서 {#evidence-20260428-404-now}
+
+1. `docs/project-governance/AIBEOPCHIN_6_0_CASE_PACKAGE_SHARE_LAWYER_ACCESS_PLAN.md`
+2. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+  - `#evidence-20260428-404`
+  - `#evidence-20260428-404-now`
+3. `tools/aibeopchin_navigator.py`
+  - `aibeopchin_6_0_case_package_share_lawyer_access_plan`
+  - `render_plan()`의 AI법친 6.0 절
+
+### 다음 실제 작업
+
+1. AI법친 6.1 — 사건 패키지 데이터 구조 / 생성 기준 설계
+2. AI법친 6.2 — 고유번호 발급 정책 / 공유 동의 구조 설계
+3. AI법친 6.3 — CasePackageShare Prisma 모델 / API 구현
+
+### 검증
+
+```bash
+npm run verify:canonical-sources
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
 
 #### 목적 (한 줄)
 
@@ -131,6 +1502,380 @@
 
 - `npm run verify:canonical-sources` **exit 0**.
 
+### [EVIDENCE-20260428-399] 대시보드 4.6 — QA 회신 대기 중 후속 보완 항목 분리표 (문서) {#evidence-20260428-399}
+
+**상태:** [EVIDENCE-20260428-399] 대시보드 4.6 **후속 보완 항목 분리표** 증빙은 **완료·잠김**으로 **본다**. **분리표** 문서·내비 **개설** **완료**; **QA 실측 전문** **수신** **전** **운영** **잠금**은 **아래** **「현재 상태 (잠김)」**·[`#predeploy-qa-1-4` 2단계](IMPLEMENTATION_EVIDENCE.md#predeploy-qa-1-4)와 **동일**하게 **본다**.
+
+#### 작업 항목명
+
+`DASHBOARD_4_6_QA_PENDING_FOLLOWUP_TRACKER.md` — 실측 QA **전**에 쓸 **후속 보완 항목 분류 틀**(문서·저장소만).
+
+#### 하지 않는 것 (잠금)
+
+- `#evidence-20260428-predeploy-qa-closure` **공식 확정 표** / **회신 원문** 미작성·채움 **금지** (팀 **실측 전문** **전**)
+- [EVIDENCE-20260428-398](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-398) **닫힘** **유지** — 본 399이 **닫힘**을 **해제하지 않는다**
+- **최종 통과** / **배포 가능** **판정** **금지**
+- **대시보드 3.x** **재오픈** **금지**
+- **앱** / **API** / **DB** / **권한** / **집계** 변경 **없음**
+
+#### 변경 요약
+
+- [`DASHBOARD_4_6_QA_PENDING_FOLLOWUP_TRACKER.md`](DASHBOARD_4_6_QA_PENDING_FOLLOWUP_TRACKER.md) **신규** — **FAIL** / **BLOCKED** / **N/A** / **문서**·**기능**·**운영** **후보** 표 틀, closure **전** 기입 **기준** (§3~5)
+- **3.x** **봉인**·**4.0~4.5** **운영** **점검** **흐름** **유지** ([4.5](IMPLEMENTATION_EVIDENCE.md#evidence-20260426-397) **보완**·**배치**)
+- `tools/aibeopchin_navigator.py` — `dashboard_4_6_qa_pending_followup_tracker` · `show-plan` **4.6** **절**
+
+#### 검증
+
+- `npm run verify:canonical-sources` — **exit 0** (2026-04-28)
+- `py -3 -m py_compile tools/aibeopchin_navigator.py` — **exit 0** (2026-04-28)
+
+#### 완료 판정 (최종) {#evidence-20260428-399-frozen}
+
+| 기준 | 결과 |
+| --- | --- |
+| `DASHBOARD_4_6_QA_PENDING_FOLLOWUP_TRACKER.md` **신규** | **완료** |
+| QA **closure** **미기입** / **실측** **전** **최종**·**배포** **판정** **금지** **전제** | **완료** |
+| **FAIL** / **BLOCKED** / **N/A** / **문서**·**기능**·**운영** **후보** **표** **틀** | **완료** |
+| **closure**·**회신**·**최종** **판정**·**3.x** **재오픈**·**코드/DB** **변경** **금지** **기준** | **완료** |
+| **회신** **후** **4.5** / **closure** **연동** **기준** (본 문서 §5·`DASHBOARD_4_5`) | **완료** |
+| [EVIDENCE-20260428-399] **본** **절**·**상단** **실제** **기록** | **완료** |
+| `DASHBOARD_4_5` **기준** **문서**·**내비** **키** **보강** | **완료** |
+| `dashboard_4_6_qa_pending_followup_tracker` · `render_plan()` **4.6** | **완료** |
+| `npm run verify:canonical-sources` | **exit 0** |
+
+#### 확인 순서 (고정) {#evidence-20260428-399-now}
+
+1. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`  
+   - [`#evidence-20260428-399`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-399) (본 절)  
+   - [`#evidence-20260428-399-now`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-399-now) (본 절)  
+   - [`#evidence-20260428-399-snap`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-399-snap)  
+   - [`#evidence-20260428-399-next`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-399-next)  
+   - 파일 **상단** **「## 실제 기록 (공식 증빙)」** **절** **399** **항목** (2줄)
+2. [`DASHBOARD_4_6_QA_PENDING_FOLLOWUP_TRACKER.md`](DASHBOARD_4_6_QA_PENDING_FOLLOWUP_TRACKER.md) (§0~§7)
+3. `tools/aibeopchin_navigator.py` — **`dashboard_4_6_qa_pending_followup_tracker`** — `show-plan` **대시보드 4.6** 절
+
+#### 현재 상태 (잠김) {#evidence-20260428-399-snap}
+
+- [EVIDENCE-20260428-399] **완료·잠김**
+- **QA** closure **공식** **확정** **표** *미기입* **유지**
+- **회신** 원문 *미기입* **유지**
+- **최종** 통과 / **배포** **가능** **판정** **금지** **유지**
+- **대시보드 3.x** **재오픈** **금지** **유지**
+- **코드** / **API** / **DB** / **권한** / **집계** **변경** **없음**
+- **QA** **실측** **전문** **수신** **전** — **후속** **보완** **후보** **관리** **틀** **준비** **완료** (본 4.6 표; **확정** **아님**)
+
+#### 다음 실제 작업 (분기) {#evidence-20260428-399-next}
+
+1. **QA** **실측** **전문** **수신** **시** — [`#evidence-20260428-predeploy-qa-closure`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-predeploy-qa-closure) 의 **공식** **확정** **표**·**회신** **원문** **만** **갱신** ([`#predeploy-qa-1-4` 3~4](IMPLEMENTATION_EVIDENCE.md#predeploy-qa-1-4) **단계**). **FAIL** / **BLOCKED** / **N/A** / **보완** **필요** **항목** **분리** — [`DASHBOARD_4_6_QA_PENDING_FOLLOWUP_TRACKER.md`](DASHBOARD_4_6_QA_PENDING_FOLLOWUP_TRACKER.md) **§3**·**§5**.
+2. **실측** **전문** **미** **수신** **시** — **closure** **미기입** **유지**; **불필요** **증빙**·**개발** **추가** **없이** **대기**.
+
+### [EVIDENCE-20260428-400] 대시보드 4.7 — QA/운영 실측 결과 AI 자동 반영 설계서 (문서) {#evidence-20260428-400}
+
+#### 상태
+
+**[EVIDENCE-20260428-400]** 대시보드 4.7 **설계서**는 **완료·잠김**으로 본다. **AI Evidence Assistant** 구현 **전** **운영·증빙·안전** 기준을 **고정**했고, **최종 확정**은 **사람 승인 후**에만 가능하다는 전제를 **유지**한다.
+
+대시보드 4.7은 QA/운영 **실측 결과**를 AI가 **자동 분석**해 **closure 초안**과 **follow-up 초안**을 만들 수 있도록 하기 위한 **설계 문서**다.
+
+이번 작업은 **실제 AI 자동화 구현이 아니라**, 향후 구현 시 따라야 할 **운영 기준**과 **금지 기준**을 고정하는 **문서화 작업**이다.
+
+#### 범위
+
+- [`DASHBOARD_4_7_AI_ASSISTED_QA_EVIDENCE_REFLECTION_DESIGN.md`](DASHBOARD_4_7_AI_ASSISTED_QA_EVIDENCE_REFLECTION_DESIGN.md) 추가
+- AI **자동 반영 가능 범위** 정리
+- AI가 **자동 확정하면 안 되는 범위** 정리
+- QA **회신 입력 데이터 형식**·**필수 필드** 기준 정리
+- **PASS** / **FAIL** / **BLOCKED** / **N/A** / **NEEDS FOLLOW-UP** 분류 기준 정리
+- [`#evidence-20260428-predeploy-qa-closure`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-predeploy-qa-closure) **공식 확정 표 초안 생성** 기준 정리
+- **회신 원문** 정리 기준 작성
+- [`DASHBOARD_4_6_QA_PENDING_FOLLOWUP_TRACKER.md`](DASHBOARD_4_6_QA_PENDING_FOLLOWUP_TRACKER.md)로 FAIL / BLOCKED / N/A / **보완 필요** 항목 **자동 분리** 기준 정리
+- **사람 승인** 절차 명시
+- **감사로그** / **변경 이력** 기준 정리
+- **UI** / **API** / **데이터 모델** 후보 작성 (구현 아님)
+- **보안** / **권한** 기준·**금지** 기준 작성
+- **대시보드 3.x 봉인 유지** 기준 재확인
+- QA **실측 전문 수신 전**까지 [`#predeploy-qa-official-confirm`](IMPLEMENTATION_EVIDENCE.md#predeploy-qa-official-confirm) **공식 확정 표**·**회신 원문**은 **미기입** 유지 재확인
+
+#### 변경하지 않은 것
+
+- 실제 AI 자동화 구현 없음
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- 오류 처리 로직 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- `CaseStatus` canonical 변경 없음
+- dashboard metric 계산 변경 없음
+- badge 계산 변경 없음
+- `DashboardPreviewCard` 구조 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+- 테스트 자동화 코드 추가 없음
+- 실제 알림·에스컬레이션 로직 추가 없음
+- **공식 확정 표** 작성 없음 (미기입 유지)
+- QA 회신 원문 작성 없음
+- QA 최종 통과 판정 없음
+- 배포 가능 최종 판정 없음
+- 대시보드 3.x 기능 재오픈 없음
+
+#### 완료 판정
+
+| 항목 | 결과 |
+| --- | --- |
+| 4.7 설계 문서 추가 | 완료 |
+| AI 자동 반영 가능 범위 정리 | 완료 |
+| AI 자동 확정 금지 범위 정리 | 완료 |
+| 입력 데이터 형식 정리 | 완료 |
+| 판정 분류 기준 정리 | 완료 |
+| closure 공식 확정 표 초안 생성 기준 정리 | 완료 |
+| 회신 원문 정리 기준 정리 | 완료 |
+| 4.6 tracker 자동 분리 기준 정리 | 완료 |
+| 사람 승인 절차 정리 | 완료 |
+| 감사로그 / 변경 이력 기준 정리 | 완료 |
+| UI / API / 데이터 모델 후보 작성 | 완료 |
+| 보안 / 권한 / 금지 기준 정리 | 완료 |
+| 3.x 봉인 유지 | 유지 |
+| QA closure 미기입 유지 | 유지 |
+| 코드 기능 변경 없음 | 유지 |
+
+#### 완료 판정 (최종 — 승인) {#evidence-20260428-400-frozen}
+
+| 기준 | 결과 |
+| --- | --- |
+| `DASHBOARD_4_7_…DESIGN.md` **신규**·**§0~§24** | **완료** |
+| AI **자동** **반영** **가능** / **금지** **범위** | **완료** |
+| **입력**·**필수** **필드**·**판정** **분류** | **완료** |
+| **closure** **초안**·**회신** **정리**·**4.6** **분리** | **완료** |
+| **사람** **승인**·**감사로그**·**UI/API/모델** **후보** | **완료** |
+| **보안**·**권한**·**실패**·**금지** | **완료** |
+| [EVIDENCE-20260428-400]·**#400-now**·`dashboard_4_7`·`render_plan` **4.7** | **완료** |
+| `DASHBOARD_4_6` **§0** **4.7** **링크** | **완료** |
+| **구현**·**신규** **API/DB/코드** **없음** | **유지** |
+| `npx tsc --noEmit` · `npm run lint` · `verify:canonical-sources` · `py_compile` | **통과** |
+
+#### 확인 순서 (고정) {#evidence-20260428-400-now}
+
+1. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`  
+   - [`#evidence-20260428-400`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-400) (본 절)  
+   - [`#evidence-20260428-400-now`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-400-now) (본 절)  
+   - [`#evidence-20260428-400-snap`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-400-snap)  
+   - [`#evidence-20260428-400-next`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-400-next)
+2. [`DASHBOARD_4_7_AI_ASSISTED_QA_EVIDENCE_REFLECTION_DESIGN.md`](DASHBOARD_4_7_AI_ASSISTED_QA_EVIDENCE_REFLECTION_DESIGN.md) (§0~§24)
+3. `tools/aibeopchin_navigator.py` — **`dashboard_4_7_ai_assisted_qa_evidence_reflection_design`** — `show-plan` **대시보드 4.7** 절
+
+#### 현재 상태 (잠김) {#evidence-20260428-400-snap}
+
+- [EVIDENCE-20260428-400] **완료·잠김**
+- **대시보드 4.7** **설계서** **완료** — **AI Evidence Assistant** **구현** **전** **운영·증빙·안전** **기준** **고정**
+- AI는 **최종** **판정자**가 **아니며** **증빙** **초안** **작성**·**분류**·**보완** **요청** **역할**만
+- **최종** **확정**은 **사람** **승인** **후**에만 **가능**
+- [`#evidence-20260428-predeploy-qa-closure`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-predeploy-qa-closure) **공식** **확정** **표**·**회신** **원문** *미기입* **유지**
+- **대시보드 3.x** **봉인** **유지**
+
+#### 다음 실제 작업 (분기) {#evidence-20260428-400-next}
+
+1. **QA** **실측** **전문** **수신** **시** — [`#evidence-20260428-predeploy-qa-closure`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-predeploy-qa-closure) 의 **공식** **확정** **표**·**회신** **원문** **만** **갱신**; **필요** **시** [`DASHBOARD_4_6_QA_PENDING_FOLLOWUP_TRACKER.md`](DASHBOARD_4_6_QA_PENDING_FOLLOWUP_TRACKER.md) **기준**으로 **FAIL** / **BLOCKED** / **N/A** / **보완** **필요** **분리**
+2. **AI** **자동화** **구현** **시** — **별도** **5.x** **Phase**로 **분리**; 4.7 **설계**를 **바탕**으로 **API** / **DB** / **UI** **구현** **지시서** **별도** **문서**
+
+#### 검증
+
+```bash
+npx tsc --noEmit
+npm run lint
+npm run verify:canonical-sources
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
+
+**검증:** 위 명령을 실행해 `tsc`·`lint`·`verify:canonical-sources`·`py_compile` **통과**를 확인한다.
+
+### [EVIDENCE-20260428-401] 대시보드 5.0 — AI Evidence Assistant MVP 착수 기준서 {#evidence-20260428-401}
+
+#### 상태
+
+대시보드 5.0은 AI Evidence Assistant를 실제 구현 Phase로 넘기기 전 MVP 착수 기준을 고정하기 위한 문서다.
+
+이번 작업은 실제 코드 구현이 아니라, 5.1 구현 전 무엇을 만들고 무엇을 만들지 않을지 확정하는 문서화 작업이다.
+
+#### 범위
+
+- `DASHBOARD_5_0_AI_EVIDENCE_ASSISTANT_MVP_START.md`를 추가했다.
+- AI Evidence Assistant MVP의 목적을 정리했다.
+- MVP 포함 기능과 제외 기능을 정리했다.
+- 관리자 화면의 권장 동작 흐름을 정리했다.
+- 입력 필드와 출력 구조를 정리했다.
+- PASS / FAIL / BLOCKED / N/A 판정 타입을 정리했다.
+- 분석 결과 상태값을 정리했다.
+- closure 공식 확정 표 초안 생성 기준을 정리했다.
+- 회신 원문 정리본 생성 기준을 정리했다.
+- 4.6 follow-up tracker 초안 생성 기준을 정리했다.
+- 필수 필드 누락 처리 기준을 정리했다.
+- 경고 메시지 기준을 정리했다.
+- 5.1 구현 파일 구조 후보를 정리했다.
+- 5.1 MVP API 후보를 정리했다.
+- 권한 / 보안 기준을 정리했다.
+- MVP 성공 기준을 정리했다.
+- 대시보드 3.x 봉인 유지 기준을 재확인했다.
+- QA 실측 전문 수신 전까지 `#evidence-20260428-predeploy-qa-closure`의 공식 확정 표와 회신 원문은 미기입 상태로 유지한다는 기준을 재확인했다.
+
+#### 변경하지 않은 것
+
+- 실제 AI Evidence Assistant 구현 없음.
+- 신규 API route 생성 없음.
+- DB schema 변경 없음.
+- Prisma model 추가 없음.
+- 권한 정책 변경 없음.
+- middleware 변경 없음.
+- 오류 처리 로직 변경 없음.
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음.
+- `CaseStatus` canonical 변경 없음.
+- dashboard metric 계산 변경 없음.
+- badge 계산 변경 없음.
+- `DashboardPreviewCard` 구조 변경 없음.
+- `dashboard-demo-metrics.ts` 삭제 없음.
+- 테스트 자동화 코드 추가 없음.
+- `IMPLEMENTATION_EVIDENCE.md` 자동 수정 기능 없음.
+- Git commit 자동 생성 없음.
+- 배포 가능 자동 판정 없음.
+- QA 최종 통과 자동 판정 없음.
+- 대시보드 3.x 기능 재오픈 없음.
+
+#### 완료 판정
+
+| 항목 | 결과 |
+| --- | --- |
+| 5.0 착수 기준서 추가 | 완료 |
+| MVP 목적 정리 | 완료 |
+| MVP 포함 기능 정리 | 완료 |
+| MVP 제외 기능 정리 | 완료 |
+| 관리자 화면 동작 흐름 정리 | 완료 |
+| 입력 필드 정리 | 완료 |
+| 출력 구조 정리 | 완료 |
+| 판정 타입 정리 | 완료 |
+| 상태값 정리 | 완료 |
+| closure 공식 확정 표 초안 기준 | 완료 |
+| 회신 원문 정리본 기준 | 완료 |
+| 4.6 follow-up tracker 초안 기준 | 완료 |
+| 필수 필드 누락 처리 기준 | 완료 |
+| 경고 메시지 기준 | 완료 |
+| 파일 구조 후보 정리 | 완료 |
+| API 후보 정리 | 완료 |
+| 권한 / 보안 기준 정리 | 완료 |
+| MVP 성공 기준 정리 | 완료 |
+| 3.x 봉인 유지 | 유지 |
+| QA closure 미기입 유지 | 유지 |
+| 코드 기능 변경 없음 | 유지 |
+
+#### 확인 순서 {#evidence-20260428-401-now}
+
+1. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`  
+   - [`#evidence-20260428-401`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-401) (본 절)  
+   - [`#evidence-20260428-401-now`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-401-now) (본 절)  
+2. [`DASHBOARD_5_0_AI_EVIDENCE_ASSISTANT_MVP_START.md`](DASHBOARD_5_0_AI_EVIDENCE_ASSISTANT_MVP_START.md)
+3. `tools/aibeopchin_navigator.py`  
+   - **`dashboard_5_0_ai_evidence_assistant_mvp_start`**  
+   - `render_plan()` / `show-plan`의 **대시보드 5.0** 절
+
+#### 다음 실제 작업
+
+다음 실제 작업은 아래 중 하나다.
+
+1. `DASHBOARD_5_1_AI_EVIDENCE_ASSISTANT_MVP_IMPLEMENTATION.md` 작성
+2. 5.1 구현에 앞서 Zod schema / renderer / analyzer 유틸을 5.1a로 분리
+3. QA 실측 전문 수신 시 기존 원칙대로 `#evidence-20260428-predeploy-qa-closure`의 공식 확정 표와 회신 원문만 갱신
+
+#### 검증
+
+```bash
+npx tsc --noEmit
+npm run lint
+npm run verify:canonical-sources
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
+
+**검증 결과:** `npx tsc --noEmit` exit 0. `npm run lint` 통과. `npm run verify:canonical-sources` exit 0. `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0.
+
+### [EVIDENCE-20260428-402] 대시보드 5.1 — AI Evidence Assistant MVP 1차 구현 세트 {#evidence-20260428-402}
+
+#### 상태
+
+대시보드 5.1은 AI Evidence Assistant MVP를 실제 코드로 1차 구현하는 단계다.
+
+이번 구현은 DB 저장, 문서 자동 수정, Git 자동 커밋 없이 관리자 화면에서 QA 원문을 분석하고 Markdown 초안을 생성하는 범위로 제한한다.
+
+#### 범위
+
+- 관리자 QA Evidence Assistant 화면을 추가한다.
+- `POST /api/admin/qa-evidence/analyze` 분석 API를 추가한다(관리자 전용 `requireAdminApi`).
+- QA Evidence 입력 / 출력 Zod schema를 추가한다.
+- QA 원문을 PASS / FAIL / BLOCKED / N/A / NEEDS FOLLOW-UP으로 분류하는 1차 analyzer를 추가한다.
+- closure 공식 확정 표 초안·회신 원문 정리본·4.6 follow-up tracker 초안을 생성하는 renderer를 추가한다.
+- 관리자 화면에서 결과를 확인하고 복사할 수 있도록 한다.
+- AI 분석 결과는 공식 확정이 아니며 사람 승인 후에만 반영 가능하다는 안내를 유지한다.
+
+#### 변경하지 않은 것
+
+- DB schema 변경 없음.
+- Prisma model 추가 없음.
+- `IMPLEMENTATION_EVIDENCE.md` 자동 수정 없음.
+- `DASHBOARD_4_6_QA_PENDING_FOLLOWUP_TRACKER.md` 자동 수정 없음.
+- Git commit 자동 생성 없음.
+- 배포 가능 자동 판정 없음.
+- QA 최종 통과 자동 판정 없음.
+- 대시보드 3.x 기능 재오픈 없음.
+- 기존 dashboard metric 변경 없음.
+- badge 계산 변경 없음.
+- middleware 변경 없음.
+- 권한 정책(관리자 판별) 변경 없음 — 기존 `requireAdminApi` / `isAdminRole`을 사용한다.
+
+#### 수정 / 추가 파일
+
+| 파일 | 내용 |
+| --- | --- |
+| `src/app/(protected)/admin/qa-evidence/page.tsx` | 관리자 QA Evidence Assistant 페이지 |
+| `src/components/admin/qa-evidence/qa-evidence-assistant-client.tsx` | 입력 폼, 분석 실행, 결과 표시, 복사 버튼 |
+| `src/app/api/admin/qa-evidence/analyze/route.ts` | 분석 API |
+| `src/lib/qa-evidence/qa-evidence-schema.ts` | 입력 / 출력 schema |
+| `src/lib/qa-evidence/qa-evidence-analyzer.ts` | 1차 분석 로직 |
+| `src/lib/qa-evidence/qa-evidence-renderer.ts` | Markdown 초안 생성 |
+
+#### 확인 순서 {#evidence-20260428-402-now}
+
+1. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md` — [`#evidence-20260428-402`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-402) (본 절)
+2. `DASHBOARD_5_0_AI_EVIDENCE_ASSISTANT_MVP_START.md` (기준) · `DASHBOARD_4_7_…DESIGN.md` (설계)
+3. `src/app/(protected)/admin/qa-evidence/` · `src/lib/qa-evidence/`
+4. `tools/aibeopchin_navigator.py` — **`dashboard_5_1_ai_evidence_assistant_mvp_implementation`**
+
+#### 검증
+
+```bash
+npx tsc --noEmit
+npm run lint
+npm run verify:canonical-sources
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
+
+**검증 결과:** `npx tsc --noEmit` exit 0. `npm run lint` 통과. `npm run verify:canonical-sources` exit 0. `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0.
+
+#### 완료 판정
+
+| 항목 | 결과 |
+| --- | --- |
+| 관리자 QA Evidence Assistant 화면 | 완료 |
+| 분석 API | 완료 |
+| Zod schema | 완료 |
+| analyzer | 완료 |
+| renderer | 완료 |
+| closure 공식 확정 표 초안 생성 | 완료 |
+| 회신 원문 정리본 생성 | 완료 |
+| 4.6 follow-up tracker 초안 생성 | 완료 |
+| 복사 버튼 | 완료 |
+| DB 변경 없음 | 유지 |
+| 문서 자동 수정 없음 | 유지 |
+| 배포 가능 자동 판정 없음 | 유지 |
+| QA 최종 통과 자동 판정 없음 | 유지 |
+| 대시보드 3.x 봉인 유지 | 유지 |
+| tsc / lint / verify:canonical-sources / py_compile | 통과 |
+
 ### [EVIDENCE-20260428-predeploy-qa-closure] 배포 전 QA 확정 (§6 회신 수령 후) {#evidence-20260428-predeploy-qa-closure}
 
 #### 목적 (한 줄)
@@ -142,9 +1887,214 @@
 - 스테이징 E2E 증빙: [#evidence-20260428-staging-e2e](#evidence-20260428-staging-e2e)
 - 회신 복사 블록·절차: [deployment-checklist.md `#deployment-qa-nm-request-copy`](../deployment-checklist.md#deployment-qa-nm-request-copy) · [§6 본절](../deployment-checklist.md#deployment-qa-nm-reply)
 
-#### 확정 기록 (팀 회신 수령 후 채움)
+#### 대기~회신 후 절차 (1~4단계) {#predeploy-qa-1-4}
 
-**상태 (고정):** 증빙·템플릿 정리 **완료** · **팀 회신 대기** — 아래 표·회신 원문은 회신 수령 후에만 채운다.
+**1단계 — QA팀에 보낼 메시지 (복사·전달)**  
+아래 [「Message (복사용)」](#predeploy-qa-message-copy) 블록을 **그대로** 개발/QA 채널에 붙여 보낸다. (별도 `text`는 [사전 회신 절 `QA팀에 다시 보낼 요청`](#predeploy-qa-sakjeon-20260428)과 동기.)
+
+**2단계 — QA팀 회신을 기다림 (건드리지 않을 것)**  
+회신이 올 때까지 **유지**한다.
+
+- [EVIDENCE-20260428-398] **닫힘** **유지**
+- `#evidence-20260428-predeploy-qa-closure` **공식** **확정** **표** *미기입*
+- **회신 원문** *미기입*
+- **최종 통과** 판정·**배포 가능** 판정 **기입·선언 금지**
+- **대시보드 3.x** 범위 **재오픈·되돌림 금지**
+
+**3단계 — QA팀 회신이 오면**  
+팀이 아래 **회신 형식**을 채운 전문을 보내면, 담당자는 **에테르니언(이 채팅) 창**에 **그대로** 붙여넣는다. 에테르니언이 **(1)(2)에 넣을 내용**을 정리해 **갱신**한다.
+
+- **(1)** `#evidence-20260428-predeploy-qa-closure` 의 **공식 확정 표** ( [「확정 기록 (팀 회신 수령 후 채움)」](#predeploy-qa-official-confirm) )
+- **(2)** 동 앵커의 **회신 원문** (링크·붙여넣기)
+
+**4단계 — 회신 결과에 따른 분기**
+
+| 조건 | 진행 |
+| --- | --- |
+| 항목이 **전부 PASS** (실측 회신·근거에 따라) | `#evidence-20260428-predeploy-qa-closure` 의 **공식 확정 표**·**회신 원문** 반영; **배포 가능 여부** 는 **QA 회신 근거**에 맞게 기재 |
+| **FAIL** 이 있거나 **미해소 BLOCKED** | **closure 최종 확정 보류**; FAIL/BLOCKED 를 **별도 후속**으로 분리; 필요 시 **대시보드 4.x** 또는 **별도 Phase**로 보완 문서 |
+
+**QA팀 회신 붙여넣기용 형식 (3단계):**
+
+```text
+QA 수행 일시:
+QA 담당자:
+테스트 환경 URL:
+사용 계정 역할:
+PASS 항목:
+FAIL 항목:
+N/A 항목:
+BLOCKED 항목:
+보완 필요 항목:
+최종 의견:
+배포 전 closure 반영 가능 여부:
+```
+
+#### Message (1단계 복사용) {#predeploy-qa-message-copy}
+
+```text
+AI법친 대시보드 배포 전 수동 QA 실측 결과 회신 요청드립니다.
+
+문서·증빙 정합 및 QA closure 절차 정리는 완료되어 있습니다.
+이제 실제 스테이징/브라우저/역할별 계정 기반 수동 QA 결과가 필요합니다.
+
+아래 기준 문서에 따라 실제 점검 후 항목별 결과를 회신 부탁드립니다.
+
+DASHBOARD_4_2_PREDEPLOY_MANUAL_QA_SCENARIOS.md
+DASHBOARD_4_3_EMPTY_ERROR_STATE_MANUAL_CHECKLIST.md
+DASHBOARD_4_4_PREDEPLOY_OPERATOR_FINAL_CHECKLIST.md
+
+회신 형식:
+
+QA 수행 일시:
+QA 담당자:
+테스트 환경 URL:
+사용 계정 역할:
+PASS 항목:
+FAIL 항목:
+N/A 항목:
+BLOCKED 항목:
+보완 필요 항목:
+최종 의견:
+배포 전 closure 반영 가능 여부:
+
+FAIL 또는 미해소 BLOCKED가 있으면 #evidence-20260428-predeploy-qa-closure의 최종 확정은 보류하겠습니다.
+```
+
+#### 현재 최종 상태 (고정)
+
+**기능·문서·대시보드 축:**
+
+- 마감권 진입
+- Living Logo V2 마감 완료 — [#evidence-20260426-367](#evidence-20260426-367)
+- 역할별 대시보드 실데이터 1차 마감 완료 — [#evidence-20260426-379](#evidence-20260426-379)
+- 배포 전 QA **회신 전** 잠금·절차·본 앵커 안내 정리 완료 — [`#deployment-qa-nm-request-copy`](../deployment-checklist.md#deployment-qa-nm-request-copy)
+
+**배포 전 QA:**
+
+- **현재 단계:** **사전 회신 수신(2026-04-28)** — 문서·증빙 경로 **정합** 확인. **스테이징·브라우저·역할별 계정** 기반 **실측 수동 QA는 미수행** → **closure 최종 확정·배포 가능 판정은 보류 (BLOCKED)**.
+- **공식** [deployment-checklist.md §6 `deployment-qa-nm-reply`](../deployment-checklist.md#deployment-qa-nm-reply) **양식**의 팀 **전문**(실측 수동 QA·§2/§3 수치) **미수령** — 본 앵커 **「확정 기록 (팀 회신 수령 후 채움)」** 내 **확정 기록 표**·**회신 원문** 줄 **미기입 유지** (사전 회신은 **아래** `사전 회신 수신 기록` 절에만 누적).
+- **임의 판정 금지** (§2·§3 수치·미완·P0·최종 판정 — **팀이 실측 후 회신한 경우에만** 공식 표에 반영)
+
+**배포 직전 기본 체크 (2026-04-26 워크스페이스 실측):**
+
+- `npm run verify:canonical-sources` — **exit 0**
+- `npx tsc --noEmit` — **exit 0**
+- `npm run lint` — **통과**
+
+**다음 실제 작업:** **실측** 수동 QA를 포함한 팀 **전문** 회신 수령 후 → `#evidence-20260428-predeploy-qa-closure` 의 **「확정 기록 (팀 회신 수령 후 채움)」** 안에서 **(1) 공식 확정 표 (2) 회신 원문** **만** 갱신한다. (2026-04-28 **사전** 회신은 **「사전 회신 수신 기록」**에만 반영·공식 확정과 혼동 금지.)
+
+**잠금 (공식 확정 표):** **닫힘/후속/보류** 를 확정하는 **deploy §6 양식** 팀 **전문**이 **실측·항목별 PASS/FAIL/N/A/BLOCKED** 를 포함해 올 때까지, **「확정 기록 (팀 회신 수령 후 채움)」**의 표·회신 원문 줄은 *미기입* 유지. (사전 회신·문서 정합만으로는 **갱신하지 않음**.) 스테이징 E2E·수동 점검 결과는 [#evidence-20260428-staging-e2e](#evidence-20260428-staging-e2e) · checklist §2·§3와 병행.
+
+**팀에 보낼 회신 요청** — [`#deployment-qa-nm-request-copy`](../deployment-checklist.md#deployment-qa-nm-request-copy) 의 `text` 블록과 동일. 복사용:
+
+```text
+배포 전 QA 최종 판정 회신 요청
+
+아래 항목을 채워 회신해 주세요.
+
+## §2 수동 점검
+- 총 항목 수:
+- 완료 항목 수:
+- 미완 항목:
+  - 없음 또는 항목명 기재
+- 차단 이슈(P0):
+  - 없음 또는 내용 기재
+
+## §3 배포 직후/운영 확인 항목
+- 총 항목 수:
+- 완료 항목 수:
+- 미완 항목:
+  - 없음 또는 항목명 기재
+- 차단 이슈(P0):
+  - 없음 또는 내용 기재
+
+## 최종 판정
+아래 중 하나로 선택해 주세요.
+- 배포 전 QA 닫음 가능
+- 비차단 후속만 남기고 배포 가능
+- 차단 이슈가 있어 배포 보류
+```
+
+#### 사전 회신 수신 기록 (2026-04-28 — QA closure 보류) {#predeploy-qa-sakjeon-20260428}
+
+> **본 절은 최종 QA 통과·배포 가능 확정이 아니다.** 문서·증빙 정합 확인과 **실측 수동 QA 미실시**에 따른 **보류·BLOCKED** 기록만 둔다. 공식 **「확정 기록 (팀 회신 수령 후 채움)」** 표는 [아래](#predeploy-qa-official-confirm)에서 **여전히 미기입**이며, 사전 회신을 사유로 **채우지 않는다.**
+
+### 사전 판정 상세 (참고용, 비최종)
+
+#### 회신 원문 상태
+
+- 회신 수신 여부: **수신**
+- 회신 성격: **실제 브라우저/스테이징 수동 QA 결과가 아닌** 문서·증빙 경로 **대조** 회신
+- QA 수행 일시: **미수행**
+- QA 담당자: **미지정**
+- 최종 QA 통과 판정: **보류**
+- 배포 가능 최종 판정: **보류**
+
+#### QA 대상 범위 (회신에서 확인 대상으로 언급된 문서)
+
+- `DASHBOARD_3_11_FINAL_SEAL_SUMMARY.md` (§12~13)
+- `IMPLEMENTATION_EVIDENCE.md` 의 `#evidence-20260426-391`
+- `DASHBOARD_4_0_PREDEPLOY_OPERATION_CHECK_PHASE.md`
+- `DASHBOARD_4_1_ROLE_ACCESS_PERMISSION_CHECKLIST.md`
+- `DASHBOARD_4_2_PREDEPLOY_MANUAL_QA_SCENARIOS.md`
+- `DASHBOARD_4_3_EMPTY_ERROR_STATE_MANUAL_CHECKLIST.md`
+- `DASHBOARD_4_4_PREDEPLOY_OPERATOR_FINAL_CHECKLIST.md`
+- `DASHBOARD_4_5_QA_CLOSURE_REFLECTION_PREP.md`
+- `IMPLEMENTATION_EVIDENCE.md` 의 `[EVIDENCE-20260426-397]`
+
+#### 확정 기록 표 (사전 — 공식 `확정 기록`과 별도)
+
+| 구분 | 결과 | 근거 | 후속 |
+| --- | --- | --- | --- |
+| 문서·증빙 정합 | PASS | 기준 문서, 증빙 앵커, 4.0~4.5 문서 세트가 저장소에 존재한다고 회신됨 | 실제 수동 QA와 **별도** 구분 |
+| 3.x 봉인 기준 | PASS | 3.11 및 4.5의 closure 미기입 원칙과 모순 없음 | 유지 |
+| 역할별 접근 / 권한 | BLOCKED | 스테이징 URL, 역할별 테스트 계정, 실제 클릭 경로 검증 없음 | QA 담당자 실측 필요 |
+| 역할별 화면 표시 | BLOCKED | 브라우저 기준 화면 확인 미실시 | QA 담당자 실측 필요 |
+| 빈 상태 / 오류 상태 | BLOCKED | 4.3 기준 수동 확인 미실시 | QA 담당자 실측 필요 |
+| demo metrics 경계 | BLOCKED | 실서비스 경로 import·화면 표시 실측 미실시 | QA 담당자 실측 필요 |
+| 금지 표현 | BLOCKED | 실제 사용자 노출 화면 기준 확인 미실시 | QA 담당자 실측 필요 |
+| 최종 배포 판정 | BLOCKED | 수동 QA 실행 증빙 없음 | FAIL/BLOCKED 해소 후 재판정 |
+
+#### 보류 / 실패 / 후속 항목
+
+| 항목 | 상태 | 사유 | 후속 |
+| --- | --- | --- | --- |
+| 4.1 역할별 접근 / 권한 점검 | BLOCKED | 실제 역할별 계정과 스테이징 환경에서 미실행 | QA 담당자가 계정별로 수행 |
+| 4.2 배포 전 수동 QA 시나리오 | BLOCKED | 브라우저 수동 시나리오 미실행 | PASS/FAIL/N/A/BLOCKED 항목 단위 기록 필요 |
+| 4.3 빈 상태 / 오류 상태 점검 | BLOCKED | 빈 데이터, 권한 제한, 오류 상태 실측 미실행 | 실제 환경에서 상태별 확인 필요 |
+| 4.4 운영자 최종 체크리스트 | BLOCKED | 운영자 최종 확인표 미작성 | QA 또는 운영 담당자가 작성 필요 |
+
+#### 사전 판정 요약 (closure 최종 아님)
+
+- 최종 판정: **보류**
+- 배포 가능 여부: **보류** (최종 통과·배포 가능으로 **채우지 않음**)
+- 판정 근거: 문서·증빙 정합은 확인됐으나, **실제 스테이징/브라우저/역할별 계정** 기반 **수동 QA가 수행되지 않았**으므로 **최종 통과** 및 **배포 가능** 판정은 **하지 않는다**.
+- 다음 조치: 실제 QA 담당자가 `DASHBOARD_4_4_PREDEPLOY_OPERATOR_FINAL_CHECKLIST.md` 와 `DASHBOARD_4_2_PREDEPLOY_MANUAL_QA_SCENARIOS.md` 를 기준으로 **수동 QA를 수행**한 뒤, 항목별 **PASS / FAIL / N/A / BLOCKED** 결과를 **회신**해야 한다.
+
+**현재 단계 정리 (참고):**
+
+- 문서 체계: **PASS**
+- 실제 수동 QA: **BLOCKED**
+- closure 최종 확정: **보류**
+- 배포 가능 판정: **부재** (최종 통과·배포 가능으로 **기입 금지**)
+
+**QA팀에 다시 보낼 요청 (복사용):** [위 1단계 `Message` 블록](#predeploy-qa-message-copy) 과 **동일**하다(중복·불일치 시 **1단계** 를 정본으로 둔다).
+
+#### 확정 기록 (팀 회신 수령 후 채움) {#predeploy-qa-official-confirm}
+
+**회신·확정 전 요약:** 위 **「현재 최종 상태 (고정)」** 및 **「[사전 회신 수신 기록](#predeploy-qa-sakjeon-20260428)」** 참조. **2026-04-28 사전 회신**이 있으나, **deploy §6 양식** 팀 **전문**·**실측** 수동 QA 회신 **미수령** — 아래 표·**회신 원문** 줄 **미기입** 유지. 사전 판정은 **공식 확정**이 **아님** (최상단 `#### 사전 회신 수신 기록` 절 전용).
+
+**갱신 시:** 팀 회신 **전문** 수령 후 **(1) 아래 표 (2) 회신 원문 줄** 만 기입·갱신. 그 외 본 앵커 문단 **대규모 수정 금지**.
+
+**수정 금지 (회신 전·실측 없을 때):**
+
+- §2 총/완료 숫자 **임의 기입 금지**
+- §3 총/완료 숫자 **임의 기입 금지**
+- 미완 항목 **임의 “없음” 처리 금지**
+- P0 **임의 “없음” 처리 금지**
+- 최종 판정 **임의 선택 금지** (팀이 택한 한 줄만 표에 반영)
+- 표·회신 원문 **외** 증빙 본문 **대규모 수정 금지**
 
 **잠금 (회신 전·확정):** 본 앵커의 **절 구조·설명 문구**는 유지한다. **확정 기록 표**와 **회신 원문** 줄**만** 회신 수령 후 기입·갱신한다.
 
@@ -161,11 +2111,21 @@
 
 **회신 원문 링크·첨부:** *미기입*
 
-**Cursor 에이전트:** 회신·확정 내용을 전달받으면 위 **표**·**회신 원문** 줄 위주로 반영한다.
+**워크스페이스 메모:** [`#deployment-qa-nm-request-copy`](../deployment-checklist.md#deployment-qa-nm-request-copy) 템플릿은 checklist에 준비됨. **2026-04-28 사전 회신**(문서 정합)은 [사전 회신 수신 기록](#predeploy-qa-sakjeon-20260428)에만 누적. **deploy §6 양식** **실측** 팀 **전문** **미수령**이면 위 **공식** 표·**회신 원문**은 [§6](../deployment-checklist.md#deployment-qa-nm-reply)에 따라 **갱신하지 않음** (사전 회신을 사유로 **채우지 않음**).
+
+**Cursor 에이전트:** **사전 회신만** 수령한 경우(문서·증빙 대조만) **공식** 확정 기록 표·회신 원문 **미기입 유지** — [사전 회신 수신 기록](#predeploy-qa-sakjeon-20260428) 절 **만** 갱신. **deploy §6** 절차상 **닫힘/후속/보류** 를 확정하는 **실측** 팀 **전문**을 전달받으면 **「확정 기록 (팀 회신 수령 후 채움)」**의 **확정 기록 표**·**회신 원문** 줄**만** 반영한다.
 
 #### 검증 (증빙 갱신 후)
 
 - `npm run verify:canonical-sources` **exit 0**.
+
+#### 검증 (회신 미수령 구간·문서·도구 점검·2026-04-26)
+
+- `npm run verify:canonical-sources` — **exit 0**
+- `npx tsc --noEmit` — **exit 0**
+- `npm run lint` — **통과** (`next lint`, 경고·에러 없음)
+
+위는 **확정 기록 미갱신** 상태에서 저장소·스크립트만 점검한 결과이며, §2·§3 수치·공식 확정은 **팀 회신 수령 후**에만 기입한다.
 
 ### [EVIDENCE-20260426-356] 로그인 후 역할별 Living Dashboard 1차 {#evidence-20260426-356}
 
@@ -326,6 +2286,1972 @@
 
 - `npx tsc --noEmit` — **exit 0**
 - `npx eslint src/components/dashboard src/app/(protected)/dashboard/page.tsx src/app/(lawyer)/lawyer/page.tsx src/app/(admin)/admin/page.tsx --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과**
+
+### [EVIDENCE-20260426-360] AI법친 Living Logo 2.0 — SVG Path 획 생성형 로고 엔진 {#evidence-20260426-360}
+
+#### 작업 항목명
+
+SVG path 획(`pathLength`)·글리프 그룹(A/I/BEOP/CHIN)·파티클·orbit·상태 모드(intro·idle·hover·thinking·verified·restricted)를 갖춘 Living Logo 2.0. 홈 Hero 인트로에 적용, 대시보드 헤더는 `useV2Logo`(기본 false)로 선택.
+
+#### 범위
+
+- `aibeopchin-logo-v2-*` 컴포넌트·`aibeopchin-logo-v2-config.ts`·`aibeopchin-logo-v2-paths.ts`·`aibeopchin-logo-v2-timeline.ts`
+- `AibeopchinIntroScene` → `AibeopchinLogoV2`(reduced motion 시 `idle`)
+- `DashboardLivingHeader` → `useV2Logo?: boolean` 분기, 기존 `AibeopchinLogo` 유지
+- SVG `filter`/`linearGradient` id는 `useId()`로 인스턴스 충돌 방지
+- Living Logo 1차(`aibeopchin-logo.tsx` 등) **삭제 없음**
+
+#### 추가·수정 파일
+
+- `src/components/branding/aibeopchin-logo-v2-types.ts` (신규)
+- `src/components/branding/aibeopchin-logo-v2-path.tsx` (신규)
+- `src/components/branding/aibeopchin-logo-v2-glyph.tsx` (신규)
+- `src/components/branding/aibeopchin-logo-v2-particles.tsx` (신규)
+- `src/components/branding/aibeopchin-logo-v2-orbit.tsx` (신규)
+- `src/components/branding/aibeopchin-logo-v2.tsx` (신규)
+- `src/lib/branding/aibeopchin-logo-v2-config.ts` (신규)
+- `src/lib/branding/aibeopchin-logo-v2-paths.ts` (신규)
+- `src/lib/branding/aibeopchin-logo-v2-timeline.ts` (신규)
+- `src/components/branding/aibeopchin-intro-scene.tsx`
+- `src/components/dashboard/dashboard-living-header.tsx`
+
+#### 변경하지 않은 것
+
+- API·DB·권한·middleware·CaseStatus·사건·인터뷰·문서·질문셋 [343]~[350]·FILE-1B·배포 전 QA 확정 표·라우트·대시보드 데이터 연동
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint src/components/branding src/components/dashboard/dashboard-living-header.tsx src/app/page.tsx --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과**
+
+### [EVIDENCE-20260426-397] 대시보드 4.5 — QA 회신 수신 후 closure 반영 준비표 {#evidence-20260426-397}
+
+#### 목적
+
+- QA 팀 **회신 수신 후** `#evidence-20260428-predeploy-qa-closure`에 확정 기록을 반영할 **절차·판정·템플릿**을 사전에 고정한다(실제 closure 작성·회신 원문 작성 아님).
+
+#### 범위
+
+- `docs/project-governance/DASHBOARD_4_5_QA_CLOSURE_REFLECTION_PREP.md` 신규 추가
+- 회신 후 확인 순서·원문 확인표·closure 판정·작성 전 금지·포함 항목·템플릿
+- 3.x 봉인·4.0~4.4 연결·QA 회신 전 closure 미기입 재확인
+- 앱 코드·API·DB·권한·집계·상태값·실제 QA closure 본문 변경 없음
+
+#### 수정 파일
+
+- `docs/project-governance/DASHBOARD_4_5_QA_CLOSURE_REFLECTION_PREP.md` (신규)
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py` (show-plan·`PROJECT_PLAN` 최소 보강)
+
+#### 변경하지 않은 것
+
+- `#evidence-20260428-predeploy-qa-closure` 확정표·회신 원문·최종 통과·배포 가능 판정 기입 없음
+- QA 팀 회신 원문 작성 없음
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- 오류 처리 로직 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- `CaseStatus` canonical 변경 없음
+- dashboard metric 계산 변경 없음
+- badge 계산 변경 없음
+- `DashboardPreviewCard` 구조 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+- 테스트 자동화 코드 추가 없음
+- 실제 알림·에스컬레이션 로직 추가 없음
+- 대시보드 3.x 기능 재오픈 없음
+
+#### 검증
+
+```bash
+npx tsc --noEmit
+npm run lint
+npm run verify:canonical-sources
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
+
+- `npx tsc --noEmit` exit 0 (2026-04-26)
+- `npm run lint` 통과 (2026-04-26)
+- `npm run verify:canonical-sources` exit 0 (2026-04-26)
+- `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0 (2026-04-26)
+
+#### 다음 후보
+
+- QA 회신 수신 후 `#evidence-20260428-predeploy-qa-closure` 확정 기록 또는 별도 4.x·Phase
+
+#### 판정
+
+- 4.5로 QA closure 반영 준비표를 고정했다.
+
+### [EVIDENCE-20260426-396] 대시보드 4.4 — 배포 전 운영자 최종 체크리스트 {#evidence-20260426-396}
+
+#### 목적
+
+- **4.0~4.3** 배포 전 운영 점검 문서를 **운영자 최종 한 장 체크리스트**로 통합한다는 기준을 문서로 고정한다(앱·오류 로직·권한 변경 아님).
+
+#### 범위
+
+- `docs/project-governance/DASHBOARD_4_4_PREDEPLOY_OPERATOR_FINAL_CHECKLIST.md` 신규 추가
+- 3.x 봉인·접근/권한·역할별 표시·빈/오류·문구·증빙/내비·배포 보류 항목 및 결과 요약표
+- 3.x 봉인·QA closure 미기입 기준 재확인 명시
+- 앱 코드·오류 처리 로직·테스트 자동화·API·DB·권한·집계·상태값 변경 없음
+
+#### 수정 파일
+
+- `docs/project-governance/DASHBOARD_4_4_PREDEPLOY_OPERATOR_FINAL_CHECKLIST.md` (신규)
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py` (show-plan·`PROJECT_PLAN` 최소 보강)
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- 오류 처리 로직 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- `CaseStatus` canonical 변경 없음
+- dashboard metric 계산 변경 없음
+- badge 계산 변경 없음
+- `DashboardPreviewCard` 구조 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+- 테스트 자동화 코드 추가 없음
+- 실제 알림·에스컬레이션 로직 추가 없음
+- `#evidence-20260428-predeploy-qa-closure` 확정표·회신 원문·최종 판정 기입 없음
+- 대시보드 3.x 기능 재오픈 없음
+
+#### 검증
+
+```bash
+npx tsc --noEmit
+npm run lint
+npm run verify:canonical-sources
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
+
+- `npx tsc --noEmit` exit 0 (2026-04-26)
+- `npm run lint` 통과 (2026-04-26)
+- `npm run verify:canonical-sources` exit 0 (2026-04-26)
+- `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0 (2026-04-26)
+
+#### 다음 후보
+
+- [EVIDENCE-20260426-397](#evidence-20260426-397) 대시보드 4.5 QA closure 반영 준비표 반영 → 이후 QA 회신 수신 후 `#evidence-20260428-predeploy-qa-closure` 확정 기록
+
+#### 판정
+
+- 4.4로 배포 전 운영자 최종 체크리스트를 고정했다.
+
+### [EVIDENCE-20260426-395] 대시보드 4.3 — 빈 상태 / 오류 상태 수동 점검표 {#evidence-20260426-395}
+
+#### 목적
+
+- **4.2** 수동 QA 흐름에서 **빈 상태·오류·제한·로딩·demo 경계**를 별도 **수동 점검표**로 분리해 고정한다(오류 처리 로직·앱 코드 변경 아님).
+
+#### 범위
+
+- `docs/project-governance/DASHBOARD_4_3_EMPTY_ERROR_STATE_MANUAL_CHECKLIST.md` 신규 추가
+- 의뢰인·변호사·관리자 빈 상태, restricted, 로딩, 오류, demo metrics 경계 항목 및 결과 요약표
+- 3.x 봉인·QA closure 미기입 기준 재확인 명시
+- 앱 코드·오류 처리 로직·테스트 자동화·API·DB·권한·집계·상태값 변경 없음
+
+#### 수정 파일
+
+- `docs/project-governance/DASHBOARD_4_3_EMPTY_ERROR_STATE_MANUAL_CHECKLIST.md` (신규)
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py` (show-plan·`PROJECT_PLAN` 최소 보강)
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- 오류 처리 로직 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- `CaseStatus` canonical 변경 없음
+- dashboard metric 계산 변경 없음
+- badge 계산 변경 없음
+- `DashboardPreviewCard` 구조 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+- 테스트 자동화 코드 추가 없음
+- 실제 알림·에스컬레이션 로직 추가 없음
+- `#evidence-20260428-predeploy-qa-closure` 확정표·회신 원문·최종 판정 기입 없음
+- 대시보드 3.x 기능 재오픈 없음
+
+#### 검증
+
+```bash
+npx tsc --noEmit
+npm run lint
+npm run verify:canonical-sources
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
+
+- `npx tsc --noEmit` exit 0 (2026-04-26)
+- `npm run lint` 통과 (2026-04-26)
+- `npm run verify:canonical-sources` exit 0 (2026-04-26)
+- `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0 (2026-04-26)
+
+#### 다음 후보
+
+- [EVIDENCE-20260426-396](#evidence-20260426-396) 대시보드 4.4 운영자 최종 체크리스트 반영 → 이후 4.5 또는 `#evidence-20260428-predeploy-qa-closure`(팀 회신 후)
+
+#### 판정
+
+- 4.3으로 빈 상태 / 오류 상태 수동 점검표를 고정했다.
+
+### [EVIDENCE-20260426-394] 대시보드 4.2 — 배포 전 수동 QA 시나리오표 {#evidence-20260426-394}
+
+#### 목적
+
+- **4.1** 접근 / 권한 점검표를 바탕으로, 배포 전 **브라우저 수동 QA** 절차·결과 기록 칸을 문서로 고정한다(자동화·앱 코드 변경 아님).
+
+#### 범위
+
+- `docs/project-governance/DASHBOARD_4_2_PREDEPLOY_MANUAL_QA_SCENARIOS.md` 신규 추가
+- 공통·의뢰인·변호사·관리자·restricted·demo metrics 경계 시나리오 및 결과 요약표
+- 3.x 봉인·QA closure 미기입 기준 재확인 명시
+- 앱 코드·테스트 자동화·API·DB·권한·집계·상태값 변경 없음
+
+#### 수정 파일
+
+- `docs/project-governance/DASHBOARD_4_2_PREDEPLOY_MANUAL_QA_SCENARIOS.md` (신규)
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py` (show-plan·`PROJECT_PLAN` 최소 보강)
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- `CaseStatus` canonical 변경 없음
+- dashboard metric 계산 변경 없음
+- badge 계산 변경 없음
+- `DashboardPreviewCard` 구조 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+- 테스트 자동화 코드 추가 없음
+- 실제 알림·에스컬레이션 로직 추가 없음
+- `#evidence-20260428-predeploy-qa-closure` 확정표·회신 원문·최종 판정 기입 없음
+- 대시보드 3.x 기능 재오픈 없음
+
+#### 검증
+
+```bash
+npx tsc --noEmit
+npm run lint
+npm run verify:canonical-sources
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
+
+- `npx tsc --noEmit` exit 0 (2026-04-26)
+- `npm run lint` 통과 (2026-04-26)
+- `npm run verify:canonical-sources` exit 0 (2026-04-26)
+- `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0 (2026-04-26)
+
+#### 다음 후보
+
+- [EVIDENCE-20260426-395](#evidence-20260426-395) 대시보드 4.3 빈 상태 / 오류 상태 점검표 반영 → 이후 4.4·4.5 또는 `#evidence-20260428-predeploy-qa-closure`(팀 회신 후)
+
+#### 판정
+
+- 4.2로 배포 전 수동 QA 시나리오표를 고정했다.
+
+### [EVIDENCE-20260426-393] 대시보드 4.1 — 역할별 접근 / 권한 점검표 세분화 {#evidence-20260426-393}
+
+#### 목적
+
+- 대시보드 **4.0** 운영 점검 Phase 중 **접근 / 권한** 항목을 **점검표로 세분화**한다는 기준을 문서로 고정한다(코드·권한 정책·미들웨어 변경 아님).
+
+#### 범위
+
+- `docs/project-governance/DASHBOARD_4_1_ROLE_ACCESS_PERMISSION_CHECKLIST.md` 신규 추가
+- 의뢰인·변호사·관리자·권한 불일치·비로그인·restricted 경로 점검표 및 시나리오 예시
+- 3.x 봉인·QA closure 미기입 기준 재확인 명시
+- 앱 코드·API·DB·권한·집계·상태값 변경 없음
+
+#### 수정 파일
+
+- `docs/project-governance/DASHBOARD_4_1_ROLE_ACCESS_PERMISSION_CHECKLIST.md` (신규)
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py` (show-plan·`PROJECT_PLAN` 최소 보강)
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- `CaseStatus` canonical 변경 없음
+- dashboard metric 계산 변경 없음
+- badge 계산 변경 없음
+- `DashboardPreviewCard` 구조 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+- 실제 알림·에스컬레이션 로직 추가 없음
+- `#evidence-20260428-predeploy-qa-closure` 확정표·회신 원문·최종 판정 기입 없음
+- 대시보드 3.x 기능 재오픈 없음
+
+#### 검증
+
+```bash
+npx tsc --noEmit
+npm run lint
+npm run verify:canonical-sources
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
+
+- `npx tsc --noEmit` exit 0 (2026-04-26)
+- `npm run lint` 통과 (2026-04-26)
+- `npm run verify:canonical-sources` exit 0 (2026-04-26)
+- `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0 (2026-04-26)
+
+#### 다음 후보
+
+- [EVIDENCE-20260426-394](#evidence-20260426-394) 대시보드 4.2 수동 QA 시나리오표 반영 → 이후 4.3·4.4 또는 `#evidence-20260428-predeploy-qa-closure`(팀 회신 후)
+
+#### 판정
+
+- 4.1로 역할별 접근 / 권한 점검표를 세분화하는 문서를 고정했다.
+
+### [EVIDENCE-20260426-392] 대시보드 4.0 — 배포 전 운영 점검 Phase 착수 문서 {#evidence-20260426-392}
+
+#### 목적
+
+- 대시보드 **3.x 최종 봉인**을 유지한 채, **배포 전 운영 점검**을 **별도 Phase(4.0)** 로 착수한다는 기준을 문서로 고정한다(신규 기능 개발·앱 코드 변경 아님).
+
+#### 범위
+
+- `docs/project-governance/DASHBOARD_4_0_PREDEPLOY_OPERATION_CHECK_PHASE.md` 신규 추가
+- 3.x 봉인 유지·QA closure 미기입·4.0 허용/금지 범위·점검 대분류·1차 체크리스트 정리
+- `DASHBOARD_3_11_FINAL_SEAL_SUMMARY.md` §12~13, `#evidence-20260426-391`, `tools/aibeopchin_navigator.py` 순서로 3.x 확인 기준 유지 명시
+- 앱 코드·데이터 조회·집계·권한·상태값 변경 없음
+
+#### 수정 파일
+
+- `docs/project-governance/DASHBOARD_4_0_PREDEPLOY_OPERATION_CHECK_PHASE.md` (신규)
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py` (show-plan·`PROJECT_PLAN` 최소 보강)
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- `CaseStatus` canonical 변경 없음
+- dashboard metric 계산 변경 없음
+- badge 계산 변경 없음
+- `DashboardPreviewCard` 구조 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+- 실제 알림·에스컬레이션 로직 추가 없음
+- `#evidence-20260428-predeploy-qa-closure` 확정표·회신 원문·최종 판정 기입 없음
+- 대시보드 3.x 기능 재오픈 없음
+
+#### 검증
+
+```bash
+npx tsc --noEmit
+npm run lint
+npm run verify:canonical-sources
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
+
+- `npx tsc --noEmit` exit 0 (2026-04-26)
+- `npm run lint` 통과 (2026-04-26)
+- `npm run verify:canonical-sources` exit 0 (2026-04-26)
+- `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0 (2026-04-26)
+
+#### 다음 후보
+
+- [EVIDENCE-20260426-393](#evidence-20260426-393) 대시보드 4.1 접근 / 권한 점검표 반영 → 이후 4.2·4.3 또는 `#evidence-20260428-predeploy-qa-closure`(팀 회신 후)
+
+#### 판정
+
+- 4.0으로 배포 전 운영 점검 Phase를 3.x 봉인과 분리해 착수 문서로 고정했다.
+
+### [EVIDENCE-20260426-391] 대시보드 3.11 — 대시보드 3.x 최종 봉인 요약표 {#evidence-20260426-391}
+
+#### 목적
+
+- 대시보드 **3.0~3.10** 완료 흐름을 **한 장 요약표**로 봉인하고, 이후는 **QA 회신 대기** 또는 **별도 Phase(4.x 등)** 로만 전환한다는 기준을 고정한다(배포 전 QA **확정표**와 혼동 방지).
+
+#### 범위
+
+- `docs/project-governance/DASHBOARD_3_11_FINAL_SEAL_SUMMARY.md` 신규 추가
+- 역할별·demo metrics·금지 표현·확인 문서 목록·변경 금지·이후 진행 기준 정리
+- 앱 코드·`dashboard-metrics.ts`·집계·API·`dashboard-demo-metrics.ts` 삭제 없음
+- 대시보드 3.x 최종 봉인 확인 순서는 `DASHBOARD_3_11_FINAL_SEAL_SUMMARY.md` §12(1~3단계)·§13(진행·비움·금지) → `#evidence-20260426-391` → `tools/aibeopchin_navigator.py`로 고정했다.
+- 이후 진행은 QA 회신 수신 후 `#evidence-20260428-predeploy-qa-closure` 확정 기록 또는 별도 4.x Phase로만 진행한다.
+
+#### 수정 파일
+
+- `docs/project-governance/DASHBOARD_3_11_FINAL_SEAL_SUMMARY.md` (신규·§12 최종 확인 순서·§13 진행 기준 보강)
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py` (show-plan 한 줄 보강)
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- `CaseStatus` canonical 변경 없음
+- 사건 / 인터뷰 / 문서 생성 로직 변경 없음
+- 문서 승인 / 생성 로직 변경 없음
+- 질문셋 [343]~[350] 재오픈 없음
+- FILE-1B 변경 없음
+- 배포 전 QA 확정표 갱신 없음
+- Living Logo V2 구조 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+- `DashboardPreviewCard` 구조 변경 없음
+- 실제 알림·에스컬레이션 로직 추가 없음
+- `attentionNeeded` count 기준 변경 없음
+- `staleCaseCount` count 기준 변경 없음
+- 실서비스 `dashboard-metrics.ts` 로직 변경 없음
+
+#### 검증
+
+```bash
+npx tsc --noEmit
+npm run lint
+npm run verify:canonical-sources
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
+
+- `npx tsc --noEmit` exit 0 (2026-04-26)
+- `npm run lint` 통과 (2026-04-26)
+- `npm run verify:canonical-sources` exit 0 (2026-04-26)
+- `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0 (2026-04-26)
+- 동일 4항 재실행(`aibeopchin_navigator.py` 3.11 절·`PROJECT_PLAN` 보강 및 하위 증빙「다음 후보」391 체인 정리 후): 모두 exit 0 / 통과 (2026-04-26)
+
+#### 다음 후보
+
+- [EVIDENCE-20260426-392](#evidence-20260426-392) 대시보드 4.0 배포 전 운영 점검 Phase 착수 반영 → 이후 4.1·4.2 또는 `#evidence-20260428-predeploy-qa-closure`(팀 회신 후)
+
+#### 판정
+
+- 3.11로 대시보드 3.x를 문서 기준 최종 봉인했다.
+
+### [EVIDENCE-20260426-390] 대시보드 3.10 — dashboard-demo-metrics 유지 기준 / 데모 경로 안전 점검 {#evidence-20260426-390}
+
+#### 목적
+
+- `dashboard-demo-metrics.ts` **유지 기준**과 실서비스 `dashboard-metrics.ts`·데모 경로의 **안전 경계**를 문서로 고정한다(배포 전 QA **확정표**와 혼동 방지).
+
+#### 범위
+
+- `docs/project-governance/DASHBOARD_3_10_DEMO_METRICS_SAFETY_CHECK.md` 신규 추가
+- 역할 분리·데모 경로·import 점검·실데이터 metric 유지·금지 표현·검증 명령 정리
+- `dashboard-demo-metrics.ts` 삭제 없음·실서비스 집계 로직 변경 없음
+
+#### 수정 파일
+
+- `docs/project-governance/DASHBOARD_3_10_DEMO_METRICS_SAFETY_CHECK.md` (신규)
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py` (show-plan 한 줄 보강)
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- `CaseStatus` canonical 변경 없음
+- 사건 / 인터뷰 / 문서 생성 로직 변경 없음
+- 문서 승인 / 생성 로직 변경 없음
+- 질문셋 [343]~[350] 재오픈 없음
+- FILE-1B 변경 없음
+- 배포 전 QA 확정표 갱신 없음
+- Living Logo V2 구조 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+- `DashboardPreviewCard` 구조 변경 없음
+- 실제 알림·에스컬레이션 로직 추가 없음
+- `attentionNeeded` count 기준 변경 없음
+- `staleCaseCount` count 기준 변경 없음
+- 실서비스 `fetch*DashboardMetrics`·Prisma 집계 로직 변경 없음
+
+#### 검증
+
+```bash
+npx tsc --noEmit
+npm run lint
+npm run verify:canonical-sources
+py -3 -m py_compile tools/aibeopchin_navigator.py
+# import 점검 (문자열 dashboard-demo-metrics; src/app·components·lib)
+```
+
+- `npx tsc --noEmit` exit 0 (2026-04-26)
+- `npm run lint` 통과 (2026-04-26)
+- `npm run verify:canonical-sources` exit 0 (2026-04-26)
+- `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0 (2026-04-26)
+- `src/app`·`src/components`·`src/lib`에서 `dashboard-demo-metrics` 문자열 검색: **일치 0건** (2026-04-26) — 실서비스 route·컴포넌트에서 해당 모듈 경로로 import하지 않음; `src/lib/dashboard/dashboard-demo-metrics.ts`는 유지 파일로만 존재
+
+#### 다음 후보
+
+- [EVIDENCE-20260426-391](#evidence-20260426-391) 3.11 최종 봉인(`DASHBOARD_3_11_FINAL_SEAL_SUMMARY.md`) 반영됨 → `#evidence-20260428-predeploy-qa-closure` 또는 대시보드 4.x / 별도 Phase
+
+#### 판정
+
+- 3.10으로 demo metrics 유지·실서비스 경계 점검 기준을 문서로 고정했다.
+
+### [EVIDENCE-20260426-389] 대시보드 3.9 — 역할별 대시보드 최종 회귀 체크리스트 {#evidence-20260426-389}
+
+#### 목적
+
+- 의뢰인·변호사·관리자 대시보드의 **배포 전 최종 회귀 점검** 항목을 체크리스트로 고정한다(배포 전 QA **확정표**·`#evidence-20260428-predeploy-qa-closure`와 혼동 방지).
+
+#### 범위
+
+- `docs/project-governance/DASHBOARD_3_9_ROLE_REGRESSION_CHECKLIST.md` 신규 추가
+- 공통·역할별·3.8 스냅샷 대조·금지 표현·검증 명령 점검 항목 정리
+- 앱 코드·Prisma·집계·API·`DashboardPreviewCard` 미변경
+
+#### 수정 파일
+
+- `docs/project-governance/DASHBOARD_3_9_ROLE_REGRESSION_CHECKLIST.md` (신규)
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py` (show-plan 한 줄 보강)
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- `CaseStatus` canonical 변경 없음
+- 사건 / 인터뷰 / 문서 생성 로직 변경 없음
+- 문서 승인 / 생성 로직 변경 없음
+- 질문셋 [343]~[350] 재오픈 없음
+- FILE-1B 변경 없음
+- 배포 전 QA 확정표 갱신 없음
+- Living Logo V2 구조 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+- `DashboardPreviewCard` 구조 변경 없음
+- 실제 알림·에스컬레이션 로직 추가 없음
+- `attentionNeeded` count 기준 변경 없음
+- `staleCaseCount` count 기준 변경 없음
+
+#### 검증
+
+```bash
+npx tsc --noEmit
+npm run lint
+npm run verify:canonical-sources
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
+
+- `npx tsc --noEmit` exit 0 (2026-04-26)
+- `npm run lint` 통과 (2026-04-26)
+- `npm run verify:canonical-sources` exit 0 (2026-04-26)
+- `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0 (2026-04-26)
+
+#### 다음 후보
+
+- [EVIDENCE-20260426-390](#evidence-20260426-390) 3.10 · [EVIDENCE-20260426-391](#evidence-20260426-391) 3.11 반영됨 → `#evidence-20260428-predeploy-qa-closure` 또는 4.x
+
+#### 판정
+
+- 3.9로 역할별 대시보드 최종 회귀 점검을 별도 문서로 고정했다.
+
+### [EVIDENCE-20260426-388] 대시보드 3.8 — 역할별 대시보드 최종 문구 스냅샷 {#evidence-20260426-388}
+
+#### 목적
+
+- 의뢰인·변호사·관리자 대시보드의 **사용자 노출 문구**를 배포 전 기준 스냅샷으로 고정한다(배포 전 QA **확정표**와 혼동 방지).
+
+#### 범위
+
+- `docs/project-governance/DASHBOARD_3_8_ROLE_COPY_SNAPSHOT.md` 신규 추가
+- 역할별 카드·badge·reason·빈 상태·금지 표현·확인 명령 정리
+- 관리자 3.4~3.7 문구·[DASHBOARD_ADMIN_3_7_REGRESSION_CHECKLIST.md](./DASHBOARD_ADMIN_3_7_REGRESSION_CHECKLIST.md)와 연계
+- 앱 코드·Prisma·집계·API 미변경
+
+#### 수정 파일
+
+- `docs/project-governance/DASHBOARD_3_8_ROLE_COPY_SNAPSHOT.md` (신규)
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py` (show-plan 한 줄 보강)
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- `CaseStatus` canonical 변경 없음
+- 사건 / 인터뷰 / 문서 생성 로직 변경 없음
+- 문서 승인 / 생성 로직 변경 없음
+- 질문셋 [343]~[350] 재오픈 없음
+- FILE-1B 변경 없음
+- 배포 전 QA 확정표 갱신 없음
+- Living Logo V2 구조 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+- 실제 알림·에스컬레이션 로직 추가 없음
+- `attentionNeeded` count 기준 변경 없음
+- `staleCaseCount` count 기준 변경 없음
+- `DashboardPreviewCard` 구조 변경 없음
+
+#### 검증
+
+```bash
+npx tsc --noEmit
+npm run lint
+npm run verify:canonical-sources
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
+
+- `npx tsc --noEmit` exit 0 (2026-04-26)
+- `npm run lint` 통과 (2026-04-26)
+- `npm run verify:canonical-sources` exit 0 (2026-04-26)
+- `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0 (2026-04-26)
+
+#### 다음 후보
+
+- [EVIDENCE-20260426-389](#evidence-20260426-389) 3.9 · [EVIDENCE-20260426-390](#evidence-20260426-390) 3.10 · [EVIDENCE-20260426-391](#evidence-20260426-391) 3.11 봉인 반영 → `#evidence-20260428-predeploy-qa-closure` 또는 4.x
+- `dashboard-demo-metrics.ts` 사용처·경계·3.x 요약 문서화 완료
+
+#### 판정
+
+- 3.8로 역할별 대시보드 문구 기준을 스냅샷 문서로 봉인했다.
+
+### [EVIDENCE-20260426-387] 대시보드 3.7 — 관리자 대시보드 마감 점검표 / 회귀 체크리스트 정리 {#evidence-20260426-387}
+
+#### 목적
+
+- 관리자 대시보드 3.4~3.6 변경분을 **배포 전 회귀 점검**할 수 있는 체크리스트로 고정한다(배포 전 QA **확정표**와 혼동 방지).
+
+#### 범위
+
+- `docs/project-governance/DASHBOARD_ADMIN_3_7_REGRESSION_CHECKLIST.md` 신규 추가
+- 장기 미진행 preview 병합·`staleCaseCount`·상태별 reason·빈 상태 문구·금지 표현 검색 기준을 점검 항목으로 정리
+- 구현 코드·Prisma·집계 로직·API 미변경
+
+#### 수정 파일
+
+- `docs/project-governance/DASHBOARD_ADMIN_3_7_REGRESSION_CHECKLIST.md` (신규)
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py` (show-plan 한 줄 보강)
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- `CaseStatus` canonical 변경 없음
+- 사건 / 인터뷰 / 문서 생성 로직 변경 없음
+- 문서 승인 / 생성 로직 변경 없음
+- 질문셋 [343]~[350] 재오픈 없음
+- FILE-1B 변경 없음
+- 배포 전 QA 확정표 갱신 없음
+- Living Logo V2 구조 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+- 장애 / P0 / P1 / 치명 / 위험 폭증 표현 없음
+- 실제 알림·에스컬레이션 로직 추가 없음
+- `attentionNeeded` count 기준 변경 없음
+- `staleCaseCount` count 기준 변경 없음
+
+#### 검증
+
+```bash
+npx tsc --noEmit
+npx eslint src/lib/dashboard/admin-stale-case.ts src/lib/dashboard/dashboard-metrics.ts src/components/dashboard/admin/admin-risk-board.tsx --max-warnings 0
+npm run lint
+npm run verify:canonical-sources
+```
+
+- `npx tsc --noEmit` exit 0 (2026-04-26)
+- 지정 경로 `eslint` exit 0 (2026-04-26)
+- `npm run lint` 통과 (2026-04-26)
+- `npm run verify:canonical-sources` exit 0 (2026-04-26)
+
+#### 다음 후보
+
+- [EVIDENCE-20260426-388](#evidence-20260426-388) 3.8 · [EVIDENCE-20260426-389](#evidence-20260426-389) 3.9 · [EVIDENCE-20260426-390](#evidence-20260426-390) 3.10 · [EVIDENCE-20260426-391](#evidence-20260426-391) 3.11 봉인 반영 → `#evidence-20260428-predeploy-qa-closure` 또는 4.x
+
+#### 판정
+
+- 3.7로 관리자 3.4~3.6 축 회귀 점검을 별도 문서로 분리·고정했다.
+
+### [EVIDENCE-20260426-386] 대시보드 3.6 — 관리자 PreviewCard 빈 상태/로딩 문구 정리 {#evidence-20260426-386}
+
+#### 목적
+
+- 운영 확인 후보가 없거나 장기 미진행 보조 지표가 0일 때 **현재 확인 후보 없음** 톤으로 안내한다(문제 없음·장애 없음 뉘앙스 지양).
+
+#### 범위
+
+- `AdminRiskBoard`: preview 목록 빈 상태 — 제목 `현재 운영 확인 후보는 없습니다.` + 보조 `보류, 접수 대기, 검토 대기 상태의 사건이 확인되면 이 영역에 표시됩니다.`(다크 카드 톤 유지)
+- 장기 미진행 보조 문구: 양수 시 기존 보조 지표 안내, 0건 시 `장기 미진행 후보도 현재 확인되지 않았습니다.`
+- 관리자 페이지 RSC에 전용 로딩 UI 없음 → 로딩 문구 신규 컴포넌트 추가 없음
+- `dashboard-preview-empty`·`dashboard-empty-state`·`dashboard-preview-card`·`dashboard-loading-state` 미변경
+
+#### 수정 파일
+
+- `src/components/dashboard/admin/admin-risk-board.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- 신규 API·DB schema·권한·middleware·session·CaseStatus·사건·인터뷰·문서·질문셋 [343]~[350]·FILE-1B·배포 전 QA 확정표·Living Logo V2·`dashboard-demo-metrics.ts`
+- `attentionNeeded`·`staleCaseCount`·preview 조회·집계
+- PreviewCard 구조 대개편·알림·에스컬레이션
+- 장애·P0/P1·치명·위험 폭증 표현(신규 없음)
+
+#### 검증
+
+- `npx tsc --noEmit` exit 0 (2026-04-26)
+- `npx eslint src/components/dashboard/admin/admin-risk-board.tsx --max-warnings 0` exit 0 (2026-04-26)
+- `npm run lint` 통과 (2026-04-26)
+- `npm run verify:canonical-sources` exit 0 (2026-04-26)
+
+#### 다음 후보
+
+- [EVIDENCE-20260426-387](#evidence-20260426-387) 3.7 · [EVIDENCE-20260426-388](#evidence-20260426-388) 3.8 · [EVIDENCE-20260426-389](#evidence-20260426-389) 3.9 · [EVIDENCE-20260426-390](#evidence-20260426-390) 3.10 · [EVIDENCE-20260426-391](#evidence-20260426-391) 3.11 봉인
+- 배포 전 QA (`#evidence-20260428-predeploy-qa-closure`)
+
+#### 판정
+
+- 3.6으로 관리자 운영 확인 영역의 빈 상태·보조 문구를 운영 확인 문맥에 맞게 정리했다.
+
+### [EVIDENCE-20260426-385] 대시보드 3.5 — 관리자 상태별 운영 확인 문구 정리 {#evidence-20260426-385}
+
+#### 목적
+
+- 관리자 운영 확인 후보 문구를 **운영 확인** 톤으로 통일하고, 과장·경고성 표현을 피한다.
+
+#### 범위
+
+- `fetchAdminDashboardMetrics` attention preview: `getAdminOperationalReviewReason`로 HOLD / INTAKE_PENDING / REVIEW_PENDING 기본 reason 정리
+- 장기 미진행: `staleReason ?? existingReason` 우선 순서 유지
+- `AdminRiskBoard` 상단 안내를 운영 확인 후보·장기 미진행 배지·보조 지표 기준으로 정리
+
+#### 수정 파일
+
+- `src/lib/dashboard/dashboard-metrics.ts`
+- `src/components/dashboard/admin/admin-risk-board.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- 신규 API·DB schema·권한·middleware·session·CaseStatus canonical·사건·인터뷰·문서·질문셋 [343]~[350]·FILE-1B·배포 전 QA 확정표·Living Logo V2·`dashboard-demo-metrics.ts`
+- `attentionNeeded`·`staleCaseCount` 집계·조회 조건
+- 알림·에스컬레이션 로직
+- 장애·P0/P1·치명·위험 폭증 표현(신규 없음)
+
+#### 검증
+
+- `npx tsc --noEmit` exit 0 (2026-04-26)
+- `npx eslint src/lib/dashboard/dashboard-metrics.ts src/components/dashboard/admin/admin-risk-board.tsx --max-warnings 0` exit 0 (2026-04-26)
+- `npm run lint` 통과 (2026-04-26)
+- `npm run verify:canonical-sources` exit 0 (2026-04-26)
+- 금지어 샘플 검색(`src/components/dashboard/admin`, `src/lib/dashboard`): UI/사용자 노출 문구에 해당 키워드 신규 삽입 없음(2026-04-26)
+
+#### 다음 후보
+
+- [EVIDENCE-20260426-386](#evidence-20260426-386) 3.6 · [EVIDENCE-20260426-387](#evidence-20260426-387) 3.7 · [EVIDENCE-20260426-388](#evidence-20260426-388) 3.8 · [EVIDENCE-20260426-389](#evidence-20260426-389) 3.9 · [EVIDENCE-20260426-390](#evidence-20260426-390) 3.10 · [EVIDENCE-20260426-391](#evidence-20260426-391) 3.11 완료(봉인)
+- 배포 전 QA (`#evidence-20260428-predeploy-qa-closure`)
+
+#### 판정
+
+- 3.5로 관리자 대시보드 운영 확인 문구 체계를 정리해 오해 없이 읽히도록 맞췄다.
+
+### [EVIDENCE-20260426-384] 대시보드 3.4b — 관리자 장기 미진행 보조 count metric 후보 {#evidence-20260426-384}
+
+#### 목적
+
+- 관리자가 **전체 장기 미진행 후보 수**를 보조 지표로 볼 수 있게 한다(목록 preview와 병행).
+- `attentionNeeded` 의미는 그대로 두고 합산하지 않는다.
+
+#### 범위
+
+- `AdminDashboardMetrics`에 `staleCaseCount` 추가
+- `HOLD` / `INTAKE_PENDING` / `REVIEW_PENDING` 중 `updatedAt <=` 3.4와 동일 `staleCutoff`인 사건 **건수** 집계(`buildAccessibleCaseWhere` 범위 동일)
+- `fetchAdminDashboardMetrics` 반환·`EMPTY_ADMIN_DASHBOARD_METRICS` 기본값 반영
+- `AdminRiskBoard`: 운영 확인 필요·장기 미진행 후보를 **분리** 표시, 보조 지표 문구
+- `admin-dashboard-home`: `attentionNeeded`·`staleCaseCount` 전달
+- 3.4 preview 병합 로직 유지
+
+#### 수정 파일
+
+- `src/lib/dashboard/dashboard-metrics.ts`
+- `src/components/dashboard/admin/admin-risk-board.tsx`
+- `src/components/dashboard/admin/admin-dashboard-home.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- 신규 API route·`admin-stale-case.ts` 외 신규 파일 없음
+- DB schema·권한·middleware·session 의미·CaseStatus canonical·사건·인터뷰·문서·질문셋 [343]~[350]·FILE-1B·배포 전 QA 확정표·Living Logo V2·`dashboard-demo-metrics.ts` 삭제
+- `attentionNeeded` 집계 정의 변경 없음
+- 장애·P0/P1·치명·위험 폭증 표현·알림·에스컬레이션 로직 없음
+
+#### 검증
+
+- `npx tsc --noEmit` exit 0 (2026-04-26)
+- `npx eslint src/lib/dashboard/dashboard-metrics.ts src/components/dashboard/admin/admin-risk-board.tsx src/components/dashboard/admin/admin-dashboard-home.tsx --max-warnings 0` exit 0 (2026-04-26)
+- `npm run lint` 통과 (2026-04-26)
+- `npm run verify:canonical-sources` exit 0 (2026-04-26)
+
+#### 다음 후보
+
+- [EVIDENCE-20260426-385](#evidence-20260426-385) 3.5 · [EVIDENCE-20260426-386](#evidence-20260426-386) 3.6 · [EVIDENCE-20260426-387](#evidence-20260426-387) 3.7 · [EVIDENCE-20260426-388](#evidence-20260426-388) 3.8 · [EVIDENCE-20260426-389](#evidence-20260426-389) 3.9 · [EVIDENCE-20260426-390](#evidence-20260426-390) 3.10 · [EVIDENCE-20260426-391](#evidence-20260426-391) 3.11 완료 → 3.x 봉인
+- 배포 전 QA (`#evidence-20260428-predeploy-qa-closure`)
+
+#### 판정
+
+- 3.4b까지 반영 시 관리자 대시보드는 **preview에 드러나는 장기 미진행 후보**와 **전체 `staleCaseCount`**를 함께 갖는다.
+
+### [EVIDENCE-20260426-383] 대시보드 3.4 — 관리자 장기 미진행 후보 {#evidence-20260426-383}
+
+#### 목적
+
+- 관리자 운영 확인 후보에 **7일 이상 업데이트 없음** 사건을 드러내 운영 확인을 돕는다(장애·법률 위험도 표현 아님).
+- [EVIDENCE-20260426-380](#evidence-20260426-380) 3순위 후보 구현; 최신순만으로는 빠질 수 있는 건을 `updatedAt asc` 장기 후보 조회로 보강 후 병합.
+
+#### 범위 (3.4 패치 세트)
+
+- `src/lib/dashboard/admin-stale-case.ts` — `ADMIN_STALE_CASE_DAYS`(7/14/30), `getStaleDays`, `isAdminStaleCase`, `getAdminStaleCaseLabel`(확인 후보 / 우선 확인 후보 / 장기 미진행 후보), `getAdminStaleCaseReason`(일수·단계별 문구)
+- 7일 이상 미변경 사건을 장기 미진행 확인 후보로 판정
+- `HOLD`, `INTAKE_PENDING`, `REVIEW_PENDING` 중 `updatedAt` 기준 장기 후보 별도 조회(`lte` cutoff, `updatedAt asc`, 최대 5건)
+- 최신 후보·장기 후보 `Map` 병합(`__staleCandidate` 표시), 중복 제거 후 정렬: 장기 미진행 우선 → 동일 시 더 오래 멈춘 순(`staleDays` desc) → 그 외 `updatedAt` desc
+- 최종 preview 5건; `AdminAttentionPreviewItem`에 `staleDays` / `staleLabel` / `staleReason`; `reason`은 `staleReason ??` 기존 상태 reason
+- `AdminRiskBoard`: 카드 `reason`에 `staleReason ?? reason`, 배지는 `staleLabel`·`amber`
+- `attentionNeeded`는 기존 `HOLD` + `INTAKE_PENDING` 유지; `fetchAdminDashboardMetrics`·`buildAccessibleCaseWhere` 범위 내에서만 확장
+
+#### 수정 파일
+
+- `src/lib/dashboard/admin-stale-case.ts`
+- `src/lib/dashboard/dashboard-metrics.ts`
+- `src/components/dashboard/admin/admin-risk-board.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- CaseStatus canonical 변경 없음
+- 사건/인터뷰/문서 생성 로직 변경 없음
+- 문서 승인/생성 로직 변경 없음
+- 질문셋 [343]~[350] 재오픈 없음
+- FILE-1B 변경 없음
+- 배포 전 QA 확정표 갱신 없음
+- Living Logo V2 구조 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+- 장애·P0/P1·치명·위험 폭증·운영 사고 표현 없음
+- 알림·에스컬레이션 로직 추가 없음
+- `attentionNeeded` count 정의 변경 없음
+- `DashboardPreviewCard` 구조 변경 없음
+
+#### 검증
+
+- `npx tsc --noEmit` exit 0 (2026-04-26)
+- `npx eslint src/lib/dashboard/admin-stale-case.ts src/lib/dashboard/dashboard-metrics.ts src/components/dashboard/admin/admin-risk-board.tsx --max-warnings 0` exit 0 (2026-04-26)
+- `npm run lint` 통과 (2026-04-26)
+- `npm run verify:canonical-sources` exit 0 (2026-04-26)
+
+#### 다음 후보
+
+- [EVIDENCE-20260426-384](#evidence-20260426-384) 3.4b · [EVIDENCE-20260426-385](#evidence-20260426-385) 3.5 · [EVIDENCE-20260426-386](#evidence-20260426-386) 3.6 · [EVIDENCE-20260426-387](#evidence-20260426-387) 3.7 · [EVIDENCE-20260426-388](#evidence-20260426-388) 3.8 · [EVIDENCE-20260426-389](#evidence-20260426-389) 3.9 · [EVIDENCE-20260426-390](#evidence-20260426-390) 3.10 · [EVIDENCE-20260426-391](#evidence-20260426-391) 3.11 완료 → demo fallback·3.x 봉인
+- 배포 전 QA 보류 유지 또는 회신 반영 재개 (`#evidence-20260428-predeploy-qa-closure`)
+
+#### 판정
+
+- 대시보드 3.4는 관리자 운영 확인 후보에 장기 미진행 사건을 포함해, 오래 업데이트되지 않은 건을 운영 확인 관점에서 빠르게 짚을 수 있게 한다.
+
+### [EVIDENCE-20260426-382] 대시보드 3.3 — 변호사 검토 우선순위 badge {#evidence-20260426-382}
+
+#### 목적
+
+- 변호사 검토 후보 preview 카드에 **업무상 검토 순서** badge를 표시한다(법률 위험도·승패 평가 아님).
+- [EVIDENCE-20260426-380](#evidence-20260426-380)·[EVIDENCE-20260426-381](#evidence-20260426-381) 후속; 정렬은 선택 A(`updatedAt desc` 유지, badge만 추가).
+
+#### 범위
+
+- `LawyerReviewQueuePreviewItem`에 `priorityScore` / `priorityLabel` / `priorityTone` 추가(화면에는 label·tone만 사용, 점수 숫자 미노출)
+- `lawyer-review-priority` 유틸(`getLawyerReviewPriority`) 추가
+- `REVIEW_PENDING` / `DRAFTING` / `INTERVIEW_DONE` / `INTAKE_PENDING` / `HOLD` 기준 업무 우선순위 label·tone 산출
+- `fetchLawyerDashboardMetrics` preview mapping에서 priority 정보 추가
+- `LawyerReviewQueue`의 `DashboardPreviewCard`에 priority badge 표시
+- preview 목록 정렬·Prisma `findMany` 조건 변경 없음
+
+#### 수정 파일
+
+- `src/lib/dashboard/lawyer-review-priority.ts`
+- `src/lib/dashboard/dashboard-metrics.ts`
+- `src/components/dashboard/lawyer/lawyer-review-queue.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- CaseStatus canonical 변경 없음
+- 사건/인터뷰/문서 생성 로직 변경 없음
+- 문서 승인/생성 로직 변경 없음
+- 질문셋 [343]~[350] 재오픈 없음
+- FILE-1B 변경 없음
+- 배포 전 QA 확정표 갱신 없음
+- Living Logo V2 구조 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+- 법률 위험도·승소·패소·AI 법률 판단 표현 없음
+- preview 정렬 기준(`updatedAt desc`)·`LAWYER_PREVIEW_STATUS` 조회 조건 변경 없음
+
+#### badge 문구 (고정)
+
+- `REVIEW_PENDING` → 우선 검토
+- `DRAFTING` → 초안 확인
+- `INTERVIEW_DONE` → 인터뷰 검토
+- `INTAKE_PENDING` / `HOLD` → 보완 확인
+- 기타 → 일반 확인
+
+#### 검증
+
+- `npx tsc --noEmit` exit 0 (2026-04-26)
+- `npx eslint src/components/dashboard/lawyer src/components/dashboard/dashboard-preview-card.tsx src/lib/dashboard --max-warnings 0` exit 0 (2026-04-26)
+- `npm run lint` 통과 (2026-04-26)
+- `npm run verify:canonical-sources` exit 0 (2026-04-26)
+
+#### 다음 후보
+
+- 대시보드 3.3b — 변호사 preview 우선순위 정렬(`priorityScore` desc + `updatedAt` desc, 별도 PR)
+- [EVIDENCE-20260426-383](#evidence-20260426-383) 3.4 · [EVIDENCE-20260426-384](#evidence-20260426-384) 3.4b · [EVIDENCE-20260426-385](#evidence-20260426-385) 3.5 · [EVIDENCE-20260426-386](#evidence-20260426-386) 3.6 · [EVIDENCE-20260426-387](#evidence-20260426-387) 3.7 · [EVIDENCE-20260426-388](#evidence-20260426-388) 3.8 · [EVIDENCE-20260426-389](#evidence-20260426-389) 3.9 · [EVIDENCE-20260426-390](#evidence-20260426-390) 3.10 · [EVIDENCE-20260426-391](#evidence-20260426-391) 3.11 완료 → demo fallback / 배포 전 QA
+- 배포 전 QA 보류 유지 또는 회신 반영 재개 (`#evidence-20260428-predeploy-qa-closure`)
+
+#### 판정
+
+- 대시보드 3.3은 변호사 검토 후보 사건에 업무상 우선순위 badge를 표시해, 로그인 직후 어떤 건을 먼저 확인하면 좋은지 상태 기준으로 안내한다.
+
+### [EVIDENCE-20260426-381] 대시보드 3.2 — 의뢰인 최근 사건 정리도 badge {#evidence-20260426-381}
+
+#### 목적
+
+- 의뢰인 최근 사건 preview 카드에 사건별 **입력 기준 정리도**를 한눈에 표시한다.
+- [EVIDENCE-20260426-380](#evidence-20260426-380)에서 1순위로 고정한 후보를 구현한다.
+
+#### 범위
+
+- `ClientCasePreviewItem`에 `readinessPercent` / `readinessLabel` 추가
+- `client-readiness-badge` 유틸 추가 (`getClientReadinessBadgeLabel`, `getClientReadinessTone`)
+- 최근 사건 preview 생성 시 `buildClientCaseReadiness` 재사용(최근 5건, 추가 쿼리 없음)
+- `ClientRecentCasesPreview`에서 `DashboardPreviewCard`에 정리도 badge 표시
+- `DashboardPreviewCard`에 선택형 `badgeLabel` / `badgeTone` 추가
+- 신규 API 없이 기존 `/dashboard` 조회 데이터만 사용
+
+#### 수정 파일
+
+- `src/lib/dashboard/dashboard-metrics.ts`
+- `src/lib/dashboard/client-readiness-badge.ts`
+- `src/app/(protected)/dashboard/page.tsx`
+- `src/components/dashboard/dashboard-preview-card.tsx`
+- `src/components/dashboard/client/client-recent-cases-preview.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- CaseStatus canonical 변경 없음
+- 사건/인터뷰/문서 생성 로직 변경 없음
+- 문서 승인/생성 로직 변경 없음
+- 질문셋 [343]~[350] 재오픈 없음
+- FILE-1B 변경 없음
+- 배포 전 QA 확정표 갱신 없음
+- Living Logo V2 구조 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+- 법률 판단·승소 가능성·AI 판단 점수 표현 없음
+- `fetchClientDashboardMetrics`·metrics 집계 쿼리 조건 변경 없음
+
+#### 문구 (고정 예시)
+
+- `정리도 60% · 보완 중`
+- `정리도 80% · 검토 준비`
+- `정리도 20% · 입력 필요`
+
+#### 검증
+
+- `npx tsc --noEmit` exit 0 (2026-04-26)
+- `npx eslint "src/app/(protected)/dashboard/page.tsx" src/components/dashboard/client src/components/dashboard/dashboard-preview-card.tsx src/lib/dashboard --max-warnings 0` exit 0 (2026-04-26)
+- `npm run lint` 통과 (2026-04-26)
+- `npm run verify:canonical-sources` exit 0 (2026-04-26)
+
+#### 다음 후보
+
+- [EVIDENCE-20260426-382](#evidence-20260426-382) 3.3 · [EVIDENCE-20260426-383](#evidence-20260426-383) 3.4 · [EVIDENCE-20260426-384](#evidence-20260426-384) 3.4b · [EVIDENCE-20260426-385](#evidence-20260426-385) 3.5 · [EVIDENCE-20260426-386](#evidence-20260426-386) 3.6 · [EVIDENCE-20260426-387](#evidence-20260426-387) 3.7 · [EVIDENCE-20260426-388](#evidence-20260426-388) 3.8 · [EVIDENCE-20260426-389](#evidence-20260426-389) 3.9 · [EVIDENCE-20260426-390](#evidence-20260426-390) 3.10 · [EVIDENCE-20260426-391](#evidence-20260426-391) 3.11 완료 → demo fallback 점검 / QA·3.x 봉인; **3.3b** — 우선순위 정렬은 별도 PR
+- 배포 전 QA 보류 유지 또는 회신 반영 재개 (`#evidence-20260428-predeploy-qa-closure`)
+
+#### 판정
+
+- 대시보드 3.2는 의뢰인 최근 사건 카드에 사건별 정리도 badge를 표시해, 의뢰인이 어떤 사건을 먼저 보완하면 좋은지 입력 기준으로 안내한다.
+
+### [EVIDENCE-20260426-380] 대시보드 3.1 — 데이터 고도화 후보 우선순위표 {#evidence-20260426-380}
+
+#### 목적
+
+- 대시보드 3.0 실데이터 1차 마감 이후 고도화 후보를 우선순위화한다.
+- 새 기능 구현 전, 의뢰인/변호사/관리자 고도화 범위와 PR 분리 기준을 정리한다.
+- 배포 전 QA 회신 반영은 보류 상태로 유지한다.
+
+#### 범위
+
+- 의뢰인 readiness badge 후보
+- 변호사 검토 우선순위 후보
+- 관리자 장기 미진행 후보
+- 의뢰인 진행 중 사건 우선 정렬 후보
+- 변호사 배정 사건 기준 정교화 후보
+- 관리자 승인 대기 장기화 후보
+- `dashboard-demo-metrics.ts` 정리 여부 후보
+- PreviewCard 세부 badge 확장 후보
+
+#### 우선순위 (요약)
+
+1. 의뢰인 최근 사건 정리도 badge → **대시보드 3.2** 1차 착수 권장
+2. 변호사 검토 우선순위 score → **3.3**
+3. 관리자 장기 미진행 후보 → **3.4**
+4. 의뢰인 진행 중 사건 우선 정렬
+5. 변호사 배정 사건 기준 정교화
+6. 관리자 승인 대기 장기화 표시
+7. demo fallback 정리 여부 판단
+8. PreviewCard 세부 badge 확장
+
+#### 수정 파일
+
+- `docs/project-governance/WORK_INSTRUCTION_DASHBOARD_3_1_DATA_ENHANCEMENT_PRIORITY.md`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- CaseStatus canonical 변경 없음
+- 사건/인터뷰/문서 생성 로직 변경 없음
+- 문서 승인/생성 로직 변경 없음
+- 질문셋 [343]~[350] 재오픈 없음
+- FILE-1B 변경 없음
+- 배포 전 QA 확정표 갱신 없음
+- Living Logo V2 구조 변경 없음
+- metrics 조회 조건 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+
+#### 판정
+
+- 대시보드 3.1은 **구현 PR이 아니라** 고도화 후보 우선순위 **문서화**로 둔다.
+- 1차 착수 후보는 **대시보드 3.2 — 의뢰인 최근 사건 정리도 badge**로 정한다.
+
+#### 검증
+
+- `npm run verify:canonical-sources` exit 0 (2026-04-26)
+- `npx tsc --noEmit` exit 0 (2026-04-26)
+- `npm run lint` exit 0 (2026-04-26)
+
+#### 다음 후보
+
+- [EVIDENCE-20260426-381](#evidence-20260426-381)~[391](#evidence-20260426-391) 3.2~3.11 완료 · **3.x 봉인** → QA 또는 4.x
+- 배포 전 QA 팀 회신 반영 (`#evidence-20260428-predeploy-qa-closure`)
+
+### [EVIDENCE-20260426-379] 대시보드 3.0 — 역할별 대시보드 실데이터 1차 마감 판정 {#evidence-20260426-379}
+
+#### 목적
+
+- 대시보드 2.0~2.8에서 진행한 역할별 실데이터 연결 범위를 1차 마감한다.
+- 의뢰인 / 변호사 / 관리자 대시보드가 각각 실제 metrics와 preview 데이터를 사용하고 있음을 확인한다.
+- 이후 작업은 추가 데이터 고도화, 배포 전 QA, 또는 demo fallback 정리 여부 판단으로 분리한다.
+
+#### 기준 증빙
+
+- [EVIDENCE-20260426-368](#evidence-20260426-368) 대시보드 2.0 — 실제 데이터 연결 1차
+- [EVIDENCE-20260426-369](#evidence-20260426-369) 대시보드 2.1 — 사건 정리도 실제 계산
+- [EVIDENCE-20260426-370](#evidence-20260426-370) 대시보드 2.2 — 변호사 검토 큐 실제 고도화
+- [EVIDENCE-20260426-371](#evidence-20260426-371) 대시보드 2.3 — 관리자 운영 지표 실제 고도화
+- [EVIDENCE-20260426-372](#evidence-20260426-372) 대시보드 2.3b — 관리자 상태별 사건 분포 미니바
+- [EVIDENCE-20260426-373](#evidence-20260426-373) 대시보드 2.4 — 공통 PreviewCard 추출
+- [EVIDENCE-20260426-374](#evidence-20260426-374) 대시보드 2.5 — 빈 상태 조건부 정리
+- [EVIDENCE-20260426-375](#evidence-20260426-375) 대시보드 2.6 — 공통 날짜/상태 표시 유틸 정리
+- [EVIDENCE-20260426-376](#evidence-20260426-376) 대시보드 2.7 — 의뢰인 최근 사건 preview 추가
+- [EVIDENCE-20260426-377](#evidence-20260426-377) 대시보드 2.7b — 의뢰인 preview / EmptyGuide 밀도 조정
+- [EVIDENCE-20260426-378](#evidence-20260426-378) 대시보드 2.8 — 변호사/관리자 preview / EmptyGuide 밀도 정리
+
+#### 마감 판정
+
+- **의뢰인 `/dashboard`:** 실제 접근 가능 사건 수, 진행 수, 사건 정리도, 최근 사건 preview를 표시한다. 사건 0건일 때 EmptyGuide 중심으로 표시한다.
+- **변호사 `/lawyer`:** 실제 사건 상태 기준 검토 큐 count와 최근 검토 후보 preview를 표시한다. 완전 빈 상태와 부분 빈 상태를 구분한다.
+- **관리자 `/admin`:** 실제 운영 지표, 상태별 분포, 운영 확인 후보 preview를 표시한다. 완전 빈 상태와 부분 빈 상태를 구분한다.
+
+#### 공통 정리
+
+- `DashboardPreviewCard` / `DashboardPreviewEmpty` 사용
+- `dashboard-display` 유틸 사용
+- `dashboard-empty-state` 유틸 사용
+- `dashboard-demo-metrics.ts`는 fallback·demo 용도로 유지
+
+#### 수정 파일
+
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `src/lib/dashboard/dashboard-demo-metrics.ts` (상단 주석 보강)
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- CaseStatus canonical 변경 없음
+- 사건/인터뷰/문서 생성 로직 변경 없음
+- 문서 승인/생성 로직 변경 없음
+- 질문셋 [343]~[350] 재오픈 없음
+- FILE-1B 변경 없음
+- 배포 전 QA 확정표 변경 없음
+- Living Logo V2 구조 변경 없음
+- metrics 조회 조건 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+- `AlertKpiWidget` 수정 없음
+
+#### 판정
+
+- 역할별 대시보드 실데이터 1차 연결 범위는 마감한다.
+- 이후 작업은 대시보드 3.1 데이터 고도화, demo fallback 정리 여부 판단, 배포 전 QA 확정으로 분리한다.
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint "src/app/(protected)/dashboard/page.tsx" "src/app/(lawyer)/lawyer/page.tsx" "src/app/(admin)/admin/page.tsx" src/components/dashboard src/lib/dashboard --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과** (`next lint`, 경고·에러 없음)
+
+#### 다음 후보
+
+- 배포 전 QA 팀 회신 반영 (`#deployment-qa-nm-request-copy`, `#evidence-20260428-predeploy-qa-closure`)
+- [대시보드 3.1 우선순위표](./WORK_INSTRUCTION_DASHBOARD_3_1_DATA_ENHANCEMENT_PRIORITY.md) · [#evidence-20260426-380](#evidence-20260426-380)
+
+### [EVIDENCE-20260426-378] 대시보드 2.8 — 변호사/관리자 preview / EmptyGuide 밀도 정리 {#evidence-20260426-378}
+
+#### 작업 항목명
+
+변호사·관리자 Living 대시보드에서 완전 빈 상태일 때 preview 블록의 `DashboardPreviewEmpty`와 역할별 `EmptyGuide`가 중복되지 않도록 `showPreviewEmpty`로 제어한다.
+
+#### 범위
+
+- `LawyerReviewQueue`에 `showPreviewEmpty` 옵션(기본 true)
+- `AdminRiskBoard`에 `showPreviewEmpty` 옵션(기본 true)
+- `shouldShowLawyerEmptyGuide` / `shouldShowAdminEmptyGuide`가 true일 때 `showPreviewEmpty={false}`로 섹션 내부 빈 문구 숨김·역할별 EmptyGuide를 메인 안내로 유지
+- 부분 빈 상태(count·승인 등은 있으나 preview만 없음)에서는 `showEmptyGuide`가 false이므로 `showPreviewEmpty` true → 섹션 내부 `DashboardPreviewEmpty` 유지
+- 신규 API·metrics 조회 변경 없음
+
+#### 수정 파일
+
+- `src/components/dashboard/lawyer/lawyer-review-queue.tsx`
+- `src/components/dashboard/lawyer/lawyer-dashboard-home.tsx`
+- `src/components/dashboard/admin/admin-risk-board.tsx`
+- `src/components/dashboard/admin/admin-dashboard-home.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- CaseStatus canonical 변경 없음
+- 사건/인터뷰/문서 생성 로직 변경 없음
+- 문서 승인/생성 로직 변경 없음
+- 질문셋 [343]~[350] 재오픈 없음
+- FILE-1B 변경 없음
+- 배포 전 QA 확정표 변경 없음
+- Living Logo V2 구조 변경 없음
+- metrics 조회 조건 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+- `DashboardPreviewCard` 구조 대규모 변경 없음
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint src/components/dashboard/lawyer src/components/dashboard/admin src/lib/dashboard --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과** (`next lint`, 경고·에러 없음)
+
+#### 근거 메모
+
+- `showEmptyGuide`와 `showPreviewEmpty`는 `!showEmptyGuide`로 연결(의뢰인 2.7b와 동일 원칙).
+
+#### 남은 이슈
+
+- 없음.
+
+#### 다음 작업
+
+- 대시보드 2.9 — 의뢰인 최근 사건 preview 세부 고도화
+- 대시보드 3.0 — 역할별 대시보드 실데이터 1차 마감 판정
+
+### [EVIDENCE-20260426-377] 대시보드 2.7b — 의뢰인 preview / EmptyGuide 밀도 조정 {#evidence-20260426-377}
+
+#### 작업 항목명
+
+의뢰인 `/dashboard`에서 사건이 0건일 때 `ClientRecentCasesPreview` 내부 빈 문구와 `ClientDashboardEmptyGuide`가 겹치지 않도록, 사건이 있을 때만 최근 사건 섹션을 표시한다.
+
+#### 범위
+
+- `shouldShowClientEmptyGuide(metrics)`가 true일 때 `ClientRecentCasesPreview` 미렌더
+- 사건 0건일 때 `ClientDashboardEmptyGuide`만 메인 빈 상태 안내로 유지
+- 사건 1건 이상일 때 `ClientRecentCasesPreview` 표시·EmptyGuide 숨김
+- `ClientDashboardPermissionNote` / `ClientTrustPanel` 유지
+- `ClientRecentCasesPreview.tsx` 변경 없음(최소 변경)
+
+#### 수정 파일
+
+- `src/components/dashboard/client/client-dashboard-home.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- CaseStatus canonical 변경 없음
+- 사건/인터뷰/문서 생성 로직 변경 없음
+- 문서 승인/생성 로직 변경 없음
+- 질문셋 [343]~[350] 재오픈 없음
+- FILE-1B 변경 없음
+- 배포 전 QA 확정표 변경 없음
+- Living Logo V2 구조 변경 없음
+- metrics 조회 조건 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint "src/app/(protected)/dashboard/page.tsx" src/components/dashboard/client src/lib/dashboard --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과** (`next lint`, 경고·에러 없음)
+
+#### 근거 메모
+
+- `showEmptyGuide`는 `totalCases === 0`과 동일(기존 `shouldShowClientEmptyGuide`).
+
+#### 남은 이슈
+
+- 없음.
+
+#### 다음 작업
+
+- 대시보드 2.8 — 역할별 preview·EmptyGuide 밀도 고도화
+- 대시보드 2.9 — 의뢰인 최근 사건 preview 세부 고도화
+
+### [EVIDENCE-20260426-376] 대시보드 2.7 — 의뢰인 최근 사건 preview 추가 {#evidence-20260426-376}
+
+#### 작업 항목명
+
+의뢰인 Living 대시보드에 최근 사건 preview(최대 5건)를 추가하고, `DashboardPreviewCard`·`dashboard-display` 유틸을 재사용한다.
+
+#### 범위
+
+- `ClientCasePreviewItem` 타입 추가
+- `ClientDashboardMetrics.recentCasesPreview` 추가
+- `(protected)/dashboard/page.tsx`에서 readiness용 `prisma.case.findMany`(접근 가능 사건·`updatedAt` desc·최대 10건) 결과를 재사용해 `recentCasesPreview` 생성 후 metrics에 병합
+- `ClientRecentCasesPreview` 컴포넌트 추가
+- `ClientDashboardHome`에 최근 사건 섹션 연결
+- `DashboardPreviewCard` / `DashboardPreviewEmpty` 재사용
+- `dashboard-display` 공통 유틸 재사용
+- `EMPTY_CLIENT_DASHBOARD_METRICS`에 `readiness`·`recentCasesPreview` 기본값 정리
+
+#### 수정 파일
+
+- `src/lib/dashboard/dashboard-metrics.ts`
+- `src/app/(protected)/dashboard/page.tsx`
+- `src/components/dashboard/client/client-recent-cases-preview.tsx`
+- `src/components/dashboard/client/client-dashboard-home.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- CaseStatus canonical 변경 없음
+- 사건/인터뷰/문서 생성 로직 변경 없음
+- 문서 승인/생성 로직 변경 없음
+- 질문셋 [343]~[350] 재오픈 없음
+- FILE-1B 변경 없음
+- 배포 전 QA 확정표 변경 없음
+- Living Logo V2 구조 변경 없음
+- `fetchClientDashboardMetrics` 집계 쿼리 구조 변경 없음(추가 `findMany` 없음)
+- `dashboard-demo-metrics.ts` 삭제 없음
+- `shouldShowClientEmptyGuide` 조건 변경 없음
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint "src/app/(protected)/dashboard/page.tsx" src/components/dashboard/client src/components/dashboard/dashboard-preview-card.tsx src/components/dashboard/dashboard-preview-empty.tsx src/lib/dashboard --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과** (`next lint`, 경고·에러 없음)
+
+#### 근거 메모
+
+- preview는 기존 `buildAccessibleCaseWhere` 기반 조회와 동일 데이터 출처; `updatedAt`은 readiness 조회 `select`에만 추가.
+
+#### 남은 이슈
+
+- 없음(2.7b: 사건 0건 시 안내 밀도 조정 후보).
+
+#### 다음 작업
+
+- 대시보드 2.7b — 의뢰인 preview와 EmptyGuide 밀도 조정
+- 대시보드 2.8 — preview 조건부 표시 고도화
+
+### [EVIDENCE-20260426-375] 대시보드 2.6 — 공통 날짜/상태 표시 유틸 정리 {#evidence-20260426-375}
+
+#### 작업 항목명
+
+변호사·관리자 preview 매핑에서 날짜 포맷, 상태 라벨, 제목 fallback, href, CTA·reason 문구를 `dashboard-display` 유틸로 통일한다.
+
+#### 범위
+
+- `dashboard-display` 유틸 추가
+- preview용 날짜 포맷을 `formatDashboardDateTime`으로 통일
+- preview용 상태 라벨을 `getDashboardCaseStatusLabel`로 통일 (`case.utils` `statusLabel` 위임)
+- preview 제목 fallback을 `getDashboardCaseTitle`로 통일
+- 사건 상세 href를 `getDashboardCaseHref`로 통일
+- 변호사 preview mapping에서 공통 유틸 사용
+- 관리자 `attentionPreview` mapping에서 공통 유틸 사용
+- `dashboard-metrics` 내 preview 전용 `Intl.DateTimeFormat` 중복 제거
+- PreviewCard 구조와 metrics 조회 조건은 변경하지 않음
+
+#### 수정 파일
+
+- `src/lib/dashboard/dashboard-display.ts`
+- `src/lib/dashboard/dashboard-metrics.ts`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- CaseStatus canonical 변경 없음
+- 사건/인터뷰/문서 생성 로직 변경 없음
+- 문서 승인/생성 로직 변경 없음
+- 질문셋 [343]~[350] 재오픈 없음
+- FILE-1B 변경 없음
+- 배포 전 QA 확정표 변경 없음
+- Living Logo V2 구조 변경 없음
+- metrics 조회 조건 변경 없음
+- `statusBreakdown` 계산 변경 없음
+- `LawyerReviewQueuePreviewItem` / `AdminAttentionPreviewItem` 강제 통합 없음
+- `dashboard-preview-card.tsx` 구조 대규모 변경 없음
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint src/lib/dashboard src/components/dashboard "src/app/(lawyer)/lawyer/page.tsx" "src/app/(admin)/admin/page.tsx" --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과** (`next lint`, 경고·에러 없음)
+
+#### 근거 메모
+
+- `statusLabel` import 경로: `@/features/cases/case.utils` (저장소 기준).
+
+#### 남은 이슈
+
+- 없음.
+
+#### 다음 작업
+
+- 대시보드 2.7 — 의뢰인 최근 사건 preview
+- 대시보드 2.8 — preview 조건부 표시 고도화
+
+### [EVIDENCE-20260426-374] 대시보드 2.5 — 빈 상태 조건부 정리 {#evidence-20260426-374}
+
+#### 작업 항목명
+
+실제 metrics 기준으로 역할별 `EmptyGuide`를 조건부 표시해, 데이터가 있을 때는 과한 빈 안내를 줄이고 없을 때만 강조한다.
+
+#### 범위
+
+- 역할별 EmptyGuide 노출 조건 유틸 추가 (`dashboard-empty-state.ts`)
+- 의뢰인 EmptyGuide를 `totalCases === 0`일 때만 표시
+- 변호사 EmptyGuide를 검토 큐 count와 preview가 모두 0일 때만 표시
+- 관리자 EmptyGuide를 `attentionNeeded`·`approvalPending`·`attentionPreview`가 모두 비었을 때만 표시
+- `DashboardPreviewEmpty`와 역할별 EmptyGuide의 역할 분리 유지
+- 신규 API 없이 기존 metrics 데이터만 사용
+
+#### 수정 파일
+
+- `src/lib/dashboard/dashboard-empty-state.ts`
+- `src/components/dashboard/client/client-dashboard-home.tsx`
+- `src/components/dashboard/lawyer/lawyer-dashboard-home.tsx`
+- `src/components/dashboard/admin/admin-dashboard-home.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- CaseStatus canonical 변경 없음
+- 사건/인터뷰/문서 생성 로직 변경 없음
+- 문서 승인/생성 로직 변경 없음
+- 질문셋 [343]~[350] 재오픈 없음
+- FILE-1B 변경 없음
+- 배포 전 QA 확정표 변경 없음
+- Living Logo V2 구조 변경 없음
+- metrics 조회 로직 변경 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint src/components/dashboard src/lib/dashboard --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과** (`next lint`, 경고·에러 없음)
+
+#### 근거 메모
+
+- 관리자: 승인 대기가 있으면 화면이 “빈 상태”가 아니므로 `approvalPending === 0` 포함.
+
+#### 남은 이슈
+
+- 없음.
+
+#### 다음 작업
+
+- 대시보드 2.6 — 공통 날짜/상태 표시 유틸 정리
+- 대시보드 2.7 — 의뢰인 최근 사건 preview
+
+### [EVIDENCE-20260426-373] 대시보드 2.4 — 공통 PreviewCard 추출 {#evidence-20260426-373}
+
+#### 작업 항목명
+
+변호사 `LawyerReviewQueue`와 관리자 `AdminRiskBoard`의 사건 preview UI를 `DashboardPreviewCard`·`DashboardPreviewEmpty`로 통일한다.
+
+#### 범위
+
+- `DashboardPreviewCard` 추가
+- `DashboardPreviewEmpty` 추가
+- `LawyerReviewQueue`의 최근 검토 후보 사건 UI를 공통 PreviewCard로 교체
+- `AdminRiskBoard`의 운영 확인 후보 사건 UI를 공통 PreviewCard로 교체
+- 변호사 preview는 indigo tone
+- 관리자 preview는 amber tone
+- preview 데이터 조회·metrics 구조는 변경하지 않음
+
+#### 수정 파일
+
+- `src/components/dashboard/dashboard-preview-card.tsx`
+- `src/components/dashboard/dashboard-preview-empty.tsx`
+- `src/components/dashboard/lawyer/lawyer-review-queue.tsx`
+- `src/components/dashboard/admin/admin-risk-board.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- CaseStatus canonical 변경 없음
+- 사건/인터뷰/문서 생성 로직 변경 없음
+- 문서 승인/생성 로직 변경 없음
+- 질문셋 [343]~[350] 재오픈 없음
+- FILE-1B 변경 없음
+- 배포 전 QA 확정표 변경 없음
+- Living Logo V2 구조 변경 없음
+- metrics 조회 로직 변경 없음
+- `LawyerReviewQueuePreviewItem` / `AdminAttentionPreviewItem` 강제 통합 없음
+- `statusBreakdown` 계산 변경 없음
+- `AlertKpiWidget` 수정 없음
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint src/components/dashboard src/components/dashboard/lawyer src/components/dashboard/admin src/lib/dashboard --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과** (`next lint`, 경고·에러 없음)
+
+#### 근거 메모
+
+- 카드 전체 단일 `Link`; CTA는 badge 형태 표시.
+
+#### 남은 이슈
+
+- 없음.
+
+#### 다음 작업
+
+- 대시보드 2.5 — 빈 상태 조건부 정리
+- 대시보드 2.6 — 공통 날짜/상태 표시 유틸 정리
+
+### [EVIDENCE-20260426-372] 대시보드 2.3b — 관리자 상태별 사건 분포 미니바 {#evidence-20260426-372}
+
+#### 작업 항목명
+
+2.3에서 준비한 `AdminDashboardMetrics.statusBreakdown`을 `AdminStatusDistributionBar`로 노출해, 접수·인터뷰·문서·검토·승인·종결 그룹별 분포와 미니 막대·총 건수를 표시한다.
+
+#### 범위
+
+- `AdminStatusDistributionBar` 추가
+- 기존 `AdminDashboardMetrics.statusBreakdown`을 UI에 연결
+- 접수 / 인터뷰 / 문서 / 검토 / 승인 / 종결 그룹으로 사건 분포 표시
+- 총 사건 수와 그룹별 count 표시
+- 상태별 사건이 0건일 때 안내 문구 표시
+- 신규 API 없이 기존 metrics 데이터만 사용
+
+#### 수정 파일
+
+- `src/components/dashboard/admin/admin-status-distribution-bar.tsx`
+- `src/components/dashboard/admin/admin-dashboard-home.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- CaseStatus canonical 변경 없음
+- 사건/인터뷰/문서 생성 로직 변경 없음
+- 문서 승인/생성 로직 변경 없음
+- 질문셋 [343]~[350] 재오픈 없음
+- FILE-1B 변경 없음
+- 배포 전 QA 확정표 변경 없음
+- Living Logo V2 구조 변경 없음
+- admin 전용 신규 mode 추가 없음
+- `AlertKpiWidget` 수정 없음
+- `fetchAdminDashboardMetrics` 조회 로직 대규모 변경 없음
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint "src/app/(admin)/admin/page.tsx" src/components/dashboard/admin src/lib/dashboard --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과** (`next lint`, 경고·에러 없음)
+
+#### 근거 메모
+
+- `statusBreakdown` 필드만 사용; DELIVERED 등 스키마 확장 없음.
+
+#### 남은 이슈
+
+- 없음.
+
+#### 다음 작업
+
+- 대시보드 2.4 — 공통 PreviewCard 추출
+- 대시보드 2.5 — 역할별 빈 상태 조건부 정리
+
+### [EVIDENCE-20260426-371] 대시보드 2.3 — 관리자 운영 지표 실제 고도화 {#evidence-20260426-371}
+
+#### 작업 항목명
+
+관리자 대시보드에 `statusBreakdown`·`attentionPreview`를 추가하고, `fetchAdminDashboardMetrics`에서 접근 가능 사건 기준 상태별 count·운영 확인 후보(최대 5건)를 조회한다. 레이더 카피는 운영 관제 톤으로 정리한다.
+
+#### 범위
+
+- `AdminDashboardMetrics`에 `statusBreakdown` / `attentionPreview` 추가
+- `fetchAdminDashboardMetrics`에서 상태별 사건 수와 운영 확인 후보 조회
+- 승인 대기 count는 기존 `UserStatus.PENDING` 기준 유지
+- `attentionNeeded`는 `HOLD` + `INTAKE_PENDING` 기준 유지
+- `AdminOperationsRadar` 설명을 운영 관제 톤으로 정리
+- `AdminRiskBoard`를 실제 `attentionPreview` 기반으로 표시
+- 신규 API 없이 기존 page 서버 조회 흐름 사용
+
+#### 수정 파일
+
+- `src/lib/dashboard/dashboard-metrics.ts`
+- `src/components/dashboard/admin/admin-operations-radar.tsx`
+- `src/components/dashboard/admin/admin-risk-board.tsx`
+- `src/components/dashboard/admin/admin-dashboard-home.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- 신규 API route 생성 없음
+- DB schema 변경 없음
+- 권한 정책 변경 없음
+- middleware 변경 없음
+- `getSessionUser` / `requireSessionUser` 의미 변경 없음
+- CaseStatus canonical 변경 없음
+- 사건/인터뷰/문서 생성 로직 변경 없음
+- 문서 승인/생성 로직 변경 없음
+- 질문셋 [343]~[350] 재오픈 없음
+- FILE-1B 변경 없음
+- 배포 전 QA 확정표 변경 없음
+- Living Logo V2 구조 변경 없음
+- admin 전용 신규 mode 추가 없음
+- `AlertKpiWidget` 수정 없음
+- `dashboard-demo-metrics.ts` 삭제 없음
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint "src/app/(admin)/admin/page.tsx" src/components/dashboard/admin src/lib/dashboard --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과** (`next lint`, 경고·에러 없음)
+
+#### 근거 메모
+
+- `statusBreakdown` UI는 이번 PR에서 미노출(데이터만 준비, 2.3b 후보).
+- preview 상태: `HOLD`, `INTAKE_PENDING`, `REVIEW_PENDING`.
+
+#### 남은 이슈
+
+- 없음(2.3b: 상태별 분포 미니바 등은 후속).
+
+#### 다음 작업
+
+- 대시보드 2.3b — 관리자 상태별 사건 분포 미니바
+- 대시보드 2.4 — 공통 PreviewCard 추출
+
+### [EVIDENCE-20260426-370] 대시보드 2.2 — 변호사 검토 큐 실제 고도화 {#evidence-20260426-370}
+
+#### 작업 항목명
+
+변호사 접근 가능 사건 기준으로 인터뷰 완료·문서 초안·보완 필요 **count**를 정리하고, `INTERVIEW_DONE`·`DRAFTING`·`REVIEW_PENDING`·`INTAKE_PENDING` 중 최근 갱신 **5건 preview**·`/cases/:id` 링크·`statusLabel`·`ko-KR` 날짜 표시.
+
+#### 범위
+
+- `LawyerReviewQueuePreviewItem`·`LawyerDashboardMetrics.reviewQueuePreview`
+- `fetchLawyerDashboardMetrics`: `needsSupplement` = `INTAKE_PENDING`+`HOLD`; `draftReady` 단일 `in` 쿼리; `findMany` preview
+- `LawyerReviewQueue` 카드 + Review Preview 블록
+
+#### 수정 파일
+
+- `src/lib/dashboard/dashboard-metrics.ts`
+- `src/components/dashboard/lawyer/lawyer-review-queue.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- 신규 API·DB schema·권한·middleware·세션 의미·CaseStatus 정의·사건·인터뷰·문서·문서 승인 로직·질문셋 [343]~[350]·FILE-1B·배포 전 QA 확정 표·Living Logo V2·lawyer mode·`dashboard-demo-metrics.ts` 삭제
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint "src/app/(lawyer)/lawyer/page.tsx" src/components/dashboard/lawyer src/lib/dashboard --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과**
+
+### [EVIDENCE-20260426-369] 대시보드 2.1 — 사건 정리도 실제 계산 {#evidence-20260426-369}
+
+#### 작업 항목명
+
+의뢰인 `/dashboard` **사건 정리도**를 정적 체크리스트가 아니라 접근 가능 사건 중 대표 1건의 실제 필드·첨부 수·인터뷰 `answersJson` 기반으로 계산(준비 상태 지표, 법률 판단 아님).
+
+#### 범위
+
+- `ClientCaseReadiness`·`ClientCaseReadinessItem`·`EMPTY_CLIENT_CASE_READINESS`; `ClientDashboardMetrics.readiness`
+- `buildClientCaseReadiness`·`countInterviewAnswerEntries` (`client-case-readiness.ts`)
+- `(protected)/dashboard/page.tsx` — `findMany` + `_count.attachments`(ACTIVE·미삭제)·`interviews`; 대표 사건: 비(CLOSED·REJECTED) 우선
+- `ClientCaseReadinessCard` — `readiness` props, 고정 안내 문구
+- CaseStatus `REVIEW_READY` 집합은 Prisma·`case-status.ts`와 정합
+
+#### 수정·추가 파일
+
+- `src/lib/dashboard/dashboard-metrics.ts`
+- `src/lib/dashboard/client-case-readiness.ts` (신규)
+- `src/app/(protected)/dashboard/page.tsx`
+- `src/components/dashboard/client/client-case-readiness-card.tsx`
+- `src/components/dashboard/client/client-dashboard-home.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- 신규 API·DB schema·권한·middleware·`getSessionUser` 의미·CaseStatus 정의·사건·인터뷰·문서 생성 로직·질문셋 [343]~[350]·FILE-1B·배포 전 QA 확정 표·Living Logo V2·`dashboard-demo-metrics.ts` 삭제·AI 법적 판단·승소 표현
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint "src/app/(protected)/dashboard/page.tsx" src/components/dashboard/client src/lib/dashboard --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과**
+
+### [EVIDENCE-20260426-368] 대시보드 2.0 — 실제 데이터 연결 1차 {#evidence-20260426-368}
+
+#### 작업 항목명
+
+`buildAccessibleCaseWhere`·Prisma `count`로 역할별 최소 지표를 연결하고, 컴포넌트는 `metrics` props(기본값 `EMPTY_*`)를 받도록 정리. `dashboard-demo-metrics.ts`는 fallback·demo용 유지.
+
+#### 범위
+
+- `src/lib/dashboard/dashboard-metrics.ts` — 타입, `EMPTY_*`, `fetchClientDashboardMetrics` / `fetchLawyerDashboardMetrics` / `fetchAdminDashboardMetrics`
+- 의뢰인·변호사·관리자 `page.tsx`에서 fetch 후 홈 컴포넌트에 전달
+- `ClientDashboardHome` 헤더 statusText에 총·진행 건수 반영(0건 시 기존 문구)
+- `LawyerReviewQueue`·`AdminOperationsRadar` 실수치 카드; `ClientCaseReadinessCard`는 `items` 옵션만(기본 정적)
+- `dashboard-demo-metrics.ts` 상단 주석
+
+#### 수정 파일
+
+- `src/lib/dashboard/dashboard-metrics.ts` (신규)
+- `src/lib/dashboard/dashboard-demo-metrics.ts`
+- `src/app/(protected)/dashboard/page.tsx`
+- `src/app/(lawyer)/lawyer/page.tsx`
+- `src/app/(admin)/admin/page.tsx`
+- `src/components/dashboard/client/client-dashboard-home.tsx`
+- `src/components/dashboard/client/client-case-readiness-card.tsx`
+- `src/components/dashboard/lawyer/lawyer-dashboard-home.tsx`
+- `src/components/dashboard/lawyer/lawyer-review-queue.tsx`
+- `src/components/dashboard/admin/admin-dashboard-home.tsx`
+- `src/components/dashboard/admin/admin-operations-radar.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- 신규 API route·DB schema·권한·middleware·`getSessionUser`/`requireSessionUser` 의미·CaseStatus 정의·사건·인터뷰·문서 생성 로직·질문셋 [343]~[350]·FILE-1B·배포 전 QA 확정 표·Living Logo V2·V1 삭제·`dashboard-demo-metrics.ts` 본문 export 제거·`AlertKpiWidget` 수정
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint src/app/(protected)/dashboard/page.tsx src/app/(lawyer)/lawyer/page.tsx src/app/(admin)/admin/page.tsx src/components/dashboard src/lib/dashboard --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과**
+
+### [EVIDENCE-20260426-367] Living Logo V2 전체 적용 마감 판정 {#evidence-20260426-367}
+
+#### 목적
+
+- AI법친 Living Logo V2 브랜드 엔진의 **1차 적용 범위**를 공식 마감한다.
+- 홈 Hero, 의뢰인, 변호사, 관리자, restricted 안내 경로까지 V2 적용 상태를 확인한다.
+- V1 파일은 fallback으로 유지하고 삭제하지 않는다.
+
+#### 적용 완료 (코드 기준 확인)
+
+- **홈 Hero:** `AibeopchinIntroScene` → `AibeopchinLogoV2` (`intro` / reduced motion 시 `idle`, `reducedMotion` 전달)
+- **의뢰인 `/dashboard`:** `ClientDashboardHome` → `DashboardLivingHeader` `useV2Logo`, role `client` → mode **thinking**
+- **변호사 `/lawyer`:** `LawyerDashboardHome` → `DashboardLivingHeader` `useV2Logo`, role `lawyer` → mode **idle**
+- **관리자 `/admin`:** `AdminDashboardHome` → `DashboardLivingHeader` `useV2Logo`, role `admin` → mode **verified**
+- **restricted 안내:** `DashboardRestrictedState` → `DashboardRestrictedLogoNote` → `AibeopchinLogoV2` **restricted**
+
+#### 상태 의미 (1차 마감)
+
+| 상태 | 의미 |
+|------|------|
+| intro | 최초 생성 |
+| thinking | 사건 정리 중 |
+| idle | 안정 검토 |
+| verified | 운영 검증 |
+| restricted | 승인·권한 제한 안내 |
+
+(신규 mode 미추가.)
+
+#### 접근성·모션
+
+- reduced motion 정책(`aibeopchin-logo-v2-motion-policy`) 유지
+- particles / orbit / draw / hover scale 정책 유지
+- SVG 글리프 `aria-hidden`, 래퍼 `role="img"`·`aria-label` 유지
+- restricted: particles / orbit off(mode config)
+
+#### 변경하지 않은 것
+
+- API·DB·권한·middleware·`getSessionUser`/`requireSessionUser`·CaseStatus·사건·인터뷰·문서·질문셋 [343]~[350]·FILE-1B·배포 전 QA 확정 표·신규 mode·Living Logo V1 파일 삭제·실제 데이터 연결
+
+#### 판정
+
+- Living Logo V2 브랜드 엔진 **1차 적용 범위는 마감**한다.
+- 이후 로고 관련 작업은 V2.4 톤 미세 조정, V1 정리 여부 판단, 실제 데이터 연결 등으로 **별도 PR**로 분리한다.
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint src/components/branding src/components/dashboard src/app/page.tsx src/app/(protected)/dashboard/page.tsx src/app/(lawyer)/lawyer/page.tsx src/app/(admin)/admin/page.tsx --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과**
+
+### [EVIDENCE-20260426-366] 대시보드 V2 점진 적용 3차 — 관리자 Living Logo V2 {#evidence-20260426-366}
+
+#### 작업 항목명
+
+`/admin` 헤더에 Living Logo V2(`useV2Logo`) 적용. admin은 `AIBEOPCHIN_LOGO_V2_ROLE_MODE` 기준 **verified**(particles·orbit off, soft pulse, 안정 톤). 의뢰인·변호사 V2 유지, 관리자 본문 블록·위젯 미변경.
+
+#### 범위
+
+- `AdminDashboardHome` → `DashboardLivingHeader`에 `useV2Logo`
+
+#### 수정 파일
+
+- `src/components/dashboard/admin/admin-dashboard-home.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- API·DB·권한·middleware·`getSessionUser`/`requireSessionUser`·CaseStatus·사건·인터뷰·문서·질문셋 [343]~[350]·FILE-1B·배포 전 QA 확정 표·신규 mode·V1 삭제·실제 데이터 연결·`AlertKpiWidget`·관리자 레이아웃 대개편·`aibeopchin-logo-v2` `lg` 폭(380px 유지)
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint src/components/dashboard src/components/branding "src/app/(admin)/admin/page.tsx" --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과**
+
+### [EVIDENCE-20260426-365] 대시보드 V2 점진 적용 2차 — 변호사 Living Logo V2 {#evidence-20260426-365}
+
+#### 작업 항목명
+
+`/lawyer` 헤더에 Living Logo V2(`useV2Logo`)를 켜고, 상단 V2와 겹치지 않도록 AI 사건 레이더 점 펄스를 낮춤. `/dashboard` 의뢰인 V2·`/admin` V1 유지.
+
+#### 범위
+
+- `LawyerDashboardHome` → `DashboardLivingHeader`에 `useV2Logo`(lawyer → `AIBEOPCHIN_LOGO_V2_ROLE_MODE` 기준 `idle`)
+- `LawyerCaseRadar` — opacity/scale 진폭·stagger·duration 완화(V2와 이중 모션 완화)
+
+#### 수정 파일
+
+- `src/components/dashboard/lawyer/lawyer-dashboard-home.tsx`
+- `src/components/dashboard/lawyer/lawyer-case-radar.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- API·DB·권한·middleware·`getSessionUser`/`requireSessionUser`·CaseStatus·사건·인터뷰·문서·질문셋 [343]~[350]·FILE-1B·배포 전 QA 확정 표·`/admin` V2·신규 mode·V1 삭제·실제 데이터·레이더 데이터 연결
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint src/components/dashboard src/components/branding "src/app/(lawyer)/lawyer/page.tsx" --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과**
+
+### [EVIDENCE-20260426-364] Living Logo 2.3 — restricted 상태 실제 연결 {#evidence-20260426-364}
+
+#### 작업 항목명
+
+권한 정책·API·미들웨어는 그대로 두고, `DashboardRestrictedState`에 `DashboardRestrictedLogoNote`(`AibeopchinLogoV2` `mode="restricted"`)를 배치해 제한·승인 안내를 상태 신호로 보이게 함.
+
+#### 범위
+
+- `DashboardRestrictedState` — 모바일 1열·lg 이상 로고 열 + `DashboardStatePanel` 2열
+- `LawyerDashboardPendingApproval` — 기존 `DashboardRestrictedState` 사용 유지(`isPending` 기본 false, 조회 로직 없음)
+- 의뢰인·관리자 `PermissionNote` — restricted 로고 미삽입(문구·역할 안내 중심)
+- dev-only 강제 노출·임시 미리보기 없음
+
+#### 수정 파일
+
+- `src/components/dashboard/dashboard-restricted-state.tsx`
+- `src/components/dashboard/dashboard-restricted-logo-note.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- API·DB·권한 정책·middleware·`getSessionUser`/`requireSessionUser`·CaseStatus·사건·인터뷰·문서·질문셋 [343]~[350]·FILE-1B·배포 전 QA 확정 표·실제 승인 상태 연결·신규 권한 분기·`/lawyer`·`/admin` V2 전면 적용·`DashboardStatePanel` 로직 대개편
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint src/components/dashboard src/components/branding "src/app/(lawyer)/lawyer/page.tsx" --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과**
+
+### [EVIDENCE-20260426-363] Living Logo 2.2 — reduced motion 세밀화 {#evidence-20260426-363}
+
+#### 작업 항목명
+
+`prefers-reduced-motion` 대응을 `aibeopchin-logo-v2-motion-policy`로 단일화하고, V2에 `reducedMotion` prop·glyph `draw`/`pulseOverride`·path stroke `draw`로 인트로 획·파티클·궤도·호버 스케일·pulse를 보수적으로 줄임.
+
+#### 범위
+
+- motion policy: reduced 시 intro→idle·draw off·particles/orbit off·hover scale off; thinking은 soft pulse만; verified/restricted는 pulse none
+- 비 reduced 시 `pulseOverride` 미전달로 2.1 mode별 pulse 유지
+- `AibeopchinIntroScene`·`DashboardLivingHeader`(V2)·`DashboardRestrictedLogoNote`에 reduced 전달
+
+#### 수정·추가 파일
+
+- `src/lib/branding/aibeopchin-logo-v2-motion-policy.ts` (신규)
+- `src/components/branding/aibeopchin-logo-v2-types.ts` (`AibeopchinLogoV2MotionOverride`)
+- `src/components/branding/aibeopchin-logo-v2.tsx`
+- `src/components/branding/aibeopchin-logo-v2-glyph.tsx`
+- `src/components/branding/aibeopchin-logo-v2-path.tsx`
+- `src/components/branding/aibeopchin-intro-scene.tsx`
+- `src/components/dashboard/dashboard-living-header.tsx`
+- `src/components/dashboard/dashboard-restricted-logo-note.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- API·DB·권한·middleware·CaseStatus·사건·인터뷰·문서·질문셋 [343]~[350]·FILE-1B·배포 전 QA 확정 표·`/lawyer`·`/admin` V2 전면 적용·신규 mode·라우트·V1 로고에 `reducedMotion` prop 추가
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint src/components/branding src/components/dashboard/dashboard-living-header.tsx src/components/dashboard/client/client-dashboard-home.tsx --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과**
+
+### [EVIDENCE-20260426-362] Living Logo 2.1 — 상태별 의미 강화 {#evidence-20260426-362}
+
+#### 작업 항목명
+
+Living Logo V2의 mode별 의미·강도를 `aibeopchin-logo-v2-mode-config`로 단일화하고, 역할→기본 mode는 `aibeopchin-logo-v2-role-mode`로 고정. V2 글리프 pulse·글로우와 헤더 매핑을 설정 기반으로 정리.
+
+#### 범위
+
+- mode별 `particles` / `orbit` / `pulse` / `opacity` / `glow` 테이블
+- 역할별 기본 mode·의미 문구(`ROLE_MEANING`, 향후 UI/문서용)
+- `AibeopchinLogoV2`·`AibeopchinLogoV2Glyph`가 config 기반 동작
+- `DashboardLivingHeader`의 `getLogoMode` → `AIBEOPCHIN_LOGO_V2_ROLE_MODE`
+- `DashboardRestrictedLogoNote` 추가(화면 미삽입, 권한 PR 후보)
+- 접근성: `aria-label`에 짧은 상태 라벨 접미
+
+#### 수정·추가 파일
+
+- `src/lib/branding/aibeopchin-logo-v2-mode-config.ts` (신규)
+- `src/lib/branding/aibeopchin-logo-v2-role-mode.ts` (신규)
+- `src/components/branding/aibeopchin-logo-v2.tsx`
+- `src/components/branding/aibeopchin-logo-v2-glyph.tsx`
+- `src/components/dashboard/dashboard-living-header.tsx`
+- `src/components/dashboard/dashboard-restricted-logo-note.tsx` (신규)
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- API·DB·권한·middleware·CaseStatus·사건·인터뷰·문서·질문셋 [343]~[350]·FILE-1B·배포 전 QA 확정 표·`/lawyer`·`/admin` V2 전면 적용·신규 mode 추가·라우트·실제 restricted UI 배선
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint src/components/branding src/components/dashboard/dashboard-living-header.tsx src/components/dashboard/client/client-dashboard-home.tsx --max-warnings 0` — **exit 0**
+- `npm run lint` — **통과**
+
+### [EVIDENCE-20260426-361] 대시보드 V2 점진 적용 — 의뢰인 Living Logo V2 {#evidence-20260426-361}
+
+#### 작업 항목명
+
+홈과 동일한 Living Logo 2.0을 **의뢰인 `/dashboard` 헤더에만** 켜고, 변호사·관리자는 V1 유지. 롤백·2차 확장을 위해 `useV2Logo`·V1 파일 유지.
+
+#### 범위
+
+- `ClientDashboardHome` → `DashboardLivingHeader`에 `useV2Logo`
+- `LawyerDashboardHome` · `AdminDashboardHome` → `useV2Logo` 미적용
+- `AibeopchinLogoV2` `md`/`lg` 최대 폭 소폭 축소(대시보드·모바일 레이아웃 여유)
+
+#### 수정 파일
+
+- `src/components/dashboard/client/client-dashboard-home.tsx`
+- `src/components/branding/aibeopchin-logo-v2.tsx`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+#### 변경하지 않은 것
+
+- API·DB·권한·middleware·CaseStatus·사건·인터뷰·문서·질문셋 [343]~[350]·FILE-1B·배포 전 QA 확정 표·라우트·변호사/관리자 V2 전면 적용·V1 삭제·`getLogoMode` 신규 모드
+
+#### 검증
+
+- `npx tsc --noEmit` — **exit 0**
+- `npx eslint src/components/dashboard src/components/branding src/app/(protected)/dashboard/page.tsx --max-warnings 0` — **exit 0**
 - `npm run lint` — **통과**
 
 ### [EVIDENCE-20260426-355] 홈 랜딩 2차 — 코드 생성형 시네마틱 인트로 + Living Logo {#evidence-20260426-355}

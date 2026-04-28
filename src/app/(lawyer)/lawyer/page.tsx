@@ -1,15 +1,18 @@
+import Link from "next/link";
 import { DashboardLegacyBridge } from "@/components/dashboard/dashboard-legacy-bridge";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { LawyerDashboardHome } from "@/components/dashboard/lawyer/lawyer-dashboard-home";
 import { requireLawyer } from "@/lib/auth/session";
+import { fetchLawyerDashboardMetrics } from "@/lib/dashboard/dashboard-metrics";
 
 export default async function LawyerPage() {
   const user = await requireLawyer();
+  const lawyerDashboardMetrics = await fetchLawyerDashboardMetrics(user);
 
   return (
     <DashboardShell>
       <div className="flex flex-col gap-10 pb-8">
-        <LawyerDashboardHome />
+        <LawyerDashboardHome metrics={lawyerDashboardMetrics} />
 
         <DashboardLegacyBridge />
 
@@ -17,9 +20,23 @@ export default async function LawyerPage() {
           aria-labelledby="lawyer-legacy-portal-heading"
           className="rounded-2xl border border-slate-200/90 bg-white p-5 text-slate-900 shadow-[0_8px_40px_-12px_rgba(15,23,42,0.18)] ring-1 ring-slate-200/80 sm:rounded-[2rem] sm:p-6 md:p-8"
         >
-          <h2 id="lawyer-legacy-portal-heading" className="text-xl font-bold text-slate-900">
-            변호사 포털
-          </h2>
+          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div>
+              <h2 id="lawyer-legacy-portal-heading" className="text-xl font-bold text-slate-900">
+                변호사 포털
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                사건 고유번호를 입력해 의뢰인이 공유한 사건 패키지를 조회할 수 있습니다.
+              </p>
+            </div>
+
+            <Link
+              href="/lawyer/case-packages/lookup"
+              className="rounded-xl border px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+            >
+              사건 고유번호 조회
+            </Link>
+          </div>
           <div className="mt-4 rounded-xl border border-slate-200 p-4">
             <p>
               <span className="text-slate-500">이름</span> — {user.name}

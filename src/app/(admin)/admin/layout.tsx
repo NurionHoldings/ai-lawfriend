@@ -3,6 +3,7 @@ import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/session";
 import AuthStatus from "@/components/auth/auth-status";
 import { AdminHeaderAlertBell } from "@/components/admin/alerts/admin-header-alert-bell";
+import { AibeopchinLogo } from "@/components/brand/aibeopchin-logo";
 import { AppBuildBadge } from "@/components/common/AppBuildBadge";
 
 type Props = {
@@ -13,14 +14,15 @@ export default async function AdminLayout({ children }: Props) {
   const user = await requireAdmin();
 
   return (
-    <div className="min-h-screen bg-white text-black">
-      <header className="border-b bg-gray-50">
+    <div className="min-h-screen bg-aibeop-bg text-aibeop-text">
+      <header className="border-b border-aibeop-line bg-aibeop-surface">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <div>
-            <div className="text-lg font-semibold">AI법친 관리자</div>
-            <div className="text-sm text-gray-600">
+          <div className="space-y-2">
+            <AibeopchinLogo href="/admin" compact />
+            <div className="text-sm font-medium text-aibeop-text">관리자 콘솔</div>
+            <div className="text-sm text-aibeop-muted">
               권한: {user.role} ·{" "}
-              <Link href="/dashboard" className="text-gray-900 underline">
+              <Link href="/dashboard" className="text-aibeop-text underline">
                 사용자 화면(대시보드)
               </Link>
             </div>
@@ -34,7 +36,7 @@ export default async function AdminLayout({ children }: Props) {
 
       <main className="mx-auto max-w-6xl px-6 py-8">{children}</main>
 
-      <footer className="border-t border-slate-100 bg-gray-50">
+      <footer className="border-t border-aibeop-line bg-aibeop-surface">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <AppBuildBadge />
         </div>

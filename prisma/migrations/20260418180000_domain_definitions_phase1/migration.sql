@@ -174,14 +174,3 @@ CREATE TABLE "CaseTimelineEvent" (
 CREATE INDEX "CaseTimelineEvent_caseId_createdAt_idx" ON "CaseTimelineEvent"("caseId", "createdAt");
 
 ALTER TABLE "CaseTimelineEvent" ADD CONSTRAINT "CaseTimelineEvent_caseId_fkey" FOREIGN KEY ("caseId") REFERENCES "Case"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- QuestionSet 확장
-ALTER TABLE "QuestionSet" ADD COLUMN IF NOT EXISTS "version" TEXT NOT NULL DEFAULT '1.0.0';
-ALTER TABLE "QuestionSet" ADD COLUMN IF NOT EXISTS "catalogStatus" "QuestionSetStatus" NOT NULL DEFAULT 'DRAFT';
-ALTER TABLE "QuestionSet" ADD COLUMN IF NOT EXISTS "supportedDocumentTypes" JSONB NOT NULL DEFAULT '[]';
-ALTER TABLE "QuestionSet" ADD COLUMN IF NOT EXISTS "visibleToRoles" JSONB NOT NULL DEFAULT '[]';
-ALTER TABLE "QuestionSet" ADD COLUMN IF NOT EXISTS "definitionJson" JSONB;
-ALTER TABLE "QuestionSet" ADD COLUMN IF NOT EXISTS "publishedAt" TIMESTAMP(3);
-ALTER TABLE "QuestionSet" ADD COLUMN IF NOT EXISTS "archivedAt" TIMESTAMP(3);
-
-CREATE INDEX IF NOT EXISTS "QuestionSet_catalogStatus_idx" ON "QuestionSet"("catalogStatus");

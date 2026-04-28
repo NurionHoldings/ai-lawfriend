@@ -7,12 +7,6 @@ CREATE TYPE "OpsQueueBoardColumn" AS ENUM ('TRIAGE', 'QUEUED', 'WORKING', 'BLOCK
 -- CreateEnum
 CREATE TYPE "TimelineExportFormat" AS ENUM ('CSV', 'JSON');
 
--- AlterTable
-ALTER TABLE "BulkActionJob" ADD COLUMN "retryScheduledAt" TIMESTAMP(3);
-
--- CreateIndex
-CREATE INDEX "BulkActionJob_retryScheduledAt_idx" ON "BulkActionJob"("retryScheduledAt");
-
 -- AlterTable OpsQueueTicket
 ALTER TABLE "OpsQueueTicket" ADD COLUMN "caseId" TEXT,
 ADD COLUMN "priority" "OpsQueuePriority" NOT NULL DEFAULT 'NORMAL',

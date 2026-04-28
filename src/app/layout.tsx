@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import "./globals.css";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { ToastProvider } from "@/components/ui/toast/ToastProvider";
 
 export const metadata = {
@@ -7,11 +8,14 @@ export const metadata = {
   description: "사건 정리와 상담 준비를 돕는 플랫폼",
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="ko">
-      <body className="min-h-dvh bg-white text-neutral-900 antialiased">
+      <body className="min-h-dvh bg-aibeop-bg font-sans text-aibeop-text antialiased">
         <ToastProvider>{children}</ToastProvider>
+        <SiteFooter />
       </body>
     </html>
   );

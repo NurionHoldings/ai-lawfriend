@@ -5,6 +5,7 @@ import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { AlertKpiWidget } from "@/components/admin/alerts/alert-kpi-widget";
 import { requireAdmin } from "@/lib/auth/session";
 import { AUDIT_LOG_USER_APPROVAL_HREF } from "@/lib/admin/audit-log-shortcuts";
+import { fetchAdminDashboardMetrics } from "@/lib/dashboard/dashboard-metrics";
 
 const PRISMA_ROLE_LABEL: Record<string, string> = {
   ADMIN: "운영 관리자",
@@ -13,12 +14,13 @@ const PRISMA_ROLE_LABEL: Record<string, string> = {
 
 export default async function AdminPage() {
   const user = await requireAdmin();
+  const adminDashboardMetrics = await fetchAdminDashboardMetrics(user);
   const roleLabel = PRISMA_ROLE_LABEL[user.role] ?? user.role;
 
   return (
     <DashboardShell>
       <div className="flex flex-col gap-10 pb-8">
-        <AdminDashboardHome />
+        <AdminDashboardHome metrics={adminDashboardMetrics} />
 
         <DashboardLegacyBridge />
 

@@ -78,6 +78,12 @@ export default async function CaseDetailPage({
             AI 인터뷰
           </Link>
           <Link
+            href={`/cases/${caseId}/share`}
+            className="rounded-xl border px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+          >
+            변호사에게 공유하기
+          </Link>
+          <Link
             href={`/cases/${caseId}/edit`}
             className="rounded-xl border px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
           >

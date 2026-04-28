@@ -90,6 +90,25 @@ enum CaseAttachmentCategory {
   OTHER
 }
 
+enum CasePackageShareStatus {
+  ACTIVE
+  EXPIRED
+  REVOKED
+}
+
+enum CasePackageShareMode {
+  DESIGNATED_LAWYER
+  PUBLIC_CODE_REQUEST
+}
+
+enum CasePackageAccessAction {
+  VIEW
+  DOWNLOAD
+  DENIED
+  EXPIRED
+  REVOKED
+}
+
 enum TimelineMemoType {
   USER_NOTE
   STAFF_NOTE
@@ -171,6 +190,9 @@ model User {
   timelineExportLogs          TimelineExportLog[]
   paragraphRewriteHistories   DocumentParagraphRewriteHistory[]
   documentParagraphVersions   DocumentParagraphVersion[] @relation("UserParagraphVersions")
+  ownedCasePackageShares      CasePackageShare[]        @relation("CasePackageShareOwner")
+  lawyerCasePackageShares     CasePackageShare[]        @relation("CasePackageShareLawyer")
+  casePackageAccessLogs       CasePackageAccessLog[]    @relation("CasePackageAccessLogActor")
 
   @@index([email])
 }
@@ -397,11 +419,78 @@ model Case {
   interviews                  Interview[]
   legalDocuments              LegalDocument[]
   caseTimelineEvents          CaseTimelineEvent[]
+  casePackageShares           CasePackageShare[]
 
   @@index([ownerUserId, status, createdAt])
   @@index([status, createdAt])
   @@index([assignedLawyerUserId])
   @@index([assignedStaffUserId])
+}
+
+model CasePackageShare {
+  id                      String                 @id @default(cuid())
+  caseId                  String
+  ownerUserId             String
+  lawyerUserId            String?
+
+  publicCode              String                 @unique
+  accessTokenHash         String?
+  optionalPinHash         String?
+
+  shareMode               CasePackageShareMode   @default(DESIGNATED_LAWYER)
+  status                  CasePackageShareStatus @default(ACTIVE)
+
+  allowSummary            Boolean                @default(true)
+  allowInterview          Boolean                @default(true)
+  allowAttachmentList     Boolean                @default(true)
+  allowAttachmentDownload Boolean                @default(false)
+  allowDocumentDraft      Boolean                @default(true)
+  allowDocumentPdf        Boolean                @default(false)
+  allowPackagePdf         Boolean                @default(false)
+  allowClientContact      Boolean                @default(false)
+  allowOpponentDetail     Boolean                @default(false)
+
+  consentText             String                 @db.Text
+  consentedAt             DateTime
+  expiresAt               DateTime?
+  revokedAt               DateTime?
+  revokeReason            String?
+
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @updatedAt
+
+  case                    Case                   @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  owner                   User                   @relation("CasePackageShareOwner", fields: [ownerUserId], references: [id], onDelete: Cascade)
+  lawyer                  User?                  @relation("CasePackageShareLawyer", fields: [lawyerUserId], references: [id], onDelete: SetNull)
+
+  accessLogs              CasePackageAccessLog[]
+
+  @@index([caseId, status])
+  @@index([ownerUserId, createdAt])
+  @@index([lawyerUserId, createdAt])
+  @@index([publicCode])
+}
+
+model CasePackageAccessLog {
+  id            String                  @id @default(cuid())
+  shareId        String
+  caseId         String
+  actorUserId    String?
+  action         CasePackageAccessAction
+  targetType     String
+  targetId       String?
+  ip             String?
+  userAgent      String?
+  resultMessage  String?
+  createdAt      DateTime                @default(now())
+
+  share          CasePackageShare        @relation(fields: [shareId], references: [id], onDelete: Cascade)
+  actor          User?                   @relation("CasePackageAccessLogActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([shareId, createdAt])
+  @@index([caseId, createdAt])
+  @@index([actorUserId, createdAt])
+  @@index([action, createdAt])
 }
 
 model CaseAttachment {

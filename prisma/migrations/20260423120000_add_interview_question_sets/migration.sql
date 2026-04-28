@@ -8,6 +8,13 @@ CREATE TABLE "QuestionSet" (
     "description" TEXT,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "isDefault" BOOLEAN NOT NULL DEFAULT false,
+    "version" TEXT NOT NULL DEFAULT '1.0.0',
+    "catalogStatus" "QuestionSetStatus" NOT NULL DEFAULT 'DRAFT',
+    "supportedDocumentTypes" JSONB NOT NULL DEFAULT '[]',
+    "visibleToRoles" JSONB NOT NULL DEFAULT '[]',
+    "definitionJson" JSONB,
+    "publishedAt" TIMESTAMP(3),
+    "archivedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -46,6 +53,9 @@ CREATE INDEX "QuestionSet_isActive_isDefault_idx" ON "QuestionSet"("isActive", "
 
 -- CreateIndex
 CREATE INDEX "QuestionSet_createdAt_idx" ON "QuestionSet"("createdAt");
+
+-- CreateIndex
+CREATE INDEX "QuestionSet_catalogStatus_idx" ON "QuestionSet"("catalogStatus");
 
 -- CreateIndex
 CREATE INDEX "InterviewQuestion_questionSetId_order_idx" ON "InterviewQuestion"("questionSetId", "order");

@@ -1,3 +1,4 @@
+import { DashboardRestrictedLogoNote } from "./dashboard-restricted-logo-note";
 import { DashboardStatePanel } from "./dashboard-state-panel";
 
 type Props = {
@@ -18,18 +19,23 @@ export function DashboardRestrictedState({
   secondaryLabel = "이용 안내 보기",
 }: Props) {
   return (
-    <DashboardStatePanel
-      variant="restricted"
-      title={title}
-      description={description}
-      action={{
-        href: actionHref,
-        label: actionLabel,
-      }}
-      secondaryAction={{
-        href: secondaryHref,
-        label: secondaryLabel,
-      }}
-    />
+    <div className="grid gap-4 lg:grid-cols-[260px_1fr] lg:items-stretch">
+      <div className="min-w-0 lg:self-start">
+        <DashboardRestrictedLogoNote />
+      </div>
+      <DashboardStatePanel
+        variant="restricted"
+        title={title}
+        description={description}
+        action={{
+          href: actionHref,
+          label: actionLabel,
+        }}
+        secondaryAction={{
+          href: secondaryHref,
+          label: secondaryLabel,
+        }}
+      />
+    </div>
   );
 }

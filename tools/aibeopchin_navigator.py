@@ -84,6 +84,140 @@ PROJECT_PLAN = {
         "보완 요청",
         "관리자 승인",
     ],
+    "dashboard_admin_3_7_regression": (
+        "Dashboard 3.7: 관리자 대시보드 3.4~3.6 변경분은 "
+        "docs/project-governance/DASHBOARD_ADMIN_3_7_REGRESSION_CHECKLIST.md와 "
+        "IMPLEMENTATION_EVIDENCE.md #evidence-20260426-387 기준으로 회귀 점검한다."
+    ),
+    "dashboard_3_8_role_copy_snapshot": (
+        "Dashboard 3.8: 역할별 대시보드 사용자 노출 문구는 "
+        "docs/project-governance/DASHBOARD_3_8_ROLE_COPY_SNAPSHOT.md와 "
+        "IMPLEMENTATION_EVIDENCE.md #evidence-20260426-388 기준으로 확인한다."
+    ),
+    "dashboard_3_9_role_regression_checklist": (
+        "Dashboard 3.9: 역할별 대시보드 최종 회귀 체크리스트는 "
+        "docs/project-governance/DASHBOARD_3_9_ROLE_REGRESSION_CHECKLIST.md와 "
+        "IMPLEMENTATION_EVIDENCE.md #evidence-20260426-389 기준으로 확인한다."
+    ),
+    "dashboard_3_10_demo_metrics_safety_check": (
+        "Dashboard 3.10: dashboard-demo-metrics 유지·데모 경로 안전 점검은 "
+        "docs/project-governance/DASHBOARD_3_10_DEMO_METRICS_SAFETY_CHECK.md와 "
+        "IMPLEMENTATION_EVIDENCE.md #evidence-20260426-390 기준으로 확인한다."
+    ),
+    "dashboard_3_11_final_seal_summary": (
+        "Dashboard 3.11: 대시보드 3.x 최종 봉인 요약표는 "
+        "docs/project-governance/DASHBOARD_3_11_FINAL_SEAL_SUMMARY.md와 "
+        "IMPLEMENTATION_EVIDENCE.md #evidence-20260426-391 기준으로 확인한다."
+    ),
+    "dashboard_4_0_predeploy_operation_check_phase": (
+        "대시보드 4.0: 배포 전 운영 점검 Phase 착수는 "
+        "docs/project-governance/DASHBOARD_4_0_PREDEPLOY_OPERATION_CHECK_PHASE.md와 "
+        "IMPLEMENTATION_EVIDENCE.md #evidence-20260426-392 기준으로 확인한다."
+    ),
+    "dashboard_4_1_role_access_permission_checklist": (
+        "대시보드 4.1: 역할별 접근 / 권한 점검표 세분화는 "
+        "docs/project-governance/DASHBOARD_4_1_ROLE_ACCESS_PERMISSION_CHECKLIST.md와 "
+        "IMPLEMENTATION_EVIDENCE.md #evidence-20260426-393 기준으로 확인한다."
+    ),
+    "dashboard_4_2_predeploy_manual_qa_scenarios": (
+        "대시보드 4.2: 배포 전 수동 QA 시나리오표는 "
+        "docs/project-governance/DASHBOARD_4_2_PREDEPLOY_MANUAL_QA_SCENARIOS.md와 "
+        "IMPLEMENTATION_EVIDENCE.md #evidence-20260426-394 기준으로 확인한다."
+    ),
+    "dashboard_4_3_empty_error_state_manual_checklist": (
+        "대시보드 4.3: 빈 상태 / 오류 상태 수동 점검표는 "
+        "docs/project-governance/DASHBOARD_4_3_EMPTY_ERROR_STATE_MANUAL_CHECKLIST.md와 "
+        "IMPLEMENTATION_EVIDENCE.md #evidence-20260426-395 기준으로 확인한다."
+    ),
+    "dashboard_4_4_predeploy_operator_final_checklist": (
+        "대시보드 4.4: 배포 전 운영자 최종 체크리스트는 "
+        "docs/project-governance/DASHBOARD_4_4_PREDEPLOY_OPERATOR_FINAL_CHECKLIST.md와 "
+        "IMPLEMENTATION_EVIDENCE.md #evidence-20260426-396 기준으로 확인한다."
+    ),
+    "dashboard_4_5_qa_closure_reflection_prep": (
+        "대시보드 4.5 — QA 회신 수신 후 closure 반영 준비표: "
+        "DASHBOARD_4_5_QA_CLOSURE_REFLECTION_PREP.md / [EVIDENCE-20260426-397] 기준"
+    ),
+    "dashboard_4_6_qa_pending_followup_tracker": (
+        "대시보드 4.6 — QA 회신 대기 중 후속 보완 항목 분리표: "
+        "docs/project-governance/DASHBOARD_4_6_QA_PENDING_FOLLOWUP_TRACKER.md / "
+        "[EVIDENCE-20260428-399] — closure·회신·최종/배포 판정 미기입, 앱·DB 미변경"
+    ),
+    "dashboard_4_7_ai_assisted_qa_evidence_reflection_design": (
+        "대시보드 4.7 — QA/운영 실측 결과 AI 자동 반영 설계서: "
+        "DASHBOARD_4_7_AI_ASSISTED_QA_EVIDENCE_REFLECTION_DESIGN.md / "
+        "[EVIDENCE-20260428-400] 기준"
+    ),
+    "dashboard_5_0_ai_evidence_assistant_mvp_start": (
+        "대시보드 5.0 — AI Evidence Assistant MVP 착수 기준서: "
+        "DASHBOARD_5_0_AI_EVIDENCE_ASSISTANT_MVP_START.md / "
+        "[EVIDENCE-20260428-401] 기준"
+    ),
+    "dashboard_5_1_ai_evidence_assistant_mvp_implementation": (
+        "대시보드 5.1 — AI Evidence Assistant MVP 1차 구현 세트: "
+        "관리자 /admin/qa-evidence, POST /api/admin/qa-evidence/analyze, "
+        "src/lib/qa-evidence/* / [EVIDENCE-20260428-402] 기준"
+    ),
+    "aibeopchin_6_0_case_package_share_lawyer_access_plan": (
+        "AI법친 6.0 — 사건 패키지 / 고유번호 공유 / 변호사 열람 연계 기획서: "
+        "AIBEOPCHIN_6_0_CASE_PACKAGE_SHARE_LAWYER_ACCESS_PLAN.md / "
+        "[EVIDENCE-20260428-404] 기준"
+    ),
+    "aibeopchin_6_1_case_package_data_structure_and_generation_rules": (
+        "AI법친 6.1 — 사건 패키지 데이터 구조 / 생성 기준 설계: "
+        "AIBEOPCHIN_6_1_CASE_PACKAGE_DATA_STRUCTURE_AND_GENERATION_RULES.md / "
+        "[EVIDENCE-20260428-405] 기준"
+    ),
+    "aibeopchin_6_2_public_code_and_share_consent_rules": (
+        "AI법친 6.2 — 고유번호 발급 정책 / 공유 동의 구조 설계: "
+        "AIBEOPCHIN_6_2_PUBLIC_CODE_AND_SHARE_CONSENT_RULES.md / "
+        "[EVIDENCE-20260428-406] 기준"
+    ),
+    "aibeopchin_6_3_case_package_share_prisma_api": (
+        "AI법친 6.3 — CasePackageShare Prisma 모델 / API 구현: "
+        "prisma/schema.prisma / src/lib/case-package/* / "
+        "src/app/api/cases/[caseId]/package-shares/* / "
+        "src/app/api/lawyer/case-packages/lookup/route.ts / "
+        "[EVIDENCE-20260428-407] 기준"
+    ),
+    "aibeopchin_6_4_client_case_package_share_screen": (
+        "AI법친 6.4 — 의뢰인 공유 설정 화면 구현: "
+        "src/app/(protected)/cases/[caseId]/share/page.tsx / "
+        "src/components/case-package/case-package-share-client.tsx / "
+        "공유 범위 설정, 고유번호 발급, 공유 취소, 전달 문구 복사 / "
+        "[EVIDENCE-20260428-408] 기준"
+    ),
+    "aibeopchin_6_5_lawyer_case_package_lookup_screen": (
+        "AI법친 6.5 — 변호사 고유번호 조회 / 열람 화면 구현: "
+        "src/app/(lawyer)/lawyer/case-packages/lookup/page.tsx / "
+        "src/components/lawyer/case-package/lawyer-case-package-lookup-client.tsx / "
+        "고유번호 입력, lookup API 연결, 사건 패키지 열람 UI / "
+        "[EVIDENCE-20260428-409] 기준"
+    ),
+    "aibeopchin_6_6_shared_attachment_download_permission": (
+        "AI법친 6.6 — 첨부파일 열람 / 다운로드 권한 분리: "
+        "공유 사건 패키지 첨부 다운로드 API, allowAttachmentDownload 검증, 다운로드 로그 / "
+        "[EVIDENCE-20260428-410] 기준"
+    ),
+    "aibeopchin_6_7_case_package_access_log_and_revoke_hardening": (
+        "AI법친 6.7 — 열람 로그 / 다운로드 로그 / 공유 취소 고도화: "
+        "접근 로그 조회 API, 공유 상세 화면, 취소 사유 UI / "
+        "[EVIDENCE-20260428-411] 기준"
+    ),
+    "aibeopchin_6_8_case_package_summary_output": (
+        "AI법친 6.8 — 사건 패키지 PDF / 요약본 출력: "
+        "allowPackagePdf 검증, 인쇄 가능한 HTML 요약본 출력 API, 출력 로그 / "
+        "[EVIDENCE-20260428-412] 기준"
+    ),
+    "aibeopchin_6_3_migration_closeout_and_runtime_verification": (
+        "AI법친 6.3 migration 마감 및 6.4~6.8 런타임 검증: .env.local 템플릿 생성 완료, 실제 DATABASE_URL 입력 대기, add-case-package-share migration 실행, 6.4~6.8 런타임 검증, 407~412 증빙 갱신"
+    ),
+    "predeploy_qa_closure_procedure": (
+        "배포 전 QA: IMPLEMENTATION_EVIDENCE.md #evidence-20260428-predeploy-qa-closure에 "
+        "1~4단계·Message(#predeploy-qa-message-copy)·사전(#predeploy-qa-sakjeon-20260428)·"
+        "공식 확정(#predeploy-qa-official-confirm) 정리됨 — [EVIDENCE-20260428-398]. "
+        "다음: QA 실측 전문 수신 후 확정 표·회신 원문만 갱신."
+    ),
     "phase1_start_baseline": (
         "시작 기준선: docs/project-governance/CASE_STATUS_DEFINITION.md §7.1 - "
         "CaseStatus, DELETED, soft delete, allowedLifecycleActions 정합 확인 스냅 -> "
@@ -503,6 +637,445 @@ def render_plan() -> str:
     lines.append("## MVP 흐름")
     for idx, step in enumerate(PROJECT_PLAN["mvp_flow"], start=1):
         lines.append(f"{idx}. {step}")
+
+    dash37 = PROJECT_PLAN.get("dashboard_admin_3_7_regression")
+    if dash37:
+        lines.append("")
+        lines.append("## 대시보드 3.7 — 관리자 회귀 점검 (배포 전 QA 확정표와 별도)")
+        lines.append(dash37)
+
+    dash38 = PROJECT_PLAN.get("dashboard_3_8_role_copy_snapshot")
+    if dash38:
+        lines.append("")
+        lines.append("## 대시보드 3.8 — 역할별 문구 스냅샷 (배포 전 QA 확정표와 별도)")
+        lines.append(dash38)
+
+    dash39 = PROJECT_PLAN.get("dashboard_3_9_role_regression_checklist")
+    if dash39:
+        lines.append("")
+        lines.append("## 대시보드 3.9 — 역할별 최종 회귀 체크리스트 (배포 전 QA 확정표와 별도)")
+        lines.append(dash39)
+
+    dash310 = PROJECT_PLAN.get("dashboard_3_10_demo_metrics_safety_check")
+    if dash310:
+        lines.append("")
+        lines.append("## 대시보드 3.10 — demo metrics 유지·실서비스 경계 (배포 전 QA 확정표와 별도)")
+        lines.append(dash310)
+
+    dash311 = PROJECT_PLAN.get("dashboard_3_11_final_seal_summary")
+    if dash311:
+        lines.append("")
+        lines.append("## 대시보드 3.11 — 3.x 최종 봉인 요약표 (배포 전 QA 확정표와 별도)")
+        lines.append("- 기준 문서: docs/project-governance/DASHBOARD_3_11_FINAL_SEAL_SUMMARY.md")
+        lines.append("- 기준 증빙: [EVIDENCE-20260426-391]")
+        lines.append(
+            "- 목적: 대시보드 3.0~3.10 완료 흐름을 최종 봉인하고 "
+            "QA 회신 대기 또는 별도 Phase 기준으로 전환"
+        )
+        lines.append(dash311)
+
+    dash40 = PROJECT_PLAN.get("dashboard_4_0_predeploy_operation_check_phase")
+    if dash40:
+        lines.append("")
+        lines.append("## 대시보드 4.0 — 배포 전 운영 점검 Phase (3.x 봉인 유지)")
+        lines.append(
+            "- 기준 문서: docs/project-governance/"
+            "DASHBOARD_4_0_PREDEPLOY_OPERATION_CHECK_PHASE.md"
+        )
+        lines.append("- 기준 증빙: [EVIDENCE-20260426-392]")
+        lines.append(
+            "- 목적: 대시보드 3.x 봉인을 유지한 상태에서 "
+            "배포 전 운영 점검 항목을 별도 Phase로 분리"
+        )
+        lines.append(dash40)
+
+    dash41 = PROJECT_PLAN.get("dashboard_4_1_role_access_permission_checklist")
+    if dash41:
+        lines.append("")
+        lines.append("## 대시보드 4.1 — 역할별 접근 / 권한 점검표 (3.x 봉인 유지)")
+        lines.append(
+            "- 기준 문서: docs/project-governance/"
+            "DASHBOARD_4_1_ROLE_ACCESS_PERMISSION_CHECKLIST.md"
+        )
+        lines.append("- 기준 증빙: [EVIDENCE-20260426-393]")
+        lines.append(
+            "- 목적: 의뢰인 / 변호사 / 관리자 / 권한 불일치 / 비로그인 접근 점검 항목을 세분화"
+        )
+        lines.append(dash41)
+
+    dash42 = PROJECT_PLAN.get("dashboard_4_2_predeploy_manual_qa_scenarios")
+    if dash42:
+        lines.append("")
+        lines.append("## 대시보드 4.2 — 배포 전 수동 QA 시나리오표 (3.x 봉인 유지)")
+        lines.append(
+            "- 기준 문서: docs/project-governance/"
+            "DASHBOARD_4_2_PREDEPLOY_MANUAL_QA_SCENARIOS.md"
+        )
+        lines.append("- 기준 증빙: [EVIDENCE-20260426-394]")
+        lines.append(
+            "- 목적: 공통 / 의뢰인 / 변호사 / 관리자 / restricted / demo metrics 경계를 "
+            "브라우저 수동 QA 절차로 확인"
+        )
+        lines.append(dash42)
+
+    dash43 = PROJECT_PLAN.get("dashboard_4_3_empty_error_state_manual_checklist")
+    if dash43:
+        lines.append("")
+        lines.append("## 대시보드 4.3 — 빈 상태 / 오류 상태 수동 점검표 (3.x 봉인 유지)")
+        lines.append(
+            "- 기준 문서: docs/project-governance/"
+            "DASHBOARD_4_3_EMPTY_ERROR_STATE_MANUAL_CHECKLIST.md"
+        )
+        lines.append("- 기준 증빙: [EVIDENCE-20260426-395]")
+        lines.append(
+            "- 목적: 빈 상태 / 제한 상태 / 로딩 상태 / 오류 상태 / demo metrics 경계를 "
+            "배포 전 수동 점검 항목으로 분리"
+        )
+        lines.append(dash43)
+
+    dash44 = PROJECT_PLAN.get("dashboard_4_4_predeploy_operator_final_checklist")
+    if dash44:
+        lines.append("")
+        lines.append("## 대시보드 4.4 — 배포 전 운영자 최종 체크리스트 (3.x 봉인 유지)")
+        lines.append(
+            "- 기준 문서: docs/project-governance/"
+            "DASHBOARD_4_4_PREDEPLOY_OPERATOR_FINAL_CHECKLIST.md"
+        )
+        lines.append("- 기준 증빙: [EVIDENCE-20260426-396]")
+        lines.append(
+            "- 목적: 4.0~4.3 운영 점검 문서를 배포 전 운영자 최종 확인표로 통합"
+        )
+        lines.append(dash44)
+
+    dash45 = PROJECT_PLAN.get("dashboard_4_5_qa_closure_reflection_prep")
+    if dash45:
+        lines.append("")
+        lines.append("## 대시보드 4.5 — QA closure 반영 준비표 (3.x 봉인 유지)")
+        lines.append(
+            "- 기준 문서: docs/project-governance/"
+            "DASHBOARD_4_5_QA_CLOSURE_REFLECTION_PREP.md"
+        )
+        lines.append("- 기준 증빙: [EVIDENCE-20260426-397]")
+        lines.append(
+            "- 목적: QA 회신 수신 후 #evidence-20260428-predeploy-qa-closure에 "
+            "무엇을 어떤 순서로 반영할지 사전 고정"
+        )
+        lines.append(dash45)
+
+    dash46 = PROJECT_PLAN.get("dashboard_4_6_qa_pending_followup_tracker")
+    if dash46:
+        lines.append("")
+        lines.append("## 대시보드 4.6 — QA 회신 대기 중 후속 보완 항목 분리표 (3.x 봉인 유지)")
+        lines.append(
+            "- 기준 문서: docs/project-governance/"
+            "DASHBOARD_4_6_QA_PENDING_FOLLOWUP_TRACKER.md"
+        )
+        lines.append("- 기준 증빙: [EVIDENCE-20260428-399]")
+        lines.append(
+            "- 목적: 실측 회신 전 후속 보완 항목을 FAIL/BLOCKED/N/A·문서/기능/운영으로 "
+            "분류할 표 틀만 둠 — closure 공식 확정 표·회신 원문은 미기입"
+        )
+        lines.append(dash46)
+
+    dash47 = PROJECT_PLAN.get("dashboard_4_7_ai_assisted_qa_evidence_reflection_design")
+    if dash47:
+        lines.append("")
+        lines.append("## 대시보드 4.7 — QA/운영 실측 결과 AI 자동 반영 설계서")
+        lines.append(
+            "- 기준 문서: docs/project-governance/"
+            "DASHBOARD_4_7_AI_ASSISTED_QA_EVIDENCE_REFLECTION_DESIGN.md"
+        )
+        lines.append("- 기준 증빙: [EVIDENCE-20260428-400]")
+        lines.append(
+            "- 목적: QA/운영 실측 결과를 AI가 자동 분석해 closure 초안과 "
+            "follow-up 초안을 만들 수 있도록 운영 기준, 금지 기준, 사람 승인 절차를 고정한다."
+        )
+        lines.append(
+            "- 핵심 원칙: AI는 최종 판정자가 아니며, 증빙 초안 작성자·분류자·보완 요청자 역할만 "
+            "수행한다. 최종 확정은 사람 승인 후에만 가능하다."
+        )
+        lines.append(dash47)
+
+    dash50 = PROJECT_PLAN.get("dashboard_5_0_ai_evidence_assistant_mvp_start")
+    if dash50:
+        lines.append("")
+        lines.append("## 대시보드 5.0 — AI Evidence Assistant MVP 착수 기준서")
+        lines.append(
+            "- 기준 문서: docs/project-governance/"
+            "DASHBOARD_5_0_AI_EVIDENCE_ASSISTANT_MVP_START.md"
+        )
+        lines.append("- 기준 증빙: [EVIDENCE-20260428-401]")
+        lines.append(
+            "- 목적: QA/운영 실측 원문을 AI가 분석해 closure 공식 확정 표 초안, "
+            "회신 원문 정리본, 4.6 follow-up tracker 초안을 생성하는 관리자 보조 기능의 "
+            "MVP 범위를 고정한다."
+        )
+        lines.append(
+            "- 핵심 원칙: 5.0은 실제 구현이 아니라 5.1 구현 전 착수 기준이다. "
+            "AI는 최종 판정자가 아니며, 공식 반영은 사람 승인 후에만 가능하다."
+        )
+        lines.append(dash50)
+        lines.append("")
+        lines.append("### 검증 명령 (5.0)")
+        lines.append("npx tsc --noEmit")
+        lines.append("npm run lint")
+        lines.append("npm run verify:canonical-sources")
+        lines.append("py -3 -m py_compile tools/aibeopchin_navigator.py")
+        lines.append("")
+        lines.append("### 5.0 완료 기준")
+        lines.append(
+            "대시보드 5.0 완료 판정: DASHBOARD_5_0…MVP_START.md 신규 추가·MVP 목적·포함/제외 "
+            "기능·동작 흐름·입출력·판정/상태값·closure/회신/4.6 초안 기준·필드 누락/경고·"
+            "파일 구조/API 후보·권한·보안·성공 기준 정리·[EVIDENCE-20260428-401]·"
+            "dashboard_5_0…·render_plan 5.0 절·코드/API/DB/권한/dashboard 미변경·3.x 봉인·"
+            "QA closure 미기입·tsc+lint+verify:canonical-sources+py_compile 통과."
+        )
+        lines.append("")
+        lines.append("### 5.0 이후 방향")
+        lines.append(
+            "권장: (1) 대시보드 5.1a — Zod schema / renderer / analyzer 유틸 선행 구현 "
+            "(5.1 일괄 시 화면·API·분석·렌더러 동시 엮임 위험 완화). "
+            "이후 (2) 5.1b API route (3) 5.1c 관리자 화면 (4) 5.1d 복사/UX (5) 5.1e 검증·증빙·내비."
+        )
+
+    dash51 = PROJECT_PLAN.get("dashboard_5_1_ai_evidence_assistant_mvp_implementation")
+    if dash51:
+        lines.append("")
+        lines.append("## 대시보드 5.1 — AI Evidence Assistant MVP 1차 구현 세트")
+        lines.append("- 기준 증빙: [EVIDENCE-20260428-402]")
+        lines.append(
+            "- 목적: QA/운영 실측 원문을 분석하여 closure 공식 확정 표 초안, "
+            "회신 원문 정리본, 4.6 follow-up tracker 초안을 생성하는 "
+            "관리자 보조 화면과 분석 API를 구현한다."
+        )
+        lines.append(
+            "- 범위: DB 저장 없음, 문서 자동 수정 없음, Git 자동 커밋 없음, "
+            "사람 승인 전 공식 반영 없음. 관리자 전용(requireAdminApi)."
+        )
+        lines.append(dash51)
+        lines.append("")
+        lines.append("### 검증 명령 (5.1)")
+        lines.append("npx tsc --noEmit")
+        lines.append("npm run lint")
+        lines.append("npm run verify:canonical-sources")
+        lines.append("py -3 -m py_compile tools/aibeopchin_navigator.py")
+        lines.append("")
+        lines.append("### 5.1 완료 기준 (요약)")
+        lines.append(
+            "화면·API·schema·analyzer·renderer·복사·안내; DB/문서 자동/MVP 외 정책 미변경; "
+            "3.x 봉인·closure 미기입 유지; tsc+lint+verify+py_compile 통과."
+        )
+
+    plan60 = PROJECT_PLAN.get("aibeopchin_6_0_case_package_share_lawyer_access_plan")
+    if plan60:
+        lines.append("")
+        lines.append("## AI법친 6.0 — 사건 패키지 / 고유번호 공유 / 변호사 열람 연계 기획서")
+        lines.append(
+            "- 기준 문서: docs/project-governance/"
+            "AIBEOPCHIN_6_0_CASE_PACKAGE_SHARE_LAWYER_ACCESS_PLAN.md"
+        )
+        lines.append("- 기준 증빙: [EVIDENCE-20260428-404]")
+        lines.append(
+            "- 목적: 일반 사용자가 AI 질문 흐름으로 사건을 정리하고, "
+            "변호사가 고유번호와 권한 승인으로 사건 패키지를 열람·다운로드할 수 있는 구조를 설계한다."
+        )
+        lines.append(
+            "- 범위: 실제 Prisma schema 변경 없음, 신규 API 구현 없음, 화면 구현 없음, "
+            "사건 패키지 / 고유번호 / 공유 동의 / 변호사 열람 구조만 기획서로 고정한다."
+        )
+        lines.append(plan60)
+
+    plan61 = PROJECT_PLAN.get("aibeopchin_6_1_case_package_data_structure_and_generation_rules")
+    if plan61:
+        lines.append("")
+        lines.append("## AI법친 6.1 — 사건 패키지 데이터 구조 / 생성 기준 설계")
+        lines.append(
+            "- 기준 문서: docs/project-governance/"
+            "AIBEOPCHIN_6_1_CASE_PACKAGE_DATA_STRUCTURE_AND_GENERATION_RULES.md"
+        )
+        lines.append("- 기준 증빙: [EVIDENCE-20260428-405]")
+        lines.append(
+            "- 목적: 기존 Case / Attachment / LegalDocument / Interview / Summary 데이터를 기준으로 "
+            "사건 패키지에 포함할 데이터, 생성 조건, 공유 가능 / 비공유 데이터, 변호사 열람용 구조를 정의한다."
+        )
+        lines.append(
+            "- 범위: 실제 Prisma schema 변경 없음, 신규 API 구현 없음, 화면 구현 없음, "
+            "데이터 구조와 생성 기준만 기획서로 고정한다."
+        )
+        lines.append(plan61)
+
+    plan62 = PROJECT_PLAN.get("aibeopchin_6_2_public_code_and_share_consent_rules")
+    if plan62:
+        lines.append("")
+        lines.append("## AI법친 6.2 — 고유번호 발급 정책 / 공유 동의 구조 설계")
+        lines.append(
+            "- 기준 문서: docs/project-governance/"
+            "AIBEOPCHIN_6_2_PUBLIC_CODE_AND_SHARE_CONSENT_RULES.md"
+        )
+        lines.append("- 기준 증빙: [EVIDENCE-20260428-406]")
+        lines.append(
+            "- 목적: 사건 패키지를 변호사에게 안전하게 공유하기 위한 publicCode 발급 규칙, "
+            "accessToken / PIN 후보, 공유 동의, 공유 범위, 만료 / 취소, 변호사 조회 전 검증 조건을 정의한다."
+        )
+        lines.append(
+            "- 범위: 실제 Prisma schema 변경 없음, 신규 API 구현 없음, 화면 구현 없음, "
+            "고유번호와 공유 동의 정책만 문서로 고정한다."
+        )
+        lines.append(plan62)
+
+    plan63 = PROJECT_PLAN.get("aibeopchin_6_3_case_package_share_prisma_api")
+    if plan63:
+        lines.append("")
+        lines.append("## AI법친 6.3 — CasePackageShare Prisma 모델 / API 구현")
+        lines.append(
+            "- 기준 문서: docs/project-governance/IMPLEMENTATION_EVIDENCE.md "
+            "#evidence-20260428-407"
+        )
+        lines.append("- 기준 증빙: [EVIDENCE-20260428-407]")
+        lines.append(
+            "- 목적: 사건 패키지 공유 정책을 실제 Prisma 모델, 공유 생성/목록/상세/취소 API, "
+            "변호사 고유번호 조회 API로 연결한다."
+        )
+        lines.append(
+            "- 범위: CasePackageShare / CasePackageAccessLog 추가, case-package 유틸 추가, "
+            "의뢰인/변호사 공유 API 구현. 첨부 다운로드 완화, 문서 PDF API, 변호사 UI, 의뢰인 UI는 제외한다."
+        )
+        lines.append(
+            "- 다음 실제 작업: 프로젝트 루트 .env.local 또는 셸 환경에 DATABASE_URL 설정 후 add-case-package-share migration을 실행하고, 이어서 6.4~6.8 런타임 검증을 수행한다."
+        )
+        lines.append(
+            "- 현재 상태 잠금: .env.local 템플릿 생성 완료, 실제 DATABASE_URL 값 입력 대기."
+        )
+        lines.append(
+            "- 고정 순서: 1) 실제 개발 DB DATABASE_URL 확보 2) 프로젝트 루트 .env.local 입력 3) add-case-package-share migration 실행 4) 6.4~6.8 런타임 검증 5) 성공 후 407~412 증빙을 런타임 검증 완료로 갱신."
+        )
+        lines.append(plan63)
+
+    plan64 = PROJECT_PLAN.get("aibeopchin_6_4_client_case_package_share_screen")
+    if plan64:
+        lines.append("")
+        lines.append("## AI법친 6.4 — 의뢰인 공유 설정 화면 구현")
+        lines.append("- 기준 증빙: [EVIDENCE-20260428-408]")
+        lines.append(
+            "- 목적: 의뢰인이 사건별 공유 범위, 다운로드 허용 여부, 공유 만료일, 동의문구를 확인한 뒤 "
+            "사건 고유번호를 발급하고 공유 상태를 관리할 수 있는 화면을 구현한다."
+        )
+        lines.append(
+            "- 범위: /cases/[caseId]/share 화면, 공유 범위 체크박스, 고유번호 발급, 공유 목록, 공유 취소, "
+            "변호사 전달 문구 복사."
+        )
+        lines.append(
+            "- 주의: 실제 공유 생성 / 목록 / 취소 런타임 검증은 6.3 DB migration 완료 후 진행한다."
+        )
+        lines.append(
+            "- 다음 실제 작업: DATABASE_URL 설정 후 add-case-package-share migration을 먼저 마감한 다음, 6.4 공유 생성 / 목록 / 취소 런타임 검증으로 이어간다."
+        )
+        lines.append(
+            "- 런타임 확인 포인트: 고유번호 발급, 공유 목록 조회, 공유 취소."
+        )
+        lines.append(plan64)
+
+    plan65 = PROJECT_PLAN.get("aibeopchin_6_5_lawyer_case_package_lookup_screen")
+    if plan65:
+        lines.append("")
+        lines.append("## AI법친 6.5 — 변호사 고유번호 조회 / 열람 화면 구현")
+        lines.append("- 기준 증빙: [EVIDENCE-20260428-409]")
+        lines.append(
+            "- 목적: 변호사가 사건 고유번호를 입력해 공유 상태와 권한 검증을 통과한 사건 패키지를 열람할 수 있는 화면을 구현한다."
+        )
+        lines.append(
+            "- 범위: /lawyer/case-packages/lookup 화면, 고유번호 입력, lookup API 연결, 사건 기본 정보 / 첨부자료 목록 / 문서 초안 표시."
+        )
+        lines.append(
+            "- 주의: 실제 고유번호 조회 런타임 검증은 6.3 DB migration 완료 후 진행한다."
+        )
+        lines.append(
+            "- 다음 실제 작업: DATABASE_URL 설정 후 add-case-package-share migration을 먼저 마감한 다음, 6.5 고유번호 조회 런타임 검증으로 이어간다."
+        )
+        lines.append(
+            "- 런타임 확인 포인트: 고유번호 입력, 사건 패키지 조회, 공유 범위별 표시 확인."
+        )
+        lines.append(plan65)
+
+    plan66 = PROJECT_PLAN.get("aibeopchin_6_6_shared_attachment_download_permission")
+    if plan66:
+        lines.append("")
+        lines.append("## AI법친 6.6 — 첨부파일 열람 / 다운로드 권한 분리")
+        lines.append("- 기준 증빙: [EVIDENCE-20260428-410]")
+        lines.append(
+            "- 목적: 변호사가 사건 패키지에서 첨부자료 목록은 볼 수 있더라도, 의뢰인이 다운로드를 허용한 경우에만 별도 API로 원본 파일을 내려받을 수 있게 한다."
+        )
+        lines.append(
+            "- 범위: 공유 첨부 다운로드 API, shareId / attachmentId 검증, allowAttachmentDownload 검증, 만료 / 취소 / 지정 변호사 조건 차단, 다운로드 로그 기록."
+        )
+        lines.append(
+            "- 주의: 실제 다운로드 런타임 검증은 6.3 DB migration 완료 후 진행한다."
+        )
+        lines.append(
+            "- 다음 실제 작업: DATABASE_URL 설정 후 add-case-package-share migration을 먼저 마감한 다음, 6.6 공유 첨부 다운로드 런타임 검증으로 이어간다."
+        )
+        lines.append(
+            "- 런타임 확인 포인트: 다운로드 허용 시 성공, 비허용 시 차단, DOWNLOAD 로그 확인."
+        )
+        lines.append(plan66)
+
+    plan67 = PROJECT_PLAN.get("aibeopchin_6_7_case_package_access_log_and_revoke_hardening")
+    if plan67:
+        lines.append("")
+        lines.append("## AI법친 6.7 — 열람 로그 / 다운로드 로그 / 공유 취소 고도화")
+        lines.append("- 기준 증빙: [EVIDENCE-20260428-411]")
+        lines.append(
+            "- 목적: 사건 패키지 공유 이후 열람, 다운로드, 접근 거부, 만료, 취소 이력을 의뢰인이 확인할 수 있도록 공유 상세 화면과 접근 로그 조회 API를 구현한다."
+        )
+        lines.append(
+            "- 범위: 접근 로그 serializer, 접근 로그 조회 API, 공유 상세 화면, 열람 / 다운로드 통계, 공유 취소 사유 선택 UI."
+        )
+        lines.append(
+            "- 주의: 실제 로그 런타임 검증은 6.3 DB migration 완료 후 진행한다."
+        )
+        lines.append(
+            "- 다음 실제 작업: DATABASE_URL 설정 후 add-case-package-share migration을 먼저 마감한 다음, 6.7 접근 로그 / 취소 이력 런타임 검증으로 이어간다."
+        )
+        lines.append(
+            "- 런타임 확인 포인트: VIEW / DOWNLOAD / DENIED / REVOKED 로그 확인, 의뢰인 공유 상세 화면 표시 확인."
+        )
+        lines.append(plan67)
+
+    plan68 = PROJECT_PLAN.get("aibeopchin_6_8_case_package_summary_output")
+    if plan68:
+        lines.append("")
+        lines.append("## AI법친 6.8 — 사건 패키지 PDF / 요약본 출력")
+        lines.append("- 기준 증빙: [EVIDENCE-20260428-412]")
+        lines.append(
+            "- 목적: 공유된 사건 패키지를 변호사 검토용 요약본으로 출력할 수 있도록 하고, allowPackagePdf와 공유 상태 검증을 통과한 경우에만 내려받을 수 있게 한다."
+        )
+        lines.append(
+            "- 범위: 요약본 출력 정책 유틸, HTML 요약본 renderer, 요약본 출력 API, 출력 성공 / 실패 로그, 변호사 열람 화면 출력 버튼."
+        )
+        lines.append(
+            "- 주의: 실제 요약본 출력 런타임 검증은 6.3 DB migration 완료 후 진행한다."
+        )
+        lines.append(
+            "- 다음 실제 작업: DATABASE_URL 설정 후 add-case-package-share migration을 먼저 마감한 다음, 6.8 요약본 출력 런타임 검증으로 이어간다."
+        )
+        lines.append(
+            "- 런타임 확인 포인트: allowPackagePdf 허용 시 HTML 요약본 출력, 비허용 시 차단, PACKAGE_SUMMARY 로그 확인."
+        )
+        lines.append(plan68)
+
+    pq = PROJECT_PLAN.get("predeploy_qa_closure_procedure")
+    if pq:
+        lines.append("")
+        lines.append("## 배포 전 QA — closure 절차 (증빙·운영)")
+        lines.append(
+            "- 증빙: [EVIDENCE-20260428-398] — "
+            "IMPLEMENTATION_EVIDENCE.md #evidence-20260428-predeploy-qa-closure"
+        )
+        lines.append(
+            "- 앵커: #predeploy-qa-1-4 · #predeploy-qa-message-copy · "
+            "#predeploy-qa-official-confirm · #predeploy-qa-sakjeon-20260428"
+        )
+        lines.append(pq)
 
     baseline = PROJECT_PLAN.get("phase1_start_baseline")
     if baseline:

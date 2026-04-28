@@ -1,22 +1,30 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import type { AibeopchinLogoMode } from "@/components/branding/aibeopchin-brand-types";
 import { AibeopchinLogo } from "@/components/branding/aibeopchin-logo";
+import { AibeopchinLogoV2 } from "@/components/branding/aibeopchin-logo-v2";
+import { AIBEOPCHIN_LOGO_V2_ROLE_MODE } from "@/lib/branding/aibeopchin-logo-v2-role-mode";
 import type { DashboardRole } from "@/lib/dashboard/dashboard-role-config";
 import { DASHBOARD_ROLE_CONFIG } from "@/lib/dashboard/dashboard-role-config";
 
 type Props = {
   role: DashboardRole;
   statusText?: string;
+  /** true일 때 SVG 획 생성형 Living Logo 2.0 사용(기본 false, 롤백·A/B 용) */
+  useV2Logo?: boolean;
 };
 
-function getLogoMode(role: DashboardRole) {
-  if (role === "client") return "thinking";
-  if (role === "lawyer") return "idle";
-  return "verified";
+function getLogoMode(role: DashboardRole): AibeopchinLogoMode {
+  return AIBEOPCHIN_LOGO_V2_ROLE_MODE[role];
 }
 
-export function DashboardLivingHeader({ role, statusText }: Props) {
+export function DashboardLivingHeader({
+  role,
+  statusText,
+  useV2Logo = false,
+}: Readonly<Props>) {
+  const reducedMotion = useReducedMotion();
   const config = DASHBOARD_ROLE_CONFIG[role];
 
   return (
@@ -53,7 +61,16 @@ export function DashboardLivingHeader({ role, statusText }: Props) {
 
       <div className="flex min-h-[140px] items-center justify-center sm:min-h-[160px] md:min-h-0">
         <div className="w-full max-w-[min(100%,380px)] md:max-w-none">
-          <AibeopchinLogo mode={getLogoMode(role)} size="lg" showSubtitle={false} />
+          {useV2Logo ? (
+            <AibeopchinLogoV2
+              mode={getLogoMode(role)}
+              size="lg"
+              showTagline={false}
+              reducedMotion={Boolean(reducedMotion)}
+            />
+          ) : (
+            <AibeopchinLogo mode={getLogoMode(role)} size="lg" showSubtitle={false} />
+          )}
         </div>
       </div>
     </section>

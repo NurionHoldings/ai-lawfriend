@@ -28,7 +28,7 @@ export const signUpSchema = z
 
 export const loginSchema = z
   .object({
-    email: z.string().trim().email("올바른 이메일 형식이 아닙니다."),
+    email: z.string().trim().min(1, "이메일 또는 데모 로그인 ID를 입력해 주세요."),
     password: z.string().min(1, "비밀번호를 입력해 주세요."),
   })
   .strict();

@@ -1,3 +1,8 @@
+/**
+ * 대시보드 3.0(역할별 실데이터 1차 마감): 역할별 라우트는 Prisma 기반 metrics를 우선 사용한다.
+ * 본 파일은 스토리보드·데모·레거시 fallback용 상수로 유지하며, 삭제·축소는 사용처 점검 후 별도 PR로 한다.
+ */
+/** 일부 대시보드가 실제 `metrics` props를 받기 전까지 fallback·demo 용도로 유지한다. */
 export const CLIENT_READINESS_ITEMS = [
   { label: "기본 정보", done: true },
   { label: "사건 경위", done: true },

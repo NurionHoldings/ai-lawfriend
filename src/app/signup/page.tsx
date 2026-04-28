@@ -66,86 +66,88 @@ export default function SignupPage() {
   }
 
   return (
-    <main className="mx-auto max-w-md px-6 py-16">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">회원가입</h1>
-        <p className="mt-2 text-sm text-gray-600">
-          AI법친 계정을 만들고 사건 정리를 시작하세요.
-        </p>
-        <p className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950">
+    <main className="mx-auto max-w-lg px-6 py-16">
+      <div className="rounded-[2rem] border border-aibeop-line bg-aibeop-surface p-8 shadow-soft">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-aibeop-text">회원가입</h1>
+          <p className="mt-2 text-sm text-aibeop-muted">
+            AI법친 계정을 만들고 사건 정리를 시작하세요.
+          </p>
+          <p className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950">
           가입 후 계정은 <strong className="font-semibold">관리자 승인 대기(PENDING)</strong> 상태입니다.
           승인이 완료되면 로그인할 수 있습니다.{" "}
           <strong className="font-semibold">플랫폼 관리자(ADMIN)</strong>는 로그인 후 상단{" "}
           <span className="whitespace-nowrap">「가입 승인」</span> 또는{" "}
           <span className="whitespace-nowrap">관리자 콘솔 → 가입 승인 대기</span>에서 승인·반려합니다.
           일반 변호사·의뢰인 계정에는 해당 메뉴가 보이지 않습니다.
-        </p>
-      </div>
+          </p>
+        </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <AuthInput
-          label="이메일"
-          type="email"
-          value={form.email}
-          placeholder="you@example.com"
-          autoComplete="email"
-          onChange={(value) => setForm((prev) => ({ ...prev, email: value }))}
-        />
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <AuthInput
+            label="이메일"
+            type="email"
+            value={form.email}
+            placeholder="you@example.com"
+            autoComplete="email"
+            onChange={(value) => setForm((prev) => ({ ...prev, email: value }))}
+          />
 
-        <AuthInput
-          label="비밀번호"
-          type="password"
-          value={form.password}
-          placeholder="8자 이상 입력"
-          autoComplete="new-password"
-          onChange={(value) =>
-            setForm((prev) => ({ ...prev, password: value }))
-          }
-        />
+          <AuthInput
+            label="비밀번호"
+            type="password"
+            value={form.password}
+            placeholder="8자 이상 입력"
+            autoComplete="new-password"
+            onChange={(value) =>
+              setForm((prev) => ({ ...prev, password: value }))
+            }
+          />
 
-        <AuthInput
-          label="비밀번호 확인"
-          type="password"
-          value={form.passwordConfirm}
-          placeholder="비밀번호를 다시 입력"
-          autoComplete="new-password"
-          onChange={(value) =>
-            setForm((prev) => ({ ...prev, passwordConfirm: value }))
-          }
-        />
+          <AuthInput
+            label="비밀번호 확인"
+            type="password"
+            value={form.passwordConfirm}
+            placeholder="비밀번호를 다시 입력"
+            autoComplete="new-password"
+            onChange={(value) =>
+              setForm((prev) => ({ ...prev, passwordConfirm: value }))
+            }
+          />
 
-        <AuthInput
-          label="이름"
-          value={form.name}
-          placeholder="홍길동"
-          autoComplete="name"
-          onChange={(value) => setForm((prev) => ({ ...prev, name: value }))}
-        />
+          <AuthInput
+            label="이름"
+            value={form.name}
+            placeholder="홍길동"
+            autoComplete="name"
+            onChange={(value) => setForm((prev) => ({ ...prev, name: value }))}
+          />
 
-        <AuthInput
-          label="전화번호(선택)"
-          value={form.phone}
-          placeholder="01012345678"
-          autoComplete="tel"
-          onChange={(value) => setForm((prev) => ({ ...prev, phone: value }))}
-        />
+          <AuthInput
+            label="전화번호(선택)"
+            value={form.phone}
+            placeholder="01012345678"
+            autoComplete="tel"
+            onChange={(value) => setForm((prev) => ({ ...prev, phone: value }))}
+          />
 
-        <FormError message={localError || errorMessage} />
+          <FormError message={localError || errorMessage} />
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-xl bg-black px-4 py-3 text-white transition hover:opacity-90 disabled:opacity-50"
-        >
-          {loading ? "가입 처리 중..." : "회원가입"}
-        </button>
-      </form>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-xl bg-aibeop-green px-4 py-3 text-white transition hover:bg-aibeop-deep disabled:opacity-50"
+          >
+            {loading ? "가입 처리 중..." : "회원가입"}
+          </button>
+        </form>
 
-      <div className="mt-6 text-sm text-gray-600">
-        이미 계정이 있으신가요?{" "}
-        <Link href="/login" className="font-medium text-black underline">
-          로그인
-        </Link>
+        <div className="mt-6 text-sm text-aibeop-muted">
+          이미 계정이 있으신가요?{" "}
+          <Link href="/login" className="font-medium text-aibeop-text underline">
+            로그인
+          </Link>
+        </div>
       </div>
     </main>
   );

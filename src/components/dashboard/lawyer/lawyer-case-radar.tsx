@@ -37,10 +37,10 @@ export function LawyerCaseRadar() {
               height: point.size,
             }}
             initial={{ opacity: 0, scale: 0.4 }}
-            animate={{ opacity: [0.45, 1, 0.45], scale: [0.9, 1.2, 0.9] }}
+            animate={{ opacity: [0.5, 0.82, 0.5], scale: [0.96, 1.08, 0.96] }}
             transition={{
-              delay: index * 0.18,
-              duration: 2.2,
+              delay: index * 0.22,
+              duration: 3.2,
               repeat: Infinity,
               ease: "easeInOut",
             }}

@@ -13,16 +13,118 @@ import {
 } from "@/features/cases/case.utils";
 import { isPlatformAdmin } from "@/features/cases/case.permissions";
 import { prismaRoleToUiRole } from "@/lib/role-map";
+import { getClientReadinessBadgeLabel } from "@/lib/dashboard/client-readiness-badge";
+import {
+  buildClientCaseReadiness,
+  countInterviewAnswerEntries,
+} from "@/lib/dashboard/client-case-readiness";
+import {
+  formatDashboardDateTime,
+  getDashboardCaseHref,
+  getDashboardCaseStatusLabel,
+  getDashboardCaseTitle,
+  getDashboardReviewCtaLabel,
+} from "@/lib/dashboard/dashboard-display";
+import {
+  fetchClientDashboardMetrics,
+  type ClientCasePreviewItem,
+} from "@/lib/dashboard/dashboard-metrics";
+import { buildAccessibleCaseWhere } from "@/features/cases/case.permissions";
+import { prisma } from "@/lib/prisma";
 
 export default async function DashboardPage() {
   const currentUser = await requireSessionUser();
   const recentCases = await getDashboardCasesService(currentUser);
+  const accessibleWhere = buildAccessibleCaseWhere(currentUser);
+  const [clientDashboardMetricsBase, casesForReadiness] = await Promise.all([
+    fetchClientDashboardMetrics(currentUser),
+    prisma.case.findMany({
+      where: accessibleWhere,
+      orderBy: { updatedAt: "desc" },
+      take: 10,
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        category: true,
+        opponentName: true,
+        status: true,
+        updatedAt: true,
+        _count: {
+          select: {
+            attachments: {
+              where: { status: "ACTIVE", deletedAt: null },
+            },
+          },
+        },
+        interviews: { select: { answersJson: true } },
+      },
+    }),
+  ]);
+
+  const sourceCase =
+    casesForReadiness.find(
+      (c) => c.status !== "CLOSED" && c.status !== "REJECTED",
+    ) ??
+    casesForReadiness[0] ??
+    null;
+
+  const readiness = buildClientCaseReadiness(
+    sourceCase
+      ? {
+          id: sourceCase.id,
+          title: sourceCase.title,
+          caseType: sourceCase.category,
+          status: sourceCase.status,
+          description: sourceCase.description,
+          interviewAnswerCount: countInterviewAnswerEntries(
+            sourceCase.interviews,
+          ),
+          attachmentCount: sourceCase._count.attachments,
+          opponentName: sourceCase.opponentName,
+        }
+      : null,
+  );
+
+  const recentCasesPreview: ClientCasePreviewItem[] = casesForReadiness
+    .slice(0, 5)
+    .map((item) => {
+      const caseReadiness = buildClientCaseReadiness({
+        id: item.id,
+        title: item.title,
+        caseType: item.category,
+        status: item.status,
+        description: item.description,
+        interviewAnswerCount: countInterviewAnswerEntries(item.interviews),
+        attachmentCount: item._count.attachments,
+        opponentName: item.opponentName,
+      });
+
+      return {
+        id: item.id,
+        title: getDashboardCaseTitle(item.title),
+        status: item.status,
+        statusLabel: getDashboardCaseStatusLabel(item.status),
+        updatedAtLabel: formatDashboardDateTime(item.updatedAt),
+        href: getDashboardCaseHref(item.id),
+        label: getDashboardReviewCtaLabel(),
+        readinessPercent: caseReadiness.percent,
+        readinessLabel: getClientReadinessBadgeLabel(caseReadiness.percent),
+      };
+    });
+
+  const clientDashboardMetrics = {
+    ...clientDashboardMetricsBase,
+    readiness,
+    recentCasesPreview,
+  };
+
   const uiRole = prismaRoleToUiRole(currentUser.role);
 
   return (
     <DashboardShell>
       <div className="flex flex-col gap-10 pb-8">
-        <ClientDashboardHome />
+        <ClientDashboardHome metrics={clientDashboardMetrics} />
 
         <DashboardLegacyBridge />
 

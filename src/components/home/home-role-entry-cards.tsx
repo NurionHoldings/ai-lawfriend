@@ -26,14 +26,14 @@ export function HomeRoleEntryCards() {
       aria-labelledby="home-role-entry-heading"
     >
       <div className="mb-8">
-        <p className="text-sm font-semibold text-cyan-600">Role Entry</p>
+        <p className="text-sm font-semibold text-aibeop-green">Role Entry</p>
         <h2
           id="home-role-entry-heading"
-          className="mt-2 text-3xl font-black text-slate-950"
+          className="mt-2 text-3xl font-black text-aibeop-text"
         >
           역할에 맞는 작업 공간으로 바로 이동합니다.
         </h2>
-        <p className="mt-3 max-w-2xl text-sm text-slate-600">
+        <p className="mt-3 max-w-2xl text-sm text-aibeop-muted">
           동일한 로그인 화면을 사용합니다. 계정 유형·승인 상태에 따라 허용된 메뉴만 열립니다.
         </p>
       </div>
@@ -42,23 +42,23 @@ export function HomeRoleEntryCards() {
         {roles.map((role) => (
           <div
             key={role.title}
-            className="flex flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+            className="flex flex-col rounded-3xl border border-aibeop-line bg-aibeop-surface p-6 shadow-soft transition hover:-translate-y-1 hover:shadow-xl"
           >
-            <h3 className="text-xl font-bold text-slate-950">{role.title}</h3>
-            <p className="mt-3 flex-1 text-sm leading-6 text-slate-600">
+            <h3 className="text-xl font-bold text-aibeop-text">{role.title}</h3>
+            <p className="mt-3 flex-1 text-sm leading-6 text-aibeop-muted">
               {role.description}
             </p>
             <div className="mt-6 flex flex-col gap-2">
               <Link
                 href={role.primary.href}
-                className="rounded-xl bg-slate-900 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600"
+                className="rounded-xl bg-aibeop-green py-2.5 text-center text-sm font-semibold text-white transition hover:bg-aibeop-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aibeop-green"
               >
                 {role.primary.label}
               </Link>
               {"secondary" in role ? (
                 <Link
                   href={role.secondary.href}
-                  className="rounded-xl border border-slate-200 py-2.5 text-center text-sm font-medium text-slate-800 transition hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600"
+                  className="rounded-xl border border-aibeop-line py-2.5 text-center text-sm font-medium text-aibeop-text transition hover:bg-aibeop-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aibeop-green"
                 >
                   {role.secondary.label}
                 </Link>

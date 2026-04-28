@@ -19,14 +19,14 @@ export default function AuthInput({
 }: Props) {
   return (
     <label className="block space-y-2">
-      <span className="text-sm font-medium text-gray-800">{label}</span>
+      <span className="text-sm font-medium text-aibeop-text">{label}</span>
       <input
         type={type}
         value={value}
         placeholder={placeholder}
         autoComplete={autoComplete}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-black"
+        className="w-full rounded-xl border border-aibeop-line bg-aibeop-surface px-4 py-3 text-aibeop-text outline-none transition focus:border-aibeop-green"
       />
     </label>
   );

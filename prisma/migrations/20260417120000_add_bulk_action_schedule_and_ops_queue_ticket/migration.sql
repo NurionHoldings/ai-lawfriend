@@ -51,9 +51,3 @@ CREATE INDEX "OpsQueueTicket_status_createdAt_idx" ON "OpsQueueTicket"("status",
 
 -- CreateIndex
 CREATE INDEX "OpsQueueTicket_sourceJobId_taxonomy_idx" ON "OpsQueueTicket"("sourceJobId", "taxonomy");
-
--- AddForeignKey
-ALTER TABLE "BulkActionSchedule" ADD CONSTRAINT "BulkActionSchedule_sourceJobId_fkey" FOREIGN KEY ("sourceJobId") REFERENCES "BulkActionJob"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "OpsQueueTicket" ADD CONSTRAINT "OpsQueueTicket_sourceJobId_fkey" FOREIGN KEY ("sourceJobId") REFERENCES "BulkActionJob"("id") ON DELETE CASCADE ON UPDATE CASCADE;

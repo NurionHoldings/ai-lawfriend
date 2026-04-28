@@ -18,36 +18,36 @@ const items = [
 export function HomeTrustStrip() {
   return (
     <section
-      className="border-y border-slate-200 bg-slate-50"
+      className="border-y border-aibeop-line bg-aibeop-soft"
       aria-labelledby="home-trust-heading"
     >
       <div className="mx-auto max-w-7xl px-5 py-10 md:px-8">
-        <h2 id="home-trust-heading" className="text-lg font-bold text-slate-950">
+        <h2 id="home-trust-heading" className="text-lg font-bold text-aibeop-text">
           신뢰·보안·면책
         </h2>
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {items.map((item) => (
             <div
               key={item.title}
-              className="rounded-2xl bg-white p-5 shadow-sm"
+              className="rounded-2xl border border-aibeop-line bg-aibeop-surface p-5 shadow-soft"
             >
-              <p className="text-sm font-semibold text-slate-900">{item.title}</p>
-              <p className="mt-2 text-sm font-medium leading-6 text-slate-700">
+              <p className="text-sm font-semibold text-aibeop-text">{item.title}</p>
+              <p className="mt-2 text-sm font-medium leading-6 text-aibeop-muted">
                 {item.body}
               </p>
             </div>
           ))}
         </div>
-        <p className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-sm text-slate-700">
+        <p className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-sm text-aibeop-muted">
           <Link
             href="/guide"
-            className="font-medium underline underline-offset-4 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600"
+            className="font-medium underline underline-offset-4 hover:text-aibeop-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aibeop-green"
           >
             이용 안내
           </Link>
           <Link
             href="/faq"
-            className="font-medium underline underline-offset-4 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600"
+            className="font-medium underline underline-offset-4 hover:text-aibeop-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aibeop-green"
           >
             FAQ
           </Link>
