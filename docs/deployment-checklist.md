@@ -1,14 +1,76 @@
 # AI법친 OpsQueue 운영 배포 체크리스트
 
+## 0. 운영 배포 전 점검 닫기 순서 (7.1-B·MVP final lock 연계)
+
+아래 순서로 닫으면 DB·마이그레이션·계정·스토리지·증빙까지 한 줄로 추적하기 쉽다. **1번**은 `DATABASE_URL`이 설정된 **스테이징 또는 운영 배포본 저장소 루트**의 셸에서만 수행한다.
+
+**게이트:** ①에서 **exit 0** 및 콘솔 **PASS**를 확인하기 전에는 [422]/[423]을 **PASS로 갱신하지 않으며**, ⑨·⑩도 닫지 않는다. 로컬/Cursor에 `DATABASE_URL` 없이 **exit 1**이면 **앱 코드 결함이 아니라 환경 미충족**이다 — 이 경우 [422] **BLOCKED**·[423] **대기**를 유지하고, **§1.0~§1.4**는 스테이징/운영에서 ①을 닫은 뒤 이어서 진행한다.
+
+**비밀:** `DATABASE_URL` **연결 문자열 값**은 문서·채팅·PR·스크린샷·증빙 본문에 **절대 기록하지 않는다.** 존재 여부·실행 환경(스테이징/운영)·시각만 남긴다 — [423 절차](./project-governance/IMPLEMENTATION_EVIDENCE.md#evidence-20260427-423).
+
+1. **DB runtime PASS** — `npm run verify:aibeopchin-7-1-b-supplement-db-runtime` ([`IMPLEMENTATION_EVIDENCE.md` §422·423](./project-governance/IMPLEMENTATION_EVIDENCE.md#evidence-20260427-422))
+2. **Prisma migration 상태 확인** — §1.1 (`migrate status` 또는 배포 파이프 기준 `migrate deploy`)
+3. **관리자 계정 확인** — §1.2
+4. **환경변수 확인** — §1 기본 항목
+5. **첨부파일 저장소 확인** — §1.3
+6. **운영 DB 백업 확인** — [`predeploy-lock-results.json`](./project-governance/predeploy-lock-results.json) 등
+7. **롤백 커밋 확인** — 동 파일 `rollback` 또는 릴리즈 노트
+8. **smoke test 실행** — §2·§3
+9. **[423] PASS 완료** — `IMPLEMENTATION_EVIDENCE.md` [#evidence-20260427-423](./project-governance/IMPLEMENTATION_EVIDENCE.md#evidence-20260427-423) 절차대로 갱신
+10. **배포 evidence 추가** — 팀 합의 위치(증빙·릴리즈 기록)
+
+**§1.0~§1.4:** 위 ①이 **PASS**이고 [`IMPLEMENTATION_EVIDENCE.md`](./project-governance/IMPLEMENTATION_EVIDENCE.md) **[422]/[423]**을 절차대로 갱신한 뒤, **같은 스테이징/운영 맥락**에서 §1.0 공통 env → §1.1~1.4 순으로 체크박스를 닫는다.
+
 ## 1. 배포 전
+
+### 1.0 공통 환경변수·앱
 
 - [ ] `.env.production` 값 점검
 - [ ] `DATABASE_URL` 확인
 - [ ] `JWT_SECRET` / `CRON_SECRET` 확인
+- [ ] 사용할 소셜 로그인 provider의 `CLIENT_ID` / `CLIENT_SECRET` 이 모두 적용됨
+- [ ] `APP_BASE_URL` 이 실제 배포 도메인과 일치함
 - [ ] `NEXT_PUBLIC_APP_VERSION` 갱신
 - [ ] feature flag 확인 (`NEXT_PUBLIC_FF_*`)
-- [ ] `prisma migrate deploy` 적용 준비
-- [ ] 관리자 계정 seed 가능 상태 확인 (`npm run db:seed`)
+
+### 1.1 Prisma 마이그레이션
+
+DB runtime 검증만으로는 **적용된 마이그레이션 이력·배포 절차**까지는 커버되지 않을 수 있으므로, 배포 전에 아래를 병행한다.
+
+- [ ] `npx prisma migrate status` — 대기 마이그레이션·스키마 드리프트 없음 확인
+- [ ] 필요 시 `npx prisma generate` — 클라이언트와 스키마 동기화
+- [ ] **운영/스테이징:** 배포는 **`npx prisma migrate deploy`** 기준. **`migrate dev`는 개발 전용**이며 운영에서 무작정 사용하지 않는다.
+
+### 1.2 Seed·관리자·데모·테스트 계정
+
+운영에서는 기능보다 **접속 가능한 관리자 계정**과 **불필요한 테스트/데모 노출** 여부가 우선될 때가 많다.
+
+- [ ] **ADMIN** 또는 **SUPER_ADMIN** 역할을 가진 운영용 계정 존재
+- [ ] 초기 관리자 계정 생성 방식(seed·수동·Entra 등) 문서·런북과 일치
+- [ ] **운영 환경에서 데모 프리패스 없음** 확인 — demo-access 관련 증빙과 정합
+- [ ] 데모·테스트 전용 계정이 **운영 DB에 잔류하지 않음**(있다면 비활성화 또는 제거 정책)
+- [ ] 최초 배포 등에서 seed가 합의되어 있으면 `npm run db:seed` **실행 대상이 스테이징/운영 중 어디인지**·데이터 영향 범위 확인
+
+### 1.3 첨부파일·스토리지
+
+사건·증거·첨부가 핵심이므로 DB 점검과 **저장소·권한**을 같이 본다. (기획상: 첨부 **직접 URL 노출 금지**, 열람/다운로드 로그, 공유 만료, 취소 접근 차단 등 보안 정책과 정합.)
+
+- [ ] 업로드 경로 또는 객체 스토리지 버킷·리전·Credential 설정
+- [ ] 첨부 **직접 URL 노출** 여부 — 공개 링크가 아닌 **가드된 다운로드 경로**인지
+- [ ] 다운로드 권한 가드(역할·사건 소유·토큰 만료 등)
+- [ ] 파일 크기 제한
+- [ ] 허용 확장자·MIME 화이트리스트
+- [ ] **백업 범위**에 DB뿐 아니라 **첨부·오브젝트**가 포함되는지
+
+### 1.4 법률·플랫폼 고지문
+
+배포 직전 **화면·약관·AI 고지 문구**를 최종 확인한다.
+
+- [ ] AI는 **변호사를 대체하지 않음**
+- [ ] **최종 법률 판단**은 변호사 또는 적법한 전문가가 수행한다는 취지가 드러남
+- [ ] AI 결과물은 **사건 정리·초안 보조**용임을 명시
+- [ ] **승소/패소 단정** 표현 없음
+- [ ] **법률 자문 자동화**처럼 읽히는 표현 없음
 
 ## 2. 코드 검증
 
@@ -21,7 +83,8 @@
 
 - [ ] `GET /api/health` 확인
 - [ ] `GET /api/release-meta` 확인
-- [ ] 로그인 확인
+- [ ] 일반 이메일 로그인 확인
+- [ ] 활성화된 소셜 로그인 확인
 - [ ] `/admin/alerts/ops-dashboard` 운영 대시보드 진입 확인
 - [ ] `/admin/alerts/ops-queue/board` OpsQueue 보드 조회 확인
 - [ ] 상세 슬라이드오버 확인

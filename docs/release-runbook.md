@@ -4,6 +4,7 @@
 
 1. main 브랜치 최신 상태 확인
 2. 환경변수 적용 (`.env.production` 또는 호스팅 비밀)
+   - 소셜 로그인을 열 경우 `APP_BASE_URL`, provider client id / secret 값을 함께 반영
 3. DB 백업
 4. 배포 버전 문자열(`NEXT_PUBLIC_APP_VERSION`) 갱신
 
@@ -15,7 +16,8 @@
 4. 프로덕션 배포 실행
 5. `GET /api/health` 확인
 6. `GET /api/release-meta` 확인
-7. 관리자 로그인 후 핵심 화면 수동 확인
+7. 일반 로그인 / 활성화된 소셜 로그인 확인
+8. 관리자 로그인 후 핵심 화면 수동 확인
 
 ## C. 핵심 수동 확인 경로
 
@@ -46,5 +48,6 @@
 2. `npx prisma migrate deploy` → `npm run db:seed`
 3. `npm run predeploy:check` → `npm run test:e2e`
 4. 프로덕션 배포
-5. `/api/health`, `/api/release-meta`, 핵심 관리자 URL 확인
-6. cron·감사로그·WIP/SLA 알림 확인
+5. `/api/health`, `/api/release-meta`, 일반 로그인 / 활성화된 소셜 로그인 확인
+6. 핵심 관리자 URL 확인
+7. cron·감사로그·WIP/SLA 알림 확인

@@ -33,7 +33,9 @@ AI법친은 특정 변호사를 추천, 순위화, 자동매칭하지 않는다.
 ## 4. 데모 로그인 보안 기준
 
 - `DEMO_ACCESS_ENABLED=true` 일 때만 데모 프리패스 로그인이 동작한다.
-- `DEMO_ACCESS_ID`, `DEMO_ACCESS_PASSWORD`, `DEMO_ACCESS_ROLE` 는 코드가 아닌 환경변수에서만 읽는다.
+- `DEMO_ACCESS_ID`, `DEMO_ACCESS_PASSWORD`, `DEMO_ACCESS_USER_ID`, `DEMO_ACCESS_ROLE` 는 코드가 아닌 환경변수에서만 읽는다.
+- 다중 프리패스가 필요하면 `DEMO_ACCESS_1_*`, `DEMO_ACCESS_2_*` 형태의 인덱스 환경변수 묶음을 사용한다.
+- 프리패스 `ID` 는 반드시 이메일이 아닌 별도 alias 로 잡아 일반 회원 이메일 로그인과 네임스페이스가 겹치지 않게 한다.
 - `DEMO_ACCESS_ENABLED=false` 이면 데모 프리패스 분기는 완전 비활성화된다.
 - 데모 프리패스 성공 로그인도 일반 로그인과 동일하게 감사로그(`AUTH_LOGIN_SUCCESS`)에 남긴다.
 - 홍보/테스트 종료 후에는 비밀번호를 즉시 교체하거나 기능을 꺼야 한다.

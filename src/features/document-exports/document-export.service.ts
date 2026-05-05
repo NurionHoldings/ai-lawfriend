@@ -1,5 +1,11 @@
 import type { SessionUser } from "@/lib/auth/require-session-user";
 import { buildDocumentVerificationCode } from "@/features/document-approvals/document-verification.utils";
+import { buildGuardrailPrintSummary } from "@/features/document-generation/document-guardrail-print-summary";
+import type { GuardrailPrintSummary } from "@/features/document-generation/document-guardrail-print-summary";
+import {
+  readGuardrailTraceFromSnapshot,
+  toPublicSafeGuardrailTrace,
+} from "@/features/document-generation/document-generation-guardrail-trace";
 import { getCaseAccessContext } from "@/features/cases/case.permissions";
 import { documentExportConfig } from "@/features/document-exports/document-export.config";
 import { documentExportRepository } from "@/features/document-exports/document-export.repository";
@@ -39,7 +45,9 @@ function escapeHtml(value: string) {
     .replaceAll("'", "&#39;");
 }
 
-function formatDateTime(value?: Date | string | null) {
+type DateTimeValue = Date | string | null | undefined;
+
+function formatDateTime(value?: DateTimeValue) {
   if (!value) return "-";
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "-";
@@ -57,6 +65,40 @@ function coerceLockedAt(value: unknown): Date | string | null {
     return new Date(value);
   }
   return null;
+}
+
+function renderGuardrailPrintSummary(summary?: GuardrailPrintSummary | null) {
+  if (!summary) {
+    return "";
+  }
+
+  return `
+      <div class="guardrail-summary" aria-label="AI 생성 안전검사 요약">
+        <div class="guardrail-summary-title">AI 생성 안전검사 요약</div>
+        <table class="guardrail-summary-table">
+          <tbody>
+            <tr>
+              <th>생성 정책</th>
+              <td>${escapeHtml(summary.generationPolicy)}</td>
+            </tr>
+            <tr>
+              <th>안전검사 상태</th>
+              <td>${escapeHtml(summary.guardrailCheckStatusLabel)}</td>
+            </tr>
+            <tr>
+              <th>검사 시각</th>
+              <td>${escapeHtml(summary.checkedAtLabel)}</td>
+            </tr>
+            <tr>
+              <th>WARNING 보강 항목 수</th>
+              <td>${summary.warningMissingFieldCount}건</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="guardrail-summary-note">
+          본 요약은 승인본 문서의 AI 생성 정책 및 안전검사 이력 중 공개 가능한 항목만 표시합니다.
+        </p>
+      </div>`;
 }
 
 function buildPrintableHtml(input: {
@@ -77,6 +119,7 @@ function buildPrintableHtml(input: {
   verificationQrDataUrl?: string | null;
   verificationQrLabel?: string | null;
   verificationHelpText?: string | null;
+  guardrailPrintSummary?: GuardrailPrintSummary | null;
 }) {
   const safeTitle = escapeHtml(input.documentTitle);
   const safeCaseTitle = escapeHtml(input.caseTitle ?? "-");
@@ -106,6 +149,9 @@ function buildPrintableHtml(input: {
     .split("\n")
     .map((line) => `<p>${escapeHtml(line) || "&nbsp;"}</p>`)
     .join("");
+  const guardrailSummaryHtml = renderGuardrailPrintSummary(
+    input.guardrailPrintSummary,
+  );
 
   return `<!DOCTYPE html>
 <html lang="ko">
@@ -268,6 +314,49 @@ function buildPrintableHtml(input: {
       padding: 12px 14px;
       font-size: 12px;
       color: #374151;
+    }
+
+    .guardrail-summary {
+      margin-top: 18px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      background: #ffffff;
+      page-break-inside: avoid;
+    }
+
+    .guardrail-summary-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #111111;
+    }
+
+    .guardrail-summary-table {
+      width: 100%;
+      margin-top: 12px;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .guardrail-summary-table th,
+    .guardrail-summary-table td {
+      padding: 6px;
+      border-top: 1px solid #e5e7eb;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .guardrail-summary-table th {
+      width: 140px;
+      color: #475569;
+      font-weight: 700;
+    }
+
+    .guardrail-summary-note {
+      margin: 12px 0 0 0;
+      font-size: 11px;
+      color: #64748b;
+      line-height: 1.6;
     }
 
     .content {
@@ -464,7 +553,7 @@ function buildPrintableHtml(input: {
           <div class="verification-qr-wrap">
             ${
               safeVerificationQrDataUrl
-                ? `<img src="${safeVerificationQrDataUrl.replace(/"/g, "&quot;")}" alt="${safeVerificationQrLabel}" class="verification-qr" />`
+                ? `<img src="${safeVerificationQrDataUrl.replaceAll('"', "&quot;")}" alt="${safeVerificationQrLabel}" class="verification-qr" />`
                 : `<div class="verification-qr"></div>`
             }
             <div class="verification-qr-label">${safeVerificationQrLabel}</div>
@@ -477,6 +566,8 @@ function buildPrintableHtml(input: {
           </div>
         </div>
       </div>
+
+      ${guardrailSummaryHtml}
 
       <div class="signature-section">
         <div class="signature-title">검토 및 승인 서명란</div>
@@ -523,7 +614,7 @@ export const documentExportService = {
     ensureUser(user);
 
     const document = await documentExportRepository.findDocumentById(documentId);
-    if (!document || !document.caseId) {
+    if (!document?.caseId) {
       throw httpError(404, "문서를 찾을 수 없습니다.");
     }
 
@@ -545,6 +636,14 @@ export const documentExportService = {
     );
 
     const caseNumber = document.case?.caseNumber ?? null;
+    const publicSafeGuardrailTrace = toPublicSafeGuardrailTrace(
+      readGuardrailTraceFromSnapshot(
+        (lockedVersion as { snapshotJson?: unknown }).snapshotJson,
+      ),
+    );
+    const guardrailPrintSummary = buildGuardrailPrintSummary(
+      publicSafeGuardrailTrace,
+    );
 
     const verification = buildDocumentVerificationCode({
       documentId,
@@ -584,11 +683,13 @@ export const documentExportService = {
       verificationQrDataUrl,
       verificationQrLabel: documentVerificationConfig.qrLabel,
       verificationHelpText: documentVerificationConfig.mobileHelpText,
+      guardrailPrintSummary,
     });
 
     return {
       document,
       lockedVersion,
+      guardrailPrintSummary,
       printableHtml,
       printableText: {
         title: lockedVersion.title,

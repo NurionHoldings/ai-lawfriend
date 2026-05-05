@@ -1,0 +1,107 @@
+{
+  "evidenceId": "EVIDENCE-20260501-AIBEOPCHIN-6-10-QA-REGRESSION-PREDEPLOY",
+  "status": "PASS",
+  "checkedAt": "2026-05-03T12:55:00.000Z",
+  "checkedBy": "최인석",
+  "notes": "AI법친 6.x 사건 패키지 수동 QA 14개 항목을 실제 화면 기준으로 확인하고 PASS 전환했다.",
+  "items": [
+    {
+      "id": "QA-6-4-CLIENT-SHARE-CREATE",
+      "title": "의뢰인 공유 생성",
+      "expected": "공유 범위/만료일/PIN 설정 후 publicCode 발급",
+      "result": "PASS",
+      "note": "의뢰인 사건 상세 화면에서 공유 범위, 만료일, PIN 설정 후 publicCode 발급 확인"
+    },
+    {
+      "id": "QA-6-4-CLIENT-SHARE-LIST",
+      "title": "의뢰인 공유 목록",
+      "expected": "기존 공유 목록 표시",
+      "result": "PASS",
+      "note": "발급된 공유 목록과 상태 표시 확인"
+    },
+    {
+      "id": "QA-6-4-CLIENT-SHARE-REVOKE",
+      "title": "공유 취소",
+      "expected": "사유 입력 후 REVOKED 처리",
+      "result": "PASS",
+      "note": "공유 취소 사유 입력 후 REVOKED 상태 반영 확인"
+    },
+    {
+      "id": "QA-6-5-LAWYER-LOOKUP",
+      "title": "변호사 고유번호 조회",
+      "expected": "publicCode/PIN 입력 후 상세 이동",
+      "result": "PASS",
+      "note": "변호사 화면에서 publicCode 및 PIN 입력 후 상세 화면 이동 확인"
+    },
+    {
+      "id": "QA-6-5-LAWYER-DETAIL",
+      "title": "변호사 상세 열람",
+      "expected": "요약/첨부 목록/문서 목록 표시",
+      "result": "PASS",
+      "note": "허용된 범위 내 사건 요약, 첨부자료 목록, 문서 목록 표시 확인"
+    },
+    {
+      "id": "QA-6-6-ATTACHMENT-LIST",
+      "title": "첨부 목록 열람",
+      "expected": "allowAttachmentList 기준 표시",
+      "result": "PASS",
+      "note": "allowAttachmentList 권한에 따라 첨부 목록 표시 여부 확인"
+    },
+    {
+      "id": "QA-6-6-ATTACHMENT-DOWNLOAD",
+      "title": "첨부 다운로드",
+      "expected": "allowAttachmentDownload=true일 때만 가능",
+      "result": "PASS",
+      "note": "allowAttachmentDownload=true 상태에서 첨부 다운로드 동작 확인"
+    },
+    {
+      "id": "QA-6-6-ATTACHMENT-DENIED",
+      "title": "첨부 다운로드 차단",
+      "expected": "권한 없으면 차단 및 로그 기록",
+      "result": "PASS",
+      "note": "다운로드 권한이 없을 때 차단되고 access log가 기록되는 것 확인"
+    },
+    {
+      "id": "QA-6-7-ACCESS-LOGS",
+      "title": "접근 로그 표시",
+      "expected": "VIEW/DOWNLOAD/DENIED/EXPIRED/REVOKED 표시",
+      "result": "PASS",
+      "note": "의뢰인/관리자 화면에서 열람, 다운로드, 차단, 만료, 취소 로그 표시 확인"
+    },
+    {
+      "id": "QA-6-8-PACKAGE-PDF",
+      "title": "사건 패키지 요약본 출력",
+      "expected": "allowPackagePdf=true일 때 다운로드 가능",
+      "result": "PASS",
+      "note": "allowPackagePdf=true 상태에서 사건 패키지 요약본 PDF 다운로드 확인"
+    },
+    {
+      "id": "QA-6-8-PDF-EXCLUSIONS",
+      "title": "출력물 제외 항목",
+      "expected": "첨부 원문/prompt/raw/snapshot/token 미포함",
+      "result": "PASS",
+      "note": "PDF 출력물에 첨부 원문, prompt, raw response, snapshotJson, token/PIN 원문이 포함되지 않음 확인"
+    },
+    {
+      "id": "QA-6-9-CONSENT-NOTICE",
+      "title": "동의/고지문",
+      "expected": "의뢰인/변호사 화면에 공용 문구 표시",
+      "result": "PASS",
+      "note": "의뢰인 공유 설정, 변호사 조회/상세 화면의 공용 동의/고지문 표시 확인"
+    },
+    {
+      "id": "QA-6-9-PRIVACY",
+      "title": "개인정보 최소노출",
+      "expected": "accessToken/PIN/hash/storagePath 직접 노출 없음",
+      "result": "PASS",
+      "note": "화면과 출력물에서 accessToken 재노출, PIN/hash, storagePath 직접 노출 없음 확인"
+    },
+    {
+      "id": "QA-6-9-LAWYER-ACT-NOTICE",
+      "title": "변호사법 오인 방지",
+      "expected": "AI가 변호사를 대체하지 않는 문구 표시",
+      "result": "PASS",
+      "note": "AI법친은 변호사를 대체하지 않는다는 고지문 표시 확인"
+    }
+  ]
+}

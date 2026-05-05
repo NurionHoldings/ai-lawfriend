@@ -1,0 +1,60 @@
+{
+  "project": "AI법친",
+  "phase": "6.x",
+  "status": "PRODUCTION_DEPLOYED_AND_LOCKED",
+  "deploymentStatus": "PRODUCTION_DEPLOYED_AND_LOCKED",
+  "featureFreeze": true,
+  "smokeTestResultsSummary": "14/14 PASS",
+  "operationMode": "STABILIZATION_ONLY",
+  "allowedWork": [
+    "operation_monitoring",
+    "incident_response",
+    "security_review",
+    "user_feedback_collection",
+    "7x_roadmap_separation"
+  ],
+  "blockedWork": [
+    "6x_feature_extension",
+    "6x_schema_change",
+    "6x_api_expansion",
+    "6x_permission_policy_relaxation",
+    "6x_dashboard_feature_addition"
+  ],
+  "latestDeployment": {
+    "branch": "main",
+    "commitSha": "b5e0e2d8a89e55048b85e6d078f544bdcca02498",
+    "rollbackTargetCommit": "930ee18cc5b107d636ca313ad649316f685e0ab2",
+    "deploymentProvider": "GitPush(origin/main)",
+    "deployedAt": "2026-05-03T06:20:11.820Z",
+    "dbBackupReference": "<마스킹된 운영 DB 백업 reference>"
+  },
+  "smokeTests": [
+    { "id": "SMOKE-01", "name": "메인 페이지 접속", "result": "PASS" },
+    { "id": "SMOKE-02", "name": "로그인 페이지 접속", "result": "PASS" },
+    { "id": "SMOKE-03", "name": "관리자 로그인", "result": "PASS" },
+    { "id": "SMOKE-04", "name": "의뢰인 사건 상세 접근", "result": "PASS" },
+    { "id": "SMOKE-05", "name": "의뢰인 공유 설정 화면 접근", "result": "PASS" },
+    { "id": "SMOKE-06", "name": "변호사 고유번호 조회 화면 접근", "result": "PASS" },
+    { "id": "SMOKE-07", "name": "사건 패키지 상세 열람", "result": "PASS" },
+    { "id": "SMOKE-08", "name": "첨부파일 목록 열람", "result": "PASS" },
+    { "id": "SMOKE-09", "name": "다운로드 차단/허용 정책 확인", "result": "PASS" },
+    { "id": "SMOKE-10", "name": "사건 패키지 PDF 다운로드 확인", "result": "PASS" },
+    { "id": "SMOKE-11", "name": "관리자 공유 현황 목록 확인", "result": "PASS" },
+    { "id": "SMOKE-12", "name": "관리자 공유 상세/로그 확인", "result": "PASS" },
+    { "id": "SMOKE-13", "name": "만료/취소 공유 접근 차단 확인", "result": "PASS" },
+    { "id": "SMOKE-14", "name": "변호사법/개인정보 고지 노출 확인", "result": "PASS" }
+  ],
+  "securityChecks": {
+    "databaseUrlRawValueExposed": false,
+    "accessTokenRawValueExposed": false,
+    "optionalPinOrHashExposed": false,
+    "storagePathExposed": false,
+    "attachmentDirectUrlExposed": false,
+    "internalPromptOrRawResponseExposed": false,
+    "publicSafeOutputMaintained": true
+  },
+  "next": {
+    "sixX": "operation_stabilization_only",
+    "sevenX": "roadmap_separation_only"
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "evidenceId": "EVIDENCE-20260501-RELEASE-CANDIDATE-MANUAL-QA-CLOSURE",
+  "status": "PASS",
+  "phase4EntryDecision": "APPROVED",
+  "checkedAt": "2026-05-01T00:00:00.000Z",
+  "checkedBy": "manual-qa",
+  "notes": "Release Candidate 수동 QA 잠금표 전 항목 PASS. Phase 4 진입 확정 가능 상태.",
+  "items": [
+    {
+      "id": "QA-LOGIN",
+      "title": "로그인",
+      "expected": "정상 로그인 가능",
+      "result": "PASS",
+      "note": "정상 로그인 확인"
+    },
+    {
+      "id": "QA-CASE-CREATE",
+      "title": "사건 생성",
+      "expected": "사건 생성 및 상세 진입 가능",
+      "result": "PASS",
+      "note": "사건 생성 및 상세 진입 확인"
+    },
+    {
+      "id": "QA-AI-INTERVIEW",
+      "title": "AI 인터뷰",
+      "expected": "질문셋 기반 답변 저장 가능",
+      "result": "PASS",
+      "note": "질문셋 기반 인터뷰 답변 저장 확인"
+    },
+    {
+      "id": "QA-DOCUMENT-GENERATE-NORMAL",
+      "title": "문서 생성 - 정상",
+      "expected": "필수항목 충족 시 생성 성공",
+      "result": "PASS",
+      "note": "필수항목 충족 시 문서 생성 성공 확인"
+    },
+    {
+      "id": "QA-DOCUMENT-GENERATE-BLOCKING",
+      "title": "문서 생성 - BLOCKING 누락",
+      "expected": "생성 차단 및 누락 항목 표시",
+      "result": "PASS",
+      "note": "BLOCKING 누락 시 생성 차단 확인"
+    },
+    {
+      "id": "QA-DOCUMENT-GENERATE-WARNING",
+      "title": "문서 생성 - WARNING 누락",
+      "expected": "생성 허용 및 보강 안내 표시",
+      "result": "PASS",
+      "note": "WARNING 누락 시 생성 허용 및 보강 안내 확인"
+    },
+    {
+      "id": "QA-NO-UNVERIFIED-FACTS-GUARDRAIL",
+      "title": "NO_UNVERIFIED_FACTS guardrail",
+      "expected": "검증되지 않은 판례/조문/단정 표현 차단",
+      "result": "PASS",
+      "note": "guardrail violation 차단 확인"
+    },
+    {
+      "id": "QA-GUARDRAIL-SUPPLEMENT-REQUEST",
+      "title": "guardrail 보완 요청",
+      "expected": "차단 후 보완 요청 초안 저장 가능",
+      "result": "PASS",
+      "note": "보완 요청 초안 저장 확인"
+    },
+    {
+      "id": "QA-DOCUMENT-APPROVE",
+      "title": "문서 승인",
+      "expected": "정상 trace 문서 승인 가능",
+      "result": "PASS",
+      "note": "정상 trace 문서 승인 확인"
+    },
+    {
+      "id": "QA-DOCUMENT-APPROVE-WITHOUT-TRACE",
+      "title": "trace 없는 문서 승인",
+      "expected": "승인 차단",
+      "result": "PASS",
+      "note": "trace 없는 문서 승인 차단 확인"
+    },
+    {
+      "id": "QA-VERIFICATION-CODE",
+      "title": "검증코드 조회",
+      "expected": "public-safe sourceTrace / guardrailTrace 표시",
+      "result": "PASS",
+      "note": "검증코드 조회 시 public-safe trace 표시 확인"
+    },
+    {
+      "id": "QA-DOCUMENT-DETAIL",
+      "title": "문서 상세",
+      "expected": "승인본 guardrailTrace 표시",
+      "result": "PASS",
+      "note": "문서 상세에서 승인본 guardrailTrace 표시 확인"
+    },
+    {
+      "id": "QA-PDF-PRINT",
+      "title": "PDF/출력",
+      "expected": "public-safe guardrail 요약만 표시",
+      "result": "PASS",
+      "note": "출력물에 public-safe guardrail 요약만 표시 확인"
+    },
+    {
+      "id": "QA-PRINT-FORBIDDEN-FIELDS",
+      "title": "출력 금지 항목",
+      "expected": "prompt/interview/raw/snapshot 원문 미노출",
+      "result": "PASS",
+      "note": "출력물 금지 항목 미노출 확인"
+    }
+  ]
+}

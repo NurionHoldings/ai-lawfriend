@@ -7,8 +7,12 @@ export async function generateParagraphContent(args: {
   title: string;
   seedContent: string;
   aiPromptKey?: string;
+  prompt?: string;
 }) {
   if (!args.seedContent?.trim()) return "";
+  if (args.prompt?.trim()) {
+    return args.seedContent.trim();
+  }
   return args.seedContent.trim();
 }
 

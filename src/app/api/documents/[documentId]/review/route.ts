@@ -6,7 +6,8 @@ import {
 import { documentDetailService } from "@/features/documents/document-detail.service";
 import { documentVersionService } from "@/features/document-versions/document-version.service";
 import { getSessionUser } from "@/lib/get-session-user";
-import { UnauthorizedError } from "@/lib/errors";
+import { prisma } from "@/lib/prisma";
+import { UnauthorizedError, ValidationError } from "@/lib/errors";
 import { ok, toErrorResponse } from "@/lib/domain-api-response";
 
 type RouteContext = {
@@ -22,6 +23,24 @@ export async function POST(req: NextRequest, context: RouteContext) {
     const user = await getSessionUser();
     if (!user) {
       throw new UnauthorizedError();
+    }
+
+    const legalDocument = await prisma.legalDocument.findUnique({
+      where: { id: params.documentId },
+      select: { id: true },
+    });
+
+    if (body.action === "APPROVE" && legalDocument) {
+      const trace = await prisma.documentGenerationTrace.findUnique({
+        where: { legalDocumentId: params.documentId },
+        select: { id: true },
+      });
+
+      if (!trace) {
+        throw new ValidationError(
+          "문서 승인 전 출처 추적 정보가 없습니다. 문서를 다시 생성하거나 관리자에게 문의하세요.",
+        );
+      }
     }
 
     const document = await documentDetailService.reviewDocument(
@@ -53,6 +72,13 @@ export async function POST(req: NextRequest, context: RouteContext) {
         user,
         "문서 승인 기준 버전 잠금",
       );
+
+      if (legalDocument) {
+        await prisma.documentGenerationTrace.update({
+          where: { legalDocumentId: params.documentId },
+          data: { approvedSnapshotAt: new Date() },
+        });
+      }
     }
 
     return ok({

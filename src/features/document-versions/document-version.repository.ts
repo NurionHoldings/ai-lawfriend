@@ -19,6 +19,29 @@ type VersionMemoPayload = {
   lockReason?: string;
 };
 
+function asNullableString(value: unknown): string | null {
+  if (typeof value === "string") {
+    return value;
+  }
+
+  if (typeof value === "number" || typeof value === "boolean" || typeof value === "bigint") {
+    return String(value);
+  }
+
+  return null;
+}
+
+function asString(value: unknown, fallback = ""): string {
+  return asNullableString(value) ?? fallback;
+}
+
+function getVersionActorId(
+  primaryValue: unknown,
+  fallbackValue: unknown,
+): string | null {
+  return asNullableString(primaryValue) ?? asNullableString(fallbackValue);
+}
+
 function getDocumentModel() {
   return (
     (prisma as unknown as { document?: unknown }).document ??
@@ -45,7 +68,7 @@ function getDocumentVersionModel() {
 }
 
 function getContentValue(raw: Record<string, unknown>) {
-  return String(raw.content ?? raw.body ?? "");
+  return asString(raw.content ?? raw.body);
 }
 
 function buildContentUpdateData(content: string) {
@@ -59,12 +82,12 @@ function mapDocument(raw: RawDocument | null) {
   if (!raw) return null;
 
   return {
-    id: String(raw.id),
-    caseId: raw.caseId ? String(raw.caseId) : null,
-    title: String(raw.title ?? ""),
+    id: asString(raw.id),
+    caseId: asNullableString(raw.caseId),
+    title: asString(raw.title),
     content: getContentValue(raw),
-    type: String(raw.type ?? raw.documentType ?? "GENERAL"),
-    status: String(raw.status ?? "DRAFT"),
+    type: asString(raw.type ?? raw.documentType, "GENERAL"),
+    status: asString(raw.status, "DRAFT"),
     createdAt: raw.createdAt ?? null,
     updatedAt: raw.updatedAt ?? null,
     createdById: raw.createdById ?? raw.authorId ?? null,
@@ -75,33 +98,27 @@ function mapDocument(raw: RawDocument | null) {
 function mapVersion(raw: RawVersion | null) {
   if (!raw) return null;
 
-  const createdById =
-    raw.createdById != null
-      ? String(raw.createdById)
-      : raw.authorId != null
-        ? String(raw.authorId)
-        : null;
-
-  const lockedById =
-    raw.lockedById != null
-      ? String(raw.lockedById)
-      : (raw as { lockedByUserId?: unknown }).lockedByUserId != null
-        ? String((raw as { lockedByUserId?: unknown }).lockedByUserId)
-        : null;
+  const createdById = getVersionActorId(raw.createdById, raw.authorId);
+  const lockedById = getVersionActorId(
+    raw.lockedById,
+    (raw as { lockedByUserId?: unknown }).lockedByUserId,
+  );
+  const snapshotJson = raw.snapshotJson ?? null;
 
   return {
-    id: String(raw.id),
-    documentId: String(raw.documentId),
+    id: asString(raw.id),
+    documentId: asString(raw.documentId),
     versionNumber: Number(raw.versionNumber ?? raw.version ?? 1),
-    title: String(raw.title ?? ""),
+    title: asString(raw.title),
     content: getContentValue(raw),
-    changeSummary: String(raw.changeSummary ?? raw.summary ?? ""),
+    snapshotJson,
+    changeSummary: asString(raw.changeSummary ?? raw.summary),
     createdAt: raw.createdAt ?? null,
     createdById,
     isLocked: Boolean(raw.isLocked ?? false),
     lockedAt: raw.lockedAt ?? null,
     lockedById,
-    lockReason: String(raw.lockReason ?? ""),
+    lockReason: asString(raw.lockReason),
   };
 }
 
@@ -120,6 +137,7 @@ function memoItemToVersion(
     versionNumber: item.parsed.versionNumber,
     title: item.parsed.title,
     content: item.parsed.body,
+    snapshotJson: null,
     changeSummary: item.parsed.changeSummary,
     createdAt: item.createdAt,
     createdById: item.authorUserId,
@@ -189,7 +207,7 @@ async function listMemoVersionRows(parentDocumentId: string) {
   return rows
     .map((row) => {
       const parsed = parseVersionMemo(row.content);
-      if (!parsed || parsed.parentDocumentId !== parentDocumentId) return null;
+      if (parsed?.parentDocumentId !== parentDocumentId) return null;
       return {
         id: row.id,
         authorUserId: row.authorUserId,
@@ -215,7 +233,7 @@ async function getNextPrismaVersionNumber(documentId: string) {
     orderBy: { versionNumber: "desc" },
   });
 
-  return Number((latest as RawVersion | null)?.versionNumber ?? 0) + 1;
+  return Number(latest?.versionNumber ?? 0) + 1;
 }
 
 export const documentVersionRepository = {
@@ -247,7 +265,7 @@ export const documentVersionRepository = {
         },
       });
 
-      return mapVersion(created as RawVersion);
+      return mapVersion(created);
     }
 
     const parent = await prisma.caseTimelineMemo.findFirst({
@@ -317,8 +335,8 @@ export const documentVersionRepository = {
         orderBy: [{ versionNumber: "desc" }, { createdAt: "desc" }],
       });
 
-      return (rows as RawVersion[])
-        .map((r) => mapVersion(r))
+      return rows
+        .map((row) => mapVersion(row))
         .filter((item): item is NonNullable<typeof item> => item !== null);
     }
 
@@ -339,7 +357,7 @@ export const documentVersionRepository = {
         },
       });
 
-      return mapVersion(raw as RawVersion | null);
+      return mapVersion(raw);
     }
 
     const row = await prisma.caseTimelineMemo.findFirst({
@@ -358,7 +376,7 @@ export const documentVersionRepository = {
 
     if (!row) return null;
     const parsed = parseVersionMemo(row.content);
-    if (!parsed || parsed.parentDocumentId !== documentId) return null;
+    if (parsed?.parentDocumentId !== documentId) return null;
 
     return memoItemToVersion(
       {
@@ -372,6 +390,51 @@ export const documentVersionRepository = {
   },
 
   async findLatestLockedVersion(documentId: string) {
+    const currentDocument = await prisma.legalDocument.findUnique({
+      where: { id: documentId },
+      select: {
+        id: true,
+        body: true,
+        lockedAt: true,
+        lockedById: true,
+        status: true,
+        title: true,
+        versions: {
+          where: { approved: true },
+          orderBy: [{ approvedAt: "desc" }, { versionNo: "desc" }],
+          take: 1,
+          select: {
+            id: true,
+            versionNo: true,
+            createdAt: true,
+            approvedById: true,
+            snapshotJson: true,
+          },
+        },
+      },
+    });
+
+    const latestApprovedVersion = currentDocument?.versions[0];
+
+    if (currentDocument?.status === "LOCKED" && currentDocument.lockedAt && latestApprovedVersion) {
+
+      return {
+        id: latestApprovedVersion.id,
+        documentId: currentDocument.id,
+        versionNumber: latestApprovedVersion.versionNo,
+        title: currentDocument.title,
+        content: currentDocument.body ?? "",
+        snapshotJson: latestApprovedVersion.snapshotJson,
+        changeSummary: "",
+        createdAt: latestApprovedVersion.createdAt,
+        createdById: latestApprovedVersion.approvedById ?? null,
+        isLocked: true,
+        lockedAt: currentDocument.lockedAt,
+        lockedById: currentDocument.lockedById ?? null,
+        lockReason: "",
+      };
+    }
+
     const versionModel = getDocumentVersionModel();
 
     if (versionModel) {
@@ -383,7 +446,7 @@ export const documentVersionRepository = {
         orderBy: [{ versionNumber: "desc" }, { createdAt: "desc" }],
       });
 
-      return mapVersion(raw as RawVersion | null);
+      return mapVersion(raw);
     }
 
     const items = await listMemoVersionRows(documentId);
@@ -420,11 +483,11 @@ export const documentVersionRepository = {
           isLocked: input.isLocked,
           lockedAt: input.isLocked ? new Date() : null,
           lockedById: input.isLocked ? input.lockedById ?? null : null,
-          lockReason: input.isLocked ? (input.lockReason ?? "") : "",
+          lockReason: input.isLocked ? input.lockReason ?? "" : "",
         },
       });
 
-      return mapVersion(updated as RawVersion);
+      return mapVersion(updated);
     }
 
     const row = await prisma.caseTimelineMemo.findFirst({
@@ -440,9 +503,8 @@ export const documentVersionRepository = {
     });
 
     if (!row) return null;
-
     const parsed = parseVersionMemo(row.content);
-    if (!parsed || parsed.parentDocumentId !== input.documentId) return null;
+    if (parsed?.parentDocumentId !== input.documentId) return null;
 
     const nextPayload: VersionMemoPayload = {
       ...parsed,
@@ -485,7 +547,6 @@ export const documentVersionRepository = {
     lockedById?: string | null;
     lockReason?: string;
   }) {
-    void input.lockReason;
     return documentVersionRepository.setVersionLock({
       documentId: input.documentId,
       versionId: input.versionId,
@@ -551,7 +612,7 @@ export const documentVersionRepository = {
         },
       });
 
-      const restoredDocument = mapDocument(updated as RawDocument);
+      const restoredDocument = mapDocument(updated);
 
       const snapshot = await documentVersionRepository.createSnapshot({
         documentId: input.documentId,

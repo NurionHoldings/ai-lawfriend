@@ -6,15 +6,17 @@ import { requireOkResponseBody } from "@/lib/client/api-error";
 import { BulkRetrySchedulePresetBar } from "@/components/admin/alerts/bulk-jobs/BulkRetrySchedulePresetBar";
 import { BulkActionJobTable } from "./bulk-action-job-table";
 
+type BulkActionJobListClientProps = {
+  initialRows: unknown[];
+  page: number;
+  totalPages: number;
+};
+
 export function BulkActionJobListClient({
   initialRows,
   page,
   totalPages,
-}: {
-  initialRows: unknown[];
-  page: number;
-  totalPages: number;
-}) {
+}: Readonly<BulkActionJobListClientProps>) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
@@ -27,7 +29,7 @@ export function BulkActionJobListClient({
   }
 
   async function handleRetry(jobId: string) {
-    const ok = window.confirm("이 Job을 재시도하시겠습니까? (새 Job이 생성됩니다.)");
+    const ok = globalThis.confirm("이 Job을 재시도하시겠습니까? (새 Job이 생성됩니다.)");
     if (!ok) return;
 
     try {
@@ -47,7 +49,7 @@ export function BulkActionJobListClient({
   }
 
   async function handleCancel(jobId: string) {
-    const reason = window.prompt("취소 사유를 입력하세요. (선택)") ?? "";
+    const reason = globalThis.prompt("취소 사유를 입력하세요. (선택)") ?? "";
 
     try {
       setLoading(true);

@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
-import type { LegalDocumentType, LegalParagraphStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/get-session-user";
 import { assertCaseAccess } from "@/lib/authz";
@@ -9,9 +8,80 @@ import { buildParagraphDraftSeeds } from "@/lib/document-template-engine";
 import { generateParagraphContent } from "@/lib/document-ai";
 import { getQuestionSetDefinitionByCodeVersion } from "@/lib/question-set-registry";
 import { getQuestionSetDefinitionFromDb } from "@/lib/question-set-repository";
-import { getDocumentTemplateDefinitionByCodeVersion } from "@/lib/document-template-repository";
+import {
+  getDocumentTemplateDefinitionFromRecord,
+  getPublishedDocumentTemplateByCodeVersion,
+} from "@/lib/document-template-repository";
+import {
+  buildDocumentGenerationTraceInput,
+  getTemplateSourceRuntimeBlockerMessage,
+} from "@/lib/document-generation-trace";
+import { validateOfficialFormRequiredFields } from "@/features/document-generation/official-form-required-field-validator";
+import { buildDocumentGenerationPrompt } from "@/features/document-generation/build-document-generation-prompt";
+import { buildDocumentGenerationGuardrailTrace } from "@/features/document-generation/document-generation-guardrail-trace";
+import { buildGuardrailViolationSuggestions } from "@/features/document-generation/document-generation-guardrail-suggestions";
+import {
+  DOCUMENT_GENERATION_POLICIES,
+  checkForbiddenAssertions,
+} from "@/features/document-generation/document-generation-policy";
 import { ok, toErrorResponse } from "@/lib/domain-api-response";
-import type { CaseStatus as PrismaCaseStatus } from "@prisma/client";
+
+type GeneratedDocumentType = "STATEMENT" | "OPINION" | "CONSULT_NOTE";
+type GeneratedParagraphStatus = "DRAFT";
+
+function asRecordOrNull(value: unknown): Record<string, unknown> | null {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+    return null;
+  }
+
+  return value as Record<string, unknown>;
+}
+
+function buildCaseSummary(caseRecord: {
+  title?: string | null;
+  description?: string | null;
+}) {
+  return caseRecord.description ?? caseRecord.title ?? null;
+}
+
+function buildOfficialFormTrace(templateRecord: {
+  id: string;
+  code: string;
+  version: string;
+  title: string;
+  sourceProvider: string;
+  sourceId?: string | null;
+  sourceUrl?: string | null;
+  sourceHash?: string | null;
+  source?: {
+    sourceName?: string | null;
+    sourceUrl?: string | null;
+    status?: string | null;
+  } | null;
+}) {
+  return {
+    templateId: templateRecord.id,
+    templateCode: templateRecord.code,
+    templateVersion: templateRecord.version,
+    templateTitle: templateRecord.title,
+    sourceProvider: templateRecord.sourceProvider,
+    sourceId: templateRecord.sourceId ?? null,
+    sourceName: templateRecord.source?.sourceName ?? null,
+    sourceUrl: templateRecord.sourceUrl ?? templateRecord.source?.sourceUrl ?? null,
+    sourceHash: templateRecord.sourceHash ?? null,
+    sourceStatus: templateRecord.source?.status ?? null,
+  };
+}
+
+function getTemplateGenerationPolicy(template: unknown) {
+  const generationPolicy = asRecordOrNull(template)?.generationPolicy;
+
+  if (typeof generationPolicy === "string") {
+    return generationPolicy;
+  }
+
+  return DOCUMENT_GENERATION_POLICIES.NO_UNVERIFIED_FACTS;
+}
 
 const BodySchema = z.object({
   documentType: z.enum(["STATEMENT", "OPINION", "CONSULT_NOTE"]),
@@ -39,6 +109,8 @@ export async function POST(
       where: { id: caseId },
       select: {
         id: true,
+        title: true,
+        description: true,
         status: true,
         ownerUserId: true,
         assignedLawyerUserId: true,
@@ -70,7 +142,7 @@ export async function POST(
       },
     });
 
-    if (!interview || interview.status !== "COMPLETED") {
+    if (interview?.status !== "COMPLETED") {
       return Response.json(
         { ok: false, message: "인터뷰 완료 후에만 문서 초안을 생성할 수 있습니다." },
         { status: 400 },
@@ -84,12 +156,25 @@ export async function POST(
       return Response.json({ ok: false, message: "질문셋 정의를 찾을 수 없습니다." }, { status: 404 });
     }
 
-    const template = await getDocumentTemplateDefinitionByCodeVersion(
+    const templateRecord = await getPublishedDocumentTemplateByCodeVersion(
       body.templateCode,
       body.templateVersion,
     );
-    if (!template) {
+    if (!templateRecord) {
       return Response.json({ ok: false, message: "문서 템플릿 정의를 찾을 수 없습니다." }, { status: 404 });
+    }
+
+    const template = getDocumentTemplateDefinitionFromRecord(templateRecord);
+    if (!template) {
+      return Response.json(
+        { ok: false, message: "저장된 문서 템플릿 정의가 올바르지 않습니다." },
+        { status: 409 },
+      );
+    }
+
+    const templateSourceBlocker = getTemplateSourceRuntimeBlockerMessage(templateRecord);
+    if (templateSourceBlocker) {
+      return Response.json({ ok: false, message: templateSourceBlocker }, { status: 409 });
     }
 
     if (template.type !== body.documentType) {
@@ -100,14 +185,46 @@ export async function POST(
     }
 
     const answers = (interview.answersJson ?? {}) as Record<string, unknown>;
+    const requiredFieldValidation = validateOfficialFormRequiredFields({
+      documentType: body.documentType,
+      answers,
+    });
+    const missingWarningFields = requiredFieldValidation.missingFields.filter(
+      (field) => field.severity === "WARNING",
+    );
+
+    if (requiredFieldValidation.shouldBlockGeneration) {
+      return Response.json(
+        {
+          ok: false,
+          code: "MISSING_REQUIRED_DOCUMENT_FIELDS",
+          message: "문서 생성에 필요한 필수항목이 부족합니다.",
+          missingFields: requiredFieldValidation.missingFields,
+          suggestedQuestions: requiredFieldValidation.suggestedQuestions,
+        },
+        { status: 422 },
+      );
+    }
 
     const paragraphDraftSeeds = buildParagraphDraftSeeds({
       template,
       questionSet,
       answers,
     });
+    const generationPolicy = getTemplateGenerationPolicy(templateRecord);
+    const officialFormTrace = buildOfficialFormTrace(templateRecord);
+    const { prompt, guardrail } = buildDocumentGenerationPrompt({
+      documentType: template.type,
+      templateTitle: template.title,
+      caseSummary: buildCaseSummary(caseRecord),
+      interviewAnswers: answers,
+      officialFormTrace,
+      attachmentSummary: null,
+      generationPolicy,
+      missingWarningFields,
+    });
 
-    const docType = body.documentType as LegalDocumentType;
+    const docType = body.documentType as GeneratedDocumentType;
 
     const generatedParagraphs = await Promise.all(
       paragraphDraftSeeds.map(async (seed) => {
@@ -115,6 +232,7 @@ export async function POST(
           title: seed.title,
           seedContent: seed.content,
           aiPromptKey: seed.aiPromptKey,
+          prompt,
         });
 
         return {
@@ -123,7 +241,7 @@ export async function POST(
           title: seed.title,
           displayOrder: seed.order,
           content,
-          status: "DRAFT" as LegalParagraphStatus,
+          status: "DRAFT" as GeneratedParagraphStatus,
           generationMode: seed.generationMode,
           aiPromptKey: seed.aiPromptKey ?? null,
           lockOnApproval: seed.lockOnApproval,
@@ -132,6 +250,45 @@ export async function POST(
         };
       }),
     );
+    const generatedBody = generatedParagraphs
+      .map((paragraph) => paragraph.content)
+      .filter(Boolean)
+      .join("\n\n");
+    const assertionCheck = checkForbiddenAssertions(generatedBody);
+
+    if (!assertionCheck.passed) {
+      const suggestions = buildGuardrailViolationSuggestions(assertionCheck.issues);
+      const guardrailTrace = buildDocumentGenerationGuardrailTrace({
+        generationPolicy: guardrail.policy,
+        guardrailCheckStatus: "FAILED",
+        guardrailIssues: assertionCheck.issues,
+        guardrailSuggestions: suggestions,
+        warningMissingFields: missingWarningFields,
+      });
+
+      return Response.json(
+        {
+          ok: false,
+          code: "DOCUMENT_GENERATION_GUARDRAIL_VIOLATION",
+          message:
+            "AI 생성 결과에 검증되지 않은 법령·판례·단정 표현으로 의심되는 문구가 포함되어 문서 생성을 중단했습니다.",
+          issues: assertionCheck.issues,
+          suggestedQuestions: suggestions.flatMap((suggestion) => suggestion.suggestedQuestions),
+          suggestions,
+          policy: guardrail.policy,
+          guardrailTrace,
+        },
+        { status: 422 },
+      );
+    }
+
+    const guardrailTrace = buildDocumentGenerationGuardrailTrace({
+      generationPolicy: guardrail.policy,
+      guardrailCheckStatus: "PASSED",
+      guardrailIssues: [],
+      guardrailSuggestions: [],
+      warningMissingFields: missingWarningFields,
+    });
 
     const created = await prisma.$transaction(async (tx) => {
       const document = await tx.legalDocument.create({
@@ -143,8 +300,15 @@ export async function POST(
           questionSetVersion: body.questionSetVersion,
           templateCode: body.templateCode,
           templateVersion: body.templateVersion,
-          body: generatedParagraphs.map((p) => p.content).filter(Boolean).join("\n\n"),
+          body: generatedBody,
         },
+      });
+
+      await tx.documentGenerationTrace.create({
+        data: buildDocumentGenerationTraceInput({
+          legalDocumentId: document.id,
+          template: templateRecord,
+        }),
       });
 
       if (generatedParagraphs.length) {
@@ -174,6 +338,7 @@ export async function POST(
             title: document.title,
             status: document.status,
             paragraphs: generatedParagraphs,
+            guardrailTrace,
           },
           approved: false,
         },
@@ -182,7 +347,7 @@ export async function POST(
       await tx.case.update({
         where: { id: caseId },
         data: {
-          status: "DRAFTING" as PrismaCaseStatus,
+          status: "DRAFTING",
         },
       });
 
@@ -196,6 +361,9 @@ export async function POST(
             documentType: body.documentType,
             templateCode: body.templateCode,
             templateVersion: body.templateVersion,
+            sourceProvider: templateRecord.sourceProvider,
+            sourceId: templateRecord.sourceId,
+            sourceUrl: templateRecord.sourceUrl,
           },
           actorUserId: sessionUser.id,
         },
@@ -204,7 +372,20 @@ export async function POST(
       return document;
     });
 
-    return ok(created, { status: 201 });
+    return ok(
+      {
+        document: created,
+        generationPolicy: guardrail.policy,
+        generationWarnings: guardrail.warnings,
+        missingWarningFields,
+        guardrailTrace,
+        validation: {
+          missingFields: missingWarningFields,
+          suggestedQuestions: requiredFieldValidation.suggestedQuestions,
+        },
+      },
+      { status: 201 },
+    );
   } catch (error) {
     return toErrorResponse(error);
   }

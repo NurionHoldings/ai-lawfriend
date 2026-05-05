@@ -3,6 +3,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import DocumentApprovalHistoryPanel from "@/components/cases/document-approval-history-panel";
+import {
+  DocumentGuardrailTracePanel,
+  type PublicSafeGuardrailTrace,
+} from "@/components/documents/document-guardrail-trace-panel";
 import DocumentVersionPanel from "@/components/cases/document-version-panel";
 import { requireOkData } from "@/lib/client/api-error";
 
@@ -21,6 +25,20 @@ type DocumentDetail = {
     status: string | null;
     caseNumber?: string | null;
   } | null;
+  generationTrace?: {
+    templateCode: string;
+    templateVersion: string;
+    templateTitle: string;
+    sourceProvider: string;
+    sourceName: string | null;
+    sourceUrl: string | null;
+    sourceHash: string | null;
+    sourceStatus: string | null;
+    sourceNote: string | null;
+    generatedSnapshotAt: string | null;
+    approvedSnapshotAt: string | null;
+  } | null;
+  approvedGuardrailTrace?: PublicSafeGuardrailTrace | null;
 };
 
 type SessionUser = {
@@ -31,6 +49,45 @@ type SessionUser = {
 type Props = {
   initialDocument: DocumentDetail;
   sessionUser: SessionUser;
+};
+
+type HeaderSectionProps = {
+  initialDocument: DocumentDetail;
+  title: string;
+  status: string;
+  updatedAt: string | null;
+  approvalOutputsReady: boolean;
+  canSeeTraceInternals: boolean;
+};
+
+type EditSectionProps = {
+  title: string;
+  content: string;
+  titleReadOnly: boolean;
+  bodyReadOnly: boolean;
+  documentEditingLocked: boolean;
+  isSaving: boolean;
+  dirty: boolean;
+  hasParagraphs: boolean;
+  isParagraphInfoLoading: boolean;
+  saveMessage: string | null;
+  saveError: string | null;
+  onTitleChange: (value: string) => void;
+  onContentChange: (value: string) => void;
+  onSave: () => void;
+};
+
+type ReviewSectionProps = {
+  initialDocument: DocumentDetail;
+  status: string;
+  reviewButtonsEnabled: boolean;
+  reviewComment: string;
+  isReviewing: boolean;
+  reviewMessage: string | null;
+  reviewError: string | null;
+  sessionUserRole?: string | null;
+  onReviewCommentChange: (value: string) => void;
+  onSubmitReview: (action: "REQUEST_REVIEW" | "APPROVE" | "REJECT") => void;
 };
 
 function formatDateTime(value?: string | null) {
@@ -52,8 +109,455 @@ function canReview(role?: string | null) {
   );
 }
 
-export default function DocumentDetailClient({ initialDocument, sessionUser }: Props) {
+function formatProvider(provider?: string | null) {
+  const labels: Record<string, string> = {
+    INTERNAL_STANDARD: "내부 표준",
+    GOVERNMENT24: "정부24",
+    SUPREME_COURT: "대한민국 법원",
+    PROSECUTION: "검찰",
+    POLICE: "경찰",
+    MINISTRY_OF_JUSTICE: "법무부",
+    OTHER: "기타",
+  };
+
+  if (!provider) return "-";
+  return labels[provider] ?? provider;
+}
+
+function formatSourceStatus(status?: string | null) {
+  const labels: Record<string, string> = {
+    ACTIVE: "활성",
+    INACTIVE: "비활성",
+    ARCHIVED: "보관",
+  };
+
+  if (!status) return "-";
+  return labels[status] ?? status;
+}
+
+function DocumentDetailHeaderSection({
+  initialDocument,
+  title,
+  status,
+  updatedAt,
+  approvalOutputsReady,
+  canSeeTraceInternals,
+}: Readonly<HeaderSectionProps>) {
+  return (
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+        <div className="space-y-2">
+          <div className="text-sm text-slate-500">문서 상세</div>
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{title}</h1>
+          <div className="flex flex-wrap gap-2 text-sm">
+            <span className="rounded-full bg-slate-100 px-3 py-1">상태: {status}</span>
+            <span className="rounded-full bg-slate-100 px-3 py-1">유형: {initialDocument.type}</span>
+            <span className="rounded-full bg-slate-100 px-3 py-1">
+              최종 수정: {formatDateTime(updatedAt)}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex flex-col items-end gap-2">
+          <div className="flex flex-wrap justify-end gap-2">
+            {initialDocument.caseId ? (
+              <a
+                href={`/cases/${initialDocument.caseId}`}
+                className="inline-flex items-center rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-800 hover:bg-slate-50"
+              >
+                사건 상세로 이동
+              </a>
+            ) : null}
+
+            {approvalOutputsReady ? (
+              <a
+                href={`/documents/${initialDocument.id}/print`}
+                className="inline-flex items-center rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-800 hover:bg-slate-50"
+              >
+                승인본 출력 보기
+              </a>
+            ) : (
+              <span
+                title="사건 상세에서 승인본 잠금 후 이용할 수 있습니다."
+                className="inline-flex cursor-not-allowed items-center rounded-xl border border-dashed border-slate-200 px-4 py-2 text-sm text-slate-400"
+              >
+                승인본 출력 보기
+              </span>
+            )}
+
+            {approvalOutputsReady ? (
+              <a
+                href={`/api/documents/${initialDocument.id}/pdf`}
+                className="inline-flex items-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white"
+              >
+                승인본 PDF 다운로드
+              </a>
+            ) : (
+              <span
+                title="사건 상세에서 승인본 잠금 후 이용할 수 있습니다."
+                className="inline-flex cursor-not-allowed items-center rounded-xl border border-dashed border-slate-300 bg-slate-100 px-4 py-2 text-sm text-slate-400"
+              >
+                승인본 PDF 다운로드
+              </span>
+            )}
+
+            <a
+              href="/document-verification"
+              className="inline-flex items-center rounded-xl border border-neutral-300 px-4 py-2 text-sm font-medium text-slate-800 hover:bg-neutral-50"
+            >
+              문서 검증 페이지
+            </a>
+          </div>
+          <p className="max-w-md text-right text-xs text-neutral-500">
+            승인본 출력은 잠금된 승인 기준 버전으로 생성되며, 법인 헤더·사건번호·워터마크·서명란과 함께
+            검증코드 및 QR 코드가 포함됩니다.
+          </p>
+        </div>
+      </div>
+
+      {initialDocument.case ? (
+        <div className="mt-4 rounded-xl bg-slate-50 p-4 text-sm">
+          <div className="font-medium text-slate-900">연결 사건</div>
+          <div className="mt-1 text-slate-700">
+            {initialDocument.case.title} / 상태: {initialDocument.case.status ?? "-"}
+          </div>
+        </div>
+      ) : null}
+
+      {initialDocument.generationTrace ? (
+        <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <div className="font-medium text-slate-900">참조 기준자료</div>
+              <div className="mt-1 text-slate-600">
+                {initialDocument.generationTrace.templateTitle} ({initialDocument.generationTrace.templateCode} v
+                {initialDocument.generationTrace.templateVersion})
+              </div>
+            </div>
+            <span className="rounded-full bg-white px-3 py-1 text-xs text-slate-600">
+              {formatProvider(initialDocument.generationTrace.sourceProvider)}
+            </span>
+          </div>
+
+          <div className="mt-3 grid gap-3 md:grid-cols-2">
+            <div>
+              <div className="text-xs text-slate-500">출처명</div>
+              <div className="mt-1 text-slate-800">{initialDocument.generationTrace.sourceName ?? "-"}</div>
+            </div>
+            <div>
+              <div className="text-xs text-slate-500">출처 상태</div>
+              <div className="mt-1 text-slate-800">
+                {formatSourceStatus(initialDocument.generationTrace.sourceStatus)}
+              </div>
+            </div>
+            <div>
+              <div className="text-xs text-slate-500">생성 스냅샷 시각</div>
+              <div className="mt-1 text-slate-800">
+                {formatDateTime(initialDocument.generationTrace.generatedSnapshotAt)}
+              </div>
+            </div>
+            <div>
+              <div className="text-xs text-slate-500">승인 스냅샷 시각</div>
+              <div className="mt-1 text-slate-800">
+                {formatDateTime(initialDocument.generationTrace.approvedSnapshotAt)}
+              </div>
+            </div>
+          </div>
+
+          {initialDocument.generationTrace.sourceUrl ? (
+            <a
+              href={initialDocument.generationTrace.sourceUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-3 inline-flex text-xs font-medium text-slate-700 underline underline-offset-2"
+            >
+              원문 출처 열기
+            </a>
+          ) : null}
+
+          {canSeeTraceInternals ? (
+            <div className="mt-3 grid gap-3 rounded-xl border border-slate-200 bg-white p-3 md:grid-cols-2">
+              <div>
+                <div className="text-xs text-slate-500">출처 해시</div>
+                <div className="mt-1 break-all text-xs text-slate-700">
+                  {initialDocument.generationTrace.sourceHash ?? "-"}
+                </div>
+              </div>
+              <div>
+                <div className="text-xs text-slate-500">내부 메모</div>
+                <div className="mt-1 text-xs text-slate-700">
+                  {initialDocument.generationTrace.sourceNote ?? "-"}
+                </div>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+
+      <div className="mt-4">
+        <DocumentGuardrailTracePanel
+          guardrailTrace={initialDocument.approvedGuardrailTrace}
+          title="승인본 AI 생성 안전검사 이력"
+        />
+      </div>
+    </section>
+  );
+}
+
+function DocumentDetailEditSection({
+  title,
+  content,
+  titleReadOnly,
+  bodyReadOnly,
+  documentEditingLocked,
+  isSaving,
+  dirty,
+  hasParagraphs,
+  isParagraphInfoLoading,
+  saveMessage,
+  saveError,
+  onTitleChange,
+  onContentChange,
+  onSave,
+}: Readonly<EditSectionProps>) {
+  const editingAvailable = !documentEditingLocked;
+
+  return (
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <div>
+          <h2 className="text-lg font-semibold text-slate-900">
+            {documentEditingLocked ? "문서 보기" : "문서 편집"}
+          </h2>
+          {documentEditingLocked ? (
+            <p className="mt-1 text-xs text-slate-500">
+              잠금 또는 보관된 문서입니다. 이 화면에서는 읽기만 가능합니다.
+            </p>
+          ) : null}
+        </div>
+        {editingAvailable ? (
+          <div className="flex shrink-0 gap-2">
+            <button
+              type="button"
+              onClick={onSave}
+              disabled={isSaving || !dirty || hasParagraphs || isParagraphInfoLoading}
+              className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {isSaving ? "저장 중..." : "저장"}
+            </button>
+          </div>
+        ) : null}
+      </div>
+
+      <div className="space-y-4">
+        <div>
+          <label htmlFor="document-detail-title" className="mb-2 block text-sm font-medium text-slate-800">
+            제목
+          </label>
+          <input
+            id="document-detail-title"
+            value={title}
+            onChange={(e) => onTitleChange(e.target.value)}
+            readOnly={titleReadOnly}
+            className={`w-full rounded-xl border border-slate-300 px-4 py-3 outline-none ring-0 focus:border-slate-500 ${
+              titleReadOnly ? "cursor-default bg-slate-50 text-slate-800" : ""
+            }`}
+            placeholder="문서 제목"
+            aria-readonly={titleReadOnly || undefined}
+          />
+        </div>
+
+        {saveMessage ? (
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+            {saveMessage}
+          </div>
+        ) : null}
+
+        {saveError ? (
+          <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+            {saveError}
+          </div>
+        ) : null}
+
+        <div>
+          <label htmlFor="document-detail-content" className="mb-2 block text-sm font-medium text-slate-800">
+            본문
+          </label>
+          <textarea
+            id="document-detail-content"
+            value={content}
+            onChange={(e) => onContentChange(e.target.value)}
+            readOnly={bodyReadOnly}
+            className={`min-h-[420px] w-full rounded-xl border border-slate-300 px-4 py-3 outline-none ring-0 focus:border-slate-500 ${
+              bodyReadOnly ? "cursor-default bg-slate-50 text-slate-800" : ""
+            }`}
+            placeholder="문서 본문"
+            aria-readonly={bodyReadOnly || undefined}
+          />
+          {hasParagraphs ? (
+            <p className="mt-2 text-xs text-amber-700">
+              이 문서는 문단 구조 기반으로 관리됩니다. 본문 직접 수정 대신 아래 문단 패널을 통해 편집하세요.
+            </p>
+          ) : null}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function renderReviewFlowHint(initialDocument: DocumentDetail, status: string) {
+  const hasCaseLink = Boolean(initialDocument.caseId);
+  const showLockedHint = status === "LOCKED";
+
+  if (hasCaseLink) {
+    return (
+      <p className="mt-3 rounded-xl border border-slate-100 bg-slate-50 p-3 text-xs leading-relaxed text-slate-600">
+        법률 문서 <strong>최종 승인 → 승인본 잠금 → 검증 → 전달 완료</strong>는{" "}
+        <a
+          href={`/cases/${initialDocument.caseId}`}
+          className="font-medium text-slate-800 underline underline-offset-2"
+        >
+          사건 상세
+        </a>
+        에서 한 화면으로 이어집니다.
+        {showLockedHint
+          ? " 잠금된 버전 기준 검증은 상단 「문서 검증 페이지」 또는 출력물 하단 코드로 확인하세요."
+          : ""}
+      </p>
+    );
+  }
+
+  if (showLockedHint) {
+    return (
+      <p className="mt-2 text-xs text-emerald-800">
+        검증코드는 상단 <strong>문서 검증 페이지</strong> 링크와 출력물 하단 코드로 확인하세요.
+      </p>
+    );
+  }
+
+  return null;
+}
+
+function DocumentDetailReviewSection({
+  initialDocument,
+  status,
+  reviewButtonsEnabled,
+  reviewComment,
+  isReviewing,
+  reviewMessage,
+  reviewError,
+  sessionUserRole,
+  onReviewCommentChange,
+  onSubmitReview,
+}: Readonly<ReviewSectionProps>) {
+  const reviewReadOnly = !reviewButtonsEnabled;
+
+  return (
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="mb-4">
+        <h2 className="text-lg font-semibold text-slate-900">
+          {reviewButtonsEnabled ? "검토 흐름" : "검토 흐름 (읽기 전용)"}
+        </h2>
+        <p className="mt-1 text-sm text-slate-600">
+          AI는 초안과 구조화까지만 담당하며, 최종 확정은 변호사 또는 관리자가 수행합니다.
+        </p>
+        <p className="mt-2 text-xs text-slate-500">
+          승인 시 최신 버전이 잠기며, PDF·승인본 출력은 그 잠금 버전을 기준으로 합니다. 이후 편집한
+          작업본과 출력본이 달라질 수 있습니다.
+        </p>
+        {renderReviewFlowHint(initialDocument, status)}
+      </div>
+
+      <div className="space-y-4">
+        <div>
+          <label htmlFor="document-detail-review-comment" className="mb-2 block text-sm font-medium text-slate-800">
+            검토 의견
+          </label>
+          <textarea
+            id="document-detail-review-comment"
+            value={reviewComment}
+            onChange={(e) => onReviewCommentChange(e.target.value)}
+            readOnly={reviewReadOnly}
+            className={`min-h-[120px] w-full rounded-xl border border-slate-300 px-4 py-3 outline-none ring-0 focus:border-slate-500 ${
+              reviewReadOnly ? "cursor-default bg-slate-50 text-slate-800" : ""
+            }`}
+            placeholder="검토 요청 또는 승인/반려 의견을 입력하세요."
+            aria-readonly={reviewReadOnly || undefined}
+          />
+        </div>
+
+        {reviewButtonsEnabled ? (
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => onSubmitReview("REQUEST_REVIEW")}
+              disabled={isReviewing}
+              className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium text-slate-800 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {isReviewing ? "처리 중..." : "검토 요청"}
+            </button>
+
+            {canReview(sessionUserRole) ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => onSubmitReview("APPROVE")}
+                  disabled={isReviewing}
+                  className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  승인
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => onSubmitReview("REJECT")}
+                  disabled={isReviewing}
+                  className="rounded-xl bg-rose-600 px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  반려
+                </button>
+              </>
+            ) : null}
+          </div>
+        ) : (
+          <p className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+            잠금 또는 보관된 문서는 이 화면에서 검토 요청·승인·반려를 진행할 수 없습니다. 필요 시{" "}
+            {initialDocument.caseId ? (
+              <a
+                href={`/cases/${initialDocument.caseId}`}
+                className="font-medium text-slate-800 underline underline-offset-2"
+              >
+                사건 상세
+              </a>
+            ) : (
+              "사건 상세"
+            )}
+            를 확인하세요.
+          </p>
+        )}
+      </div>
+
+      {reviewMessage ? (
+        <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+          {reviewMessage}
+        </div>
+      ) : null}
+
+      {reviewError ? (
+        <div className="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+          {reviewError}
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+export default function DocumentDetailClient({
+  initialDocument,
+  sessionUser,
+}: Readonly<Props>) {
   const router = useRouter();
+  const canSeeTraceInternals = canReview(sessionUser.role);
 
   const [title, setTitle] = useState(initialDocument.title);
   const [content, setContent] = useState(initialDocument.content);
@@ -251,281 +755,44 @@ export default function DocumentDetailClient({ initialDocument, sessionUser }: P
 
   return (
     <div className="space-y-6">
-      <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-          <div className="space-y-2">
-            <div className="text-sm text-slate-500">문서 상세</div>
-            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{title}</h1>
-            <div className="flex flex-wrap gap-2 text-sm">
-              <span className="rounded-full bg-slate-100 px-3 py-1">상태: {status}</span>
-              <span className="rounded-full bg-slate-100 px-3 py-1">유형: {initialDocument.type}</span>
-              <span className="rounded-full bg-slate-100 px-3 py-1">
-                최종 수정: {formatDateTime(updatedAt)}
-              </span>
-            </div>
-          </div>
+      <DocumentDetailHeaderSection
+        initialDocument={initialDocument}
+        title={title}
+        status={status}
+        updatedAt={updatedAt}
+        approvalOutputsReady={approvalOutputsReady}
+        canSeeTraceInternals={canSeeTraceInternals}
+      />
 
-          <div className="flex flex-col items-end gap-2">
-            <div className="flex flex-wrap justify-end gap-2">
-              {initialDocument.caseId ? (
-                <a
-                  href={`/cases/${initialDocument.caseId}`}
-                  className="inline-flex items-center rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-800 hover:bg-slate-50"
-                >
-                  사건 상세로 이동
-                </a>
-              ) : null}
+      <DocumentDetailEditSection
+        title={title}
+        content={content}
+        titleReadOnly={titleReadOnly}
+        bodyReadOnly={bodyReadOnly}
+        documentEditingLocked={documentEditingLocked}
+        isSaving={isSaving}
+        dirty={dirty}
+        hasParagraphs={hasParagraphs}
+        isParagraphInfoLoading={isParagraphInfoLoading}
+        saveMessage={saveMessage}
+        saveError={saveError}
+        onTitleChange={setTitle}
+        onContentChange={setContent}
+        onSave={saveDocument}
+      />
 
-              {approvalOutputsReady ? (
-                <a
-                  href={`/documents/${initialDocument.id}/print`}
-                  className="inline-flex items-center rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-800 hover:bg-slate-50"
-                >
-                  승인본 출력 보기
-                </a>
-              ) : (
-                <span
-                  title="사건 상세에서 승인본 잠금 후 이용할 수 있습니다."
-                  className="inline-flex cursor-not-allowed items-center rounded-xl border border-dashed border-slate-200 px-4 py-2 text-sm text-slate-400"
-                >
-                  승인본 출력 보기
-                </span>
-              )}
-
-              {approvalOutputsReady ? (
-                <a
-                  href={`/api/documents/${initialDocument.id}/pdf`}
-                  className="inline-flex items-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white"
-                >
-                  승인본 PDF 다운로드
-                </a>
-              ) : (
-                <span
-                  title="사건 상세에서 승인본 잠금 후 이용할 수 있습니다."
-                  className="inline-flex cursor-not-allowed items-center rounded-xl border border-dashed border-slate-300 bg-slate-100 px-4 py-2 text-sm text-slate-400"
-                >
-                  승인본 PDF 다운로드
-                </span>
-              )}
-
-              <a
-                href="/document-verification"
-                className="inline-flex items-center rounded-xl border border-neutral-300 px-4 py-2 text-sm font-medium text-slate-800 hover:bg-neutral-50"
-              >
-                문서 검증 페이지
-              </a>
-            </div>
-            <p className="max-w-md text-right text-xs text-neutral-500">
-              승인본 출력은 잠금된 승인 기준 버전으로 생성되며, 법인 헤더·사건번호·워터마크·서명란과 함께
-              검증코드 및 QR 코드가 포함됩니다.
-            </p>
-          </div>
-        </div>
-
-        {initialDocument.case ? (
-          <div className="mt-4 rounded-xl bg-slate-50 p-4 text-sm">
-            <div className="font-medium text-slate-900">연결 사건</div>
-            <div className="mt-1 text-slate-700">
-              {initialDocument.case.title} / 상태: {initialDocument.case.status ?? "-"}
-            </div>
-          </div>
-        ) : null}
-      </section>
-
-      <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="mb-4 flex items-center justify-between gap-3">
-          <div>
-            <h2 className="text-lg font-semibold text-slate-900">
-              {documentEditingLocked ? "문서 보기" : "문서 편집"}
-            </h2>
-            {documentEditingLocked ? (
-              <p className="mt-1 text-xs text-slate-500">
-                잠금 또는 보관된 문서입니다. 이 화면에서는 읽기만 가능합니다.
-              </p>
-            ) : null}
-          </div>
-          {!documentEditingLocked ? (
-            <div className="flex shrink-0 gap-2">
-              <button
-                type="button"
-                onClick={saveDocument}
-                disabled={
-                  isSaving ||
-                  !dirty ||
-                  hasParagraphs ||
-                  isParagraphInfoLoading
-                }
-                className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {isSaving ? "저장 중..." : "저장"}
-              </button>
-            </div>
-          ) : null}
-        </div>
-
-        <div className="space-y-4">
-          <div>
-            <label className="mb-2 block text-sm font-medium text-slate-800">제목</label>
-            <input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              readOnly={titleReadOnly}
-              className={`w-full rounded-xl border border-slate-300 px-4 py-3 outline-none ring-0 focus:border-slate-500 ${
-                titleReadOnly ? "cursor-default bg-slate-50 text-slate-800" : ""
-              }`}
-              placeholder="문서 제목"
-              aria-readonly={titleReadOnly || undefined}
-            />
-          </div>
-
-          {saveMessage ? (
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-              {saveMessage}
-            </div>
-          ) : null}
-
-          {saveError ? (
-            <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
-              {saveError}
-            </div>
-          ) : null}
-
-          <div>
-            <label className="mb-2 block text-sm font-medium text-slate-800">본문</label>
-            <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              readOnly={bodyReadOnly}
-              className={`min-h-[420px] w-full rounded-xl border border-slate-300 px-4 py-3 outline-none ring-0 focus:border-slate-500 ${
-                bodyReadOnly
-                  ? "cursor-default bg-slate-50 text-slate-800"
-                  : ""
-              }`}
-              placeholder="문서 본문"
-              aria-readonly={bodyReadOnly || undefined}
-            />
-            {hasParagraphs ? (
-              <p className="mt-2 text-xs text-amber-700">
-                이 문서는 문단 구조 기반으로 관리됩니다. 본문 직접 수정 대신 아래 문단 패널을 통해 편집하세요.
-              </p>
-            ) : null}
-          </div>
-        </div>
-      </section>
-
-      <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold text-slate-900">
-            {reviewButtonsEnabled ? "검토 흐름" : "검토 흐름 (읽기 전용)"}
-          </h2>
-          <p className="mt-1 text-sm text-slate-600">
-            AI는 초안과 구조화까지만 담당하며, 최종 확정은 변호사 또는 관리자가 수행합니다.
-          </p>
-          <p className="mt-2 text-xs text-slate-500">
-            승인 시 최신 버전이 잠기며, PDF·승인본 출력은 그 잠금 버전을 기준으로 합니다. 이후
-            편집한 작업본과 출력본이 달라질 수 있습니다.
-          </p>
-          {initialDocument.caseId ? (
-            <p className="mt-3 rounded-xl border border-slate-100 bg-slate-50 p-3 text-xs leading-relaxed text-slate-600">
-              법률 문서 <strong>최종 승인 → 승인본 잠금 → 검증 → 전달 완료</strong>는{" "}
-              <a
-                href={`/cases/${initialDocument.caseId}`}
-                className="font-medium text-slate-800 underline underline-offset-2"
-              >
-                사건 상세
-              </a>
-              에서 한 화면으로 이어집니다.
-              {status === "LOCKED"
-                ? " 잠금된 버전 기준 검증은 상단 「문서 검증 페이지」 또는 출력물 하단 코드로 확인하세요."
-                : ""}
-            </p>
-          ) : status === "LOCKED" ? (
-            <p className="mt-2 text-xs text-emerald-800">
-              검증코드는 상단 <strong>문서 검증 페이지</strong> 링크와 출력물 하단 코드로 확인하세요.
-            </p>
-          ) : null}
-        </div>
-
-        <div className="space-y-4">
-          <div>
-            <label className="mb-2 block text-sm font-medium text-slate-800">검토 의견</label>
-            <textarea
-              value={reviewComment}
-              onChange={(e) => setReviewComment(e.target.value)}
-              readOnly={!reviewButtonsEnabled}
-              className={`min-h-[120px] w-full rounded-xl border border-slate-300 px-4 py-3 outline-none ring-0 focus:border-slate-500 ${
-                !reviewButtonsEnabled
-                  ? "cursor-default bg-slate-50 text-slate-800"
-                  : ""
-              }`}
-              placeholder="검토 요청 또는 승인/반려 의견을 입력하세요."
-              aria-readonly={!reviewButtonsEnabled || undefined}
-            />
-          </div>
-
-          {reviewButtonsEnabled ? (
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => submitReview("REQUEST_REVIEW")}
-                disabled={isReviewing}
-                className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium text-slate-800 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {isReviewing ? "처리 중..." : "검토 요청"}
-              </button>
-
-              {canReview(sessionUser.role) ? (
-                <>
-                  <button
-                    type="button"
-                    onClick={() => submitReview("APPROVE")}
-                    disabled={isReviewing}
-                    className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    승인
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => submitReview("REJECT")}
-                    disabled={isReviewing}
-                    className="rounded-xl bg-rose-600 px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    반려
-                  </button>
-                </>
-              ) : null}
-            </div>
-          ) : (
-            <p className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
-              잠금 또는 보관된 문서는 이 화면에서 검토 요청·승인·반려를 진행할 수 없습니다. 필요 시{" "}
-              {initialDocument.caseId ? (
-                <a
-                  href={`/cases/${initialDocument.caseId}`}
-                  className="font-medium text-slate-800 underline underline-offset-2"
-                >
-                  사건 상세
-                </a>
-              ) : (
-                "사건 상세"
-              )}
-              를 확인하세요.
-            </p>
-          )}
-        </div>
-
-        {reviewMessage ? (
-          <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-            {reviewMessage}
-          </div>
-        ) : null}
-
-        {reviewError ? (
-          <div className="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
-            {reviewError}
-          </div>
-        ) : null}
-      </section>
+      <DocumentDetailReviewSection
+        initialDocument={initialDocument}
+        status={status}
+        reviewButtonsEnabled={reviewButtonsEnabled}
+        reviewComment={reviewComment}
+        isReviewing={isReviewing}
+        reviewMessage={reviewMessage}
+        reviewError={reviewError}
+        sessionUserRole={sessionUser.role}
+        onReviewCommentChange={setReviewComment}
+        onSubmitReview={submitReview}
+      />
 
       <DocumentApprovalHistoryPanel
         documentId={initialDocument.id}

@@ -46,4 +46,8 @@ __pycache__/
 /test-results/
 /playwright-report/
 
+# archives / accidental dumps (keep repo lean)
+*.zip
+docs/project-governance/IMPLEMENTATION_EVIDENCE.md.*.txt
+
 # prisma

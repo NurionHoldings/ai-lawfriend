@@ -11,6 +11,19 @@ type Props = {
     title: string;
     latestApprovedAt: string | null;
     lockedAt: string | null;
+    generationTrace?: {
+      templateCode: string;
+      templateVersion: string;
+      templateTitle: string;
+      sourceProvider: string;
+      sourceName: string | null;
+      sourceUrl: string | null;
+      sourceHash: string | null;
+      sourceStatus: string | null;
+      sourceNote: string | null;
+      generatedSnapshotAt: string;
+      approvedSnapshotAt: string | null;
+    } | null;
     paragraphs: Array<{
       id: string;
       title: string;
@@ -32,6 +45,7 @@ export function DocumentReviewPanel({
   busy,
 }: Props) {
   const requiredParagraphsMissing = document.paragraphs.some((p) => !p.content?.trim());
+  const canSeeTraceInternals = ["ADMIN", "LAWYER"].includes(currentRole);
 
   const isTerminal = document.status === "LOCKED" || document.status === "ARCHIVED";
 
@@ -49,6 +63,22 @@ export function DocumentReviewPanel({
     document.status === "LOCKED" ||
     document.status === "APPROVED" ||
     document.status === "ARCHIVED";
+
+  const providerLabels: Record<string, string> = {
+    INTERNAL_STANDARD: "내부 표준",
+    GOVERNMENT24: "정부24",
+    SUPREME_COURT: "대한민국 법원",
+    PROSECUTION: "검찰",
+    POLICE: "경찰",
+    MINISTRY_OF_JUSTICE: "법무부",
+    OTHER: "기타",
+  };
+
+  const sourceStatusLabels: Record<string, string> = {
+    ACTIVE: "활성",
+    INACTIVE: "비활성",
+    ARCHIVED: "보관",
+  };
 
   return (
     <div className="rounded-2xl border bg-white p-5 shadow-sm">
@@ -115,6 +145,81 @@ export function DocumentReviewPanel({
               ? "비어 있는 문단이 있어 승인 전 보완이 필요합니다."
               : "기본 검토 조건이 충족되었습니다."}
         </div>
+
+        {document.generationTrace ? (
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="font-medium text-slate-900">참조 기준자료</div>
+              <span className="rounded-full bg-white px-3 py-1 text-xs text-slate-600">
+                {providerLabels[document.generationTrace.sourceProvider] ??
+                  document.generationTrace.sourceProvider}
+              </span>
+            </div>
+            <div className="mt-2 text-sm text-slate-800">
+              {document.generationTrace.templateTitle} ({document.generationTrace.templateCode} v
+              {document.generationTrace.templateVersion})
+            </div>
+            <div className="mt-2 grid gap-3 sm:grid-cols-2">
+              <div>
+                <div className="text-xs text-slate-500">출처명</div>
+                <div className="mt-1">{document.generationTrace.sourceName ?? "-"}</div>
+              </div>
+              <div>
+                <div className="text-xs text-slate-500">출처 상태</div>
+                <div className="mt-1">
+                  {document.generationTrace.sourceStatus
+                    ? sourceStatusLabels[document.generationTrace.sourceStatus] ??
+                      document.generationTrace.sourceStatus
+                    : "-"}
+                </div>
+              </div>
+              <div>
+                <div className="text-xs text-slate-500">생성 스냅샷 시각</div>
+                <div className="mt-1">
+                  {new Date(document.generationTrace.generatedSnapshotAt).toLocaleString()}
+                </div>
+              </div>
+              <div>
+                <div className="text-xs text-slate-500">승인 스냅샷 시각</div>
+                <div className="mt-1">
+                  {document.generationTrace.approvedSnapshotAt
+                    ? new Date(document.generationTrace.approvedSnapshotAt).toLocaleString()
+                    : "-"}
+                </div>
+              </div>
+            </div>
+            {document.generationTrace.sourceUrl ? (
+              <a
+                className="mt-3 inline-flex text-xs font-medium text-slate-700 underline underline-offset-2"
+                href={document.generationTrace.sourceUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                원문 출처 열기
+              </a>
+            ) : null}
+            {canSeeTraceInternals ? (
+              <div className="mt-3 grid gap-3 rounded-xl border border-slate-200 bg-white p-3 sm:grid-cols-2">
+                <div>
+                  <div className="text-xs text-slate-500">출처 해시</div>
+                  <div className="mt-1 break-all text-xs text-slate-700">
+                    {document.generationTrace.sourceHash ?? "-"}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-slate-500">내부 메모</div>
+                  <div className="mt-1 text-xs text-slate-700">
+                    {document.generationTrace.sourceNote ?? "-"}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        ) : (
+          <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+            출처 추적 정보가 없습니다. 이 문서는 검증 가능한 공식서식 trace 없이 생성되었을 수 있습니다.
+          </div>
+        )}
       </div>
 
       {!isTerminal ? (

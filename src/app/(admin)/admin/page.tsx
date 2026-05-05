@@ -97,6 +97,16 @@ export default async function AdminPage() {
               문서 템플릿
             </Link>
             <Link
+              href="/admin/qa-evidence"
+              className="flex flex-col gap-1 rounded-xl border border-aibeop-line bg-aibeop-surface p-4 text-sm font-medium hover:bg-aibeop-soft"
+              title="/admin/qa-evidence — QA 실측 원문 분석·closure 초안 복사(공식 반영은 사람 승인 후)"
+            >
+              <span>AI 증빙 검토</span>
+              <span className="text-xs font-normal text-aibeop-muted">
+                QA Evidence 분석 및 증빙 초안 확인 · 초안만 생성
+              </span>
+            </Link>
+            <Link
               href="/admin/system"
               className="rounded-xl border border-aibeop-line bg-aibeop-surface p-4 text-sm font-medium hover:bg-aibeop-soft"
             >

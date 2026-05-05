@@ -1,0 +1,146 @@
+{
+  "evidenceId": "EVIDENCE-20260503-AIBEOPCHIN-6-PRODUCTION-DEPLOYMENT-READY",
+  "deploymentReady": true,
+  "status": "PRODUCTION_DEPLOYED_AND_LOCKED",
+  "deploymentStatus": "PRODUCTION_DEPLOYED_AND_LOCKED",
+  "deployDecision": "APPROVED_FOR_PRODUCTION",
+  "predeployCheckAt": "2026-05-03T14:00:00.000Z",
+  "checkedAt": "2026-05-03T14:00:00.000Z",
+  "checkedBy": "최인석",
+  "environment": "production",
+  "branch": "main",
+  "commitSha": "b5e0e2d8a89e55048b85e6d078f544bdcca02498",
+  "rollbackTargetCommit": "930ee18cc5b107d636ca313ad649316f685e0ab2",
+  "deploymentProvider": "GitPush(origin/main)",
+  "databaseBackup": {
+    "confirmed": true,
+    "method": "managed-backup",
+    "reference": "<마스킹된 운영 DB 백업 reference>",
+    "checkedAt": "2026-05-03T14:00:00.000Z"
+  },
+  "environmentVariables": {
+    "confirmed": true,
+    "notes": "SECRET 원문 미기록. DATABASE_URL, 인증 token, 앱 URL, 스토리지/AI 관련 환경변수의 존재 여부와 형식만 확인."
+  },
+  "rollback": {
+    "confirmed": true,
+    "targetCommit": "930ee18cc5b107d636ca313ad649316f685e0ab2",
+    "notes": "배포 실패 또는 smoke test 실패 시 targetCommit으로 rollback."
+  },
+  "predeployVerification": {
+    "verifyManualQa": "PASS",
+    "verifyCasePackage6Regression": "PASS",
+    "verifyReleaseCandidate": "PASS",
+    "verifyPredeployLock": "PASS",
+    "verifyCasePackage6_12": "PASS",
+    "tscNoEmit": "PASS",
+    "lintCheck": "PASS",
+    "pythonSyntax": "PASS"
+  },
+  "smokeTestResultsSummary": "14/14 PASS",
+  "smokeTestResults": {
+    "completed": true,
+    "completedAt": "2026-05-03T06:20:11.820Z",
+    "items": [
+      {
+        "id": "SMOKE-01-main-page-access",
+        "title": "메인 페이지 접속",
+        "expected": "홈 페이지 정상 로드",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-02-login-page-access",
+        "title": "로그인 페이지 접속",
+        "expected": "로그인 폼 정상 표시",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-03-admin-login",
+        "title": "관리자 로그인",
+        "expected": "관리자 계정 로그인 가능",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-04-client-case-detail",
+        "title": "의뢰인 사건 상세 접근",
+        "expected": "의뢰인 사건 상세 진입 가능",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-05-client-share-settings",
+        "title": "의뢰인 공유 설정 화면 접근",
+        "expected": "공유 범위/만료일/PIN 설정 화면 표시",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-06-lawyer-lookup",
+        "title": "변호사 고유번호 조회 화면 접근",
+        "expected": "publicCode/PIN 입력 화면 표시",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-07-case-package-detail",
+        "title": "사건 패키지 상세 열람",
+        "expected": "요약/첨부/문서 목록 표시",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-08-attachment-list",
+        "title": "첨부파일 목록 열람",
+        "expected": "첨부파일 목록 정상 표시",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-09-download-policy",
+        "title": "다운로드 차단/허용 정책 확인",
+        "expected": "allowAttachmentDownload 기준 작동",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-10-case-package-pdf",
+        "title": "사건 패키지 PDF 다운로드 확인",
+        "expected": "allowPackagePdf=true 시 PDF 다운로드 가능",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-11-admin-share-list",
+        "title": "관리자 공유 현황 목록 확인",
+        "expected": "공유 목록/상태 필터/검색 정상 작동",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-12-admin-share-detail-logs",
+        "title": "관리자 공유 상세/로그 확인",
+        "expected": "공유 상세 정보 및 access log 표시",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-13-expired-revoked-access-denied",
+        "title": "만료/취소 공유 접근 차단 확인",
+        "expected": "EXPIRED/REVOKED 상태 공유 접근 차단",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-14-lawyer-act-privacy-notice",
+        "title": "변호사법/개인정보 고지 노출 확인",
+        "expected": "AI 대체 불가 고지문 및 개인정보 동의문 표시",
+        "result": "PASS"
+      }
+    ]
+  },
+  "securityPrinciplesVerified": {
+    "database_url_not_exposed": true,
+    "accessToken_not_exposed": true,
+    "pin_hash_not_exposed": true,
+    "storagePath_not_exposed": true,
+    "attachment_direct_url_not_exposed": true,
+    "prompt_raw_response_snapshot_not_exposed": true,
+    "public_safe_output_maintained": true
+  },
+  "deploymentDetails": {
+    "deployedAt": "2026-05-03T06:20:11.820Z",
+    "deployedBy": "최인석",
+    "deploymentNotes": "운영 URL 기준 SMOKE-01~14 실측 결과 14/14 PASS 확인. 최종 잠금 반영 완료."
+  },
+  "notes": "배포 전 재검증 완료 및 배포 후 Smoke Test 14/14 PASS 확인. 6.x 운영 배포 완료/최종 잠금 상태로 전환."
+}

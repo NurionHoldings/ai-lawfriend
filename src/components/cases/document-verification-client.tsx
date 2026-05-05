@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { DocumentGuardrailTracePanel } from "@/components/documents/document-guardrail-trace-panel";
 import { requireOkData } from "@/lib/client/api-error";
 import {
   assertDocumentVerificationResult,
@@ -15,6 +16,32 @@ function formatDateTime(value?: string | null) {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(date);
+}
+
+function formatProvider(provider?: string | null) {
+  const labels: Record<string, string> = {
+    INTERNAL_STANDARD: "내부 표준",
+    GOVERNMENT24: "정부24",
+    SUPREME_COURT: "대한민국 법원",
+    PROSECUTION: "검찰",
+    POLICE: "경찰",
+    MINISTRY_OF_JUSTICE: "법무부",
+    OTHER: "기타",
+  };
+
+  if (!provider) return "-";
+  return labels[provider] ?? provider;
+}
+
+function formatSourceStatus(status?: string | null) {
+  const labels: Record<string, string> = {
+    ACTIVE: "활성",
+    INACTIVE: "비활성",
+    ARCHIVED: "보관",
+  };
+
+  if (!status) return "-";
+  return labels[status] ?? status;
 }
 
 export default function DocumentVerificationClient() {
@@ -63,7 +90,7 @@ export default function DocumentVerificationClient() {
   }, []);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(globalThis.location.search);
     const code = params.get("code");
 
     if (code) {
@@ -184,6 +211,70 @@ export default function DocumentVerificationClient() {
                   {result.fullHash}
                 </div>
               </div>
+
+              {result.sourceTrace ? (
+                <div className="rounded-2xl bg-white p-4 sm:col-span-2">
+                  <div className="text-xs text-neutral-500">참조 공식서식 / 내부표준</div>
+                  <div className="mt-1 text-sm font-semibold text-neutral-900 sm:text-base">
+                    {result.sourceTrace.templateTitle}
+                  </div>
+                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                    <div>
+                      <div className="text-xs text-neutral-500">템플릿 버전</div>
+                      <div className="mt-1 text-sm text-neutral-900">
+                        {result.sourceTrace.templateCode} v{result.sourceTrace.templateVersion}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-neutral-500">출처 구분</div>
+                      <div className="mt-1 text-sm text-neutral-900">
+                        {formatProvider(result.sourceTrace.sourceProvider)}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-neutral-500">출처명</div>
+                      <div className="mt-1 text-sm text-neutral-900">
+                        {result.sourceTrace.sourceName || "-"}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-neutral-500">출처 상태</div>
+                      <div className="mt-1 text-sm text-neutral-900">
+                        {formatSourceStatus(result.sourceTrace.sourceStatus)}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-neutral-500">생성 스냅샷 시각</div>
+                      <div className="mt-1 text-sm text-neutral-900">
+                        {formatDateTime(result.sourceTrace.generatedSnapshotAt)}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-neutral-500">승인 스냅샷 시각</div>
+                      <div className="mt-1 text-sm text-neutral-900">
+                        {formatDateTime(result.sourceTrace.approvedSnapshotAt)}
+                      </div>
+                    </div>
+                  </div>
+                  {result.sourceTrace.sourceUrl ? (
+                    <a
+                      href={result.sourceTrace.sourceUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-3 inline-flex text-xs font-medium text-neutral-700 underline underline-offset-2"
+                    >
+                      원문 출처 열기
+                    </a>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
+
+            <div className="mt-4">
+              <DocumentGuardrailTracePanel
+                guardrailTrace={result.guardrailTrace}
+                title="검증된 문서의 AI 생성 안전검사 이력"
+              />
             </div>
           </section>
         ) : null}

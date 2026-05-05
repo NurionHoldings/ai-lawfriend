@@ -7,6 +7,91 @@ import {
 
 type RawVersion = Record<string, unknown>;
 
+type LockedVersionCase = {
+  id: string;
+  title: string;
+  caseNumber: string | null;
+};
+
+type LockedVersionDocument = {
+  id: string;
+  title: string;
+  caseId: string | null;
+  case: LockedVersionCase | null;
+};
+
+export type LockedVersionForVerification = {
+  id: string;
+  documentId: string;
+  versionNumber: number;
+  title: string;
+  content: string;
+  snapshotJson?: unknown;
+  createdAt: Date | null;
+  isLocked: boolean;
+  lockedAt: Date | null;
+  lockedById: string | null;
+  lockReason: string;
+  document: LockedVersionDocument | null;
+};
+
+function asRecord(value: unknown): Record<string, unknown> | null {
+  return value && typeof value === "object" ? (value as Record<string, unknown>) : null;
+}
+
+function asNonEmptyString(value: unknown): string | null {
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : null;
+}
+
+function asStringOrFallback(value: unknown, fallback = ""): string {
+  return asNonEmptyString(value) ?? fallback;
+}
+
+function asNumberOrFallback(value: unknown, fallback: number): number {
+  return typeof value === "number" && Number.isFinite(value) ? value : fallback;
+}
+
+function asDateOrNull(value: unknown): Date | null {
+  if (value instanceof Date) {
+    return value;
+  }
+
+  if (typeof value === "string" && value.trim().length > 0) {
+    const parsed = new Date(value);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  }
+
+  return null;
+}
+
+function getFirstString(values: unknown[]): string | null {
+  for (const value of values) {
+    const normalized = asNonEmptyString(value);
+    if (normalized) {
+      return normalized;
+    }
+  }
+
+  return null;
+}
+
+function getLockedTimestamp(value: Date | string | null | undefined): number {
+  if (value instanceof Date) {
+    return value.getTime();
+  }
+
+  if (typeof value === "string" && value.trim().length > 0) {
+    return new Date(value).getTime();
+  }
+
+  return 0;
+}
+
 function getDocumentVersionModel() {
   const v =
     (prisma as unknown as { documentVersion?: unknown }).documentVersion ??
@@ -29,51 +114,49 @@ function getDocumentModel() {
 }
 
 function caseNumberFromRaw(c: unknown): string | null {
-  if (!c || typeof c !== "object") return null;
-  const r = c as Record<string, unknown>;
-  const num =
-    r.caseNumber ?? r.caseNo ?? r.caseCode ?? r.referenceNumber ?? null;
-  return num != null && String(num).trim() !== "" ? String(num).trim() : null;
+  const record = asRecord(c);
+  if (!record) return null;
+
+  return getFirstString([
+    record.caseNumber,
+    record.caseNo,
+    record.caseCode,
+    record.referenceNumber,
+  ]);
 }
 
-function mapPrismaLockedVersion(raw: RawVersion | null) {
+function mapPrismaLockedVersion(raw: RawVersion | null): LockedVersionForVerification | null {
   if (!raw) return null;
 
-  const doc = raw.document as RawVersion | undefined;
-  const c = doc && typeof doc === "object" ? (doc as { case?: unknown }).case : null;
+  const doc = asRecord(raw.document);
+  const caseRecord = asRecord(doc?.case);
+  const lockedById = getFirstString([
+    raw.lockedById,
+    (raw as { lockedByUserId?: unknown }).lockedByUserId,
+  ]);
 
   return {
-    id: String(raw.id),
-    documentId: String(raw.documentId),
-    versionNumber: Number(raw.versionNumber ?? raw.version ?? 1),
-    title: String(raw.title ?? ""),
-    content: String(raw.content ?? raw.body ?? ""),
-    createdAt: raw.createdAt ?? null,
+    id: asStringOrFallback(raw.id),
+    documentId: asStringOrFallback(raw.documentId),
+    versionNumber: asNumberOrFallback(raw.versionNumber ?? raw.version, 1),
+    title: asStringOrFallback(raw.title),
+    content: getFirstString([raw.content, raw.body]) ?? "",
+    snapshotJson: raw.snapshotJson,
+    createdAt: asDateOrNull(raw.createdAt),
     isLocked: Boolean(raw.isLocked ?? false),
-    lockedAt: raw.lockedAt ?? null,
-    lockedById:
-      raw.lockedById != null
-        ? String(raw.lockedById)
-        : (raw as { lockedByUserId?: unknown }).lockedByUserId != null
-          ? String((raw as { lockedByUserId?: unknown }).lockedByUserId)
-          : null,
-    lockReason: String(raw.lockReason ?? ""),
+    lockedAt: asDateOrNull(raw.lockedAt),
+    lockedById,
+    lockReason: asStringOrFallback(raw.lockReason),
     document: doc
       ? {
-          id: String((doc as { id: unknown }).id),
-          title: String((doc as { title?: unknown }).title ?? ""),
-          caseId: (doc as { caseId?: unknown }).caseId
-            ? String((doc as { caseId: unknown }).caseId)
-            : null,
-          case: c
+          id: asStringOrFallback(doc.id),
+          title: asStringOrFallback(doc.title),
+          caseId: asNonEmptyString(doc.caseId),
+          case: caseRecord
             ? {
-                id: String((c as { id: unknown }).id),
-                title: String(
-                  (c as { title?: unknown }).title ??
-                    (c as { subject?: unknown }).subject ??
-                    "사건",
-                ),
-                caseNumber: caseNumberFromRaw(c),
+                id: asStringOrFallback(caseRecord.id),
+                title: getFirstString([caseRecord.title, caseRecord.subject]) ?? "사건",
+                caseNumber: caseNumberFromRaw(caseRecord),
               }
             : null,
         }
@@ -81,12 +164,67 @@ function mapPrismaLockedVersion(raw: RawVersion | null) {
   };
 }
 
-export type LockedVersionForVerification = NonNullable<
-  ReturnType<typeof mapPrismaLockedVersion>
->;
-
 export const documentVerificationRepository = {
   async listLockedVersions(): Promise<LockedVersionForVerification[]> {
+    const currentLockedDocuments = await prisma.legalDocument.findMany({
+      where: {
+        status: "LOCKED",
+        lockedAt: { not: null },
+      },
+      include: {
+        case: true,
+        versions: {
+          where: { approved: true },
+          orderBy: [{ approvedAt: "desc" }, { versionNo: "desc" }],
+          take: 1,
+          select: {
+            id: true,
+            versionNo: true,
+            snapshotJson: true,
+            createdAt: true,
+          },
+        },
+      },
+      orderBy: [{ lockedAt: "desc" }, { updatedAt: "desc" }],
+    });
+
+    if (currentLockedDocuments.length > 0) {
+      return currentLockedDocuments.flatMap((document) => {
+          const latestApprovedVersion = document.versions[0];
+          if (!latestApprovedVersion || !document.lockedAt) {
+            return [];
+          }
+
+          return [
+            {
+              id: latestApprovedVersion.id,
+              documentId: document.id,
+              versionNumber: latestApprovedVersion.versionNo,
+              title: document.title,
+              content: document.body ?? "",
+              snapshotJson: latestApprovedVersion.snapshotJson,
+              createdAt: latestApprovedVersion.createdAt,
+              isLocked: true,
+              lockedAt: document.lockedAt,
+              lockedById: document.lockedById ?? null,
+              lockReason: "",
+              document: {
+                id: document.id,
+                title: document.title,
+                caseId: document.caseId,
+                case: document.case
+                  ? {
+                      id: String(document.case.id),
+                      title: document.case.title ?? "사건",
+                      caseNumber: caseNumberFromRaw(document.case),
+                    }
+                  : null,
+              },
+            },
+          ];
+        });
+    }
+
     const versionModel = getDocumentVersionModel();
 
     if (versionModel) {
@@ -104,9 +242,10 @@ export const documentVerificationRepository = {
         orderBy: [{ lockedAt: "desc" }, { createdAt: "desc" }],
       });
 
-      return (rows as RawVersion[])
-        .map((r) => mapPrismaLockedVersion(r))
-        .filter((item): item is LockedVersionForVerification => item !== null);
+      return rows.flatMap((row) => {
+        const mapped = mapPrismaLockedVersion(row);
+        return mapped ? [mapped] : [];
+      });
     }
 
     const memos = await prisma.caseTimelineMemo.findMany({
@@ -138,6 +277,7 @@ export const documentVerificationRepository = {
         versionNumber: parsed.versionNumber,
         title: parsed.title,
         content: parsed.body,
+        snapshotJson: null,
         createdAt: row.createdAt,
         isLocked: true,
         lockedAt: parsed.lockedAt ? new Date(parsed.lockedAt) : null,
@@ -145,13 +285,13 @@ export const documentVerificationRepository = {
         lockReason: parsed.lockReason ?? "",
         document: {
           id: String(doc.id),
-          title: String(doc.title ?? ""),
+          title: doc.title ?? "",
           caseId: doc.caseId ?? null,
           case: doc.case
             ? {
                 id: String(doc.case.id),
-                title: String(doc.case.title ?? ""),
-                caseNumber: doc.case.caseNumber != null ? String(doc.case.caseNumber) : null,
+                title: doc.case.title ?? "",
+                caseNumber: doc.case.caseNumber,
               }
             : null,
         },
@@ -159,18 +299,8 @@ export const documentVerificationRepository = {
     }
 
     out.sort((a, b) => {
-      const ta =
-        a.lockedAt instanceof Date
-          ? a.lockedAt.getTime()
-          : a.lockedAt
-            ? new Date(a.lockedAt as string | number).getTime()
-            : 0;
-      const tb =
-        b.lockedAt instanceof Date
-          ? b.lockedAt.getTime()
-          : b.lockedAt
-            ? new Date(b.lockedAt as string | number).getTime()
-            : 0;
+      const ta = getLockedTimestamp(a.lockedAt);
+      const tb = getLockedTimestamp(b.lockedAt);
       return tb - ta;
     });
 
@@ -190,23 +320,17 @@ export const documentVerificationRepository = {
 
       if (!raw) return null;
 
-      const c = (raw as { case?: unknown }).case;
+      const caseRecord = asRecord((raw as { case?: unknown }).case);
 
       return {
-        id: String((raw as { id: unknown }).id),
-        title: String((raw as { title?: unknown }).title ?? ""),
-        caseId: (raw as { caseId?: unknown }).caseId
-          ? String((raw as { caseId: unknown }).caseId)
-          : null,
-        case: c
+        id: asStringOrFallback((raw as { id?: unknown }).id),
+        title: asStringOrFallback((raw as { title?: unknown }).title),
+        caseId: asNonEmptyString((raw as { caseId?: unknown }).caseId),
+        case: caseRecord
           ? {
-              id: String((c as { id: unknown }).id),
-              title: String(
-                (c as { title?: unknown }).title ??
-                  (c as { subject?: unknown }).subject ??
-                  "사건",
-              ),
-              caseNumber: caseNumberFromRaw(c),
+              id: asStringOrFallback(caseRecord.id),
+              title: getFirstString([caseRecord.title, caseRecord.subject]) ?? "사건",
+              caseNumber: caseNumberFromRaw(caseRecord),
             }
           : null,
       };

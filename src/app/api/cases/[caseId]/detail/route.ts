@@ -31,6 +31,7 @@ export async function GET(
         },
         legalDocuments: {
           include: {
+            generationTrace: true,
             paragraphs: {
               orderBy: [{ sectionKey: "asc" }, { displayOrder: "asc" }],
             },

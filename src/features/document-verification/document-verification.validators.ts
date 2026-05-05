@@ -13,7 +13,17 @@ export type VerifyDocumentCodeInput = z.infer<typeof verifyDocumentCodeInputSche
 /** OK 응답 `data` / `documentVerificationService.verifyByCode`·클라이언트 공통 (wire = JSON, 일부 일시 필드 Date 허용). */
 const jsonDateString = z
   .union([z.string(), z.date(), z.null()])
-  .transform((v) => (v == null ? null : v instanceof Date ? v.toISOString() : v));
+  .transform((value) => {
+    if (value == null) {
+      return null;
+    }
+
+    if (value instanceof Date) {
+      return value.toISOString();
+    }
+
+    return value;
+  });
 
 const documentVerifyValidSchema = z.object({
   isValid: z.literal(true),
@@ -36,6 +46,36 @@ const documentVerifyValidSchema = z.object({
     role: z.string(),
     approvedAt: jsonDateString,
   }),
+  sourceTrace: z
+    .object({
+      templateCode: z.string(),
+      templateVersion: z.string(),
+      templateTitle: z.string(),
+      sourceProvider: z.string(),
+      sourceName: z.string().nullable(),
+      sourceUrl: z.string().nullable(),
+      sourceHash: z.string().nullable(),
+      sourceStatus: z.string().nullable(),
+      generatedSnapshotAt: jsonDateString,
+      approvedSnapshotAt: jsonDateString,
+    })
+    .nullable(),
+  guardrailTrace: z
+    .object({
+      generationPolicy: z.string(),
+      guardrailCheckStatus: z.enum(["PASSED", "FAILED", "SKIPPED"]),
+      guardrailIssues: z.array(z.string()),
+      warningMissingFields: z.array(
+        z.object({
+          fieldKey: z.string(),
+          label: z.string(),
+          severity: z.literal("WARNING"),
+          suggestedQuestions: z.array(z.string()),
+        }),
+      ),
+      checkedAt: z.string(),
+    })
+    .nullable(),
 });
 
 const documentVerifyInvalidSchema = z.object({

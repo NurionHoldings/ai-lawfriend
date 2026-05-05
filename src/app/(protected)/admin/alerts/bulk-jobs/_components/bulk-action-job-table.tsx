@@ -17,19 +17,46 @@ type Row = {
   } | null;
 };
 
+type BulkActionJobTableProps = {
+  rows: Row[];
+  onRetry: (jobId: string) => void;
+  onCancel: (jobId: string) => void;
+  selectedIds: string[];
+  onToggleSelect: (jobId: string) => void;
+};
+
+function getStatusBadgeClass(status: string) {
+  switch (status) {
+    case "SUCCESS":
+      return "bg-emerald-100 text-emerald-700";
+    case "PARTIAL_SUCCESS":
+      return "bg-amber-100 text-amber-700";
+    case "FAILED":
+      return "bg-rose-100 text-rose-700";
+    case "RUNNING":
+      return "bg-blue-100 text-blue-700";
+    case "CANCELED":
+      return "bg-slate-200 text-slate-700";
+    default:
+      return "bg-slate-100 text-slate-600";
+  }
+}
+
+function canRetryJob(status: string) {
+  return status === "FAILED" || status === "PARTIAL_SUCCESS";
+}
+
+function canCancelJob(status: string) {
+  return status === "QUEUED" || status === "FAILED" || status === "PARTIAL_SUCCESS";
+}
+
 export function BulkActionJobTable({
   rows,
   onRetry,
   onCancel,
   selectedIds,
   onToggleSelect,
-}: {
-  rows: Row[];
-  onRetry: (jobId: string) => void;
-  onCancel: (jobId: string) => void;
-  selectedIds: string[];
-  onToggleSelect: (jobId: string) => void;
-}) {
+}: Readonly<BulkActionJobTableProps>) {
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
       <table className="min-w-full text-sm">
@@ -65,19 +92,7 @@ export function BulkActionJobTable({
               <td className="px-4 py-3 text-slate-700">{row.action}</td>
               <td className="px-4 py-3">
                 <span
-                  className={`rounded-full px-2 py-1 text-xs ${
-                    row.status === "SUCCESS"
-                      ? "bg-emerald-100 text-emerald-700"
-                      : row.status === "PARTIAL_SUCCESS"
-                        ? "bg-amber-100 text-amber-700"
-                        : row.status === "FAILED"
-                          ? "bg-rose-100 text-rose-700"
-                          : row.status === "RUNNING"
-                            ? "bg-blue-100 text-blue-700"
-                            : row.status === "CANCELED"
-                              ? "bg-slate-200 text-slate-700"
-                              : "bg-slate-100 text-slate-600"
-                  }`}
+                  className={`rounded-full px-2 py-1 text-xs ${getStatusBadgeClass(row.status)}`}
                 >
                   {row.status}
                 </span>
@@ -105,7 +120,7 @@ export function BulkActionJobTable({
                     상세
                   </Link>
 
-                  {["FAILED", "PARTIAL_SUCCESS"].includes(row.status) && (
+                  {canRetryJob(row.status) && (
                     <button
                       type="button"
                       onClick={() => onRetry(row.id)}
@@ -115,7 +130,7 @@ export function BulkActionJobTable({
                     </button>
                   )}
 
-                  {["QUEUED", "FAILED", "PARTIAL_SUCCESS"].includes(row.status) && (
+                  {canCancelJob(row.status) && (
                     <button
                       type="button"
                       onClick={() => onCancel(row.id)}

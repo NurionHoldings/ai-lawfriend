@@ -78,6 +78,12 @@ export default async function ProtectedLayout({ children }: Props) {
                   <Link href="/admin/notifications" className="hover:text-aibeop-text">
                     알림함
                   </Link>
+                  <Link
+                    href="/admin/operations/aibeopchin-7-dashboard"
+                    className="hover:text-aibeop-text"
+                  >
+                    운영 모니터링
+                  </Link>
                   <Link href="/admin/system" className="hover:text-aibeop-text">
                     시스템 점검
                   </Link>

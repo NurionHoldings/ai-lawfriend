@@ -28,6 +28,19 @@ export type SerializedCaseDetail = {
     questionSetVersion: string | null;
     latestApprovedAt: string | null;
     lockedAt: string | null;
+    generationTrace: {
+      templateCode: string;
+      templateVersion: string;
+      templateTitle: string;
+      sourceProvider: string;
+      sourceName: string | null;
+      sourceUrl: string | null;
+      sourceHash: string | null;
+      sourceStatus: string | null;
+      sourceNote: string | null;
+      generatedSnapshotAt: string;
+      approvedSnapshotAt: string | null;
+    } | null;
     body: string | null;
     createdAt: string;
     updatedAt: string;
@@ -78,6 +91,7 @@ type CaseWithDetail = Prisma.CaseGetPayload<{
     interviews: true;
     legalDocuments: {
       include: {
+        generationTrace: true;
         paragraphs: true;
         versions: true;
       };
@@ -118,6 +132,21 @@ export function serializeCaseDetail(caseRecord: CaseWithDetail): SerializedCaseD
       questionSetVersion: doc.questionSetVersion,
       latestApprovedAt: doc.latestApprovedAt?.toISOString() ?? null,
       lockedAt: doc.lockedAt?.toISOString() ?? null,
+      generationTrace: doc.generationTrace
+        ? {
+            templateCode: doc.generationTrace.templateCode,
+            templateVersion: doc.generationTrace.templateVersion,
+            templateTitle: doc.generationTrace.templateTitle,
+            sourceProvider: doc.generationTrace.sourceProvider,
+            sourceName: doc.generationTrace.sourceName,
+            sourceUrl: doc.generationTrace.sourceUrl,
+            sourceHash: doc.generationTrace.sourceHash,
+            sourceStatus: doc.generationTrace.sourceStatus,
+            sourceNote: doc.generationTrace.sourceNote,
+            generatedSnapshotAt: doc.generationTrace.generatedSnapshotAt.toISOString(),
+            approvedSnapshotAt: doc.generationTrace.approvedSnapshotAt?.toISOString() ?? null,
+          }
+        : null,
       body: doc.body,
       createdAt: doc.createdAt.toISOString(),
       updatedAt: doc.updatedAt.toISOString(),

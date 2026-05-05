@@ -1,5 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import {
+  readGuardrailTraceFromSnapshot,
+  toPublicSafeGuardrailTrace,
+} from "@/features/document-generation/document-generation-guardrail-trace";
+import {
   CASE_DOCUMENT_DRAFT_NOTE_TYPE,
   type StoredDocumentDraftPayload,
   parseDocumentDraftContent,
@@ -7,6 +11,23 @@ import {
 } from "@/features/document-drafts/document-draft.repository";
 
 type RawDocument = Record<string, unknown>;
+
+function asTrimmedString(value: unknown): string | null {
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    return trimmed === "" ? null : trimmed;
+  }
+
+  if (typeof value === "number" || typeof value === "boolean" || typeof value === "bigint") {
+    return String(value);
+  }
+
+  return null;
+}
+
+function asStringOrFallback(value: unknown, fallback = ""): string {
+  return asTrimmedString(value) ?? fallback;
+}
 
 function getDocumentModel() {
   const d =
@@ -39,8 +60,7 @@ async function hasStoredParagraphs(documentId: string) {
 }
 
 function strId(value: unknown): string | null {
-  if (value == null || value === "") return null;
-  return String(value);
+  return asTrimmedString(value);
 }
 
 function mapCaseRelation(caseRaw: unknown): {
@@ -57,7 +77,7 @@ function mapCaseRelation(caseRaw: unknown): {
   const title =
     typeof titleRaw === "string" && titleRaw !== "" ? titleRaw : "사건";
 
-  const status = r.status != null ? String(r.status) : null;
+  const status = asTrimmedString(r.status);
 
   const num =
     r.caseNumber ??
@@ -65,14 +85,32 @@ function mapCaseRelation(caseRaw: unknown): {
     r.caseCode ??
     r.referenceNumber ??
     null;
-  const caseNumber =
-    num != null && String(num).trim() !== "" ? String(num).trim() : null;
+  const caseNumber = asTrimmedString(num);
 
   return {
-    id: String(r.id),
+    id: asStringOrFallback(r.id),
     title,
     status,
     caseNumber,
+  };
+}
+
+function mapGenerationTrace(raw: unknown) {
+  if (!raw || typeof raw !== "object") return null;
+
+  const trace = raw as Record<string, unknown>;
+  return {
+    templateCode: asStringOrFallback(trace.templateCode),
+    templateVersion: asStringOrFallback(trace.templateVersion),
+    templateTitle: asStringOrFallback(trace.templateTitle),
+    sourceProvider: asStringOrFallback(trace.sourceProvider, "INTERNAL_STANDARD"),
+    sourceName: strId(trace.sourceName),
+    sourceUrl: strId(trace.sourceUrl),
+    sourceHash: strId(trace.sourceHash),
+    sourceStatus: strId(trace.sourceStatus),
+    sourceNote: strId(trace.sourceNote),
+    generatedSnapshotAt: trace.generatedSnapshotAt ?? null,
+    approvedSnapshotAt: trace.approvedSnapshotAt ?? null,
   };
 }
 
@@ -80,18 +118,19 @@ function mapDocument(raw: RawDocument | null) {
   if (!raw) return null;
 
   return {
-    id: String(raw.id),
-    caseId: raw.caseId ? String(raw.caseId) : null,
-    title: String(raw.title ?? ""),
-    content: String(raw.content ?? raw.body ?? ""),
-    type: String(raw.type ?? raw.documentType ?? "GENERAL"),
-    status: String(raw.status ?? "DRAFT"),
+    id: asStringOrFallback(raw.id),
+    caseId: strId(raw.caseId),
+    title: asStringOrFallback(raw.title),
+    content: asStringOrFallback(raw.content ?? raw.body),
+    type: asStringOrFallback(raw.type ?? raw.documentType, "GENERAL"),
+    status: asStringOrFallback(raw.status, "DRAFT"),
     createdAt: raw.createdAt ?? null,
     updatedAt: raw.updatedAt ?? null,
     createdById: strId(raw.createdById ?? raw.authorId),
     updatedById: strId(raw.updatedById),
     reviewerId: strId(raw.reviewerId),
-    reviewComment: String(raw.reviewComment ?? ""),
+    reviewComment: asStringOrFallback(raw.reviewComment),
+    generationTrace: mapGenerationTrace(raw.generationTrace),
   };
 }
 
@@ -194,6 +233,7 @@ async function findMemoDraftByIdWithCase(documentId: string) {
   return {
     ...base,
     case: row.case ? mapCaseRelation(row.case) : null,
+    approvedGuardrailTrace: null,
   };
 }
 
@@ -285,6 +325,17 @@ async function patchMemoReview(
 
 export const documentDetailRepository = {
   async findById(documentId: string) {
+    const legalDocument = await prisma.legalDocument.findUnique({
+      where: { id: documentId },
+      include: {
+        generationTrace: true,
+      },
+    });
+
+    if (legalDocument) {
+      return mapDocument(legalDocument as unknown as RawDocument);
+    }
+
     const documentModel = getDocumentModel();
 
     if (documentModel) {
@@ -298,6 +349,34 @@ export const documentDetailRepository = {
   },
 
   async findByIdWithCase(documentId: string) {
+    const legalDocument = await prisma.legalDocument.findUnique({
+      where: { id: documentId },
+      include: {
+        case: true,
+        generationTrace: true,
+        versions: {
+          where: { approved: true },
+          orderBy: [{ approvedAt: "desc" }, { versionNo: "desc" }],
+          take: 1,
+          select: {
+            snapshotJson: true,
+          },
+        },
+      },
+    });
+
+    if (legalDocument) {
+      const approvedGuardrailTrace = toPublicSafeGuardrailTrace(
+        readGuardrailTraceFromSnapshot(legalDocument.versions[0]?.snapshotJson),
+      );
+
+      return {
+        ...mapDocument(legalDocument as unknown as RawDocument),
+        case: mapCaseRelation(legalDocument.case),
+        approvedGuardrailTrace,
+      };
+    }
+
     const documentModel = getDocumentModel();
 
     if (documentModel) {
@@ -313,6 +392,7 @@ export const documentDetailRepository = {
       return {
         ...mapDocument(raw),
         case: mapCaseRelation((raw as { case?: unknown }).case),
+        approvedGuardrailTrace: null,
       };
     }
 

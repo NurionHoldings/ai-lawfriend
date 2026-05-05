@@ -1,5 +1,6 @@
 import { PrismaClient, UserRole, UserStatus } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { seedLegalFormSources } from "./seed-legal-form-sources";
 import { DEFAULT_QUESTION_SET_CODE, seedQuestionSets } from "./seed-question-sets";
 
 const prisma = new PrismaClient();
@@ -174,6 +175,7 @@ async function main() {
     },
   });
 
+  await seedLegalFormSources(prisma);
   await seedQuestionSets(prisma);
   console.log(`QuestionSet: code=${DEFAULT_QUESTION_SET_CODE} (멱등 upsert)`);
   console.log("=== Seed Complete ===");

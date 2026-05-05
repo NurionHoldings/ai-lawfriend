@@ -1,17 +1,11 @@
-import { ok, toErrorResponse } from "@/lib/domain-api-response";
+import { NextResponse } from "next/server";
+import { z } from "zod";
 import { requireSessionUser } from "@/lib/auth/require-session-user";
-import { prisma } from "@/lib/prisma";
-import {
-  casePackageShareRouteParamsSchema,
-  RevokeCasePackageShareSchema,
-} from "@/lib/case-package/case-package-share-schema";
-import {
-  assertCanReadCasePackageShare,
-  assertFound,
-} from "@/lib/case-package/case-package-share-policy";
-import { createCasePackageAccessLog } from "@/lib/case-package/case-package-access-log";
+import { revokeCasePackageShare } from "@/features/case-package/case-package-share.repository";
 
-export const dynamic = "force-dynamic";
+const revokeSchema = z.object({
+  reason: z.string().max(500).nullable().optional(),
+});
 
 type RouteContext = {
   params: Promise<{
@@ -21,48 +15,43 @@ type RouteContext = {
 };
 
 export async function POST(request: Request, context: RouteContext) {
-  try {
-    const currentUser = await requireSessionUser();
-    const params = await context.params;
-    const { caseId, shareId } = casePackageShareRouteParamsSchema.parse(params);
-    const body: unknown = await request.json().catch(() => ({}));
-    const input = RevokeCasePackageShareSchema.parse(body);
+  const user = await requireSessionUser();
+  const { caseId, shareId } = await context.params;
+  const body: unknown = await request.json();
+  const parsed = revokeSchema.safeParse(body);
 
-    const share = await prisma.casePackageShare.findFirst({
-      where: { id: shareId, caseId },
-    });
-
-    const foundShare = assertFound(share, "사건 패키지 공유를 찾을 수 없습니다.");
-
-    assertCanReadCasePackageShare(currentUser, foundShare);
-
-    const updated = await prisma.casePackageShare.update({
-      where: { id: shareId },
-      data: {
-        status: "REVOKED",
-        revokedAt: new Date(),
-        revokeReason: input.revokeReason || "의뢰인 공유 취소",
+  if (!parsed.success) {
+    return NextResponse.json(
+      {
+        ok: false,
+        code: "INVALID_REVOKE_PAYLOAD",
+        message: "공유 취소 입력값이 올바르지 않습니다.",
+        issues: parsed.error.flatten(),
       },
+      { status: 422 },
+    );
+  }
+
+  try {
+    const share = await revokeCasePackageShare({
+      caseId,
+      shareId,
+      ownerUserId: user.id,
+      reason: parsed.data.reason ?? null,
     });
 
-    await createCasePackageAccessLog({
-      shareId: updated.id,
-      caseId: updated.caseId,
-      actorUserId: currentUser.id,
-      action: "REVOKED",
-      targetType: "CASE_PACKAGE_SHARE",
-      targetId: updated.id,
-      resultMessage: "사건 패키지 공유가 취소되었습니다.",
-      request,
+    return NextResponse.json({
+      ok: true,
+      share,
     });
-
-    return ok({
-      id: updated.id,
-      status: updated.status,
-      revokedAt: updated.revokedAt,
-      revokeReason: updated.revokeReason,
-    });
-  } catch (error) {
-    return toErrorResponse(error);
+  } catch {
+    return NextResponse.json(
+      {
+        ok: false,
+        code: "SHARE_NOT_FOUND_OR_FORBIDDEN",
+        message: "취소할 사건 패키지 공유를 찾을 수 없습니다.",
+      },
+      { status: 404 },
+    );
   }
 }

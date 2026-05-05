@@ -1,19 +1,31 @@
-import { ok, toErrorResponse } from "@/lib/domain-api-response";
+import { NextResponse } from "next/server";
+import { z } from "zod";
 import { requireSessionUser } from "@/lib/auth/require-session-user";
-import { prisma } from "@/lib/prisma";
-import { NotFoundError } from "@/lib/errors";
 import {
-  casePackageRouteParamsSchema,
-  CreateCasePackageShareSchema,
-} from "@/lib/case-package/case-package-share-schema";
-import { generateUniquePublicCode } from "@/lib/case-package/public-code";
-import {
-  assertUserOwnsCase,
-  ensureShareCanBeCreated,
-} from "@/lib/case-package/case-package-share-policy";
-import { serializeCasePackageShare } from "@/lib/case-package/case-package-share-serializer";
+  createCasePackageShare,
+  listCasePackageShares,
+} from "@/features/case-package/case-package-share.repository";
 
-export const dynamic = "force-dynamic";
+const createShareSchema = z.object({
+  lawyerUserId: z.string().min(1).nullable().optional(),
+  optionalPin: z.string().min(4).max(20).nullable().optional(),
+  expiresAt: z.string().datetime().nullable().optional(),
+  scope: z
+    .object({
+      allowSummary: z.boolean().optional(),
+      allowInterview: z.boolean().optional(),
+      allowAttachmentList: z.boolean().optional(),
+      allowDocumentDraft: z.boolean().optional(),
+    })
+    .optional(),
+  downloadPermissions: z
+    .object({
+      allowAttachmentDownload: z.boolean().optional(),
+      allowPackagePdf: z.boolean().optional(),
+      allowDocumentDownload: z.boolean().optional(),
+    })
+    .optional(),
+});
 
 type RouteContext = {
   params: Promise<{
@@ -21,129 +33,68 @@ type RouteContext = {
   }>;
 };
 
-export async function GET(_: Request, context: RouteContext) {
-  try {
-    const currentUser = await requireSessionUser();
-    const params = await context.params;
-    const { caseId } = casePackageRouteParamsSchema.parse(params);
+export async function GET(_request: Request, context: RouteContext) {
+  const user = await requireSessionUser();
+  const { caseId } = await context.params;
 
-    const targetCase = await prisma.case.findUnique({
-      where: { id: caseId },
-      select: { id: true, ownerUserId: true },
-    });
+  const shares = await listCasePackageShares({
+    caseId,
+    ownerUserId: user.id,
+  });
 
-    if (!targetCase) {
-      throw new NotFoundError("사건을 찾을 수 없습니다.");
-    }
-
-    assertUserOwnsCase(currentUser, targetCase);
-
-    const shares = await prisma.casePackageShare.findMany({
-      where: { caseId },
-      include: {
-        case: {
-          include: {
-            attachments: {
-              where: { status: "ACTIVE" },
-              orderBy: { createdAt: "desc" },
-            },
-            legalDocuments: {
-              orderBy: { createdAt: "desc" },
-            },
-          },
-        },
-        owner: {
-          select: { id: true, name: true, email: true, phone: true },
-        },
-        lawyer: {
-          select: { id: true, name: true, email: true, phone: true },
-        },
-      },
-      orderBy: { createdAt: "desc" },
-    });
-
-    return ok(shares.map(serializeCasePackageShare));
-  } catch (error) {
-    return toErrorResponse(error);
-  }
+  return NextResponse.json({
+    ok: true,
+    shares,
+  });
 }
 
 export async function POST(request: Request, context: RouteContext) {
+  const user = await requireSessionUser();
+  const { caseId } = await context.params;
+  const body: unknown = await request.json();
+  const parsed = createShareSchema.safeParse(body);
+
+  if (!parsed.success) {
+    return NextResponse.json(
+      {
+        ok: false,
+        code: "INVALID_CASE_PACKAGE_SHARE_PAYLOAD",
+        message: "사건 패키지 공유 입력값이 올바르지 않습니다.",
+        issues: parsed.error.flatten(),
+      },
+      { status: 422 },
+    );
+  }
+
   try {
-    const currentUser = await requireSessionUser();
-    const params = await context.params;
-    const { caseId } = casePackageRouteParamsSchema.parse(params);
-    const body: unknown = await request.json();
-    const input = CreateCasePackageShareSchema.parse(body);
-
-    const targetCase = await prisma.case.findUnique({
-      where: { id: caseId },
-      select: {
-        id: true,
-        ownerUserId: true,
-        status: true,
-      },
+    const result = await createCasePackageShare({
+      caseId,
+      ownerUserId: user.id,
+      lawyerUserId: parsed.data.lawyerUserId ?? null,
+      optionalPin: parsed.data.optionalPin ?? null,
+      expiresAt: parsed.data.expiresAt ?? null,
+      scope: parsed.data.scope,
+      downloadPermissions: parsed.data.downloadPermissions,
     });
 
-    if (!targetCase) {
-      throw new NotFoundError("사건을 찾을 수 없습니다.");
-    }
-
-    assertUserOwnsCase(currentUser, targetCase);
-
-    const expiresAt = input.expiresAt ? new Date(input.expiresAt) : null;
-
-    ensureShareCanBeCreated({
-      consentText: input.consentText,
-      expiresAt,
+    return NextResponse.json({
+      ok: true,
+      share: result.share,
+      plainAccessToken: result.plainAccessToken,
+      warning:
+        "plainAccessToken은 발급 직후 한 번만 표시하십시오. DB에는 hash만 저장됩니다.",
     });
-
-    const publicCode = await generateUniquePublicCode();
-
-    const share = await prisma.casePackageShare.create({
-      data: {
-        caseId,
-        ownerUserId: targetCase.ownerUserId,
-        lawyerUserId: input.lawyerUserId ?? null,
-        publicCode,
-        shareMode: input.shareMode,
-        status: "ACTIVE",
-        allowSummary: input.allowSummary,
-        allowInterview: input.allowInterview,
-        allowAttachmentList: input.allowAttachmentList,
-        allowAttachmentDownload: input.allowAttachmentDownload,
-        allowDocumentDraft: input.allowDocumentDraft,
-        allowDocumentPdf: input.allowDocumentPdf,
-        allowPackagePdf: input.allowPackagePdf,
-        allowClientContact: input.allowClientContact,
-        allowOpponentDetail: input.allowOpponentDetail,
-        consentText: input.consentText,
-        consentedAt: new Date(),
-        expiresAt,
-      },
-      include: {
-        case: {
-          include: {
-            attachments: {
-              where: { status: "ACTIVE" },
-              orderBy: { createdAt: "desc" },
-            },
-            legalDocuments: {
-              orderBy: { createdAt: "desc" },
-            },
-          },
-        },
-        owner: {
-          select: { id: true, name: true, email: true, phone: true },
-        },
-        lawyer: {
-          select: { id: true, name: true, email: true, phone: true },
-        },
-      },
-    });
-
-    return ok(serializeCasePackageShare(share), { status: 201 });
   } catch (error) {
-    return toErrorResponse(error);
+    const message =
+      error instanceof Error ? error.message : "사건 패키지 공유 생성 실패";
+
+    return NextResponse.json(
+      {
+        ok: false,
+        code: message,
+        message: "사건 패키지 공유를 생성하지 못했습니다.",
+      },
+      { status: 400 },
+    );
   }
 }

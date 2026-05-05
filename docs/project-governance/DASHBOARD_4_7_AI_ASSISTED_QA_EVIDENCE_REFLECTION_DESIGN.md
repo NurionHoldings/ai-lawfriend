@@ -400,20 +400,24 @@ AI Evidence Assistant — QA Closure 반영 보조
 
 ## 16. API 설계 후보
 
-실제 구현 시 후보 API는 아래와 같다.
+실제 구현 시 후보 API는 아래와 같다. **구분** 열은 본 저장소 기준(대시보드 5.1·5.2 이후)이다.
 
-| Method | Path | 목적 |
-| --- | --- | --- |
-| POST | `/api/admin/qa-evidence/analyze` | QA 회신 원문 AI 분석 |
-| POST | `/api/admin/qa-evidence/draft-closure` | closure 표 초안 생성 |
-| POST | `/api/admin/qa-evidence/draft-followups` | 4.6 tracker 초안 생성 |
-| POST | `/api/admin/qa-evidence/request-more-info` | QA팀 보완 요청문 생성 |
-| POST | `/api/admin/qa-evidence/approve` | 사람 승인 후 반영 |
-| POST | `/api/admin/qa-evidence/reject` | 초안 반려 |
-| GET | `/api/admin/qa-evidence/[id]` | 분석 결과 조회 |
-| GET | `/api/admin/qa-evidence/[id]/diff` | 반영 전후 diff 조회 |
+**구분 값 (단일 선택):** **구현됨** — 코드에 라우트·핸들러 존재. **후보** — 설계·후속 Phase 구현 대상, 코드 없음. **설계잠금** — `DASHBOARD_5_2_*` 등 문서로 모델·동작만 고정, 저장·조회 API는 아직 없음. **보류** — 조건 미충족 등으로 구현 보류(표기 시 사유 유지). **폐기** — 채택하지 않음(표기 시 대체 경로 유지).
 
-**주의:** 4.7에서는 API를 만들지 않는다. 이 표는 향후 구현 후보일 뿐이다.
+페이지 **실경로**는 `src/app/(protected)/admin/qa-evidence/page.tsx`(라우트 URL은 `/admin/qa-evidence`). `src/app/admin/...` 단독 경로는 사용하지 않는다.
+
+| Method | Path | 구분 | 목적 |
+| --- | --- | --- | --- |
+| POST | `/api/admin/qa-evidence/analyze` | **구현됨** | QA 회신 원문 규칙 기반 분석·Markdown 초안 JSON 반환 |
+| POST | `/api/admin/qa-evidence/draft-closure` | 후보 | closure 표 전용 엔드포인트(5.1에서는 analyze 내 renderer로 통합 가능) |
+| POST | `/api/admin/qa-evidence/draft-followups` | 후보 | 4.6 tracker 초안 전용 |
+| POST | `/api/admin/qa-evidence/request-more-info` | 후보 | QA팀 보완 요청문 생성 |
+| POST | `/api/admin/qa-evidence/approve` | 후보 | 사람 승인 후 반영(서버 측 반영 API는 미구현) |
+| POST | `/api/admin/qa-evidence/reject` | 후보 | 초안 반려 |
+| GET | `/api/admin/qa-evidence/[id]` | 설계잠금 | Draft·분석 조회(5.2 저장 모델·5.3 API 구현 시 연계; 현재 핸들러 없음) |
+| GET | `/api/admin/qa-evidence/[id]/diff` | 후보 | 반영 전후 diff 조회 |
+
+**주의:** 4.7 작성 시점에는 API를 만들지 않았다. **5.1에서 `analyze`만 구현**되었고, 나머지는 `DASHBOARD_5_2_AI_EVIDENCE_DRAFT_STORAGE_DESIGN.md` 등 후속 설계·구현 후보다.
 
 ## 17. 데이터 모델 후보
 

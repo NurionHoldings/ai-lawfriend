@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import "./globals.css";
+import { PromoAnalyticsProvider } from "@/components/analytics/promo-analytics-provider";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { SitePromoPopupProvider } from "@/components/layout/site-promo-popup-provider";
 import { ToastProvider } from "@/components/ui/toast/ToastProvider";
 
 export const metadata = {
@@ -16,6 +18,8 @@ export default function RootLayout({
       <body className="flex min-h-dvh flex-col bg-aibeop-bg font-sans text-aibeop-text antialiased">
         <ToastProvider>
           <div className="flex-1">{children}</div>
+          <SitePromoPopupProvider />
+          <PromoAnalyticsProvider />
         </ToastProvider>
         <SiteFooter />
       </body>

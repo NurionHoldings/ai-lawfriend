@@ -28,6 +28,11 @@ export const PermissionKeyEnum = z.enum([
   "documentTemplate.publish",
   "documentTemplate.archive",
 
+  "legalFormSource.read",
+  "legalFormSource.create",
+  "legalFormSource.update",
+  "legalFormSource.archive",
+
   "document.create",
   "document.read",
   "document.update",
@@ -75,6 +80,7 @@ export const ROLE_PERMISSIONS: Record<Role, PermissionKey[]> = {
 
     "questionSet.read",
     "documentTemplate.read",
+    "legalFormSource.read",
 
     "document.create",
     "document.read",
@@ -111,6 +117,7 @@ export const ROLE_PERMISSIONS: Record<Role, PermissionKey[]> = {
 
     "questionSet.read",
     "documentTemplate.read",
+    "legalFormSource.read",
 
     "document.create",
     "document.read",

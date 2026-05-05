@@ -26,6 +26,8 @@ export default async function DocumentDetailPage({ params }: PageProps) {
       documentId,
       sessionUser,
     );
+    const generationTrace =
+      "generationTrace" in document ? document.generationTrace : null;
 
     return (
       <div className="mx-auto max-w-7xl space-y-6 px-4 py-6">
@@ -50,6 +52,35 @@ export default async function DocumentDetailPage({ params }: PageProps) {
                       id: document.case.id,
                       title: document.case.title,
                       status: document.case.status,
+                    }
+                  : null,
+                generationTrace: generationTrace
+                  ? {
+                      templateCode: generationTrace.templateCode,
+                      templateVersion: generationTrace.templateVersion,
+                      templateTitle: generationTrace.templateTitle,
+                      sourceProvider: generationTrace.sourceProvider,
+                      sourceName: generationTrace.sourceName,
+                      sourceUrl: generationTrace.sourceUrl,
+                      sourceHash: generationTrace.sourceHash,
+                      sourceStatus: generationTrace.sourceStatus,
+                      sourceNote: generationTrace.sourceNote,
+                      generatedSnapshotAt: generationTrace.generatedSnapshotAt
+                        ? new Date(
+                            generationTrace.generatedSnapshotAt as
+                              | string
+                              | number
+                              | Date,
+                          ).toISOString()
+                        : null,
+                      approvedSnapshotAt: generationTrace.approvedSnapshotAt
+                        ? new Date(
+                            generationTrace.approvedSnapshotAt as
+                              | string
+                              | number
+                              | Date,
+                          ).toISOString()
+                        : null,
                     }
                   : null,
               }}

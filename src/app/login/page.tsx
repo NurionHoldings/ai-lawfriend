@@ -1,7 +1,10 @@
 import { Suspense } from "react";
+import { getEnabledOAuthProviders } from "@/lib/auth/oauth";
 import LoginPageClient from "./login-page-client";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const oauthProviders = getEnabledOAuthProviders();
+
   return (
     <Suspense
       fallback={
@@ -10,7 +13,7 @@ export default function LoginPage() {
         </div>
       }
     >
-      <LoginPageClient />
+      <LoginPageClient oauthProviders={oauthProviders} />
     </Suspense>
   );
 }

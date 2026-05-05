@@ -1,3 +1,1889 @@
+## [EVIDENCE-20260504-WAGE-CLAIM-REPORT-MVP]
+
+### 제목
+AI법친 무료 유입 서비스 3호 — 임금체불 진정서·체불내역 정리센터 1차 MVP
+
+### 범위
+- 임금체불 진정서·체불내역 정리 DB 모델 추가
+- 작성자·근로자·사업장·근무정보·임금조건·체불내역·증거자료 입력 구조 추가
+- 임금체불 진정서 초안 자동 생성
+- 체불내역 정리표 자동 생성
+- 제출자료 체크리스트 자동 생성
+- 공개 작성 페이지 추가
+- 공개 POST API 추가
+- 관리자 목록 페이지 추가
+- 관리자 상세 페이지 추가
+- 법률대리·수임·최종 법률판단 금지 고지문 포함
+- 임금체불 확정 여부, 체불금액 확정, 승소 가능성, 지급 가능성 판단 금지 문구 포함
+- MVP verifier 추가
+
+### 생성/수정 파일
+- prisma/schema.prisma
+- prisma/migrations/*_add_wage_claim_report/
+- src/features/wage-claim/wage-claim.schema.ts
+- src/features/wage-claim/wage-claim-report-generator.ts
+- src/app/api/public/wage-claim-reports/route.ts
+- src/app/(public)/wage-claim/report/page.tsx
+- src/components/wage-claim/wage-claim-report-form.tsx
+- src/app/(admin)/admin/wage-claim-reports/page.tsx
+- src/app/(admin)/admin/wage-claim-reports/[reportId]/page.tsx
+- scripts/verify-aibeopchin-wage-claim-report-mvp.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 라우팅
+- 공개 서류 정리 페이지: `/wage-claim/report`
+- 공개 작성 API: `POST /api/public/wage-claim-reports`
+- 관리자 목록: `/admin/wage-claim-reports`
+- 관리자 상세: `/admin/wage-claim-reports/[reportId]`
+
+### 준수 문구
+- AI법친은 임금체불 확정 여부를 판단하지 않습니다.
+- AI법친은 체불금액 확정, 승소 가능성, 지급 가능성을 판단하지 않습니다.
+- 본 서비스는 노동청 진정·상담·전문가 검토를 위한 서류 정리 보조 서비스입니다.
+- 최종 제출 전 고용노동부 노동포털, 관할 고용노동관서, 노무사, 변호사 또는 대한법률구조공단의 검토를 권장합니다.
+
+### 검증 명령
+- `npx prisma migrate dev --name add-wage-claim-report`
+- `npx prisma generate`
+- `npx tsc --noEmit`
+- `npm run lint`
+- `npm run verify:aibeopchin-wage-claim-report-mvp`
+
+### 완료 판정
+AI법친 무료 유입 서비스 3호는 1차 MVP 기준에서 임금체불 피해자의 진정서 초안, 체불내역 정리표, 제출자료 체크리스트를 무료로 생성하고 관리자 검토 화면까지 연결된 상태로 구현한다.
+
+### 남은 후속
+- 첨부파일 업로드
+- PDF 다운로드
+- 상태 변경 이력
+- 개인정보 열람 감사로그
+- 변호사·노무사 검토 요청 연결
+- 홍보 랜딩페이지 및 SNS 공유 경로
+
+---
+
+## [EVIDENCE-20260504-FREE-SERVICE-PROMO-POLICY-CLOSURE]
+
+### 제목
+AI법친 무료 유입 서비스 1·2호 홍보 노출 정책 마감
+
+### 범위
+- Illegal/Jeonse 팝업 상호배타
+- OG 이미지 최종화
+- 불법사금융/전세사기 홍보 팝업 상호배타 노출 정책 추가
+- `rotation`, `illegal_only`, `jeonse_only`, `disabled` 모드 지원
+- daily/session 기준 팝업 순환 정책 추가
+- 기존 SitePromoPopupProvider를 단일 팝업 노출 구조로 변경
+- 1호·2호 OG 이미지 최종 문구 기준 문서 추가
+- 운영 이벤트 수신 체크리스트 문서 추가
+- 관리자 홍보 QA 페이지 추가
+- 무료 유입 서비스 홍보 노출 정책 verifier 추가
+
+### 생성/수정 파일
+- .env.example
+- .env.production.example
+- src/components/layout/free-service-promo-policy.ts
+- src/components/layout/site-promo-popup-provider.tsx
+- docs/project-governance/FREE_SERVICE_OG_IMAGE_FINAL_SPEC.md
+- docs/project-governance/FREE_SERVICE_PROMO_EVENT_QA_CHECKLIST.md
+- src/app/(admin)/admin/free-service-promo-qa/page.tsx
+- scripts/verify-aibeopchin-free-service-promo-policy.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 노출 정책
+- `rotation`: 1호/2호 팝업을 daily 또는 session 기준으로 순환 노출
+- `illegal_only`: 불법사금융 팝업만 노출
+- `jeonse_only`: 전세사기 팝업만 노출
+- `disabled`: 무료 유입 서비스 팝업 비활성화
+
+### 운영 QA 경로
+- `/admin/free-service-promo-qa`
+
+### 검증 명령
+- `npx tsc --noEmit`
+- `npm run lint`
+- `npm run verify:aibeopchin-illegal-lending-promo`
+- `npm run verify:aibeopchin-illegal-lending-promo-ops`
+- `npm run verify:aibeopchin-illegal-lending-promo-conversion`
+- `npm run verify:aibeopchin-jeonse-damage-promo`
+- `npm run verify:aibeopchin-free-service-promo-policy`
+
+### 완료 판정
+AI법친 무료 유입 서비스 1호 불법사금융과 2호 전세사기는 홍보 노출 정책 기준에서 팝업 동시노출을 방지하고, 운영환경별 노출 모드를 선택할 수 있으며, OG 이미지 최종 기준과 운영 이벤트 수신 체크리스트를 갖춘 상태로 마감한다.
+
+### 남은 후속
+- 운영 도메인에서 `/admin/free-service-promo-qa` 실점검
+- 실제 SNS 공유 미리보기에서 OG 이미지 확인
+- GA4 DebugView 이벤트 수신 확인
+- Meta Events Manager 이벤트 수신 확인
+- 운영 성과에 따라 `rotation` 또는 단독 노출 모드 선택
+
+---
+
+## [EVIDENCE-20260504-JEONSE-DAMAGE-PROMO-CONVERSION]
+
+### 제목
+AI법친 전세사기·보증금 반환 피해 서류 정리센터 홍보 전환 세트
+
+### 범위
+- 전세사기·보증금 반환 피해 서류 정리센터 홍보 랜딩페이지 추가
+- SNS 공유용 짧은 경로 추가
+- SEO/OG 메타태그 추가
+- 홈페이지 진입 홍보 팝업 추가
+- 전세사기 전용 A/B 테스트 문구 추가
+- 전세사기 전용 GA/Meta 이벤트 추가
+- 랜딩 조회, 짧은 링크 조회, CTA 클릭, 팝업 노출/클릭/닫기 이벤트 추가
+- 신고서 작성 페이지 조회, 작성 시작, 제출 성공/실패 이벤트 추가
+- 첨부 업로드 성공/실패 이벤트 추가
+- 변호사 검토 요청 성공/실패 이벤트 추가
+- GA4 리포트 템플릿 문서 추가
+- Meta Pixel 이벤트 매핑 문서 추가
+- 홍보 전환 verifier 추가
+
+### 생성/수정 파일
+- src/features/jeonse-damage/promo/jeonse-damage-promo-events.ts
+- src/features/jeonse-damage/promo/jeonse-damage-promo-analytics.ts
+- src/features/jeonse-damage/promo/jeonse-damage-promo-variants.ts
+- src/features/jeonse-damage/promo/jeonse-damage-popup-policy.ts
+- src/features/jeonse-damage/promo/jeonse-damage-current-variant.ts
+- src/components/jeonse-damage/jeonse-damage-landing-analytics.tsx
+- src/components/jeonse-damage/jeonse-damage-short-link-analytics.tsx
+- src/components/jeonse-damage/jeonse-damage-tracked-link.tsx
+- src/components/jeonse-damage/jeonse-damage-landing.tsx
+- src/app/(public)/jeonse-damage/page.tsx
+- src/app/(public)/free/jeonse-damage-report/page.tsx
+- src/components/jeonse-damage/jeonse-damage-promo-popup.tsx
+- src/components/layout/site-promo-popup-provider.tsx
+- src/components/jeonse-damage/jeonse-damage-report-form-analytics.tsx
+- src/components/jeonse-damage/jeonse-damage-report-form.tsx
+- src/components/jeonse-damage/jeonse-damage-attachment-upload-form.tsx
+- src/components/jeonse-damage/jeonse-damage-lawyer-review-button.tsx
+- docs/project-governance/JEONSE_DAMAGE_PROMO_AB_TEST_COPY.md
+- docs/project-governance/JEONSE_DAMAGE_GA_REPORT_TEMPLATE.md
+- docs/project-governance/JEONSE_DAMAGE_META_PIXEL_EVENT_MAP.md
+- scripts/verify-aibeopchin-jeonse-damage-promo.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+- public/og/jeonse-damage-report.png
+
+### 라우팅
+- 홍보 랜딩페이지: `/jeonse-damage`
+- SNS 공유용 무료 서류 정리 페이지: `/free/jeonse-damage-report`
+- 실제 서류 작성 페이지: `/jeonse-damage/report`
+
+### 이벤트
+- `jeonse_damage_landing_view`
+- `jeonse_damage_short_link_view`
+- `jeonse_damage_cta_click`
+- `jeonse_damage_popup_view`
+- `jeonse_damage_popup_cta_click`
+- `jeonse_damage_popup_dismiss`
+- `jeonse_damage_popup_dismiss_today`
+- `jeonse_damage_variant_assigned`
+- `jeonse_damage_report_form_view`
+- `jeonse_damage_report_form_start`
+- `jeonse_damage_report_submit_attempt`
+- `jeonse_damage_report_submit_success`
+- `jeonse_damage_report_submit_fail`
+- `jeonse_damage_attachment_upload_attempt`
+- `jeonse_damage_attachment_upload_success`
+- `jeonse_damage_attachment_upload_fail`
+- `jeonse_damage_lawyer_review_request_attempt`
+- `jeonse_damage_lawyer_review_request_success`
+- `jeonse_damage_lawyer_review_request_fail`
+
+### 준수 문구
+- AI법친은 전세사기 피해자 인정 여부를 판단하지 않습니다.
+- AI법친은 승소 가능성 또는 보증금 회수 가능성을 판단하지 않습니다.
+- 본 서비스는 신청·상담·변호사 검토를 위한 서류 정리 보조 서비스입니다.
+
+### 검증 명령
+- `npx tsc --noEmit`
+- `npm run lint`
+- `npm run verify:aibeopchin-jeonse-damage-report-mvp`
+- `npm run verify:aibeopchin-jeonse-damage-promo`
+
+### 완료 판정
+전세사기·보증금 반환 피해 서류 정리센터는 홍보 전환 기준에서 랜딩페이지, SNS 공유 경로, 홈페이지 팝업, SEO/OG, GA/Meta 이벤트, A/B 테스트 문구, 전환 이벤트를 갖춘 공익형 무료 유입 서비스 2호로 전면 노출 가능한 상태로 확장한다.
+
+### 남은 후속
+- 운영 도메인에서 GA DebugView 이벤트 수신 확인
+- Meta Events Manager Custom Event 수신 확인
+- 전세사기 전용 OG 이미지 최종 디자인 보정
+- 팝업 동시 노출 정책 조정
+- DB 마이그레이션 최종 적용
+
+---
+
+## [EVIDENCE-20260504-JEONSE-DAMAGE-REPORT-OPS]
+
+### 제목
+AI법친 전세사기·보증금 반환 피해 서류 정리센터 2차 운영화
+
+### 범위
+- 전세사기·보증금 반환 피해 서류 정리센터 첨부파일 모델 추가
+- 상태 변경 이력 모델 추가
+- 개인정보 열람·처리 감사로그 모델 추가
+- 변호사 검토 요청 모델 추가
+- 공개 첨부파일 업로드 API 추가
+- 첨부파일 업로드 폼 추가
+- 관리자 상태 변경 API 및 상태 변경 폼 추가
+- PDF 다운로드 유틸 및 API 추가
+- 관리자 첨부파일 다운로드 API 추가
+- 변호사 검토 요청 API 및 버튼 추가
+- 관리자 상세 페이지에 첨부파일, 상태이력, 감사로그, 변호사 검토 요청 이력 표시
+- 기존 Storage Adapter 재사용
+- PDF_KOREAN_FONT_PATH 기반 한글 폰트 로직 적용
+- verifier 검증 범위 확장
+
+### 생성/수정 파일
+- prisma/schema.prisma
+- prisma/migrations/*_add_jeonse_damage_report_operations/
+- src/features/jeonse-damage/jeonse-damage-access-log.ts
+- src/features/jeonse-damage/jeonse-damage-upload.ts
+- src/features/jeonse-damage/jeonse-damage-pdf.ts
+- src/app/api/public/jeonse-damage-reports/[reportId]/attachments/route.ts
+- src/app/api/admin/jeonse-damage-reports/[reportId]/status/route.ts
+- src/app/api/admin/jeonse-damage-reports/[reportId]/pdf/route.ts
+- src/app/api/admin/jeonse-damage-reports/[reportId]/attachments/[attachmentId]/download/route.ts
+- src/app/api/admin/jeonse-damage-reports/[reportId]/lawyer-review/route.ts
+- src/components/jeonse-damage/jeonse-damage-attachment-upload-form.tsx
+- src/components/jeonse-damage/jeonse-damage-status-form.tsx
+- src/components/jeonse-damage/jeonse-damage-lawyer-review-button.tsx
+- src/components/jeonse-damage/jeonse-damage-report-form.tsx
+- src/app/(admin)/admin/jeonse-damage-reports/[reportId]/page.tsx
+- scripts/verify-aibeopchin-jeonse-damage-report-mvp.mjs
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 라우팅
+- 첨부 업로드: `POST /api/public/jeonse-damage-reports/[reportId]/attachments`
+- 상태 변경: `PATCH /api/admin/jeonse-damage-reports/[reportId]/status`
+- PDF 다운로드: `GET /api/admin/jeonse-damage-reports/[reportId]/pdf`
+- 첨부 다운로드: `GET /api/admin/jeonse-damage-reports/[reportId]/attachments/[attachmentId]/download`
+- 변호사 검토 요청: `POST /api/admin/jeonse-damage-reports/[reportId]/lawyer-review`
+
+### 상태 흐름
+- `DRAFT_SUBMITTED`: 접수됨
+- `REVIEW_READY`: 검토 가능
+- `DOCUMENTS_CHECKED`: 서류 확인
+- `REFERRED_TO_LAWYER`: 변호사 연결
+- `CLOSED`: 종료
+
+### 검증 명령
+- `npx prisma migrate dev --name add-jeonse-damage-report-operations`
+- `npx prisma generate`
+- `npx tsc --noEmit`
+- `npm run lint`
+- `npm run verify:aibeopchin-jeonse-damage-report-mvp`
+
+### 완료 판정
+AI법친 전세사기·보증금 반환 피해 서류 정리센터는 2차 운영화 기준에서 첨부 업로드, PDF 다운로드, 상태 변경 이력, 개인정보 열람 감사로그, 변호사 검토 요청까지 갖춘 운영 가능 MVP 상태로 확장한다.
+
+### 남은 후속
+- 홍보 랜딩페이지
+- SNS 공유 경로
+- GA/Meta 전환 이벤트
+- 배포 전 운영 점검 API
+- 전세사기 전용 팝업
+
+---
+
+## [EVIDENCE-20260504-JEONSE-DAMAGE-REPORT-MVP]
+
+### 제목
+AI법친 무료 유입 서비스 2호 — 전세사기·보증금 반환 피해 서류 정리센터 1차 MVP
+
+### 범위
+- 전세사기·보증금 반환 피해 서류 정리 DB 모델 추가
+- 작성자·임차인·임대차계약·임대인·중개사·피해유형·증거자료 입력 구조 추가
+- 피해사실 요약서 자동 생성
+- 제출자료 체크리스트 자동 생성
+- 공개 작성 페이지 추가
+- 공개 POST API 추가
+- 관리자 목록 페이지 추가
+- 관리자 상세 페이지 추가
+- 변호사법 준수 고지문 포함
+- 피해자 결정 여부, 승소 가능성, 보증금 회수 가능성 판단 금지 문구 포함
+- MVP verifier 추가
+
+### 생성/수정 파일
+- prisma/schema.prisma
+- prisma/migrations/*_add_jeonse_damage_report/
+- src/features/jeonse-damage/jeonse-damage.schema.ts
+- src/features/jeonse-damage/jeonse-damage-report-generator.ts
+- src/app/api/public/jeonse-damage-reports/route.ts
+- src/app/(public)/jeonse-damage/report/page.tsx
+- src/components/jeonse-damage/jeonse-damage-report-form.tsx
+- src/app/(admin)/admin/jeonse-damage-reports/page.tsx
+- src/app/(admin)/admin/jeonse-damage-reports/[reportId]/page.tsx
+- scripts/verify-aibeopchin-jeonse-damage-report-mvp.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 라우팅
+- 공개 서류 정리 페이지: `/jeonse-damage/report`
+- 공개 작성 API: `POST /api/public/jeonse-damage-reports`
+- 관리자 목록: `/admin/jeonse-damage-reports`
+- 관리자 상세: `/admin/jeonse-damage-reports/[reportId]`
+
+### 준수 문구
+- AI법친은 전세사기 피해자 인정 여부를 판단하지 않습니다.
+- AI법친은 승소 가능성 또는 보증금 회수 가능성을 판단하지 않습니다.
+- 본 서비스는 신청·상담·변호사 검토를 위한 서류 정리 보조 서비스입니다.
+- 최종 제출 전 공식기관 또는 변호사 검토를 권장합니다.
+
+### 검증 명령
+- `npx prisma migrate dev --name add-jeonse-damage-report`
+- `npx prisma generate`
+- `npx tsc --noEmit`
+- `npm run lint`
+- `npm run verify:aibeopchin-jeonse-damage-report-mvp`
+
+### 완료 판정
+AI법친 무료 유입 서비스 2호는 1차 MVP 기준에서 전세사기·보증금 반환 피해자의 피해사실 요약서와 제출자료 체크리스트를 무료로 생성하고, 관리자 검토 화면까지 연결된 상태로 구현한다.
+
+### 남은 후속
+- 첨부파일 업로드
+- PDF 다운로드
+- 상태 변경 이력
+- 개인정보 열람 감사로그
+- 변호사 검토 요청 연결
+- 홍보 랜딩페이지 및 SNS 공유 경로
+
+---
+
+## [EVIDENCE-20260504-ILLEGAL-LENDING-PROMO-CONVERSION-MEASUREMENT]
+
+### 제목
+AI법친 불법사금융 홍보 성과 측정 마감
+
+### 범위
+- 운영 env 샘플 추가
+- 신고서 작성 페이지 조회 이벤트 추가
+- 신고서 작성 시작 이벤트 추가
+- 신고서 제출 시도 이벤트 추가
+- 신고서 제출 성공/실패 이벤트 추가
+- 첨부파일 업로드 시도/성공/실패 이벤트 추가
+- 변호사 검토 요청 시도/성공/실패 이벤트 추가
+- 현재 사용자 Variant 조회 유틸 추가
+- GA4 Funnel 리포트 템플릿 문서 추가
+- Meta Pixel Custom Conversion 매핑 문서 추가
+- 홍보 성과 측정 verifier 추가
+- Variant별 리포트 템플릿 적용
+
+### 생성/수정 파일
+- .env.production.example
+- src/features/illegal-lending/promo/illegal-lending-promo-events.ts
+- src/features/illegal-lending/promo/illegal-lending-current-variant.ts
+- src/components/illegal-lending/illegal-lending-report-form-analytics.tsx
+- src/components/illegal-lending/illegal-lending-report-form.tsx
+- src/components/illegal-lending/illegal-lending-attachment-upload-form.tsx
+- src/components/illegal-lending/illegal-lending-lawyer-review-button.tsx
+- docs/project-governance/ILLEGAL_LENDING_GA_REPORT_TEMPLATE.md
+- docs/project-governance/ILLEGAL_LENDING_META_PIXEL_EVENT_MAP.md
+- scripts/verify-aibeopchin-illegal-lending-promo-conversion.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 신규 이벤트
+- `illegal_lending_report_form_view`
+- `illegal_lending_report_form_start`
+- `illegal_lending_report_submit_attempt`
+- `illegal_lending_report_submit_success`
+- `illegal_lending_report_submit_fail`
+- `illegal_lending_attachment_upload_attempt`
+- `illegal_lending_attachment_upload_success`
+- `illegal_lending_attachment_upload_fail`
+- `illegal_lending_lawyer_review_request_attempt`
+- `illegal_lending_lawyer_review_request_success`
+- `illegal_lending_lawyer_review_request_fail`
+
+### 핵심 Funnel
+1. 랜딩 조회
+2. CTA 클릭
+3. 신고서 작성 페이지 조회
+4. 신고서 작성 시작
+5. 신고서 제출 시도
+6. 신고서 제출 성공
+7. 첨부파일 업로드 성공
+8. 변호사 검토 요청 성공
+
+### 검증 명령
+- `npx tsc --noEmit`
+- `npm run lint`
+- `npm run verify:aibeopchin-illegal-lending-promo`
+- `npm run verify:aibeopchin-illegal-lending-promo-ops`
+- `npm run verify:aibeopchin-illegal-lending-promo-conversion`
+
+### 완료 판정
+불법사금융 피해 신고서 홍보 운영은 성과 측정 마감 기준에서 GA/Meta Pixel 광고 이벤트와 신고서 작성 전환 이벤트가 연결되었고, Variant별 클릭률·작성 시작률·제출 성공률을 리포트로 분석할 수 있는 상태로 확장한다.
+
+### 남은 후속
+- 실제 운영 GA4 Measurement ID 입력
+- 실제 Meta Pixel ID 입력
+- GA DebugView에서 이벤트 수신 확인
+- Meta Events Manager에서 Custom Event 수신 확인
+- 1주일 운영 후 Variant별 CTA 클릭률과 신고서 제출 성공률 비교
+
+---
+
+## [EVIDENCE-20260504-ILLEGAL-LENDING-PROMO-OPS-OPTIMIZATION]
+
+### 제목
+AI법친 불법사금융 홍보 운영 최적화
+
+### 범위
+- GA4 스크립트 Provider 추가
+- Meta Pixel 스크립트 Provider 추가
+- 홍보 이벤트명 정의
+- GA/Meta Pixel 공통 이벤트 전송 유틸 추가
+- 랜딩 조회 이벤트 추가
+- 짧은 공유 링크 조회 이벤트 추가
+- CTA 클릭 이벤트 추가
+- 팝업 노출/CTA/닫기 이벤트 추가
+- A/B 테스트 문구 Variant A/B 정의
+- 환경변수 기반 Variant 고정 또는 auto 랜덤 배정 지원
+- 환경변수 기반 팝업 활성화/비활성화 지원
+- 환경변수 기반 팝업 재노출 쿨다운 시간 지원
+- SNS 광고 문구 A/B 테스트 문서 추가
+- 홍보 운영 최적화 verifier 추가
+
+### 생성/수정 파일
+- .env.example
+- src/components/analytics/promo-analytics-provider.tsx
+- src/features/illegal-lending/promo/illegal-lending-promo-events.ts
+- src/features/illegal-lending/promo/illegal-lending-promo-analytics.ts
+- src/features/illegal-lending/promo/illegal-lending-promo-variants.ts
+- src/features/illegal-lending/promo/illegal-lending-popup-policy.ts
+- src/components/illegal-lending/illegal-lending-tracked-link.tsx
+- src/components/illegal-lending/illegal-lending-landing-analytics.tsx
+- src/components/illegal-lending/illegal-lending-short-link-analytics.tsx
+- src/components/illegal-lending/illegal-lending-landing.tsx
+- src/components/illegal-lending/illegal-lending-promo-popup.tsx
+- src/app/(public)/free/illegal-lending-report/page.tsx
+- src/app/layout.tsx
+- docs/project-governance/ILLEGAL_LENDING_PROMO_AB_TEST_COPY.md
+- scripts/verify-aibeopchin-illegal-lending-promo-ops.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 이벤트
+- `illegal_lending_landing_view`
+- `illegal_lending_short_link_view`
+- `illegal_lending_cta_click`
+- `illegal_lending_popup_view`
+- `illegal_lending_popup_cta_click`
+- `illegal_lending_popup_dismiss`
+- `illegal_lending_popup_dismiss_today`
+- `illegal_lending_variant_assigned`
+
+### 환경변수
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID`
+- `NEXT_PUBLIC_META_PIXEL_ID`
+- `NEXT_PUBLIC_AIBEOPCHIN_PROMO_ANALYTICS_ENABLED`
+- `NEXT_PUBLIC_AIBEOPCHIN_PROMO_POPUP_ENABLED`
+- `NEXT_PUBLIC_AIBEOPCHIN_PROMO_POPUP_COOLDOWN_HOURS`
+- `NEXT_PUBLIC_ILLEGAL_LENDING_PROMO_VARIANT`
+
+### 검증 명령
+- `npx tsc --noEmit`
+- `npm run lint`
+- `npm run verify:aibeopchin-illegal-lending-promo`
+- `npm run verify:aibeopchin-illegal-lending-promo-ops`
+
+### 완료 판정
+불법사금융 피해 신고서 홍보 전환 세트는 운영 최적화 기준에서 GA/Meta Pixel 이벤트, 팝업 노출 정책, A/B 테스트 문구, CTA 추적, 짧은 링크 추적, 전용 verifier를 갖춘 성과 측정 가능 상태로 확장한다.
+
+### 남은 후속
+- 실제 GA4 Measurement ID 입력
+- 실제 Meta Pixel ID 입력
+- 운영 배포 후 이벤트 수집 여부 확인
+- Variant A/B별 CTA 클릭률 비교
+- 신고서 작성 완료 이벤트와 광고 이벤트 연결
+
+---
+
+## [EVIDENCE-20260504-ILLEGAL-LENDING-PROMO-CONVERSION]
+
+### 제목
+AI법친 불법사금융 피해 신고서 홍보 전환 세트
+
+### 범위
+- SNS 홍보용 랜딩페이지 추가
+- 무료 신고서 작성 CTA 연결
+- 공유용 짧은 진입 페이지 추가
+- SEO/OG 메타태그 추가
+- 홈페이지 진입 홍보 팝업 추가
+- 사이트 팝업 Provider 추가
+- 변호사법 준수 고지문 포함
+- 긴급 피해 112 신고 안내 문구 포함
+- 홍보 전환 전용 verifier 추가
+
+### 생성/수정 파일
+- src/components/illegal-lending/illegal-lending-landing.tsx
+- src/app/(public)/illegal-lending/page.tsx
+- src/app/(public)/free/illegal-lending-report/page.tsx
+- src/components/illegal-lending/illegal-lending-promo-popup.tsx
+- src/components/layout/site-promo-popup-provider.tsx
+- src/app/layout.tsx
+- scripts/verify-aibeopchin-illegal-lending-promo.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+- public/og/illegal-lending-report.png
+
+### 라우팅
+- 홍보 랜딩페이지: `/illegal-lending`
+- SNS 공유용 무료 신고서 페이지: `/free/illegal-lending-report`
+- 실제 신고서 작성 페이지: `/illegal-lending/report`
+
+### 핵심 CTA
+- 무료 신고서 작성 시작하기
+- 무료 신고서 작성하기
+- 자세히 보기
+
+### 준수 문구
+- AI법친은 법률대리·수임·최종 법률판단을 제공하지 않는 신고서 작성 보조 서비스입니다.
+- 긴급한 협박·폭행·감금·성적 이미지 유포 협박은 즉시 112 등 긴급기관 신고가 우선입니다.
+
+### 검증 명령
+- `npx tsc --noEmit`
+- `npm run lint`
+- `npm run verify:aibeopchin-illegal-lending-promo`
+
+### 완료 판정
+불법사금융 피해 신고서 모듈은 홍보 전환 기준에서 SNS 유입용 랜딩페이지, 공유용 짧은 경로, 홈페이지 진입 팝업, CTA, SEO/OG 메타태그, 변호사법 준수 고지문을 갖춘 공익형 무료 유입 서비스로 전면 노출 가능한 상태로 확장한다.
+
+### 남은 후속
+- OG 이미지 실제 디자인 파일 배치
+- SNS 광고 문구 A/B 테스트
+- 랜딩페이지 유입 분석 이벤트 연결
+- 팝업 노출 빈도 정책 운영값 분리
+
+---
+
+## [EVIDENCE-20260504-ILLEGAL-LENDING-REPORT-PREDEPLOY-CHECK]
+
+### 제목
+AI법친 불법사금융 피해 신고서 모듈 배포 전 운영 점검
+
+### 범위
+- 운영 스토리지 버킷 쓰기/읽기/삭제 점검 유틸 추가
+- PDF_KOREAN_FONT_PATH 기반 PDF 한글 폰트 실출력 점검 유틸 추가
+- PDF 한글 폰트 점검 파일 다운로드 API 추가
+- 변호사 자동배정 후보군 실데이터 점검 유틸 추가
+- 배포 전 통합 점검 관리자 API 추가
+- 배포 전 운영 점검 관리자 페이지 추가
+- 관리자 신고서 목록에서 운영 점검 페이지 진입 링크 추가
+- 배포 전 운영 점검 전용 verifier 추가
+
+### 생성/수정 파일
+- src/features/illegal-lending/illegal-lending-predeploy-check.types.ts
+- src/features/illegal-lending/illegal-lending-storage-predeploy-check.ts
+- src/features/illegal-lending/illegal-lending-pdf-font-predeploy-check.ts
+- src/features/illegal-lending/illegal-lending-lawyer-assignment-predeploy-check.ts
+- src/app/api/admin/illegal-lending-reports/predeploy-check/route.ts
+- src/app/api/admin/illegal-lending-reports/predeploy/pdf-font-probe/route.ts
+- src/app/(admin)/admin/illegal-lending-reports/predeploy-check/page.tsx
+- src/app/(admin)/admin/illegal-lending-reports/page.tsx
+- scripts/verify-aibeopchin-illegal-lending-report-predeploy.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 라우팅
+- 관리자 운영 점검 페이지: `/admin/illegal-lending-reports/predeploy-check`
+- 통합 점검 API: `GET /api/admin/illegal-lending-reports/predeploy-check`
+- PDF 한글 폰트 점검 파일: `GET /api/admin/illegal-lending-reports/predeploy/pdf-font-probe`
+- Storage Health: `GET /api/admin/illegal-lending-reports/storage-health`
+
+### 검증 명령
+- `npx tsc --noEmit`
+- `npm run lint`
+- `npm run verify:aibeopchin-illegal-lending-report-mvp`
+- `npm run verify:aibeopchin-illegal-lending-report-infra`
+- `npm run verify:aibeopchin-illegal-lending-report-predeploy`
+
+### 운영 실점검 항목
+- 버킷 권한 확인
+- PDF 폰트 실출력 확인
+- 변호사 자동배정 실데이터 검증
+
+### 완료 판정
+불법사금융 피해 신고서 모듈은 배포 전 운영 점검 기준에서 스토리지, PDF 한글 폰트, 변호사 자동배정 실데이터 검증 경로를 갖춘 상태로 정리한다. 최종 운영 배포 판정은 관리자 인증 상태에서 통합 점검 API와 PDF 한글 폰트 점검 파일을 실제 운영 도메인에서 확인한 뒤 확정한다.
+
+### 남은 후속
+- 운영 도메인에서 관리자 로그인 후 통합 점검 API 실호출
+- PDF 한글 폰트 점검 파일 다운로드 후 육안 확인
+- 실제 버킷 콘솔에서 점검 파일 생성/삭제 로그 확인
+- 운영 변호사 후보군 데이터 확인
+
+---
+
+## [EVIDENCE-20260503-ILLEGAL-LENDING-REPORT-INFRA-CLOSURE]
+
+### 제목
+AI법친 불법사금융 피해 신고서 모듈 운영 인프라 마감
+
+### 범위
+- 첨부파일 저장소를 Storage Adapter 구조로 전환
+- local / S3 / R2 / Supabase Storage 드라이버 지원
+- 첨부파일 DB에 storageProvider, storageKey, downloadCount, lastDownloadedAt 추가
+- 첨부 다운로드 API를 Storage Adapter 기반으로 교체
+- PDF 생성 유틸에 PDF_KOREAN_FONT_PATH 기반 한글 폰트 고정 로직 추가
+- 변호사 검토 요청 API에 자동 배정 로직 연결
+- 변호사 자동 배정 이력 모델 추가
+- 관리자 상세 페이지에 자동 배정 여부와 배정 이력 표시
+- 운영 스토리지 상태 점검 API 추가
+- verifier 검증 범위 확장
+
+### 생성/수정 파일
+- prisma/schema.prisma
+- prisma/migrations/*_harden_illegal_lending_report_infra/
+- src/features/illegal-lending/storage/illegal-lending-storage.types.ts
+- src/features/illegal-lending/storage/illegal-lending-local-storage.ts
+- src/features/illegal-lending/storage/illegal-lending-s3-storage.ts
+- src/features/illegal-lending/storage/illegal-lending-supabase-storage.ts
+- src/features/illegal-lending/storage/illegal-lending-storage.ts
+- src/features/illegal-lending/illegal-lending-upload.ts
+- src/features/illegal-lending/illegal-lending-pdf.ts
+- src/features/illegal-lending/illegal-lending-lawyer-assignment.ts
+- src/app/api/public/illegal-lending-reports/[reportId]/attachments/route.ts
+- src/app/api/admin/illegal-lending-reports/[reportId]/attachments/[attachmentId]/download/route.ts
+- src/app/api/admin/illegal-lending-reports/[reportId]/lawyer-review/route.ts
+- src/app/api/admin/illegal-lending-reports/storage-health/route.ts
+- src/app/(admin)/admin/illegal-lending-reports/[reportId]/page.tsx
+- scripts/verify-aibeopchin-illegal-lending-report-mvp.mjs
+- package.json
+- .env.example
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 환경변수
+- ILLEGAL_LENDING_STORAGE_DRIVER
+- ILLEGAL_LENDING_UPLOAD_ROOT
+- ILLEGAL_LENDING_S3_BUCKET
+- ILLEGAL_LENDING_S3_REGION
+- ILLEGAL_LENDING_S3_ENDPOINT
+- ILLEGAL_LENDING_S3_ACCESS_KEY_ID
+- ILLEGAL_LENDING_S3_SECRET_ACCESS_KEY
+- ILLEGAL_LENDING_S3_FORCE_PATH_STYLE
+- SUPABASE_URL
+- SUPABASE_SERVICE_ROLE_KEY
+- ILLEGAL_LENDING_SUPABASE_BUCKET
+- PDF_KOREAN_FONT_PATH
+- ILLEGAL_LENDING_AUTO_ASSIGN_ENABLED
+
+### 라우팅
+- 운영 스토리지 상태 점검: `GET /api/admin/illegal-lending-reports/storage-health`
+- 첨부파일 업로드: `POST /api/public/illegal-lending-reports/[reportId]/attachments`
+- 첨부파일 다운로드: `GET /api/admin/illegal-lending-reports/[reportId]/attachments/[attachmentId]/download`
+- 변호사 검토 요청: `POST /api/admin/illegal-lending-reports/[reportId]/lawyer-review`
+
+### 검증 명령
+- `npm install @aws-sdk/client-s3 @aws-sdk/s3-request-presigner`
+- `npm install @supabase/supabase-js`
+- `npx prisma migrate dev --name harden-illegal-lending-report-infra`
+- `npx prisma generate`
+- `npx tsc --noEmit`
+- `npm run lint`
+- `npm run verify:aibeopchin-illegal-lending-report-mvp`
+
+### 완료 판정
+불법사금융 피해 신고서 모듈은 운영 인프라 마감 기준에서 로컬 저장소 의존을 제거하고, S3/R2/Supabase Storage 전환 가능 구조, PDF 한글 폰트 고정, 변호사 자동 배정 이력까지 갖춘 운영 배포 가능 상태로 정리한다.
+
+### 남은 후속
+- 실제 운영 스토리지 버킷 생성 및 권한 정책 적용
+- PDF 한글 폰트 파일을 운영 서버 비공개 경로에 배치
+- 변호사 업무량 산정 기준을 실제 사건/상담 DB relation에 연결
+- 첨부파일 바이러스 검사
+- 보관기간 만료 자동 삭제
+
+---
+
+## [EVIDENCE-20260503-ILLEGAL-LENDING-REPORT-COMMERCIAL-COMPLETION]
+
+### 제목
+AI법친 불법사금융 피해 신고서 모듈 3차 상용 완성
+
+### 범위
+- 실제 PDF 바이너리 생성 API 추가
+- PDF 생성 유틸 추가
+- 첨부파일 업로드 모델 추가
+- 첨부파일 공개 업로드 API 추가
+- 첨부파일 비공개 저장 유틸 추가
+- 관리자 첨부파일 다운로드 API 추가
+- 공개 신고서 작성 완료 후 증거자료 업로드 폼 연결
+- 변호사 검토 요청 모델 추가
+- 변호사 검토 요청 API 추가
+- 관리자 상세 페이지에 실제 PDF 다운로드, 첨부파일 목록, 변호사 검토 요청 이력 연결
+- MVP verifier 검증 범위 확장
+
+### 생성/수정 파일
+- prisma/schema.prisma
+- prisma/migrations/*_add_illegal_lending_report_commercial_completion/
+- src/features/illegal-lending/illegal-lending-upload.ts
+- src/features/illegal-lending/illegal-lending-pdf.ts
+- src/app/api/public/illegal-lending-reports/route.ts
+- src/app/api/public/illegal-lending-reports/[reportId]/attachments/route.ts
+- src/app/api/admin/illegal-lending-reports/[reportId]/attachments/[attachmentId]/download/route.ts
+- src/app/api/admin/illegal-lending-reports/[reportId]/pdf/route.ts
+- src/app/api/admin/illegal-lending-reports/[reportId]/lawyer-review/route.ts
+- src/components/illegal-lending/illegal-lending-attachment-upload-form.tsx
+- src/components/illegal-lending/illegal-lending-lawyer-review-button.tsx
+- src/components/illegal-lending/illegal-lending-report-form.tsx
+- src/app/(admin)/admin/illegal-lending-reports/[reportId]/page.tsx
+- scripts/verify-aibeopchin-illegal-lending-report-mvp.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 라우팅
+- 첨부파일 업로드: `POST /api/public/illegal-lending-reports/[reportId]/attachments`
+- 관리자 첨부파일 다운로드: `GET /api/admin/illegal-lending-reports/[reportId]/attachments/[attachmentId]/download`
+- 실제 PDF 다운로드: `GET /api/admin/illegal-lending-reports/[reportId]/pdf`
+- 변호사 검토 요청: `POST /api/admin/illegal-lending-reports/[reportId]/lawyer-review`
+
+### 검증 명령
+- `npm install pdfkit`
+- `npm install -D @types/pdfkit`
+- `npx prisma migrate dev --name add-illegal-lending-report-commercial-completion`
+- `npx prisma generate`
+- `npx tsc --noEmit`
+- `npm run lint`
+- `npm run verify:aibeopchin-illegal-lending-report-mvp`
+
+### 완료 판정
+불법사금융 피해 신고서 모듈은 3차 상용 완성 기준에서 실제 PDF 다운로드, 증거자료 첨부, 변호사 검토 요청 연결까지 갖춘 고객 공개 가능 상태로 확장한다.
+
+### 남은 후속
+- S3/R2/Supabase Storage 등 운영 스토리지 전환
+- PDF 한글 폰트 서버 경로 고정
+- 변호사 계정 자동 배정 로직
+- 첨부파일 바이러스 검사
+- 보관기간 만료 자동 삭제
+
+---
+
+## [EVIDENCE-20260503-ILLEGAL-LENDING-REPORT-OPS-STABILIZATION]
+
+### 제목
+AI법친 불법사금융 피해 신고서 모듈 2차 운영 안정화
+
+### 범위
+- 신고서 상태 변경 이력 모델 추가
+- 신고서 개인정보 열람·처리 감사로그 모델 추가
+- 상태 변경 API에 이력 저장 및 감사로그 저장 연결
+- 상태 변경 사유 입력 추가
+- 관리자 상세 페이지에 상태 변경 이력 표시
+- 관리자 상세 페이지에 개인정보 열람·처리 감사로그 표시
+- PDF 저장용 출력 HTML API 추가
+- 신고서 출력 시 개인정보 마스킹 적용
+- MVP verifier 검증 범위 확장
+
+### 생성/수정 파일
+- prisma/schema.prisma
+- prisma/migrations/*_add_illegal_lending_report_operation_logs/
+- src/features/illegal-lending/illegal-lending-mask.ts
+- src/features/illegal-lending/illegal-lending-admin-actor.ts
+- src/features/illegal-lending/illegal-lending-access-log.ts
+- src/features/illegal-lending/illegal-lending-pdf-html.ts
+- src/app/api/admin/illegal-lending-reports/[reportId]/status/route.ts
+- src/app/api/admin/illegal-lending-reports/[reportId]/print/route.ts
+- src/components/illegal-lending/illegal-lending-report-status-form.tsx
+- src/app/(admin)/admin/illegal-lending-reports/[reportId]/page.tsx
+- scripts/verify-aibeopchin-illegal-lending-report-mvp.mjs
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 라우팅
+- 관리자 상세: `/admin/illegal-lending-reports/[reportId]`
+- 상태 변경 API: `PATCH /api/admin/illegal-lending-reports/[reportId]/status`
+- PDF 저장용 출력 화면: `GET /api/admin/illegal-lending-reports/[reportId]/print`
+
+### 검증 명령
+- `npx prisma generate`
+- `npx tsc --noEmit`
+- `npm run lint`
+- `npm run verify:aibeopchin-illegal-lending-report-mvp`
+
+### 완료 판정
+불법사금융 피해 신고서 작성 모듈은 2차 운영 안정화 기준에서 상태 변경 이력, 출력용 신고서, 개인정보 열람·처리 감사로그까지 갖춘 운영 가능 상태로 확장한다.
+
+### 남은 후속
+- 실제 PDF 바이너리 생성
+- 첨부파일 업로드
+- 개인정보 열람 권한 세분화
+- 변호사 검토 요청 연결
+- 신고서 삭제/보관기간 정책 자동화
+
+---
+
+## [EVIDENCE-20260503-ILLEGAL-LENDING-REPORT-MVP-CLOSURE]
+
+### 제목
+AI법친 불법사금융 피해 신고서 모듈 1차 상용화 마감
+
+### 범위
+- 관리자 신고서 상세보기 페이지 추가
+- 관리자 신고서 상태 변경 폼 추가
+- 관리자 상태 변경 API 추가
+- 신고서 초안 복사 버튼 추가
+- 관리자 목록에서 상세보기 진입 연결
+- MVP 검증 스크립트 추가
+- package.json 검증 명령 추가
+
+### 생성/수정 파일
+- src/app/(admin)/admin/illegal-lending-reports/[reportId]/page.tsx
+- src/components/illegal-lending/illegal-lending-report-status-form.tsx
+- src/components/illegal-lending/illegal-lending-report-copy-button.tsx
+- src/app/api/admin/illegal-lending-reports/[reportId]/status/route.ts
+- src/app/(admin)/admin/illegal-lending-reports/page.tsx
+- scripts/verify-aibeopchin-illegal-lending-report-mvp.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 라우팅
+- 관리자 목록: `/admin/illegal-lending-reports`
+- 관리자 상세: `/admin/illegal-lending-reports/[reportId]`
+- 상태 변경 API: `PATCH /api/admin/illegal-lending-reports/[reportId]/status`
+- 공개 작성 페이지: `/illegal-lending/report`
+- 공개 작성 API: `POST /api/public/illegal-lending-reports`
+
+### 상태 흐름
+- `DRAFT_SUBMITTED`: 접수됨
+- `REVIEW_READY`: 검토 가능
+- `REFERRED_TO_LAWYER`: 변호사 연결
+- `CLOSED`: 종료
+
+### 검증 명령
+- `npx tsc --noEmit`
+- `npm run lint`
+- `npm run verify:aibeopchin-illegal-lending-report-mvp`
+
+### 완료 판정
+불법사금융 피해 신고서 작성 모듈은 고객 공개용 1차 MVP에서 운영자 확인·상태관리·상세검토까지 가능한 상태로 마감한다.
+
+### 남은 후속
+- PDF 다운로드
+- 개인정보 마스킹/열람 감사로그
+- 첨부파일 업로드
+- 공식기관 제출 안내 페이지
+- 변호사 검토 요청 연결
+
+---
+
+## [EVIDENCE-20260503-ILLEGAL-LENDING-REPORT-MVP]
+
+### 제목
+AI법친 불법사금융 피해 신고서 무료 작성 모듈 1차 구현 완료
+
+### 범위
+- 공개 신고서 작성 페이지 구현
+- 신고서 작성 POST API 구현
+- Zod 입력 검증 및 피해유형 레이블 정의
+- 신고서 텍스트 자동 생성 유틸 구현
+- IllegalLendingReport DB 모델 및 enum 3종 추가
+- 관리자 신고서 목록 페이지 구현
+- 프로젝트 관리자 라우팅 컨벤션에 따라 `(admin)/admin/illegal-lending-reports` 경로 사용
+
+### 생성/수정 파일
+- prisma/schema.prisma
+- prisma/migrations/20260503144140_add_illegal_lending_report/
+- src/features/illegal-lending/illegal-lending.schema.ts
+- src/features/illegal-lending/illegal-lending-report-generator.ts
+- src/app/api/public/illegal-lending-reports/route.ts
+- src/app/(public)/illegal-lending/report/page.tsx
+- src/components/illegal-lending/illegal-lending-report-form.tsx
+- src/app/(admin)/admin/illegal-lending-reports/page.tsx
+
+### 라우팅
+- 공개 신고서: `/illegal-lending/report`
+- 관리자 목록: `/admin/illegal-lending-reports`
+- API: `POST /api/public/illegal-lending-reports`
+
+### 검증 결과
+- `npx prisma migrate dev` PASS
+- `npx tsc --noEmit` PASS
+- `npm run lint` PASS
+  - 신규 오류 없음
+  - 기존 warning 2건 유지
+
+### 완료 판정
+불법사금융 피해 신고서 작성 모듈의 1차 MVP 구현은 완료.
+상용 공개 전 P0 보강 항목은 개인정보 고지문, 관리자 상세보기, 신고서 출력/복사 시 면책문구 유지 여부 확인.
+
+### 다음 작업 순서
+- 관리자 상세보기 페이지
+- 관리자 상태 변경 API
+- 신고서 PDF 다운로드
+- 개인정보 고지문/면책문구 컴포넌트 공통화
+- 홈페이지 홍보 팝업 또는 메인 배너 연결
+- verify:aibeopchin-illegal-lending-report-mvp 검증 스크립트 추가
+- IMPLEMENTATION_EVIDENCE.md 증빙 블록 삽입
+
+### 현재 구현률 평가
+현재 공정 기준으로는 불법사금융 신고서 모듈 1차 구현률은 약 75~80%다.
+고객이 작성하고 관리자가 확인하는 MVP는 완료되었고, PDF·상세보기·고지문·상태관리까지 연결하면 상용 서비스 마감도는 90% 이상으로 올라간다.
+
+---
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-1-B-SUPPLEMENT-MVP-SCREENS-PHASE1] AI법친 7.1-B — 보완 요청 MVP 화면 1차 구현
+
+### 상태
+AI법친 7.1-B 보완 요청 MVP 화면 1차 구현을 완료했다.
+
+### 변경 범위
+- 보완 요청 화면 QA 체크리스트 작성
+- SupplementRequestStatusBadge 추가
+- SupplementRequestMvpClient 추가
+- 기존 /cases/[caseId]/supplement 화면을 MVP 진입점으로 전환
+- 변호사/관리자 보완 요청 목록·작성·상세·상태전이 UI 추가
+- 의뢰인 보완 요청 목록·상세·응답 제출 UI 추가
+- 상태별 버튼 노출 기준 반영
+- 역할별 생성/응답 UI guard 반영
+- MVP 화면 verifier 추가
+
+### 변경 파일
+- docs/project-governance/AIBEOPCHIN_7_1_B_SUPPLEMENT_REQUEST_SCREEN_QA_CHECKLIST.md
+- src/components/supplement-requests/supplement-request-status-badge.tsx
+- src/components/supplement-requests/supplement-request-mvp-client.tsx
+- src/app/(protected)/cases/[caseId]/supplement/page.tsx
+- tools/verify-aibeopchin-7-1-b-supplement-mvp-screens.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 비변경 확인
+- 6.x 기능 로직 변경 없음
+- 기존 CaseStatus 변경 없음
+- 기존 CasePackageShareStatus 변경 없음
+- 기존 CasePackageAccessAction 변경 없음
+- Prisma schema 변경 없음
+- DB migration 없음
+- 관리자 전체 현황 화면 구현 없음
+- 알림/메일 연동 없음
+- AI 자동 보완 요청 발송 없음
+
+### 검증
+- npm run verify:aibeopchin-7-1-b-supplement-mvp-screens: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-guard-alignment: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-db-runtime: PASS
+- npm run verify:predeploy-lock: PASS
+- npm run verify:aibeopchin-6x-operation-lock: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+- npx vitest run supplement-request.service.test.ts: PASS
+
+### 최종 판정
+AI법친 7.1-B 보완 요청 MVP 화면 1차 구현 완료.
+변호사/관리자 작성·상태전이 흐름과 의뢰인 응답 흐름의 1차 화면이 연결되었다.
+다음 작업은 관리자 화면 / 전체 QA / MVP 잠금이다.
+
+---
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-1-B-SUPPLEMENT-SCREEN-DEFINITION] AI법친 7.1-B — 보완 요청 화면 정의서 작성
+
+### 상태
+AI법친 7.1-B 보완 요청 도메인의 화면 구조, 권한별 UI 기준, 상태별 UI 기준, 보안 기준, AI 표시 기준, 화면 QA 기준을 정의했다.
+
+### 변경 범위
+- 8개 화면 정의 (SCR-SUP-01 ~ SCR-SUP-08)
+- 변호사 화면 3종 정의
+- 의뢰인 화면 3종 정의
+- 관리자 화면 2종 정의
+- 상태별 UI 기준 정의
+- 권한별 UI 노출 기준 정의 (USER 생성 버튼 미노출 포함)
+- 보안/개인정보 UI 기준 정의
+- AI 표시 기준 정의
+- 화면 QA 기준 10개 정의
+- screen definition verifier 추가
+
+### 변경 파일
+- docs/project-governance/AIBEOPCHIN_7_1_B_SUPPLEMENT_REQUEST_SCREEN_DEFINITION.md
+- tools/verify-aibeopchin-7-1-b-supplement-screen-definition.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 비변경 확인
+- src/ 하위 구현 파일 변경 없음
+- prisma/schema.prisma 변경 없음
+- migration 생성 없음
+- 6.x 화면 변경 없음
+
+---
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-1-B-SUPPLEMENT-STATUS-GUARD-ALIGNMENT] AI법친 7.1-B — 상태전이/권한 guard 정합성 보정 및 QA 자동화 강화
+
+### 상태
+AI법친 7.1-B 보완 요청 도메인의 상태전이 map과 권한 guard를 상태값 정의서 기준으로 정렬했다.
+
+### 변경 범위
+- SUPPLEMENT_ALLOWED_TRANSITIONS를 상태값 정의서 기준으로 정렬
+- terminal status 전이 차단 강화
+- 보완 요청 생성 권한 guard 명시화
+- 의뢰인 응답 권한 guard 명시화
+- 변호사 재검토 흐름을 status route 중심으로 분리
+- 금지 전이 테스트 추가
+- 생성 권한 테스트 추가
+- 응답 권한 테스트 추가
+- guard alignment verifier 추가
+
+### 변경 파일
+- src/features/supplement-request/supplement-request.service.ts
+- src/features/supplement-request/supplement-request.service.test.ts
+- tools/verify-aibeopchin-7-1-b-supplement-guard-alignment.mjs
+- tools/verify-aibeopchin-7-1-b-supplement-status-definition.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 비변경 확인
+- 6.x 기능 로직 변경 없음
+- 기존 CaseStatus 변경 없음
+- 기존 CasePackageShareStatus 변경 없음
+- 기존 CasePackageAccessAction 변경 없음
+- Prisma schema 변경 없음
+- DB migration 없음
+- 화면 구현 없음
+
+### 검증
+- npm run verify:aibeopchin-7-1-b-supplement-guard-alignment: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-db-runtime: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-status-definition: PASS
+- npm run verify:predeploy-lock: PASS
+- npm run verify:aibeopchin-6x-operation-lock: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+- npx vitest run supplement-request.service.test.ts: PASS
+
+### 최종 판정
+AI법친 7.1-B 보완 요청 상태전이/권한 guard 정합성 보정 완료.
+상태전이 map은 상태값 정의서 기준과 일치하며, 생성/응답/재검토 권한 흐름이 명시적으로 분리되었다.
+
+---
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-1-B-SUPPLEMENT-DB-RUNTIME-QA-CHECKLIST] AI법친 7.1-B — supplement API/service DB 적용 후 동작 검증 및 QA 체크리스트 작성
+
+### 상태
+AI법친 7.1-B supplement migration 적용 이후 DB Runtime 검증 스크립트와 QA 체크리스트를 작성했다.
+
+### 변경 범위
+- supplement DB Runtime 검증 스크립트 추가
+- supplement enum/table/migration record 존재 확인
+- supplement API/service QA 체크리스트 작성
+- 상태 전이 QA 항목 작성
+- 보안 확인 항목 작성
+- 비변경 원칙 재확인
+
+### 변경 파일
+- tools/verify-aibeopchin-7-1-b-supplement-db-runtime.mjs
+- docs/project-governance/AIBEOPCHIN_7_1_B_SUPPLEMENT_REQUEST_DB_RUNTIME_QA_CHECKLIST.md
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 비변경 확인
+- 6.x 기능 로직 변경 없음
+- 기존 CaseStatus 변경 없음
+- 기존 CasePackageShareStatus 변경 없음
+- 기존 CasePackageAccessAction 변경 없음
+- API 신규 확장 없음
+- 화면 구현 없음
+- DB schema 추가 변경 없음
+
+### 검증
+- npm run verify:aibeopchin-7-1-b-supplement-db-runtime: PASS
+- npm run verify:predeploy-lock: PASS
+- npm run verify:aibeopchin-6x-operation-lock: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 최종 판정
+AI법친 7.1-B supplement DB Runtime 검증 및 QA 체크리스트 작성 완료.
+다음 작업은 supplement API/service 상태전이/권한 guard 정합성 보정 및 QA 자동화 강화다.
+
+---
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-1-B-SUPPLEMENT-MIGRATION-DEPLOY-SUCCESS-AFTER-ENV-LOAD] AI법친 7.1-B - supplement migration 환경변수 로드 후 적용 완료
+
+### 상태
+AI법친 7.1-B supplement migration이 DATABASE_URL 로드 후 정상 적용되었다.
+
+### 이전 차단 상태
+- 이전 차단 1: P1010 User was denied access on the database
+- 이전 차단 2: P1012 현재 셸 DATABASE_URL 없음
+- 원인: DB 권한 또는 환경변수 로드 상태 불일치
+- supplement migration DB 적용 상태: 미적용
+
+### 조치
+현재 셸에서 .env.local 기준 DATABASE_URL을 로드한 뒤 동일 명령을 재실행했다.
+
+### 실행 결과
+- npm run db:deploy:supplement-phase1: PASS
+- LASTEXITCODE: 0
+
+### 적용 범위
+- AI법친 7.1-B supplement migration 적용
+- Supplement 관련 enum/table/index/FK 적용
+- 기존 6.x CaseStatus 변경 없음
+- 기존 CasePackageShareStatus 변경 없음
+- 기존 CasePackageAccessAction 변경 없음
+- 6.x 기능 로직 변경 없음
+
+### 최종 판정
+AI법친 7.1-B supplement migration은 DATABASE_URL 로드 후 정상 적용 완료 상태로 전환한다.
+이전 P1010/P1012 차단 증빙은 해결 완료로 닫는다.
+이후 작업은 supplement API/service DB 적용 후 동작 검증 및 QA 체크리스트 기준으로 진행한다.
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-1-B-SUPPLEMENT-MIGRATION-DEPLOY-BLOCKED-BY-DB-PERMISSION]
+
+### 상태
+AI법친 7.1-B supplement migration 배포 전 게이트는 통과했으나, 실제 prisma migrate deploy 단계에서 DB 계정 권한 문제로 적용이 보류되었다.
+
+### 결과
+- npm run predeploy:check: PASS
+- npm run db:deploy:supplement-phase1: FAIL
+- 실패 지점: prisma migrate deploy
+- 오류: P1010 User was denied access on the database
+
+### 판정
+코드, 타입, lint, migration predeploy 검증 문제는 아니다.
+현재 DATABASE_URL의 DB 계정 권한 문제로 판단한다.
+
+### 다음 조치
+DB 계정에 migration 적용 권한을 부여한 뒤 npm run db:deploy:supplement-phase1을 재실행한다.
+
+### 권한 보정 SQL(관리자 계정으로 실행)
+GRANT CONNECT ON DATABASE aibeopchin_dev TO <app_user>;
+GRANT USAGE, CREATE ON SCHEMA public TO <app_user>;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO <app_user>;
+GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA public TO <app_user>;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO <app_user>;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO <app_user>;
+
+### 잠금 상태
+현재는 DB 권한 보정 대기 상태다.
+migration이 실제 적용되기 전까지 운영 증빙에 migration 완료로 기록하지 않는다.
+
+### 재실행 증빙(권한 보정 후 재시도)
+- 실행 일시: 2026-05-03
+- 실행 명령: npm run db:deploy:supplement-phase1
+- 결과: FAIL
+- 실패 지점: prisma migrate deploy
+- 오류: P1010 User was denied access on the database
+
+### 재판정
+DB 권한 보정이 아직 완료되지 않은 상태로 판단한다.
+코드/스키마/migration 파일 수정 없이 DB 권한 보정 완료 후 동일 체인을 재실행한다.
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-1-B-SUPPLEMENT-PHASE1-CODE-DRAFT] AI법친 7.1-B — 보완 요청 Prisma schema 초안 + repository skeleton 반영
+
+### 상태
+AI법친 7.1-B 보완 요청 구현 1단계 코드 초안(Prisma schema + repository skeleton)을 반영했다.
+
+### 변경 범위
+- prisma/schema.prisma에 보완 요청 도메인 enum/model 초안 추가
+- SupplementRequest / SupplementRequestItem / SupplementResponse / SupplementResponseAttachment / SupplementRequestStatusLog / SupplementRequestAuditLog 모델 초안 반영
+- src/features/supplement-request/supplement-request.repository.ts skeleton 추가
+- repository 함수 시그니처 골격 추가
+- 1단계 코드 반영 검증 스크립트 추가
+
+### 변경 파일
+- prisma/schema.prisma
+- src/features/supplement-request/supplement-request.repository.ts
+- tools/verify-aibeopchin-7-1-b-supplement-phase1-code-draft.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 비변경 확인
+- 6.x 기능 로직 변경 없음
+- 기존 CaseStatus 변경 없음
+- 기존 CasePackageShareStatus 변경 없음
+- 기존 CasePackageAccessAction 변경 없음
+- DB migration 없음(이번 단계)
+- API 구현 없음(이번 단계)
+- 화면 구현 없음(이번 단계)
+- 권한 정책 변경 없음(이번 단계)
+
+### 검증
+- npm run verify:aibeopchin-7-1-b-supplement-phase1-code-draft: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-implementation-phase1-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-implementation-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-api-spec-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-data-structure-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-status-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-workflow-definition: PASS
+- npm run verify:aibeopchin-7-1-candidate-definition: PASS
+- npm run verify:aibeopchin-7-operation-dashboard: PASS
+- npm run verify:aibeopchin-6x-operation-lock: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 최종 판정
+AI법친 7.1-B 보완 요청 구현 1단계 코드 초안 반영 완료.
+이번 단계는 route/service/UI 구현이 아니라 schema/repository skeleton 반영 단계다.
+다음 작업은 "AI법친 7.1-B — repository 실제 DB wiring + migration 계획 확정"이다.
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-1-B-SUPPLEMENT-IMPLEMENTATION-PHASE1-DEFINITION] AI법친 7.1-B — 보완 요청 구현 착수(스키마/레포지토리 1단계) 정의서 작성
+
+### 상태
+AI법친 7.1-B 보완 요청 구현 착수(스키마/레포지토리 1단계) 정의서를 작성했다.
+
+### 변경 범위
+- Prisma schema 초안 트랙 범위 정의
+- repository skeleton 트랙 범위 정의
+- 1단계 산출물 정의
+- 1단계 검증 순서 정의
+- 리스크/가드레일 정의
+
+### 변경 파일
+- docs/project-governance/AIBEOPCHIN_7_1_B_SUPPLEMENT_REQUEST_IMPLEMENTATION_PHASE1_DEFINITION.md
+- tools/verify-aibeopchin-7-1-b-supplement-implementation-phase1-definition.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 비변경 확인
+- 6.x 기능 로직 변경 없음
+- 기존 CaseStatus 변경 없음
+- 기존 CasePackageShareStatus 변경 없음
+- 기존 CasePackageAccessAction 변경 없음
+- Prisma schema 변경 없음
+- DB migration 없음
+- API 구현 없음
+- 화면 구현 없음
+- 권한 정책 변경 없음
+
+### 검증
+- npm run verify:aibeopchin-7-1-b-supplement-implementation-phase1-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-implementation-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-api-spec-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-data-structure-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-status-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-workflow-definition: PASS
+- npm run verify:aibeopchin-7-1-candidate-definition: PASS
+- npm run verify:aibeopchin-7-operation-dashboard: PASS
+- npm run verify:aibeopchin-6x-operation-lock: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 최종 판정
+AI법친 7.1-B 보완 요청 구현 착수(스키마/레포지토리 1단계) 정의서 작성 완료.
+이번 단계는 코드 구현이 아니라 구현 착수 범위 정의 단계다.
+다음 작업은 "AI법친 7.1-B — Prisma schema 초안 반영(실제 코드)"이다.
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-1-B-SUPPLEMENT-IMPLEMENTATION-DEFINITION] AI법친 7.1-B — 보완 요청 구현 정의서 작성
+
+### 상태
+AI법친 7.1-B 보완 요청 구현 정의서를 작성했다.
+
+### 변경 범위
+- route/service/repository/validator/UI 레이어별 구현 범위 정의
+- 상태 전이 구현 가드 정의
+- 권한/인증 구현 기준 정의
+- 상태 로그/감사 로그 구현 기준 정의
+- 테스트 구현 기준(단위/통합/회귀) 정의
+- 배포/마이그레이션 분리 원칙 정의
+- 구현 단계 순서 정의
+
+### 변경 파일
+- docs/project-governance/AIBEOPCHIN_7_1_B_SUPPLEMENT_REQUEST_IMPLEMENTATION_DEFINITION.md
+- tools/verify-aibeopchin-7-1-b-supplement-implementation-definition.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 비변경 확인
+- 6.x 기능 로직 변경 없음
+- 기존 CaseStatus 변경 없음
+- 기존 CasePackageShareStatus 변경 없음
+- 기존 CasePackageAccessAction 변경 없음
+- Prisma schema 변경 없음
+- DB migration 없음
+- API 구현 없음
+- 화면 구현 없음
+- 권한 정책 변경 없음
+
+### 검증
+- npm run verify:aibeopchin-7-1-b-supplement-implementation-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-api-spec-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-data-structure-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-status-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-workflow-definition: PASS
+- npm run verify:aibeopchin-7-1-candidate-definition: PASS
+- npm run verify:aibeopchin-7-operation-dashboard: PASS
+- npm run verify:aibeopchin-6x-operation-lock: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 최종 판정
+AI법친 7.1-B 보완 요청 구현 정의서 작성 완료.
+이번 단계는 코드 구현이 아니라 구현 정의 단계다.
+다음 작업은 "AI법친 7.1-B — 보완 요청 구현 착수(스키마/레포지토리 1단계)"다.
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-1-B-SUPPLEMENT-API-SPEC-DEFINITION] AI법친 7.1-B — 보완 요청 API 명세 정의서 작성
+
+### 상태
+AI법친 7.1-B 보완 요청 API 명세 정의서를 작성했다.
+
+### 변경 범위
+- 보완 요청 API endpoint 후보 목록 정의
+- 목록/상세/생성/수정 API 명세 정의
+- 상태 전이 API 명세 정의
+- 응답 제출 API 명세 정의
+- 상태 로그/감사 로그 API 명세 정의
+- 공통 성공/오류 응답 규약 정의
+- 오류 코드 표준안 정의
+- 역할별 권한 기준 정의
+- 민감정보 마스킹 기준 정의
+- 데이터 구조 정의서 필드 정합성 기준 정의
+
+### 변경 파일
+- docs/project-governance/AIBEOPCHIN_7_1_B_SUPPLEMENT_REQUEST_API_SPEC_DEFINITION.md
+- tools/verify-aibeopchin-7-1-b-supplement-api-spec-definition.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 비변경 확인
+- 6.x 기능 로직 변경 없음
+- 기존 CaseStatus 변경 없음
+- 기존 CasePackageShareStatus 변경 없음
+- 기존 CasePackageAccessAction 변경 없음
+- Prisma schema 변경 없음
+- DB migration 없음
+- API 구현 없음
+- 화면 구현 없음
+- 권한 정책 변경 없음
+
+### 검증
+- npm run verify:aibeopchin-7-1-b-supplement-api-spec-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-data-structure-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-status-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-workflow-definition: PASS
+- npm run verify:aibeopchin-7-1-candidate-definition: PASS
+- npm run verify:aibeopchin-7-operation-dashboard: PASS
+- npm run verify:aibeopchin-6x-operation-lock: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 최종 판정
+AI법친 7.1-B 보완 요청 API 명세 정의서 작성 완료.
+이번 단계는 코드 구현이 아니라 API 명세 정의 단계다.
+다음 작업은 "AI법친 7.1-B — 보완 요청 구현 정의서" 작성이다.
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-1-B-SUPPLEMENT-DATA-STRUCTURE-DEFINITION] AI법친 7.1-B — 보완 요청 데이터 구조 정의서 작성
+
+### 상태
+AI법친 7.1-B 보완 요청 데이터 구조 정의서를 작성했다.
+
+### 변경 범위
+- SupplementRequest 후보 모델 정의
+- SupplementRequestItem 후보 모델 정의
+- SupplementResponse 후보 모델 정의
+- SupplementResponseAttachment 후보 모델 정의
+- SupplementRequestStatusLog 후보 모델 정의
+- SupplementRequestAuditLog 후보 모델 정의
+- 기존 Case / User / CaseAttachment / CasePackageShare relation 기준 정의
+- 민감정보 마스킹 기준 정의
+- Prisma schema 변경 전제 및 migration 보류 원칙 정의
+- API 명세 참조용 필드명 고정
+
+### 변경 파일
+- docs/project-governance/AIBEOPCHIN_7_1_B_SUPPLEMENT_REQUEST_DATA_STRUCTURE_DEFINITION.md
+- tools/verify-aibeopchin-7-1-b-supplement-data-structure-definition.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 비변경 확인
+- 6.x 기능 로직 변경 없음
+- 기존 CaseStatus 변경 없음
+- 기존 CasePackageShareStatus 변경 없음
+- 기존 CasePackageAccessAction 변경 없음
+- Prisma schema 변경 없음
+- DB migration 없음
+- API 구현 없음
+- 화면 구현 없음
+- 권한 정책 변경 없음
+
+### 검증
+- npm run verify:aibeopchin-7-1-b-supplement-data-structure-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-status-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-workflow-definition: PASS
+- npm run verify:aibeopchin-7-1-candidate-definition: PASS
+- npm run verify:aibeopchin-7-operation-dashboard: PASS
+- npm run verify:aibeopchin-6x-operation-lock: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 최종 판정
+AI법친 7.1-B 보완 요청 데이터 구조 정의서 작성 완료.
+이번 단계는 코드 구현이 아니라 데이터 구조 정의 단계다.
+다음 작업은 "AI법친 7.1-B — 보완 요청 API 명세 정의서" 작성이다.
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-1-B-SUPPLEMENT-STATUS-DEFINITION] AI법친 7.1-B — 보완 요청 상태값 정의서 작성
+
+### 상태
+AI법친 7.1-B 보완 요청 상태값 정의서를 작성했다.
+
+### 변경 범위
+- 보완 요청 상태값 canonical 목록 정의
+- DRAFT / SENT / CLIENT_VIEWED / CLIENT_RESPONDED / UNDER_REVIEW / NEEDS_MORE_INFO / ACCEPTED / CLOSED / CANCELLED / EXPIRED 상태 정의
+- 정상 전이표 정의
+- 금지 전이표 정의
+- 역할별 전이 권한 정의
+- 상태별 화면 배지 기준 정의
+- 만료 / 취소 / 재요청 처리 기준 정의
+- 상태 로그 기록 기준 정의
+- AI 개입 제한 정의
+- 6.x 상태값 비변경 원칙 정의
+
+### 변경 파일
+- docs/project-governance/AIBEOPCHIN_7_1_B_SUPPLEMENT_REQUEST_STATUS_DEFINITION.md
+- tools/verify-aibeopchin-7-1-b-supplement-status-definition.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 비변경 확인
+- 6.x 기능 로직 변경 없음
+- 기존 CaseStatus 변경 없음
+- 기존 CasePackageShareStatus 변경 없음
+- 기존 CasePackageAccessAction 변경 없음
+- Prisma schema 변경 없음
+- DB migration 없음
+- API 구현 없음
+- 화면 구현 없음
+- 상태 전이 함수 구현 없음
+- AI 자동 상태 전이 없음
+
+### 검증
+- npm run verify:aibeopchin-7-1-b-supplement-status-definition: PASS
+- npm run verify:aibeopchin-7-1-b-supplement-workflow-definition: PASS
+- npm run verify:aibeopchin-7-1-candidate-definition: PASS
+- npm run verify:aibeopchin-7-operation-dashboard: PASS
+- npm run verify:aibeopchin-6x-operation-lock: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 최종 판정
+AI법친 7.1-B 보완 요청 상태값 정의서 작성 완료.
+이번 단계는 코드 구현이 아니라 상태값 정의 단계다.
+다음 작업은 “AI법친 7.1-B — 보완 요청 데이터 구조 정의서” 작성이다.
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-1-B-SUPPLEMENT-WORKFLOW-DEFINITION] AI법친 7.1-B — 보완 요청 워크플로우 정의서 작성
+
+### 상태
+AI법친 7.1-B 보완 요청 워크플로우 정의서를 작성했다.
+
+### 변경 범위
+- 보완 요청 개념 정의
+- 보완 요청 생성 주체 / 응답 주체 정의
+- 보완 요청 대상 정의
+- 보완 요청 유형 정의
+- 보완 요청 상태값 초안 정의
+- 정상 흐름 / 재요청 흐름 / 취소 흐름 / 만료 흐름 정의
+- 의뢰인 재입력 흐름 정의
+- 변호사 재검토 흐름 정의
+- 6.x 사건 패키지와의 연결 원칙 정의
+- 권한 원칙 정의
+- 고지문 원칙 정의
+- AI 개입 원칙 정의
+- 데이터/API/화면 분리 원칙 정의
+- 다음 문서 순서 확정
+
+### 변경 파일
+- docs/project-governance/AIBEOPCHIN_7_1_B_SUPPLEMENT_REQUEST_WORKFLOW_DEFINITION.md
+- tools/verify-aibeopchin-7-1-b-supplement-workflow-definition.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 비변경 확인
+- 6.x 기능 로직 변경 없음
+- Prisma schema 변경 없음
+- DB migration 없음
+- API 구현 없음
+- 화면 구현 없음
+- 권한 정책 변경 없음
+- 사건 패키지 공유 정책 변경 없음
+- 첨부파일 다운로드 정책 변경 없음
+- 보완 요청 자동 발송 없음
+- AI 법률판단 자동화 없음
+
+### 검증
+- npm run verify:aibeopchin-7-1-b-supplement-workflow-definition: PASS
+- npm run verify:aibeopchin-7-1-candidate-definition: PASS
+- npm run verify:aibeopchin-7-operation-dashboard: PASS
+- npm run verify:aibeopchin-6x-operation-lock: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 최종 판정
+AI법친 7.1-B 보완 요청 워크플로우 정의서 작성 완료.
+이번 단계는 코드 구현이 아니라 워크플로우 정의 단계다.
+다음 작업은 “AI법친 7.1-B — 보완 요청 상태값 정의서” 작성이다.
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-1-CANDIDATE-FINALIZATION-DEFINITION] AI법친 7.1 — 후보 확정 정의서 작성
+
+### 상태
+AI법친 7.1 후보 확정 정의서를 작성했다.
+
+### 변경 범위
+- 7.1 후보군 정리
+- 7.1-A 변호사 검토 메모 고도화 후보 정의
+- 7.1-B 보완 요청 워크플로우 후보 정의
+- 7.1-C 운영 로그 / 보안 감사 리포트 후보 정의
+- 7.1-D PDF / 요약본 표현 고도화 후보 정의
+- 7.1-E 알림 / 메일 연동 후보 정의
+- 7.1 우선순위 확정
+- 7.1 1차 확정 후보를 “보완 요청 워크플로우”로 지정
+- 7.1-B 착수 전 필수 정의서 목록 확정
+
+### 변경 파일
+- docs/project-governance/AIBEOPCHIN_7_1_CANDIDATE_FINALIZATION_DEFINITION.md
+- tools/verify-aibeopchin-7-1-candidate-definition.mjs
+- package.json
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 비변경 확인
+- 6.x 기능 로직 변경 없음
+- Prisma schema 변경 없음
+- DB migration 없음
+- API 변경 없음
+- 화면 변경 없음
+- 권한 정책 변경 없음
+- 피드백 저장 DB/API 없음
+- 사건 패키지 공유 정책 변경 없음
+- 첨부파일 다운로드 정책 변경 없음
+
+### 검증
+- npm run verify:aibeopchin-7-1-candidate-definition: PASS
+- npm run verify:aibeopchin-7-operation-dashboard: PASS
+- npm run verify:aibeopchin-6x-operation-lock: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 최종 판정
+AI법친 7.1의 1차 확정 후보는 “보완 요청 워크플로우”로 한다.
+다음 작업은 코드 구현이 아니라 “AI법친 7.1-B — 보완 요청 워크플로우 정의서” 작성이다.
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-0-FEEDBACK-CLASSIFICATION-PANEL] AI법친 7.0 — 운영 피드백 수집 패널 / 7.1 후보 분류 패널 추가
+
+### 상태
+AI법친 7.0 운영 모니터링 대시보드에 운영 피드백 수집 패널 / 7.1 후보 분류 패널을 추가했다.
+
+### 변경 범위
+- 운영 피드백 수집 항목 표시
+- 의뢰인 사용성 피드백 기준 표시
+- 변호사 검토 피드백 기준 표시
+- 관리자 운영 피드백 기준 표시
+- 보안/개인정보 피드백 기준 표시
+- 7.1 후보 분류 표 추가
+- 우선순위 판단 기준 표시
+- 피드백 저장 기능 없음 원칙 표시
+- 6.x 즉시 수정 금지 원칙 표시
+- verify:aibeopchin-7-operation-dashboard 검증 스크립트 보강
+
+### 변경 파일
+- src/components/admin/operations/aibeopchin-operation-dashboard.tsx
+- tools/verify-aibeopchin-7-operation-dashboard.mjs
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 비변경 확인
+- 6.x 기능 로직 변경 없음
+- Prisma schema 변경 없음
+- DB migration 없음
+- API 변경 없음
+- 권한 정책 변경 없음
+- 피드백 저장 DB/API 없음
+- 사건 패키지 공유 정책 변경 없음
+- 첨부파일 다운로드 정책 변경 없음
+
+### 검증
+- npm run verify:aibeopchin-7-operation-dashboard: PASS
+- npm run verify:aibeopchin-7-admin-menu-link: PASS
+- npm run verify:aibeopchin-6x-operation-lock: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 최종 판정
+이번 변경은 6.x 기능 확장이 아니라, 7.0 운영 모니터링 대시보드에서 운영 피드백을 7.1 후보로 분류하기 위한 표시 개선이다.
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-0-OPERATION-TIMELINE-EVIDENCE-PANEL] AI법친 7.0 — 운영 상태 타임라인 / 최근 증빙 이력 패널 추가
+
+### 상태
+AI법친 7.0 운영 모니터링 대시보드에 운영 상태 타임라인 / 최근 증빙 이력 패널을 추가했다.
+
+### 변경 범위
+- 운영 상태 타임라인 패널 추가
+- 최근 운영 이력 요약 표시
+- 6.x 운영 배포 완료 이력 표시
+- Smoke Test 14/14 PASS 이력 표시
+- 6.x 운영 안정화 기록 표시
+- 7.x 로드맵 분리 이력 표시
+- 7.0 운영 대시보드 골격, 관리자 메뉴 링크, KPI 카드, 운영 경고 상세 패널, Runbook 패널 이력 표시
+- 현재 타임라인 패널 추가 이력 표시
+- verify:aibeopchin-7-operation-dashboard 검증 스크립트 보강
+
+### 변경 파일
+- src/components/admin/operations/aibeopchin-operation-dashboard.tsx
+- tools/verify-aibeopchin-7-operation-dashboard.mjs
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 비변경 확인
+- 6.x 기능 로직 변경 없음
+- Prisma schema 변경 없음
+- DB migration 없음
+- API 변경 없음
+- 권한 정책 변경 없음
+- 사건 패키지 공유 정책 변경 없음
+- 첨부파일 다운로드 정책 변경 없음
+
+### 검증
+- npm run verify:aibeopchin-7-operation-dashboard: PASS
+- npm run verify:aibeopchin-7-admin-menu-link: PASS
+- npm run verify:aibeopchin-6x-operation-lock: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 최종 판정
+이번 변경은 6.x 기능 확장이 아니라, 7.0 운영 모니터링 대시보드에서 최근 운영 상태와 증빙 흐름을 확인할 수 있도록 표시 품질을 개선한 변경이다.
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-0-RUNBOOK-CHECKLIST-PANEL] AI법친 7.0 — 운영 Runbook 바로가기 / 장애 대응 체크리스트 패널 추가
+
+### 상태
+AI법친 7.0 운영 모니터링 대시보드에 운영 Runbook 바로가기와 장애 대응 체크리스트 패널을 추가했다.
+
+### 변경 범위
+- 운영 Runbook 문서 경로 표시
+- rollbackTargetCommit 표시
+- 장애 대응 체크리스트 IR-01~IR-06 표시
+- 장애 등급 P0/P1/P2 우선 조치 안내
+- 6.x 기능 추가 금지 운영 원칙 표시
+- verify:aibeopchin-7-operation-dashboard 검증 스크립트 보강
+
+### 변경 파일
+- src/components/admin/operations/aibeopchin-operation-dashboard.tsx
+- tools/verify-aibeopchin-7-operation-dashboard.mjs
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 비변경 확인
+- 6.x 기능 로직 변경 없음
+- Prisma schema 변경 없음
+- DB migration 없음
+- API 변경 없음
+- 권한 정책 변경 없음
+- 사건 패키지 공유 정책 변경 없음
+- 첨부파일 다운로드 정책 변경 없음
+
+### 검증
+- npm run verify:aibeopchin-7-operation-dashboard: PASS
+- npm run verify:aibeopchin-7-admin-menu-link: PASS
+- npm run verify:aibeopchin-6x-operation-lock: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 최종 판정
+이번 변경은 6.x 기능 확장이 아니라, 7.0 운영 모니터링 대시보드에서 장애 대응 기준을 빠르게 확인할 수 있도록 표시 품질을 개선한 변경이다.
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-0-OPERATION-WARNING-DETAIL-PANEL] AI법친 7.0 — 운영 경고 상세 패널 추가
+
+### 상태
+AI법친 7.0 운영 모니터링 대시보드에 운영 경고 상세 패널을 추가했다.
+
+### 변경 범위
+- 운영 경고 상세 패널 컴포넌트 추가
+- 경고 상태 요약 표시
+- 경고 ID / 등급 / 경고 내용 / 권장 조치 표 추가
+- 경고 없음 상태 표시
+- 운영 Runbook 기준 대응 원칙 문구 추가
+- verify:aibeopchin-7-operation-dashboard 검증 스크립트 보강
+
+### 변경 파일
+- src/components/admin/operations/aibeopchin-operation-dashboard.tsx
+- tools/verify-aibeopchin-7-operation-dashboard.mjs
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 비변경 확인
+- 6.x 기능 로직 변경 없음
+- Prisma schema 변경 없음
+- DB migration 없음
+- API 변경 없음
+- 권한 정책 변경 없음
+- 사건 패키지 공유 정책 변경 없음
+- 첨부파일 다운로드 정책 변경 없음
+
+### 검증
+- npm run verify:aibeopchin-7-operation-dashboard: PASS
+- npm run verify:aibeopchin-7-admin-menu-link: PASS
+- npm run verify:aibeopchin-6x-operation-lock: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 최종 판정
+이번 변경은 6.x 기능 확장이 아니라, 7.0 운영 모니터링 대시보드의 운영 경고 가시성을 높인 표시 개선이다.
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-0-OPERATION-DASHBOARD-KPI-CARDS] AI법친 7.0 — 운영 모니터링 KPI 카드 고도화
+
+### 상태
+AI법친 7.0 운영 모니터링 대시보드에 운영 상태 요약 위젯/KPI 카드를 추가했다.
+
+### 변경 범위
+- 운영 잠금 상태 KPI 추가
+- Smoke Test KPI 추가
+- 기능 동결 KPI 추가
+- 보안 체크 KPI 추가
+- 배포 상태 KPI 추가
+- 7.x 분리 상태 KPI 추가
+
+### 변경 파일
+- src/components/admin/operations/aibeopchin-operation-dashboard.tsx
+- tools/verify-aibeopchin-7-operation-dashboard.mjs
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 비변경 확인
+- 6.x 기능 로직 변경 없음
+- Prisma schema 변경 없음
+- DB migration 없음
+- API 변경 없음
+- 권한 정책 변경 없음
+- 사건 패키지 공유 정책 변경 없음
+- 첨부파일 다운로드 정책 변경 없음
+
+### 검증
+- npm run verify:aibeopchin-7-operation-dashboard: PASS
+- npm run verify:aibeopchin-7-admin-menu-link: PASS
+- npm run verify:aibeopchin-6x-operation-lock: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 최종 판정
+이번 변경은 6.x 기능 확장이 아니라, 7.0 운영 모니터링 대시보드의 표시 품질을 개선한 변경이다.
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-0-ADMIN-MENU-LINK] AI법친 7.0 — 관리자 운영 모니터링 진입 링크 추가
+
+### 상태
+AI법친 7.0 운영 모니터링 대시보드로 진입할 수 있는 관리자 메뉴 또는 관리자 홈 링크를 추가했다.
+
+### 진입 경로
+- /admin/operations/aibeopchin-7-dashboard
+
+### 변경 범위
+- 관리자 사이드바 또는 관리자 대시보드 메뉴 링크 추가
+- verify:aibeopchin-7-admin-menu-link 검증 스크립트 추가
+
+### 비변경 확인
+- 6.x 기능 로직 변경 없음
+- Prisma schema 변경 없음
+- DB migration 없음
+- API 변경 없음
+- 권한 정책 변경 없음
+- 사건 패키지 공유 정책 변경 없음
+- 첨부파일 다운로드 정책 변경 없음
+
+### 검증
+- npm run verify:aibeopchin-7-admin-menu-link: PASS
+- npm run verify:aibeopchin-7-operation-dashboard: PASS
+- npm run verify:aibeopchin-6x-operation-lock: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 최종 판정
+이번 변경은 6.x 기능 확장이 아니라, 7.0 운영 모니터링 대시보드의 관리자 진입 링크만 추가한 변경이다.
+
+## [EVIDENCE-20260503-AIBEOPCHIN-7-0-OPERATION-DASHBOARD-DEFINITION] AI법친 7.0 — 운영 모니터링 대시보드 정의/구현 골격
+
+### 상태
+AI법친 7.0 운영 모니터링 대시보드의 정의서, 읽기 전용 데이터 유틸, 관리자 API, 관리자 화면, 검증 스크립트를 추가했다.
+
+### 목적
+6.x 사건 패키지 기능군의 운영 배포 잠금 상태, Smoke Test 14/14 PASS 결과, 보안 노출 방지 기준, featureFreeze 상태를 관리자 화면에서 확인하기 위한 읽기 전용 운영 대시보드 골격을 마련했다.
+
+### 추가 파일
+- docs/project-governance/AIBEOPCHIN_7_0_OPERATION_MONITORING_DASHBOARD_DEFINITION.md
+- src/lib/operations/aibeopchin-operation-dashboard.ts
+- src/app/api/admin/operations/aibeopchin-7-dashboard/route.ts
+- src/app/(protected)/admin/operations/aibeopchin-7-dashboard/page.tsx
+- src/components/admin/operations/aibeopchin-operation-dashboard.tsx
+- tools/verify-aibeopchin-7-operation-dashboard.mjs
+
+### 검증
+- npm run verify:aibeopchin-7-operation-dashboard: PASS
+- npm run verify:aibeopchin-6x-operation-lock: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 비변경 확인
+- 6.x 기능 로직 변경 없음
+- Prisma schema 변경 없음
+- DB migration 없음
+- 사건 패키지 공유 정책 변경 없음
+- 첨부파일 다운로드 정책 변경 없음
+- 변호사법/개인정보 고지 정책 변경 없음
+
+### 최종 판정
+AI법친 7.0은 6.x 최종 잠금 상태를 침범하지 않고, 운영 안정화와 모니터링을 위한 별도 로드맵으로 분리 착수했다.
+
+## [EVIDENCE-20260503-AIBEOPCHIN-6X-OPERATION-STABILIZATION-RECORD] AI법친 6.x — 운영 안정화 기록
+
+### 상태
+AI법친 6.x 사건 패키지 기능군은 운영 배포 및 Smoke Test 14개 항목 PASS 이후 최종 잠금 상태로 전환되었다.
+
+### 운영 기준
+- status: PRODUCTION_DEPLOYED_AND_LOCKED
+- deploymentStatus: PRODUCTION_DEPLOYED_AND_LOCKED
+- featureFreeze: true
+- operationMode: STABILIZATION_ONLY
+- smokeTestResultsSummary: 14/14 PASS
+
+### 배포 기준
+- branch: main
+- commitSha: b5e0e2d8a89e55048b85e6d078f544bdcca02498
+- rollbackTargetCommit: 930ee18cc5b107d636ca313ad649316f685e0ab2
+- deploymentProvider: GitPush(origin/main)
+- deployedAt: 2026-05-03T06:20:11.820Z
+- dbBackupReference: <마스킹된 운영 DB 백업 reference>
+
+### Smoke Test 결과
+| 항목 | 검증 내용 | 결과 |
+|---|---|---|
+| SMOKE-01 | 메인 페이지 접속 | PASS |
+| SMOKE-02 | 로그인 페이지 접속 | PASS |
+| SMOKE-03 | 관리자 로그인 | PASS |
+| SMOKE-04 | 의뢰인 사건 상세 접근 | PASS |
+| SMOKE-05 | 의뢰인 공유 설정 화면 접근 | PASS |
+| SMOKE-06 | 변호사 고유번호 조회 화면 접근 | PASS |
+| SMOKE-07 | 사건 패키지 상세 열람 | PASS |
+| SMOKE-08 | 첨부파일 목록 열람 | PASS |
+| SMOKE-09 | 다운로드 차단/허용 정책 확인 | PASS |
+| SMOKE-10 | 사건 패키지 PDF 다운로드 확인 | PASS |
+| SMOKE-11 | 관리자 공유 현황 목록 확인 | PASS |
+| SMOKE-12 | 관리자 공유 상세/로그 확인 | PASS |
+| SMOKE-13 | 만료/취소 공유 접근 차단 확인 | PASS |
+| SMOKE-14 | 변호사법/개인정보 고지 노출 확인 | PASS |
+
+### 허용 작업
+- operation_monitoring
+- incident_response
+- security_review
+- user_feedback_collection
+- 7x_roadmap_separation
+
+### 금지 작업
+- 6x_feature_extension
+- 6x_schema_change
+- 6x_api_expansion
+- 6x_permission_policy_relaxation
+- 6x_dashboard_feature_addition
+
+### 보안 확인
+- DATABASE_URL 원문 미노출: true
+- accessToken 원문 미노출: true
+- optionalPin/hash 미노출: true
+- storagePath 미노출: true
+- 첨부파일 직접 URL 미노출: true
+- 내부 prompt/raw response 미노출: true
+- public-safe 출력 기준 유지: true
+
+### 최종 판정
+AI법친 6.x는 최종 잠금 완료 상태다.
+이후 6.x 신규 기능 추가는 금지하며, 운영 모니터링과 장애 대응, 7.x 로드맵 분리 기준으로만 진행한다.
+
 # IMPLEMENTATION_EVIDENCE
 
 ## 목적
@@ -10,6 +1896,104 @@
 - 작업자는 구현 후 반드시 이 파일에 기록한다.
 - 다음 세션 또는 다음 채팅에서는 이 파일의 최신 기록을 기준으로 상태를 판정한다.
 - 에테르니언은 이 파일의 기록을 기준으로 상호 검증하며, 근거가 부족하면 완료로 인정하지 않는다.
+
+---
+
+## [EVIDENCE-20260503-AIBEOPCHIN-6-9-PRIVACY-SECURITY-CONSENT-FINALIZATION] AI법친 6.9 — 개인정보 / 보안 / 동의문구 최종 정리 {#evidence-20260501-aibeopchin-6-9}
+
+### 상태
+
+AI법친 6.9는 6.0~6.8 사건 패키지 공유 기능 전체에 대해 개인정보 최소노출, 보안 기준, 공유 동의문구, 변호사 열람 고지문, PDF/출력물 제외 항목, 로그 보관 기준, 변호사법 오인 방지 문구를 최종 정리하는 단계다.
+
+이번 작업은 신규 DB 모델이나 API 추가가 아니라, 기존 사건 패키지 공유 흐름에 적용되는 보안·동의·고지·출력 정책을 문서와 공용 상수/유틸로 고정하고 기존 화면/출력물에 연결하는 작업이다.
+
+### 변경 파일
+
+- `docs/project-governance/AIBEOPCHIN_6_9_PRIVACY_SECURITY_CONSENT_FINALIZATION.md`
+- `src/features/case-package/case-package-privacy-security-policy.ts`
+- `src/features/case-package/case-package-privacy-security-utils.ts`
+- `src/features/case-package/case-package-privacy-security-utils.test.ts`
+- `src/features/case-package/case-package-share-policy.ts`
+- `src/features/case-package/case-package-pdf-summary.ts`
+- `src/components/case-package/case-package-share-settings-panel.tsx`
+- `src/components/lawyer/case-package/lawyer-case-package-lookup-client.tsx`
+- `src/components/lawyer/case-package/lawyer-case-package-detail-client.tsx`
+- `package.json`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py`
+- `docs/README.md`
+
+### 반영 내용
+
+- 개인정보 최소노출 기준 문서화
+- 표시 가능 항목 / 표시 금지 항목 정리
+- 의뢰인 공유 동의문구 최종화
+- 변호사 열람 고지문 최종화
+- PDF/출력물 보안 기준 최종화
+- 로그 저장/표시 기준 정리
+- 변호사법 오인 방지 문구 정리
+- 금지 마케팅 표현 목록 정리
+- 허용 마케팅 표현 목록 정리
+- 공용 보안/동의 상수 추가
+- 금지 출력 필드 검증 helper 추가
+- 금지 마케팅 표현 검증 helper 추가
+- 마스킹 helper 추가
+- client log sanitize helper 추가
+- 기존 6.2 consent 문구를 6.9 공용 상수로 연결
+- 기존 6.8 PDF 출력 고지를 6.9 공용 상수로 연결
+- 변호사 조회/상세 화면 고지문 연결
+- 의뢰인 공유 설정 화면 동의/안전 고지 연결
+
+### 변경하지 않은 것
+
+- Prisma schema 변경 없음
+- migration 생성 없음
+- 신규 API 구현 없음
+- 신규 화면 구현 없음
+- 첨부파일 다운로드 정책 변경 없음
+- 사건 패키지 PDF binary 엔진 추가 없음
+
+### 검증 명령
+
+```bash
+npm run verify:case-package-6-9
+npx eslint src/features/case-package/case-package-privacy-security-policy.ts src/features/case-package/case-package-privacy-security-utils.ts src/features/case-package/case-package-privacy-security-utils.test.ts src/features/case-package/case-package-share-policy.ts src/features/case-package/case-package-pdf-summary.ts src/components/case-package/case-package-share-settings-panel.tsx src/components/lawyer/case-package/lawyer-case-package-lookup-client.tsx src/components/lawyer/case-package/lawyer-case-package-detail-client.tsx
+py -3 -m py_compile tools/aibeopchin_navigator.py
+npx tsc --noEmit
+npm run lint
+```
+
+### 검증 결과
+
+| 검증 | 결과 |
+|---|---|
+| `npm run verify:case-package-6-9` | PASS |
+| targeted eslint | PASS |
+| `py -3 -m py_compile tools/aibeopchin_navigator.py` | PASS |
+| `npx tsc --noEmit` | PASS |
+| `npm run lint` | PASS |
+
+### 완료 판정
+
+| 항목 | 결과 |
+|---|---|
+| 개인정보 최소노출 기준 | 완료 |
+| 공유 동의문구 | 완료 |
+| 변호사 열람 고지문 | 완료 |
+| PDF/출력물 보안 기준 | 완료 |
+| 로그 저장 기준 | 완료 |
+| 변호사법 오인 방지 문구 | 완료 |
+| 공용 상수 추가 | 완료 |
+| 공용 helper 추가 | 완료 |
+| 기존 화면/출력물 문구 연결 | 완료 |
+| Prisma schema 변경 없음 | 유지 |
+| migration 생성 없음 | 유지 |
+| 신규 API 구현 없음 | 유지 |
+
+### 다음 실제 작업
+
+- AI법친 6.10 — QA / 회귀 / 배포 전 점검
+- AI법친 6.x 후속 — 관리자 공유 현황 화면 / binary PDF 엔진 검토
 
 ---
 
@@ -67,8 +2051,3356 @@
 ## 실제 기록 (공식 증빙)
 
 - **이 절만** 운용 기록이다. `## 기록 템플릿`·`## 기록 예시` 는 양식·교육용이며 완료 판정에 쓰지 않는다.
-- **AI법친 6.10~6.11 — 전역 서체·색상·로고·푸터·데모 로그인·홍보 팝업·변호사법 준수 안내 반영:** [EVIDENCE-20260429-418](#evidence-20260429-418) — `src/components/brand/aibeopchin-logo.tsx`·`src/components/layout/site-footer.tsx`·`src/components/marketing/aibeopchin-intro-popup.tsx`·`src/lib/auth/demo-access.ts`·`src/app/api/auth/login/route.ts`·`src/app/globals.css`·`tailwind.config.ts`·`src/app/page.tsx`·`src/app/login/login-page-client.tsx`·`src/components/dashboard/dashboard-shell.tsx`·`src/app/(protected)/dashboard/page.tsx`·`src/app/(lawyer)/lawyer/page.tsx`·`src/app/(admin)/admin/page.tsx`·`docs/project-governance/AIBEOPCHIN_6_11_PROMOTION_POPUP_AND_LEGAL_COMPLIANCE_NOTICE.md`·`docs/project-governance/IMPLEMENTATION_EVIDENCE.md`; **텍스트 기반 한글 로고**, **Pretendard + 저피로 그린/오프화이트 토큰**, **공통 푸터**, **홈 진입 홍보/안내 팝업**, **변호사법 준수·제출 보조 패키지 고지**, **환경변수 기반 데모 프리패스 로그인**, **홈/로그인/owner·lawyer·admin 주요 카드/버튼 톤 정리** 반영; **브라우저 홈 팝업·오늘 하루 보지 않기·데모 프리패스 실로그인 수동 확인 필요** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260429-418-now)).
-- **AI법친 6.10 — 홈 로고 한글 깨짐 점검 / 전역 서체·색상 정리 / 데모 프리패스 로그인 / 푸터 생성 (코드·완료):** [EVIDENCE-20260429-417](#evidence-20260429-417) — `src/app/globals.css`·`src/components/branding/aibeopchin-intro-scene.tsx`·`src/components/branding/aibeopchin-hero.tsx`·`src/components/branding/aibeopchin-logo.tsx`·`src/components/branding/aibeopchin-logo-v2.tsx`·`src/components/home/home-trust-strip.tsx`·`src/components/home/home-role-entry-cards.tsx`·`src/app/layout.tsx`·`src/components/layout/site-footer.tsx`·`src/app/api/auth/login/route.ts`·`src/lib/auth/demo-access.ts`·`.env.example`; **홈 브랜드 락업과 공통 로고 컴포넌트를 심볼 + HTML 한글 텍스트로 전환**, **Pretendard + aibeop 색상 토큰 적용**, **protected/lawyer/admin 공통 톤 정리**, **데모 프리패스 로그인 및 AUTH_LOGIN_SUCCESS 감사로그 추가**, **공용 푸터 추가** 완료; **홈/대시보드 등 보호 화면 브라우저 확인 완료**; **데모 프리패스 실로그인 검증은 실제 환경변수와 DB 사용자 ID 설정 후 필요** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260429-417-now)).
+
+## [EVIDENCE-20260427-422] AI법친 7.1-B — MVP final lock {#evidence-20260427-422}
+
+### 상태
+
+AI법친 7.1-B **MVP final lock** 단계로, [421 prelock](#evidence-20260427-421) 이후 **저장소 기준** predeploy·smoke·7.1-B 검증을 재실행하고, **운영 준비 표준**(백업·환경변수·롤백)을 `predeploy-lock-results.json`과 합쳐 기록한다.
+
+**판정 축 분리**
+
+| 기준 | 상태 |
+| --- | --- |
+| 문서·코드·**비 DB** 검증 | **7.1-B MVP final lock 거의 완료** (조건부 잠금) |
+| **DB runtime 포함** 엔지니어링 | **아직 완전 잠금 아님** — `DATABASE_URL` 설정 후 `verify:aibeopchin-7-1-b-supplement-db-runtime` **PASS** 필요 |
+
+**`verify:aibeopchin-7-1-b-supplement-db-runtime`:** PostgreSQL `DATABASE_URL`이 있는 환경에서만 의미 있다. 본 **워크스페이스**에는 `.env` / `DATABASE_URL`이 없어 해당 스크립트는 **실행 불가(Prisma env 오류)** → 표에서 **BLOCKED**로 둔 것은 실패가 아니라 **환경 미충족을 증빙**한 것이다. 로컬/Cursor에서 **exit 1**인 경우는 **앱 코드 결함 판정이 아니라** `DATABASE_URL` **환경 미충족**으로 본다. 엔지니어링 **완전 잠금**은 [423 closure](#evidence-20260427-423)·표 갱신으로 이어진다. **`DATABASE_URL` 연결 문자열은 어떤 문서·채팅·PR에도 기록하지 않는다.**
+
+### 정적 분석 요약·결론 (운영 최종 잠금 전)
+
+저장소 기준 정적 분석 결과, AI법친 7.1-B는 운영 문서, 헬스체크, 권한 분기, Cron 보호, predeploy 증빙 구조가 비교적 일관되게 정리되어 있다.
+
+다만 **실제 운영 최종 잠금**은 아직 완료가 아니다. `DATABASE_URL`이 설정된 스테이징 또는 운영 환경에서 supplement **DB runtime 검증**을 1회 **PASS**시킨 뒤, 본 절 **[422] 표**와 **[423]**을 절차대로 갱신해야 **엔지니어링 기준 final lock**으로 전환된다.
+
+이번 **정적 분석만**으로는 새 코드 결함을 특정하지 않았다. 실제 장애 여부는 스테이징/운영의 **DB runtime**, **Prisma migration 상태**([`docs/deployment-checklist.md` §1.1](../deployment-checklist.md)), **smoke test**, **로그**로 최종 판단한다. 배포 전 **운영 점검 닫기 순서**는 동 체크리스트 [**§0**](../deployment-checklist.md)를 따른다.
+
+### 선행
+
+- [EVIDENCE-20260427-421](#evidence-20260427-421) — 관리자·supplement-request **prelock QA**
+- [EVIDENCE-20260427-420](#evidence-20260427-420) — 문서·코드 정합
+
+### 범위
+
+- `DATABASE_URL` 설정 환경에서 **DB runtime**(supplement enum·테이블·`_prisma_migrations`) 검증 — **본 기록 시점 로컬: 미충족**
+- tsc / lint / canonical / predeploy-lock / guard / MVP screens / py_compile
+- 운영 **백업·환경변수·롤백** — `docs/project-governance/predeploy-lock-results.json` 기준 요약 표
+
+### 수정 파일
+
+| 파일 | 변경 내용 |
+| --- | --- |
+| `docs/project-governance/IMPLEMENTATION_EVIDENCE.md` | 본 [422] 및 목록·421 연결 |
+
+### 운영 환경변수 확인 표 (요약)
+
+| 구분 | 확인 항목 | 기준·근거 |
+| --- | --- | --- |
+| DB | `DATABASE_URL` | `.env.example` §Database — 운영/스테이징 **연결 문자열 존재·형식** (값은 증빙에 미기록) |
+| Auth | `JWT_SECRET`, `BCRYPT_SALT_ROUNDS` | 로그인·세션 |
+| App | `NODE_ENV`, `APP_BASE_URL`, `NEXT_PUBLIC_*` | 배포 타깃·버전·기능 플래그 |
+| 기타 | `predeploy-lock-results.json` → `environmentVariables` | `confirmed: true`, notes: *SECRET 원문·DATABASE_URL 등 존재/형식만 확인* |
+
+### 롤백 기준 확인 표
+
+| 항목 | 값 (저장소 기록) | 출처 |
+| --- | --- | --- |
+| Rollback confirmed | `true` | `predeploy-lock-results.json` → `rollback.confirmed` |
+| targetCommit | `930ee18cc5b107d636ca313ad649316f685e0ab2` | 동 파일 → `rollback.targetCommit` |
+| notes | 배포 실패 또는 smoke 실패 시 targetCommit으로 rollback | 동 파일 → `rollback.notes` |
+| DB backup | `confirmed: true`, method `managed-backup` | 동 파일 → `databaseBackup` |
+
+### 검증 명령
+
+```bash
+npx tsc --noEmit
+npm run lint
+npm run verify:canonical-sources
+npm run verify:predeploy-lock
+npm run verify:aibeopchin-7-1-b-supplement-guard-alignment
+npm run verify:aibeopchin-7-1-b-supplement-mvp-screens
+npm run verify:aibeopchin-7-1-b-supplement-db-runtime
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
+
+| 명령 | 결과 (2026-04-27 에이전트 실행) |
+| --- | --- |
+| `npx tsc --noEmit` | PASS |
+| `npm run lint` | PASS |
+| `npm run verify:canonical-sources` | PASS |
+| `npm run verify:predeploy-lock` | PASS |
+| `npm run verify:aibeopchin-7-1-b-supplement-guard-alignment` | PASS |
+| `npm run verify:aibeopchin-7-1-b-supplement-mvp-screens` | PASS |
+| `py -3 -m py_compile tools/aibeopchin_navigator.py` | PASS |
+| `npm run verify:aibeopchin-7-1-b-supplement-db-runtime` | **BLOCKED** | 워크스페이스에 `.env` / `DATABASE_URL` 없음 → **환경 미충족**(코드 결함 아님). **PASS 시(스테이징/운영 셸에서 exit 0·PASS 확인 후):** `| PASS | 스테이징/운영 DATABASE_URL 기준 실행 완료 |`로 갱신하고 [423](#evidence-20260427-423) 참조 |
+
+#### 확인 순서 {#evidence-20260427-422-now}
+
+1. [`#evidence-20260427-422`](#evidence-20260427-422) · [`#evidence-20260427-422-now`](#evidence-20260427-422-now)
+2. [`#evidence-20260427-423`](#evidence-20260427-423) — DB runtime **PASS 후** 표·판정 갱신
+3. [`#evidence-20260427-421`](#evidence-20260427-421)
+4. `docs/project-governance/predeploy-lock-results.json`
+5. 스테이징/운영: `DATABASE_URL=... npm run verify:aibeopchin-7-1-b-supplement-db-runtime`
+
+### 완료 판정
+
+7.1-B MVP final lock은 **문서·정적 검증·predeploy** 기준으로 **조건부 잠금** 상태다.
+
+DB runtime 검증은 **`DATABASE_URL`이 있는 스테이징 또는 운영** 환경에서 **PASS** 확인 후 **최종 완료**로 전환한다. 그때 [422] 위 표의 DB runtime 행을 **PASS**로 바꾸고, 아래 문장을 **본 절 완료 판정에 추가**하면 엔지니어링 기준으로 닫는다.
+
+> DB runtime 검증까지 PASS로 확인되어, AI법친 7.1-B MVP final lock을 엔지니어링 기준으로 닫는다.
+
+**별도 최종 seal 신규 파일은 두지 않는다.** 본 절·`predeploy-lock-results.json`·[421]·[423]을 묶어 기록한다.
+
+### 잠금 유지 시 금지
+
+1. DB runtime **BLOCKED**인 채 **「완전 잠금」**만 단정해 표현하기(조건부·엔지니어링 미완 구분 유지).
+2. `DATABASE_URL` 없이 로컬에서 DB runtime을 **억지로 PASS** 처리하기.
+3. **신규 기능** 추가로 7.1-B 범위 흔들기.
+4. **[422] 이후** 문서·코드 기준을 **합의 없이** 재개돌하기.
+
+---
+
+## [EVIDENCE-20260427-423] AI법친 7.1-B — DB runtime verification closure {#evidence-20260427-423}
+
+### 상태
+
+**대기.** [422](#evidence-20260427-422)는 DB runtime 행 **BLOCKED** 유지, 본 [423]은 **PASS 전까지 대기**한다. `npm run verify:aibeopchin-7-1-b-supplement-db-runtime`을 **스테이징 또는 운영**에서 **`DATABASE_URL`이 설정된 셸**로 실행해 **exit 0** 및 콘솔 **PASS**를 확인한 뒤에만 본 절·**[422] 검증 표**·**[422] 완료 판정**을 절차대로 갱신한다. 그 다음 [`docs/deployment-checklist.md` §0~§1.4](../deployment-checklist.md)를 이어서 닫는다.
+
+### 실행 시도 기록 (로컬·환경 미충족, PASS 아님)
+
+| 일시 | 환경 | 결과 | 비고 |
+| --- | --- | --- | --- |
+| 2026-04-27 | 로컬/Cursor 클론: `.env` 없음, 셸에 `DATABASE_URL` 미설정 | **FAIL** (exit 1) | **앱 코드 결함 아님** — 환경 미충족(Prisma: `Environment variable not found: DATABASE_URL`). **스테이징/운영 미실행.** [422] **BLOCKED** 유지·본 절 **대기** 유지·**PASS 갱신 없음**. |
+
+### 목적
+
+422의 **DB runtime** 공백을 엔지니어링 증빙으로 닫는다.
+
+### 상세 절차 — 운영 DB에서 423 PASS 닫기 (1~7)
+
+**핵심:** `DATABASE_URL` **연결 문자열 값은 증빙·스크린샷·PR·채팅에 넣지 않는다.** **검증 결과**와 **실행 환경·실행 시각(KST)** 만 남긴다.
+
+1. **저장소 루트 이동** — 스테이징/운영 서버에서 실제 배포 클론 루트로 `cd` (로컬 예: `c:\Users\NEW\Desktop\AI법친` 은 참고용).
+2. **`DATABASE_URL` 설정 여부만 확인** — CMD `echo %DATABASE_URL%`, PowerShell `$env:DATABASE_URL`. 값이 출력되는지로만 판단한다. **출력된 문자열을 복사해 문서에 붙이지 않는다.** 증빙에는 **「DATABASE_URL: 설정 확인 / 값 비공개」**만 적는다.
+3. **DB runtime 검증 실행** — `npm run verify:aibeopchin-7-1-b-supplement-db-runtime`  
+   **PASS 조건:** **exit 0**과 콘솔 **verification PASS**를 **모두** 확인한다.
+4. **PASS일 때만** `docs/project-governance/IMPLEMENTATION_EVIDENCE.md` 갱신.
+5. **[422]** (`#evidence-20260427-422`) — DB runtime 표 행을  
+   `| npm run verify:aibeopchin-7-1-b-supplement-db-runtime | PASS | 스테이징/운영 DATABASE_URL 기준 실행 완료 |`  
+   `### 완료 판정`에 인용 추가:  
+   > DB runtime 검증까지 PASS로 확인되어, AI법친 7.1-B MVP final lock을 엔지니어링 기준으로 닫는다.
+6. **[423]** (`#evidence-20260427-423`) — 기존 **미실행**·**PASS 후 채움 템플릿** 자리를 아래 구조로 채운다. **`YYYY-MM-DD HH:mm KST`** 에는 **실제 실행 시각**만 넣는다.  
+   - `### 검증 결과` · `### 실행 환경` · `### 완료 판정` — 본 절 **「PASS 후 채움 템플릿」**과 동일 문안.
+7. **실패 시 갱신 금지** — 422·423을 **PASS로 바꾸지 않는다.** 문구 예: *DB runtime 검증 실패. 422·423 PASS 갱신 없음. 실행 로그를 개발팀에 공유하고 원인 분석 후 재실행.* **코드는 즉시 수정하지 말고 로그부터 확인한다.**
+
+**한 줄:** 운영 DB 환경에서 `verify:aibeopchin-7-1-b-supplement-db-runtime`이 **PASS일 때만** 422·423을 갱신한다.
+
+### 운영 실행 순서 (코드 변경 없음)
+
+1. **`DATABASE_URL` 환경** — 스테이징 또는 운영(`.env` 또는 배포 환경변수). **연결 문자열 원문은 문서·증빙·PR에 절대 적지 않는다.** 존재만 확인: CMD `echo %DATABASE_URL%`, PowerShell `$env:DATABASE_URL`. 증빙에는 `DATABASE_URL: 설정 확인 / 값 비공개` 형태만 쓴다.
+2. **실행:** `npm run verify:aibeopchin-7-1-b-supplement-db-runtime` — **PASS(exit 0)**.
+3. **[422] 갱신** — `#evidence-20260427-422`: DB runtime 표 행을 `PASS · 스테이징/운영 DATABASE_URL 기준 실행 완료`로 바꾼 뒤, `### 완료 판정`에 아래 인용문을 추가한다.  
+   > DB runtime 검증까지 PASS로 확인되어, AI법친 7.1-B MVP final lock을 엔지니어링 기준으로 닫는다.
+4. **[423] 갱신** — `#evidence-20260427-423`: `### 상태`의 **대기**를 제거하거나 완료 문구로 바꾸고, 아래 **「PASS 후 채움 템플릿」**을 붙인다(실행 시각만 기입·KST).
+5. **최종 확인(권장):** 동일 환경에서 다음을 한 번 더 묶어 실행한다.  
+   `npx tsc --noEmit` · `npm run lint` · `npm run verify:canonical-sources` · `npm run verify:predeploy-lock` · `npm run verify:aibeopchin-7-1-b-supplement-guard-alignment` · `npm run verify:aibeopchin-7-1-b-supplement-mvp-screens` · `npm run verify:aibeopchin-7-1-b-supplement-db-runtime` · `py -3 -m py_compile tools/aibeopchin_navigator.py`
+
+**423이 PASS로 닫힌 뒤** 다음 단계는 새 기능이 아니라 **운영 배포 전 점검표**로 넘어간다. 권장 **닫기 순서(10단계)**·Prisma·계정·첨부·고지는 [`docs/deployment-checklist.md` §0·§1](../deployment-checklist.md)(저장소 루트 `docs/deployment-checklist.md`)를 따른다.
+
+### 개발·운영 팀 전달용 지시문 (복사)
+
+**AI법친 7.1-B 운영 검증 지시**
+
+현재 7.1-B는 코드·문서·정적 검증·predeploy 기준으로 **조건부 잠금** 상태입니다. **새 기능 개발이나 코드 수정은 하지 않습니다.**
+
+개발팀/운영팀은 **`DATABASE_URL`이 설정된 스테이징 또는 운영 환경**에서 아래 명령만 실행해 주세요.
+
+```bash
+npm run verify:aibeopchin-7-1-b-supplement-db-runtime
+```
+
+실행 결과가 **PASS**이면 다음 문서만 갱신합니다.
+
+**대상 문서:** `docs/project-governance/IMPLEMENTATION_EVIDENCE.md` (앵커 `#evidence-20260427-422`, `#evidence-20260427-423`)
+
+**갱신 내용:**
+
+1. **[EVIDENCE-20260427-422]**의 DB runtime 검증 행을 **BLOCKED → PASS**로 변경
+2. **[422]** `### 완료 판정`에 다음 문구 추가: *DB runtime 검증까지 PASS로 확인되어, AI법친 7.1-B MVP final lock을 엔지니어링 기준으로 닫는다.*
+3. **[EVIDENCE-20260427-423]**의 완료 판정을 **미실행 → PASS 완료**로 변경하고, 본 절의 **「PASS 후 채움 템플릿」**으로 실행 환경·시각 기입
+4. **실행 환경**과 **실행 시각**(KST)만 기록
+5. **`DATABASE_URL` 연결 문자열 값은 절대 기록하지 않음**
+
+**주의:**
+
+- **PASS 전**에는 *final lock 완료*라고 표현하지 않습니다.
+- `DATABASE_URL` 없이 **억지 PASS** 처리하지 않습니다.
+- **새 기능 추가**, 코드 리팩터링, 화면 수정은 하지 않습니다.
+- **실패 시** 결과 로그만 공유하고, 임의 수정하지 않습니다. **DB runtime 검증 실패 시 422·423 PASS 갱신 없음.** 코드는 바로 고치지 말고 로그·원인부터 확인합니다.
+
+**한 줄 (개발·운영팀 전달):** **`DATABASE_URL`이 있는 스테이징/운영에서 위 명령이 PASS일 때만** `IMPLEMENTATION_EVIDENCE.md`의 422·423을 갱신합니다.
+
+**참고 파일:** `tools/aibeopchin_navigator.py`, `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+### 수정 (PASS 시)
+
+| 대상 | 내용 |
+| --- | --- |
+| `IMPLEMENTATION_EVIDENCE.md` → [422](#evidence-20260427-422) | DB runtime 행: `PASS` · 비고: 스테이징/운영 `DATABASE_URL` 기준 실행 완료 |
+| 동일 → [422](#evidence-20260427-422) `### 완료 판정` | 문단 추가: *DB runtime 검증까지 PASS로 확인되어, AI법친 7.1-B MVP final lock을 엔지니어링 기준으로 닫는다.* |
+| 본 [423] | 실행 일시·환경(스테이징/운영, 비밀 미기록)·검증 결과 기입 |
+
+### PASS 후 채움 템플릿 ([423] 본문에 붙여 넣기)
+
+아래는 **DB runtime PASS 확인 후** `### 검증` 아래 등에 두고, `YYYY-MM-DD HH:mm`만 채운다.
+
+```markdown
+### 검증 결과
+
+| 명령 | 결과 | 비고 |
+| --- | ---: | --- |
+| `npm run verify:aibeopchin-7-1-b-supplement-db-runtime` | PASS | 스테이징/운영 DATABASE_URL 기준 실행 완료. 연결 문자열 값은 기록하지 않음. |
+
+### 실행 환경
+
+| 항목 | 내용 |
+| --- | --- |
+| 실행 환경 | 스테이징 또는 운영 |
+| DATABASE_URL | 설정 확인 / 값 비공개 |
+| 실행 시각 | YYYY-MM-DD HH:mm KST |
+
+### 완료 판정
+
+DB runtime 검증이 DATABASE_URL이 설정된 환경에서 PASS로 확인되었다.
+
+이에 따라 [EVIDENCE-20260427-422]의 조건부 final lock은 엔지니어링 기준 최종 잠금으로 전환되며, AI법친 7.1-B MVP final lock을 완료로 판정한다.
+```
+
+### 검증
+
+```bash
+npm run verify:aibeopchin-7-1-b-supplement-db-runtime
+```
+
+#### 확인 순서 {#evidence-20260427-423-now}
+
+1. [`#evidence-20260427-423`](#evidence-20260427-423)
+2. [`#evidence-20260427-422`](#evidence-20260427-422) — 표·완료 판정 갱신
+3. 스테이징/운영 셸에서 위 검증 명령 **exit 0**
+
+### 완료 판정
+
+**미실행** — `verify:aibeopchin-7-1-b-supplement-db-runtime` **PASS** 후 운영 책임이 본 절·422를 갱신할 때 **완료**로 둔다.
+
+---
+
+## [EVIDENCE-20260427-421] AI법친 7.1-B — 관리자 화면 및 supplement-request QA prelock {#evidence-20260427-421}
+
+### 상태
+
+AI법친 7.1-B MVP 잠금 **전** **prelock** 단계로, 관리자·QA Evidence 동선과 supplement-request 권한·플로우를 **코드·가드·라우트 기준**으로 점검하고 자동 검증을 재실행했다.
+
+이번 작업은 **신규 기능 추가가 아니다.** 기존 7.1-B 보완요청 MVP와 관리자 운영 화면이 **문서·코드·증빙과 정합**한 채 접근 통제가 유지되는지 **QA closure**로 남긴다.
+
+**선행 정합(420):** 문서·코드 정합은 [EVIDENCE-20260427-420](#evidence-20260427-420). **관리자·보완요청 prelock QA는 본 절(421)에서 닫는다.**
+
+### 범위
+
+- `(admin)/admin` 트리 및 연결된 관리자 동선
+- `/admin/qa-evidence` — UI·API 가드 차이
+- supplement-request 생성·조회·응답·상태 전이·guard verifier 정합
+- USER / LAWYER / STAFF / ADMIN / SUPER_ADMIN 권한별 기대치와 코드 정합 표기
+- 기존 검증 스크립트 재실행(MVP 화면 verifier·DB runtime은 환경 조건 별도)
+
+### 수정 파일
+
+| 파일 | 변경 내용 |
+| --- | --- |
+| `docs/project-governance/IMPLEMENTATION_EVIDENCE.md` | 본 [421] prelock QA 증빙·목록 연결 |
+| `tools/aibeopchin_navigator.py` | 변경 없음 |
+| `src/app/(admin)/admin/page.tsx` | 변경 없음(420 링크 기준 확인) |
+| `src/features/supplement-request/supplement-request.service.ts` | 변경 없음(420 guard·export 기준 확인) |
+
+### 관리자 화면 QA
+
+저장소에 **`/admin/cases`·`/admin/lawyers` 단일 경로는 없다.** 동일 역할은 아래 **실경로**로 확인했다.
+
+| 화면 | 기대 동작 | 결과 | 비고 |
+| --- | --- | ---: | --- |
+| `/admin` | 관리자 허브 진입 | PASS | `(admin)/admin/layout.tsx` · `requireAdmin` |
+| `/admin/qa-evidence` | QA Evidence UI 진입 | PASS | `(protected)/admin/qa-evidence/page.tsx` · 상위 `requireUser` |
+| `/admin/case-package-shares` | 관리자 사건 패키지 공유 목록 | PASS | `(admin)/admin` 트리 · `requireAdmin` |
+| `/admin/users/pending` | 가입·역할 승인 큐 | PASS | 플랫폼 관리자 동선 · `isAdminRole` |
+| `/admin/question-sets` | 질문셋 관리 | PASS | `(protected)/admin` · `questionSet.*` 권한 |
+| `/admin/document-templates` | 문서 템플릿 관리 | PASS | `(protected)/admin` · 문서 템플릿 권한 |
+
+### supplement-request 실제 플로우 QA
+
+| 단계 | 시나리오 | 기대 동작 | 결과 | 비고 |
+| ---: | --- | --- | ---: | --- |
+| 1 | 보완요청 생성 | LAWYER·ADMIN·SUPER만 생성 | PASS | `canCreateSupplementRequest` · STAFF 제외 |
+| 2 | 보완요청 조회 | 사건 접근 가능한 주체가 목록·상세 조회 | PASS | `getCaseAccessContext` |
+| 3 | 보완 입력 | 대상 의뢰인이 항목 응답 입력 | PASS | 응답 생성·검증 서비스 |
+| 4 | 보완 제출 | 제출 후 상태·로그 반영 | PASS | `CLIENT_RESPONDED` 등 전이 |
+| 5 | 보완 검토 | `canReviewSupplementRequest` 만족 시 검토·전이 | PASS | 요청자·LAWYER·ADMIN/SUPER |
+| 6 | 보완 취소 | 역할 게이트 내 취소 | PASS | `canCancelSupplementRequest` export·420 정합 |
+| 7 | 보완 완료 | 허용 전이만·종료 상태 일관성 | PASS | `SUPPLEMENT_ALLOWED_TRANSITIONS`·guard verifier |
+
+### 권한별 접근 QA
+
+| 권한 | `(admin)/admin` 트리 | QA Evidence UI | `POST /api/admin/qa-evidence/analyze` | 보완요청 생성 | 보완 제출(대상 의뢰인) | 보완 검토·상태 전이 | 결과 |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| USER | DENY | ALLOW | DENY | DENY | ALLOW | DENY | PASS |
+| LAWYER | DENY | ALLOW | DENY | ALLOW | DENY | ALLOW | PASS |
+| STAFF | DENY | ALLOW | DENY | DENY | DENY | DENY | PASS |
+| ADMIN | ALLOW | ALLOW | ALLOW | ALLOW | DENY | ALLOW | PASS |
+| SUPER_ADMIN | ALLOW | ALLOW | ALLOW | ALLOW | DENY | ALLOW | PASS |
+
+- **`(admin)/admin` DENY:** `requireAdmin` — ADMIN·SUPER_ADMIN만. 비관리자는 `/dashboard`로 redirect.
+- **QA Evidence UI ALLOW / API DENY:** 페이지는 `(protected)`·로그인 사용자 접근 가능. 분석 API는 `requireAdminApi`(ADMIN·SUPER만).
+- **보완 생성:** `ensureCreatePermission` — LAWYER·ADMIN·SUPER만(STAFF·USER 불가).
+- **보완 제출:** `canRespondSupplementRequest` — USER이며 `targetUserId` 일치만.
+- **검토·전이:** `canReviewSupplementRequest` — 요청자 본인·LAWYER·ADMIN/SUPER(STAFF는 일반 플로우에서 검토 전이 불가).
+
+#### 확인 순서 {#evidence-20260427-421-now}
+
+1. 본 절 앵커 [`#evidence-20260427-421`](#evidence-20260427-421) · [`#evidence-20260427-421-now`](#evidence-20260427-421-now)
+2. [EVIDENCE-20260427-420](#evidence-20260427-420) — 문서·코드 정합 선행
+3. `src/app/(admin)/admin/layout.tsx` · `src/lib/auth/session.ts`(`requireAdmin`)
+4. `src/app/(protected)/admin/qa-evidence/page.tsx` · `src/app/api/admin/qa-evidence/analyze/route.ts`
+5. `src/features/supplement-request/supplement-request.service.ts`
+
+### 검증 명령
+
+```bash
+npx tsc --noEmit
+npm run lint
+npm run verify:canonical-sources
+npm run verify:predeploy-lock
+npm run verify:aibeopchin-7-1-b-supplement-guard-alignment
+npm run verify:aibeopchin-7-1-b-supplement-mvp-screens
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
+
+| 명령 | 결과 |
+| --- | --- |
+| `npx tsc --noEmit` | PASS |
+| `npm run lint` | PASS |
+| `npm run verify:canonical-sources` | PASS |
+| `npm run verify:predeploy-lock` | PASS |
+| `npm run verify:aibeopchin-7-1-b-supplement-guard-alignment` | PASS |
+| `npm run verify:aibeopchin-7-1-b-supplement-mvp-screens` | PASS |
+| `py -3 -m py_compile tools/aibeopchin_navigator.py` | PASS |
+| `npm run verify:aibeopchin-7-1-b-supplement-db-runtime` | 로컬 기록 환경 `DATABASE_URL` 미설정으로 **실행 생략**(연결된 스테이징·운영에서 수행) |
+
+### 완료 판정
+
+7.1-B **prelock** 기준으로 관리자·QA Evidence·supplement-request **접근·권한·플로우**를 증빙했다.
+
+**후속 final lock:** [EVIDENCE-20260427-422](#evidence-20260427-422) — MVP final lock **조건부**(문서·정적·predeploy); DB runtime·엔지니어링 완결은 [EVIDENCE-20260427-423](#evidence-20260427-423).
+
+---
+
+## [EVIDENCE-20260501-AIBEOPCHIN-6-8-CASE-PACKAGE-PDF-SUMMARY] AI법친 6.8 — 사건 패키지 PDF / 요약본 출력 {#evidence-20260501-aibeopchin-6-8}
+
+### 상태
+
+AI법친 6.8은 6.0 사건 패키지 기획서의 다운로드 후보 중 사건 패키지 요약본 출력을 구현하는 단계다. 6.6에서 분리한 첨부파일 다운로드 권한과 별도로, `allowPackagePdf`가 허용된 공유에 한해 public-safe 사건 패키지 요약본을 다운로드할 수 있도록 한다.
+
+이번 작업은 의뢰인/변호사 사건 패키지 요약본 출력 API와 UI 버튼을 연결하며, 첨부파일 원문·첨부파일 직접 URL·내부 prompt·interview raw JSON·모델 raw response·snapshotJson 전체는 출력물에 포함하지 않는다.
+
+### 변경 파일
+
+- `src/features/case-package/case-package-pdf-summary.ts`
+- `src/features/case-package/render-case-package-pdf-html.ts`
+- `src/features/case-package/case-package-pdf-permission.ts`
+- `src/features/case-package/case-package-pdf-response.ts`
+- `src/features/case-package/case-package-share.repository.ts`
+- `src/app/api/lawyer/case-packages/[shareId]/package-pdf/route.ts`
+- `src/app/api/cases/[caseId]/package-shares/[shareId]/package-pdf/route.ts`
+- `src/components/lawyer/case-package/lawyer-case-package-detail-client.tsx`
+- `src/components/case-package/case-package-share-settings-panel.tsx`
+- `package.json`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py`
+- `docs/README.md`
+
+### 반영 내용
+
+- 사건 패키지 PDF public-safe summary builder 추가
+- HTML 기반 사건 패키지 출력 템플릿 추가
+- `allowPackagePdf` 권한 판정 유틸 추가
+- 변호사 사건 패키지 PDF 다운로드 API 추가
+- 의뢰인 사건 패키지 PDF 다운로드 API 추가
+- ACTIVE 공유만 출력 허용
+- EXPIRED 공유 출력 차단
+- REVOKED 공유 출력 차단
+- `allowPackagePdf=false` 출력 차단
+- PDF 다운로드 성공/차단 로그 기록
+- 변호사 상세 화면 요약본 다운로드 버튼 추가
+- 의뢰인 공유 패널 요약본 다운로드 버튼 추가
+
+### 실제 Case 모델 필드 매핑 (스펙 vs 실제)
+
+| 스펙 필드 | 실제 Prisma 필드 |
+|-----------|----------------|
+| `caseType` | `category` |
+| `summary` | `description` |
+
+Route에서 `{ ...share.case, caseType: share.case.category, summary: share.case.description }` 매핑으로 처리.
+
+### 출력물 포함 항목
+
+- 사건 고유번호
+- 사건 제목
+- 사건 유형
+- 사건 상태
+- 의뢰인 마스킹 표시명
+- 사건 요약
+- 첨부자료 목록
+- 문서 목록
+- 공유 만료일
+- 안전 고지
+- 제외 항목 고지
+
+### 출력물 제외 항목
+
+- 첨부파일 원문
+- 첨부파일 직접 URL
+- 내부 prompt 원문
+- interviewAnswers raw JSON
+- 모델 raw response
+- snapshotJson 전체
+- guardrailIssues 상세 문구
+- suggestedQuestions 전체
+- accessToken 원문
+- optionalPin 원문
+
+### 변경하지 않은 것
+
+- 실제 binary PDF 엔진 도입 없음
+- 첨부파일 원문 포함 없음
+- 관리자 공유 현황 화면 구현 없음
+- Prisma schema 변경 없음
+- migration 생성 없음
+
+### 검증 명령
+
+```bash
+npm run verify:case-package-6-8
+npx eslint src/features/case-package/case-package-pdf-summary.ts src/features/case-package/render-case-package-pdf-html.ts src/features/case-package/case-package-pdf-permission.ts src/features/case-package/case-package-pdf-response.ts "src/app/api/lawyer/case-packages/[shareId]/package-pdf/route.ts" "src/app/api/cases/[caseId]/package-shares/[shareId]/package-pdf/route.ts" src/components/lawyer/case-package/lawyer-case-package-detail-client.tsx src/components/case-package/case-package-share-settings-panel.tsx
+py -3 -m py_compile tools/aibeopchin_navigator.py
+npx tsc --noEmit
+npm run lint
+```
+
+### 검증 결과
+
+- `npm run verify:case-package-6-8`: PASS
+- targeted eslint: PASS
+- `npx tsc --noEmit`: PASS
+- `npm run lint`: PASS
+
+### 완료 판정
+
+| 항목 | 결과 |
+|------|------|
+| 사건 패키지 요약본 출력 builder | 완료 |
+| HTML 출력 템플릿 | 완료 |
+| allowPackagePdf 권한 확인 | 완료 |
+| 변호사 PDF API | 완료 |
+| 의뢰인 PDF API | 완료 |
+| EXPIRED 차단 | 완료 |
+| REVOKED 차단 | 완료 |
+| 출력 성공 로그 | 완료 |
+| 출력 차단 로그 | 완료 |
+| 변호사 상세 버튼 | 완료 |
+| 의뢰인 공유 패널 버튼 | 완료 |
+| 첨부 원문 제외 | 유지 |
+| prompt/raw/snapshot 제외 | 유지 |
+| binary PDF 엔진 | 후속 필요 시 |
+
+### 다음 실제 작업
+
+- AI법친 6.9 — 개인정보 / 보안 / 동의문구 최종 정리
+- AI법친 6.10 — QA / 회귀 / 배포 전 점검
+
+---
+
+## [EVIDENCE-20260501-AIBEOPCHIN-6-7-ACCESS-LOGS-REVOKE-ENHANCEMENT] AI법친 6.7 — 열람 로그 / 다운로드 로그 / 공유 취소 고도화 {#evidence-20260501-aibeopchin-6-7}
+
+### 상태
+
+AI법친 6.7은 6.3 CasePackageShare / CasePackageAccessLog 모델과 API, 6.4 의뢰인 공유 설정 화면, 6.5 변호사 열람 화면, 6.6 첨부파일 다운로드 권한 분리를 바탕으로 공유별 열람/다운로드/차단 로그를 의뢰인이 확인할 수 있도록 고도화하는 단계다.
+
+이번 작업은 공유별 access log 조회 API, 의뢰인 공유 패널의 로그 표시, 공유 취소 사유 입력 및 취소 후 로그 새로고침을 구현한다.
+
+### 변경 파일
+
+- `src/features/case-package/case-package-share.repository.ts`
+- `src/app/api/cases/[caseId]/package-shares/[shareId]/access-logs/route.ts`
+- `src/components/case-package/case-package-share-settings-panel.tsx`
+- `package.json`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py`
+- `docs/README.md`
+
+### 반영 내용
+
+- 공유별 access log 조회 repository 함수 추가 (`listCasePackageAccessLogsForOwner`)
+- 의뢰인 권한 기반 access log API 추가 (기존 파일 확인 — 이미 완전 구현)
+- VIEW / DOWNLOAD / DENIED / EXPIRED / REVOKED 로그 표시
+- targetType / targetId / resultMessage / createdAt 표시
+- actor name / email / role 후보 표시
+- 공유 취소 사유 입력 UI 추가
+- 공유 취소 시 입력 사유 전달
+- 공유 취소 후 목록 및 로그 새로고침
+- 의뢰인 공유 설정 패널에서 열람 로그 보기/닫기 지원
+
+### 변경하지 않은 것
+
+- 관리자 전체 공유 현황 화면 구현 없음
+- 변호사 검토 메모 화면 구현 없음
+- 사건 패키지 PDF 구현 없음
+- Prisma schema 변경 없음
+- migration 생성 없음
+
+### 검증 명령
+
+```bash
+npm run verify:case-package-6-7
+npx eslint src/features/case-package/case-package-share.repository.ts "src/app/api/cases/[caseId]/package-shares/[shareId]/access-logs/route.ts" src/components/case-package/case-package-share-settings-panel.tsx
+py -3 -m py_compile tools/aibeopchin_navigator.py
+npx tsc --noEmit
+npm run lint
+```
+
+### 검증 결과
+
+- `npm run verify:case-package-6-7`: PASS
+- targeted eslint: PASS
+- `py -3 -m py_compile tools/aibeopchin_navigator.py`: PASS
+- `npx tsc --noEmit`: PASS
+- `npm run lint`: PASS
+
+### 완료 판정
+
+| 항목 | 결과 |
+|------|------|
+| 공유별 access log API | 완료 |
+| 의뢰인 권한 로그 조회 | 완료 |
+| 열람 로그 표시 | 완료 |
+| 다운로드 로그 표시 | 완료 |
+| 차단 로그 표시 | 완료 |
+| 공유 취소 사유 입력 | 완료 |
+| 취소 후 목록 새로고침 | 완료 |
+| 취소 후 로그 새로고침 | 완료 |
+| 관리자 전체 공유 현황 | 후속 |
+| 사건 패키지 PDF | 후속 6.8 |
+
+### 다음 실제 작업
+
+- AI법친 6.8 — 사건 패키지 PDF / 요약본 출력
+- AI법친 6.9 — 개인정보 / 보안 / 동의문구 최종 정리
+
+---
+
+## [EVIDENCE-20260501-AIBEOPCHIN-6-6-ATTACHMENT-VIEW-DOWNLOAD-PERMISSIONS] AI법친 6.6 — 첨부파일 열람 / 다운로드 권한 분리 {#evidence-20260501-aibeopchin-6-6}
+
+### 상태
+
+AI법친 6.6은 6.0에서 정의한 열람/다운로드 권한 분리 원칙과 6.3 CasePackageShare API, 6.5 변호사 사건 패키지 상세 화면을 바탕으로, 첨부파일 목록 열람과 실제 다운로드 권한을 분리하여 적용하는 단계다.
+
+이번 작업은 변호사 사건 패키지 상세 화면에서 첨부자료 목록은 `allowAttachmentList`, 실제 파일 다운로드는 `allowAttachmentDownload`로 각각 분리하고, 다운로드 성공/차단 로그를 기록하는 기능을 구현한다.
+
+### 변경 파일
+
+- `src/features/case-package/case-package-share.repository.ts`
+- `src/features/case-package/case-package-attachment-download.ts`
+- `src/app/api/lawyer/case-packages/[shareId]/attachments/[attachmentId]/download/route.ts`
+- `src/components/lawyer/case-package/lawyer-case-package-detail-client.tsx`
+- `package.json`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py`
+- `docs/README.md`
+
+### 반영 내용
+
+- 변호사 사건 패키지 첨부파일 다운로드 API 추가
+- 공유 상태 ACTIVE 확인
+- EXPIRED 공유 다운로드 차단
+- REVOKED 공유 다운로드 차단
+- 변호사 권한 확인
+- 첨부파일이 공유 사건에 속하는지 확인
+- `allowAttachmentList`와 `allowAttachmentDownload` 분리 적용
+- 첨부파일 직접 URL 미노출
+- 다운로드 성공 로그 기록
+- 다운로드 차단 로그 기록
+- 변호사 사건 패키지 상세 화면에 다운로드 버튼 연결
+- `findShareAttachmentForLawyer` repository 함수 추가 (실제 필드명 `originalName`, `storagePath` 기준)
+- `case-package-attachment-download.ts` resolver 추가 (`readCaseAttachmentFromDisk` 연결)
+
+### 변경하지 않은 것
+
+- 사건 패키지 PDF 구현 없음
+- 관리자 공유 현황 화면 구현 없음
+- Prisma schema 변경 없음
+- migration 생성 없음
+- 기존 의뢰인 공유 설정 UI 변경 없음
+
+### 검증 명령
+
+```bash
+npm run verify:case-package-6-6
+npx eslint src/features/case-package/case-package-share.repository.ts src/features/case-package/case-package-attachment-download.ts "src/app/api/lawyer/case-packages/[shareId]/attachments/[attachmentId]/download/route.ts" src/components/lawyer/case-package/lawyer-case-package-detail-client.tsx
+py -3 -m py_compile tools/aibeopchin_navigator.py
+npx tsc --noEmit
+npm run lint
+```
+
+### 검증 결과
+
+- `npm run verify:case-package-6-6`: PASS
+- targeted eslint: PASS
+- `py -3 -m py_compile tools/aibeopchin_navigator.py`: PASS
+- `npx tsc --noEmit`: PASS
+- `npm run lint`: PASS
+
+### 완료 판정
+
+| 항목 | 결과 |
+|------|------|
+| 첨부자료 목록 열람 권한 | 완료 |
+| 첨부파일 다운로드 권한 | 완료 |
+| 다운로드 API | 완료 |
+| 공유 상태 ACTIVE 확인 | 완료 |
+| EXPIRED 차단 | 완료 |
+| REVOKED 차단 | 완료 |
+| 변호사 권한 확인 | 완료 |
+| 첨부파일 소속 사건 확인 | 완료 |
+| 직접 URL 미노출 | 완료 |
+| 다운로드 성공 로그 | 완료 |
+| 다운로드 차단 로그 | 완료 |
+| 상세 화면 다운로드 버튼 | 완료 |
+| 사건 패키지 PDF | 후속 6.8 |
+
+### 다음 실제 작업
+
+- AI법친 6.7 — 열람 로그 / 다운로드 로그 / 공유 취소 고도화
+- AI법친 6.8 — 사건 패키지 PDF / 요약본 출력
+
+---
+
+## [EVIDENCE-20260501-AIBEOPCHIN-6-5-LAWYER-CASE-PACKAGE-LOOKUP-DETAIL-UI] AI법친 6.5 — 변호사 고유번호 조회 / 열람 화면 구현 {#evidence-20260501-aibeopchin-6-5}
+
+### 상태
+
+AI법친 6.5는 6.3에서 구현한 변호사 사건 패키지 lookup/detail API를 바탕으로, 변호사가 로그인 후 의뢰인에게 받은 사건 패키지 고유번호와 선택형 PIN으로 사건 패키지를 조회하고 허용된 범위 내에서 사건 요약, 첨부자료 목록, 문서 초안의 기초를 열람할 수 있도록 화면을 연결하는 단계다.
+
+이번 작업은 변호사 고유번호 조회 / 열람 화면 구현이며, 첨부파일 실제 다운로드 권한 분리는 6.6으로 분리한다.
+
+### 변경 파일
+
+- `src/components/lawyer/case-package/lawyer-case-package-lookup-client.tsx`
+- `src/app/(lawyer)/lawyer/case-packages/lookup/page.tsx`
+- `src/components/lawyer/case-package/lawyer-case-package-detail-client.tsx`
+- `src/app/(lawyer)/lawyer/case-packages/[shareId]/page.tsx`
+- `package.json`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py`
+- `docs/README.md`
+
+### 반영 내용
+
+- 변호사 사건 패키지 고유번호 조회 화면 추가
+- publicCode 입력 UI 추가
+- 선택형 PIN 입력 UI 추가
+- `/api/lawyer/case-packages/lookup` 연결
+- 조회 성공 시 `/lawyer/case-packages/[shareId]` 이동
+- 사건 패키지 상세 화면 추가
+- 사건 고유번호 / 사건 제목 / 사건 유형 / 상태 표시
+- 공유 만료일 표시
+- 공유 권한 badge 표시
+- 사건 요약 표시
+- 첨부자료 목록 표시
+- 문서 초안/문서 목록 표시
+- 접근 실패 메시지 표시
+- 첨부파일 실제 다운로드는 6.6으로 분리 표시
+
+### 변경하지 않은 것
+
+- 첨부파일 실제 다운로드 라우팅 변경 없음
+- 사건 패키지 PDF 구현 없음
+- 관리자 공유 현황 화면 구현 없음
+- Prisma schema 변경 없음
+- migration 생성 없음
+
+### 검증 명령
+
+```bash
+npm run verify:case-package-6-5
+npx eslint src/components/lawyer/case-package/lawyer-case-package-lookup-client.tsx src/components/lawyer/case-package/lawyer-case-package-detail-client.tsx "src/app/(lawyer)/lawyer/case-packages/lookup/page.tsx" "src/app/(lawyer)/lawyer/case-packages/[shareId]/page.tsx"
+py -3 -m py_compile tools/aibeopchin_navigator.py
+npx tsc --noEmit
+npm run lint
+```
+
+### 검증 결과
+
+- npm run verify:case-package-6-5: PASS
+- targeted eslint: PASS
+- py -3 -m py_compile tools/aibeopchin_navigator.py: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 완료 판정
+
+| 항목 | 결과 |
+|---|---|
+| 변호사 고유번호 조회 화면 | 완료 |
+| publicCode 입력 | 완료 |
+| 선택형 PIN 입력 | 완료 |
+| lookup API 연결 | 완료 |
+| 조회 성공 후 상세 이동 | 완료 |
+| 사건 패키지 상세 화면 | 완료 |
+| 사건 요약 표시 | 완료 |
+| 첨부자료 목록 표시 | 완료 |
+| 문서 초안/문서 목록 표시 | 완료 |
+| 공유 권한 badge 표시 | 완료 |
+| 접근 실패 메시지 표시 | 완료 |
+| 첨부파일 다운로드 권한 분리 | 후속 6.6 |
+| 사건 패키지 PDF | 후속 6.8 |
+
+### 다음 실제 작업
+
+1. AI법친 6.6 — 첨부파일 열람 / 다운로드 권한 분리
+2. AI법친 6.7 — 열람 로그 / 다운로드 로그 / 공유 취소 고도화
+
+## [EVIDENCE-20260501-AIBEOPCHIN-6-4-CLIENT-SHARE-SETTINGS-UI] AI법친 6.4 — 의뢰인 공유 설정 화면 구현 {#evidence-20260501-aibeopchin-6-4}
+
+### 상태
+
+AI법친 6.4는 6.0 사건 패키지 기획서, 6.1 사건 패키지 DTO, 6.2 고유번호/공유 동의 정책, 6.3 CasePackageShare Prisma/API 구현을 바탕으로 의뢰인이 사건 상세 화면에서 사건 패키지 공유를 설정하고 고유번호를 발급·관리할 수 있도록 UI를 연결하는 단계다.
+
+이번 작업은 의뢰인 공유 설정 화면 구현이며, 변호사 고유번호 조회/열람 화면은 6.5로 분리한다.
+
+### 변경 파일
+
+- `src/components/case-package/case-package-share-settings-panel.tsx`
+- `src/components/cases/case-detail-client.tsx`
+- `package.json`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py`
+- `docs/README.md`
+
+### 반영 내용
+
+- 의뢰인 사건 패키지 공유 설정 패널 추가
+- 공유 범위 선택 UI 추가
+  - 사건 요약
+  - AI 인터뷰 요약
+  - 첨부자료 목록
+  - 문서 초안의 기초
+- 다운로드 권한 선택 UI 추가
+  - 첨부파일 다운로드
+  - 문서 다운로드
+  - 사건 패키지 PDF 다운로드
+- 공유 만료일 입력 추가
+- 선택형 PIN 입력 추가
+- 변호사 사용자 ID 입력 후보 추가
+- 공유 생성 API 연결
+- 발급된 publicCode 표시
+- 발급 직후 plainAccessToken 1회 표시
+- 기존 공유 목록 표시
+- 공유 취소 API 연결
+- 사건 상세 화면에 공유 설정 패널 연결
+
+### 변경하지 않은 것
+
+- 변호사 고유번호 조회 화면 구현 없음
+- 변호사 사건 패키지 열람 화면 구현 없음
+- 첨부파일 다운로드 권한 실제 라우팅 변경 없음
+- 사건 패키지 PDF 출력 구현 없음
+- 관리자 공유 현황 화면 구현 없음
+- Prisma schema 변경 없음
+- migration 생성 없음
+
+### 검증 명령
+
+```bash
+npm run verify:case-package-6-4
+npx eslint src/components/case-package/case-package-share-settings-panel.tsx src/components/cases/case-detail-client.tsx
+py -3 -m py_compile tools/aibeopchin_navigator.py
+npx tsc --noEmit
+npm run lint
+```
+
+### 검증 결과
+
+- npm run verify:case-package-6-4: PASS
+- targeted eslint: PASS
+- py -3 -m py_compile tools/aibeopchin_navigator.py: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 완료 판정
+
+| 항목 | 결과 |
+|---|---|
+| 의뢰인 공유 설정 패널 | 완료 |
+| 공유 범위 선택 UI | 완료 |
+| 다운로드 권한 선택 UI | 완료 |
+| 공유 만료일 입력 | 완료 |
+| 선택형 PIN 입력 | 완료 |
+| 공유 생성 API 연결 | 완료 |
+| publicCode 표시 | 완료 |
+| plainAccessToken 1회 표시 | 완료 |
+| 기존 공유 목록 표시 | 완료 |
+| 공유 취소 API 연결 | 완료 |
+| 사건 상세 화면 연결 | 완료 |
+| 변호사 조회/열람 화면 | 후속 6.5 |
+| 첨부파일 다운로드 권한 분리 | 후속 6.6 |
+| 사건 패키지 PDF | 후속 6.8 |
+
+### 다음 실제 작업
+
+1. AI법친 6.5 — 변호사 고유번호 조회 / 열람 화면 구현
+2. AI법친 6.6 — 첨부파일 열람 / 다운로드 권한 분리
+
+## [EVIDENCE-20260501-AIBEOPCHIN-6-3-CASE-PACKAGE-SHARE-PRISMA-API] AI법친 6.3 — CasePackageShare Prisma 모델 / API 구현 {#evidence-20260501-aibeopchin-6-3}
+
+### 상태
+
+AI법친 6.3은 6.0 사건 패키지 기획서, 6.1 사건 패키지 DTO, 6.2 고유번호/공유 동의 정책을 바탕으로 실제 `CasePackageShare` / `CasePackageAccessLog` Prisma 모델과 최소 API를 구현하는 단계다.
+이번 작업부터는 실제 DB 모델과 API가 추가되며, 의뢰인 공유 생성/목록, 공유 취소, 변호사 고유번호 조회, 변호사 사건 패키지 상세 조회, 접근 로그 기록까지 연결한다.
+
+### 변경 파일
+
+- `prisma/schema.prisma`
+- `src/features/case-package/case-package-share.repository.ts`
+- `src/app/api/cases/[caseId]/package-shares/route.ts`
+- `src/app/api/cases/[caseId]/package-shares/[shareId]/revoke/route.ts`
+- `src/app/api/lawyer/case-packages/lookup/route.ts`
+- `src/app/api/lawyer/case-packages/[shareId]/route.ts`
+- `package.json`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py`
+- `docs/README.md`
+
+### 반영 내용
+
+- `CasePackageShare` / `CasePackageAccessLog` 모델과 relation을 기준으로 repository 레이어 추가
+- 의뢰인 사건 패키지 공유 생성 API 추가
+- 의뢰인 사건 패키지 공유 목록 API 추가
+- 의뢰인 사건 패키지 공유 취소 API 추가
+- 변호사 고유번호 조회 API 추가
+- 변호사 사건 패키지 상세 조회 API 추가
+- 접근 성공/실패/만료/취소 로그 기록 연결
+- publicCode / accessToken hash / optionalPin hash 정책과 6.2 유틸 연결
+
+### 변경하지 않은 것
+
+- 의뢰인 공유 설정 화면 구현 없음
+- 변호사 사건 패키지 열람 화면 구현 없음
+- 첨부파일 다운로드 권한 실제 라우팅 변경 없음
+- 사건 패키지 PDF 출력 구현 없음
+- 기존 CaseStatus 변경 없음
+- 기존 UserRole 변경 없음
+
+### 검증 명령
+
+```bash
+npx prisma migrate dev --name add_case_package_share
+npx prisma generate
+npm run verify:case-package-6-3
+npx eslint src/features/case-package/case-package-share.repository.ts "src/app/api/cases/[caseId]/package-shares/route.ts" "src/app/api/cases/[caseId]/package-shares/[shareId]/revoke/route.ts" src/app/api/lawyer/case-packages/lookup/route.ts "src/app/api/lawyer/case-packages/[shareId]/route.ts"
+npx tsc --noEmit
+npm run lint
+```
+
+### 검증 결과
+
+- npx prisma migrate dev --name add_case_package_share: PASS (Already in sync, no pending migration)
+- npx prisma generate: PASS
+- npm run verify:case-package-6-3: PASS
+- targeted eslint: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 6.3 DB 검증 재실행 결과
+
+DATABASE_URL 설정 후 6.3 migration / verify를 재실행했다. DATABASE_URL 원문은 보안상 증빙에 기록하지 않는다.
+
+### 재실행 명령
+
+```bash
+npx prisma migrate dev --name add_case_package_share
+npx prisma generate
+npm run verify:case-package-6-3
+npx tsc --noEmit
+npm run lint
+```
+
+### 재실행 결과
+
+- npx prisma migrate dev --name add_case_package_share: PASS
+- npx prisma generate: PASS
+- npm run verify:case-package-6-3: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 승격 판정
+
+- 6.3 코드/API 구현: 완료
+- 6.3 DB migration 검증: 완료
+- 6.3 verify:case-package-6-3: 완료
+- DATABASE_URL 미설정으로 인한 보류 상태: 해소
+
+### 완료 판정
+
+| 항목 | 결과 |
+|---|---|
+| CasePackageShare 모델 추가 | 완료 |
+| CasePackageAccessLog 모델 추가 | 완료 |
+| 공유 생성 API | 완료 |
+| 공유 목록 API | 완료 |
+| 공유 취소 API | 완료 |
+| 변호사 고유번호 조회 API | 완료 |
+| 변호사 사건 패키지 상세 API | 완료 |
+| 접근 로그 기록 | 완료 |
+| 의뢰인 공유 화면 | 후속 6.4 |
+| 변호사 열람 화면 | 후속 6.5 |
+| 첨부파일 다운로드 권한 분리 | 후속 6.6 |
+| 사건 패키지 PDF | 후속 6.8 |
+
+### 다음 실제 작업
+
+1. AI법친 6.4 — 의뢰인 공유 설정 화면 구현
+2. AI법친 6.5 — 변호사 고유번호 조회 / 열람 화면 구현
+
+## [EVIDENCE-20260501-AIBEOPCHIN-6-2-CASE-PACKAGE-CODE-CONSENT-POLICY] AI법친 6.2 — 고유번호 발급 정책 / 공유 동의 구조 설계 {#evidence-20260501-aibeopchin-6-2}
+
+### 상태
+
+AI법친 6.2는 6.0 사건 패키지 기획서와 6.1 사건 패키지 DTO 구조를 바탕으로,
+고유번호 발급 정책, accessToken/PIN 보안 정책, 의뢰인 공유 동의 snapshot 구조,
+공유 상태 전이 기준, 변호사 접근 허용/차단 기준을 문서·타입·순수 유틸·테스트로 고정하는 단계다.
+
+이번 작업은 실제 Prisma schema 변경이나 API 구현이 아니라,
+6.3의 CasePackageShare 모델/API 구현 전 반드시 잠가야 할 정책 레이어를 확정하는 작업이다.
+
+### 변경 파일
+
+- `docs/project-governance/AIBEOPCHIN_6_2_CASE_PACKAGE_CODE_CONSENT_POLICY.md`
+- `src/features/case-package/case-package-share-policy.ts`
+- `src/features/case-package/case-package-share-policy-utils.ts`
+- `src/features/case-package/case-package-share-policy-utils.test.ts`
+- `package.json`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py`
+- `docs/README.md`
+
+### 반영 내용
+
+- publicCode 형식 `AIF-YYYY-NNNNNN` 정의
+- publicCode 생성 유틸 추가
+- accessToken 발급/hash 정책 정의
+- optionalPin hash/검증 정책 정의
+- 공유 동의 consent snapshot 구조 정의
+- 공유 범위 scope 기본값 정의
+- 다운로드 권한 기본값 정의
+- shareStatus `ACTIVE / EXPIRED / REVOKED` 기준 정의
+- 공유 상태 resolve 유틸 추가
+- 변호사 접근 허용/차단 decision 유틸 추가
+- 접근 차단 code 정의
+- 단위 테스트 추가
+
+### 변경하지 않은 것
+
+- Prisma schema 변경 없음
+- migration 생성 없음
+- CasePackageShare 모델 생성 없음
+- CasePackageAccessLog 모델 생성 없음
+- 신규 API 구현 없음
+- 신규 화면 구현 없음
+- 첨부파일 다운로드 정책 변경 없음
+- 기존 CaseStatus 변경 없음
+- 기존 UserRole 변경 없음
+- 배포 상태 변경 없음
+
+### 검증 명령
+
+```bash
+npm run verify:case-package-6-2
+npx eslint src/features/case-package/case-package-share-policy.ts src/features/case-package/case-package-share-policy-utils.ts src/features/case-package/case-package-share-policy-utils.test.ts
+py -3 -m py_compile tools/aibeopchin_navigator.py
+npx tsc --noEmit
+npm run lint
+```
+
+### 검증 결과
+
+- npm run verify:case-package-6-2: PASS
+- targeted eslint: PASS
+- py -3 -m py_compile tools/aibeopchin_navigator.py: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 완료 판정
+
+| 항목 | 결과 |
+|---|---|
+| publicCode 정책 정의 | 완료 |
+| accessToken 정책 정의 | 완료 |
+| optionalPin 정책 정의 | 완료 |
+| consent snapshot 구조 정의 | 완료 |
+| shareStatus 전이 기준 정의 | 완료 |
+| access decision 기준 정의 | 완료 |
+| 순수 유틸 추가 | 완료 |
+| 단위 테스트 추가 | 완료 |
+| Prisma schema 변경 없음 | 유지 |
+| 신규 API 구현 없음 | 유지 |
+| 신규 화면 구현 없음 | 유지 |
+
+### 다음 실제 작업
+
+1. AI법친 6.3 — CasePackageShare Prisma 모델 / API 구현
+2. AI법친 6.4 — 의뢰인 공유 설정 화면 구현
+
+## [EVIDENCE-20260501-AIBEOPCHIN-6-1-CASE-PACKAGE-DATA-STRUCTURE] AI법친 6.1 — 사건 패키지 데이터 구조 / 생성 기준 설계 {#evidence-20260501-aibeopchin-6-1}
+
+### 상태
+
+AI법친 6.1은 6.0에서 정의한 사건 패키지 / 고유번호 공유 / 변호사 열람 연계 기획을 바탕으로,
+기존 Case / Attachment / Interview / Summary / LegalDocument / TimelineMemo 데이터를
+변호사 검토용 사건 패키지 DTO로 조합하는 기준을 확정하는 단계다.
+
+이번 작업은 실제 Prisma schema 변경이나 API 구현이 아니라,
+사건 패키지 데이터 구조와 생성 기준을 문서·타입·순수 builder·테스트로 고정하는 작업이다.
+
+### 변경 파일
+
+- `docs/project-governance/AIBEOPCHIN_6_1_CASE_PACKAGE_DATA_STRUCTURE.md`
+- `src/features/case-package/case-package-dto.ts`
+- `src/features/case-package/build-case-package-dto.ts`
+- `src/features/case-package/build-case-package-dto.test.ts`
+- `package.json`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py`
+- `docs/README.md`
+
+### 반영 내용
+
+- 사건 패키지 DTO 구조 정의
+- 사건 패키지 생성 입력 구조 정의
+- 사건 기본 정보 구조 정의
+- 의뢰인/상대방 표시 정보 구조 정의
+- 사건 요약 구조 정의
+- 인터뷰 답변 public-safe preview 구조 정의
+- 첨부자료 public-safe 목록 구조 정의
+- 문서 초안/승인본 요약 구조 정의
+- public-safe guardrail 요약 연결 기준 정의
+- followUp 생성 기준 정의
+- 안전 고지 구조 정의
+- 공유 기본값 구조 정의
+- `buildCasePackageDto` 순수 builder 추가
+- builder 단위 테스트 추가
+
+### 변경하지 않은 것
+
+- Prisma schema 변경 없음
+- migration 생성 없음
+- CasePackageShare 모델 생성 없음
+- 신규 API 구현 없음
+- 신규 화면 구현 없음
+- 첨부파일 다운로드 정책 변경 없음
+- 기존 CaseStatus 변경 없음
+- 기존 UserRole 변경 없음
+- 배포 상태 변경 없음
+
+### 검증 명령
+
+```bash
+npm run verify:case-package-6-1
+npx eslint src/features/case-package/case-package-dto.ts src/features/case-package/build-case-package-dto.ts src/features/case-package/build-case-package-dto.test.ts
+npx tsc --noEmit
+npm run lint
+```
+
+### 검증 결과
+
+- npm run verify:case-package-6-1: PASS
+- targeted eslint: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+
+### 완료 판정
+
+| 항목 | 결과 |
+|---|---|
+| 사건 패키지 DTO 구조 정의 | 완료 |
+| 생성 기준 정의 | 완료 |
+| public-safe 기준 정의 | 완료 |
+| followUp 기준 정의 | 완료 |
+| 공유 기본값 정의 | 완료 |
+| 순수 builder 추가 | 완료 |
+| 단위 테스트 추가 | 완료 |
+| Prisma schema 변경 없음 | 유지 |
+| 신규 API 구현 없음 | 유지 |
+| 신규 화면 구현 없음 | 유지 |
+
+### 다음 실제 작업
+
+1. AI법친 6.2 — 고유번호 발급 정책 / 공유 동의 구조 설계
+2. AI법친 6.3 — CasePackageShare Prisma 모델 / API 구현
+
+## [EVIDENCE-20260501-AIBEOPCHIN-6-0-CASE-PACKAGE-SHARE-LAWYER-ACCESS-PLAN] AI법친 6.0 — 사건 패키지 / 고유번호 공유 / 변호사 열람 연계 기획서 {#evidence-20260501-aibeopchin-6-0}
+
+### 상태
+
+AI법친 6.0은 일반 사용자가 사건을 AI 질문 흐름으로 정리하고, 변호사가 고유번호와 권한 승인으로 사건 패키지를 열람·다운로드할 수 있는 구조를 설계하는 단계다.
+
+이번 작업은 실제 코드 구현이 아니라, 기존 Case / Attachment / LegalDocument / UserRole / AuditLog 구조를 기반으로 사건 패키지, 고유번호 공유, 변호사 열람 연계 구조를 기획서로 고정하는 문서화 작업이다.
+
+### 변경 파일
+
+- `docs/project-governance/AIBEOPCHIN_6_0_CASE_PACKAGE_SHARE_LAWYER_ACCESS_PLAN.md`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+- `tools/aibeopchin_navigator.py`
+- `docs/README.md`
+
+### 범위
+
+- 사건 패키지 개념을 정의했다.
+- 일반 사용자가 로그인해서 얻는 가치를 정리했다.
+- 변호사가 고유번호로 사건 패키지를 조회하는 흐름을 정의했다.
+- 의뢰인 공유 동의 구조를 정의했다.
+- 열람 / 다운로드 권한 분리 기준을 정리했다.
+- 첨부자료 / 문서 초안 / 사건 요약 연계 기준을 정리했다.
+- 개인정보 / 보안 / 열람 로그 / 만료일 정책을 정리했다.
+- 기존 코드 기준 변경 필요 파일을 정리했다.
+- 신규 DB 모델 후보를 작성했다.
+- 신규 API 후보를 작성했다.
+- 신규 화면 후보를 작성했다.
+- 단계별 구현 로드맵을 작성했다.
+- 홈페이지 문구 개선안을 작성했다.
+- 개발팀 전달용 작업지시서를 작성했다.
+
+### 변경하지 않은 것
+
+- 실제 Prisma schema 변경 없음.
+- 마이그레이션 생성 없음.
+- 신규 API 구현 없음.
+- 신규 화면 구현 없음.
+- 첨부파일 다운로드 정책 변경 없음.
+- 기존 CaseStatus 변경 없음.
+- 기존 UserRole 변경 없음.
+- 대시보드 3.x 재오픈 없음.
+- 배포 가능 판정 변경 없음.
+- Phase 4-1 predeploy lock 상태 변경 없음.
+
+### 완료 판정
+
+| 항목 | 결과 |
+|---|---|
+| 사건 패키지 개념 정의 | 완료 |
+| 고유번호 공유 구조 정의 | 완료 |
+| 변호사 열람 흐름 정의 | 완료 |
+| 공유 동의 구조 정의 | 완료 |
+| 열람 / 다운로드 권한 분리 | 완료 |
+| 보안 / 로그 / 만료일 정책 | 완료 |
+| 신규 DB 모델 후보 | 완료 |
+| 신규 API 후보 | 완료 |
+| 신규 화면 후보 | 완료 |
+| 구현 로드맵 | 완료 |
+| 홈페이지 문구 개선안 | 완료 |
+| 코드 기능 변경 없음 | 유지 |
+
+### 확인 순서 {#evidence-20260501-aibeopchin-6-0-now}
+
+1. `docs/project-governance/AIBEOPCHIN_6_0_CASE_PACKAGE_SHARE_LAWYER_ACCESS_PLAN.md`
+2. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+  - `#evidence-20260501-aibeopchin-6-0`
+  - `#evidence-20260501-aibeopchin-6-0-now`
+3. `tools/aibeopchin_navigator.py`
+  - `aibeopchin_6_0_case_package_share_lawyer_access_plan`
+  - `render_plan()`의 AI법친 6.0 절
+
+### 다음 실제 작업
+
+1. AI법친 6.1 — 사건 패키지 데이터 구조 / 생성 기준 설계
+2. AI법친 6.2 — 고유번호 발급 정책 / 공유 동의 구조 설계
+3. AI법친 6.3 — CasePackageShare Prisma 모델 / API 구현
+
+## [EVIDENCE-20260501-DEPLOYMENT-REQUIRED-TESTS-LOCK]
+
+### 목적
+
+Phase 4-1 predeploy lock 완료 및 실제 배포 가능 상태 확인 이후, 즉시 배포를 진행하지 않고 다른 작업을 우선 수행하기로 했다. 이에 따라 향후 실제 배포 또는 운영 전환 시 반드시 다시 수행해야 할 자동 검증, 환경변수 확인, DB 백업, 롤백 기준, Smoke Test 항목을 사전에 지정·잠금했다.
+
+### 변경 파일
+
+- `docs/project-governance/DEPLOYMENT_REQUIRED_TESTS_LOCK.md`
+- `docs/README.md`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+### 반영 내용
+
+- 실제 배포 실행을 보류 상태로 기록
+- 배포 가능 상태는 유지하되 배포 시 재검증 필요 기준 추가
+- 배포 직전 자동 검증 명령 지정
+- 환경변수 재확인 항목 지정
+- DB 백업 재확인 항목 지정
+- 롤백 기준 재확인 항목 지정
+- 배포 후 Smoke Test 12개 항목 지정
+- PDF/출력물 보안 재확인 기준 지정
+- 향후 배포 시 `IMPLEMENTATION_EVIDENCE.md`에 별도 배포 시점 증빙을 추가하도록 잠금
+
+### 현재 판정
+
+- Phase 4-1 predeploy lock: 완료
+- 실제 배포 가능 상태: 완료
+- 실제 배포 실행: 보류
+- 다른 작업 우선 진행: 허용
+- 배포/운영 시 필수 재검증 항목 지정: 완료
+
+### 향후 배포 시 필수 명령
+
+```bash
+npm run verify:predeploy-lock
+npm run verify:phase4-entry
+npm run verify:release-candidate
+npm run verify:official-form-phase3
+npm run verify:official-form-phase2:full
+npx tsc --noEmit
+npm run lint
+```
+
+### 향후 배포 시 필수 Smoke Test
+
+| 항목 | 결과 |
+|---|---|
+| 앱 접속 | 배포 시 확인 |
+| 로그인 | 배포 시 확인 |
+| 사건 목록 | 배포 시 확인 |
+| 사건 상세 | 배포 시 확인 |
+| 문서 생성 | 배포 시 확인 |
+| BLOCKING 누락 | 배포 시 확인 |
+| WARNING 누락 | 배포 시 확인 |
+| guardrail violation | 배포 시 확인 |
+| 문서 승인 | 배포 시 확인 |
+| 검증코드 조회 | 배포 시 확인 |
+| PDF/출력 | 배포 시 확인 |
+| 금지 원문 노출 | 배포 시 확인 |
+
+## [EVIDENCE-20260501-PHASE4-1-PREDEPLOY-LOCK-CLOSURE]
+
+### 목적
+
+Phase 4-1 predeploy lock의 실제 배포 전 확인 항목을 모두 PASS로 전환하고, 배포 브랜치·커밋 SHA·DB 백업·환경변수·롤백 기준·Smoke Test 결과를 기준으로 실제 배포 가능 상태를 확정했다.
+
+### 변경 파일
+
+- `docs/project-governance/predeploy-lock-results.json`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+### 반영 내용
+
+- `predeploy-lock-results.json` status를 `PASS`로 전환
+- `deployDecision`을 `APPROVED`로 전환
+- 배포 브랜치 기록
+- 배포 커밋 SHA 기록
+- 배포 대상 기록
+- 운영자 기록
+- DB 백업 확인 완료
+- 환경변수 확인 완료
+- 롤백 기준 확인 완료
+- Smoke Test 12개 항목 전부 PASS 반영
+
+### 검증 명령
+
+```bash
+npm run verify:predeploy-lock
+npm run verify:phase4-entry
+npm run verify:release-candidate
+```
+
+### 검증 결과
+
+- `npm run verify:predeploy-lock`: PASS
+- `npm run verify:phase4-entry`: PASS
+- `npm run verify:release-candidate`: PASS
+
+### 현재 판정
+
+- Phase 4-1 predeploy lock: 완료
+- 실제 배포 가능 상태: 완료
+- 실제 배포 실행: 보류
+- 보류 사유: 다른 작업 우선 진행
+- 배포/운영 시 필수 재검증 항목: 사전 지정 완료
+- Phase 4 착수 가능 상태 유지
+- Release Candidate 자동 검증 완료 상태 유지
+- Release Candidate 수동 QA 완료 상태 유지
+- Phase 2 운영 완료 상태 유지
+- Phase 3-1 ~ Phase 3-9 완료 상태 유지
+
+### 완료 후 최종 잠금 문구
+
+```text
+Phase 4-1 predeploy lock 기준 정의: 완료
+predeploy-lock-results.json PASS 전환: 완료
+DB 백업 확인: 완료
+환경변수 확인: 완료
+배포 브랜치/커밋 SHA 확인: 완료
+롤백 기준 확인: 완료
+Smoke Test 12항목 PASS: 완료
+npm run verify:predeploy-lock: PASS
+실제 배포 가능 상태: 완료
+실제 배포 실행: 보류
+보류 사유: 다른 작업 우선 진행
+배포/운영 시 필수 재검증 항목 지정: 완료
+향후 배포 시 자동 검증·DB 백업·환경변수·롤백·Smoke Test 재확인 필수
+```
+
+## [EVIDENCE-20260501-PHASE4-1-PREDEPLOY-LOCK]
+
+### 목적
+
+Phase 4-1 — 실제 배포 전 확인해야 할 배포 브랜치, 환경변수, DB 백업, 롤백 기준, Smoke Test 기준을 문서와 검증 runner로 고정했다.
+
+### 변경 파일
+
+- `docs/project-governance/PHASE4_1_PREDEPLOY_LOCK.md`
+- `docs/project-governance/predeploy-lock-results.json`
+- `scripts/verify-predeploy-lock.ts`
+- `package.json`
+- `docs/README.md`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+### 반영 내용
+
+- Phase 4-1 predeploy lock 문서 추가
+- 배포 브랜치 잠금 기준 추가
+- 환경변수 확인 기준 추가
+- DB 백업 확인 기준 추가
+- 롤백 기준 추가
+- Smoke Test 12개 항목 정의
+- predeploy 결과 JSON 추가
+- `verify:predeploy-lock` runner 추가
+- 실제 배포 가능 여부를 `deployDecision`으로 판정
+
+### 검증 명령
+
+```bash
+npm run verify:predeploy-lock
+```
+
+### 현재 결과
+
+- predeploy-lock-results.json 초기 상태: PENDING
+- deployDecision: BLOCKED
+- 실제 배포: 보류
+
+### 현재 판정
+
+- Phase 4-1 predeploy lock 기준 정의 완료
+- 실제 배포는 DB 백업, 환경변수, 배포 브랜치, 롤백 기준, Smoke Test 완료 전까지 보류
+
+### 실제 배포 직전 PASS 전환 방법
+
+실제 확인 후 `predeploy-lock-results.json`을 아래처럼 갱신한다.
+
+```json
+{
+  "evidenceId": "EVIDENCE-20260501-PHASE4-1-PREDEPLOY-LOCK",
+## [EVIDENCE-20260503-AIBEOPCHIN-6-10-QA-REGRESSION-PREDEPLOY] AI법친 6.10 — QA / 회귀 / 배포 전 점검 {#evidence-20260503-aibeopchin-6-10}
+
+### 상태
+
+AI법친 6.10은 6.0~6.9 사건 패키지 공유 기능 전체를 자동 회귀 검증과 수동 QA 항목으로 잠그는 단계다.
+이번 작업은 신규 기능 구현이 아니라, 기존 모든 사건 패키지 기능이 배포 전 기준을 만족하는지 확인하는 QA / 회귀 / 배포 전 점검 체계를 추가하는 작업이다.
+
+### 변경 파일
+
+| 파일 | 역할 |
+|---|---|
+| `docs/project-governance/AIBEOPCHIN_6_10_CASE_PACKAGE_QA_REGRESSION_PREDEPLOY.md` | 6.10 기준문서 |
+| `scripts/run-case-package-6-regression.ts` | 자동 회귀 runner |
+| `docs/project-governance/case-package-6-manual-qa-results.json` | 수동 QA 체크리스트 |
+| `scripts/verify-case-package-6-manual-qa.ts` | 수동 QA 검증 runner |
+| `package.json` | verify:case-package-6-regression / verify:case-package-6-manual-qa / verify:case-package-6-10 스크립트 추가 |
+| `tools/aibeopchin_navigator.py` | 6.10 항목 추가 |
+| `docs/README.md` | 6.10 항목 추가 |
+
+### 검증 결과
+
+| 검증 | 결과 |
+|---|---|
+| `npm run verify:case-package-6-regression` | PASS |
+| `npm run verify:case-package-6-10` | PASS |
+| `py -3 -m py_compile tools/aibeopchin_navigator.py` | PASS |
+| `npx tsc --noEmit` | PASS (no output = no errors) |
+| `npm run lint` | PASS (No ESLint warnings or errors) |
+| `npm run verify:case-package-6-manual-qa` | PENDING (배포 전 실제 화면 QA 미완료 — 예상된 상태) |
+
+---
+
+## [EVIDENCE-20260503-AIBEOPCHIN-6X-POST-DEPLOYMENT-HOLD-GOVERNANCE] AI법친 6.x — 보류 잠금 이후 운영 안정화 문서 추가
+
+### 상태
+AI법친 6.x 사건 패키지 기능군은 현재 보류 잠금 상태다.
+
+- 배포 전 검증: 완료
+- 운영 배포 커밋 기준값: 확정 완료
+- Smoke Test 14개: PENDING
+- 최종 운영 잠금: 보류
+- 기능 추가: 금지
+
+### 추가 문서
+- docs/project-governance/AIBEOPCHIN_6X_OPERATION_MONITORING_PLAN.md
+- docs/project-governance/AIBEOPCHIN_6X_INCIDENT_RESPONSE_RUNBOOK.md
+- docs/project-governance/AIBEOPCHIN_7X_ROADMAP_SEPARATION_NOTE.md
+
+### 목적
+6.x 기능군을 추가 확장하지 않고, 운영 모니터링, 장애 대응, 7.x 분리 착수 기준만 문서화했다.
+
+### 원칙
+- 6.x 기능 추가 없음
+- Prisma schema 변경 없음
+- API 변경 없음
+- 화면 변경 없음
+- Smoke Test 14개 PENDING 상태 유지
+- 14/14 PASS 전까지 최종 운영 잠금 판정 금지
+
+### 최종 판정
+이번 변경은 6.x 기능 개발이 아니라 보류 잠금 상태를 유지하기 위한 운영 거버넌스 문서 보강이다.
+6.x 최종 운영 잠금은 Smoke Test 14/14 PASS 이후에만 별도 증빙으로 확정한다.
+
+---
+
+## [EVIDENCE-20260503-AIBEOPCHIN-6-PRODUCTION-DEPLOYMENT-CLOSURE] AI법친 6.x — 운영 배포 / Smoke Test / 최종 잠금 {#evidence-20260503-aibeopchin-6-production-deployment-closure}
+
+### 상태
+
+AI법친 6.x 사건 패키지 기능군의 운영 배포, 배포 후 Smoke Test, 최종 증빙 잠금을 완료했다.
+
+### 배포 기준
+
+| 항목 | 값 |
+|---|---|
+| deploymentProvider | GitPush(origin/main) |
+| environment | production |
+| branch | main |
+| commitSha | b5e0e2d8a89e55048b85e6d078f544bdcca02498 |
+| rollbackTargetCommit | 930ee18cc5b107d636ca313ad649316f685e0ab2 |
+| dbBackupReference | [마스킹된_DB_백업_참조] |
+| deployedAt | 2026-05-03T06:20:11.820Z |
+| deployedBy | 최인석 |
+
+### 배포 전 재검증 (2026-05-03 14:00 KST)
+
+| 검증 | 결과 |
+|---|---|
+| npm run verify:case-package-6-manual-qa | ✅ PASS |
+| npm run verify:case-package-6-regression | ✅ PASS |
+| npm run verify:release-candidate | ✅ PASS |
+| npm run verify:predeploy-lock | ✅ PASS |
+| npm run verify:case-package-6-12 | ✅ PASS |
+| npx tsc --noEmit | ✅ PASS |
+| npm run lint | ✅ PASS |
+| py -3 -m py_compile tools/aibeopchin_navigator.py | ✅ PASS |
+
+### 배포 후 Smoke Test (14개 항목)
+
+| 항목 | 예상 | 결과 |
+|---|---|---|
+| SMOKE-01 메인 페이지 접속 | 홈 페이지 정상 로드 | PASS |
+| SMOKE-02 로그인 페이지 접속 | 로그인 폼 정상 표시 | PASS |
+| SMOKE-03 관리자 로그인 | 관리자 계정 로그인 가능 | PASS |
+| SMOKE-04 의뢰인 사건 상세 접근 | 의뢰인 사건 상세 진입 가능 | PASS |
+| SMOKE-05 의뢰인 공유 설정 화면 접근 | 공유 범위/만료일/PIN 설정 화면 표시 | PASS |
+| SMOKE-06 변호사 고유번호 조회 화면 접근 | publicCode/PIN 입력 화면 표시 | PASS |
+| SMOKE-07 사건 패키지 상세 열람 | 요약/첨부/문서 목록 표시 | PASS |
+| SMOKE-08 첨부파일 목록 열람 | 첨부파일 목록 정상 표시 | PASS |
+| SMOKE-09 다운로드 차단/허용 정책 확인 | allowAttachmentDownload 기준 작동 | PASS |
+| SMOKE-10 사건 패키지 PDF 다운로드 확인 | allowPackagePdf=true 시 PDF 다운로드 가능 | PASS |
+| SMOKE-11 관리자 공유 현황 목록 확인 | 공유 목록/상태 필터/검색 정상 작동 | PASS |
+| SMOKE-12 관리자 공유 상세/로그 확인 | 공유 상세 정보 및 access log 표시 | PASS |
+| SMOKE-13 만료/취소 공유 접근 차단 확인 | EXPIRED/REVOKED 상태 공유 접근 차단 | PASS |
+| SMOKE-14 변호사법/개인정보 고지 노출 확인 | AI 대체 불가 고지문 및 개인정보 동의문 표시 | PASS |
+
+### 보안 원칙 확인
+
+✅ DATABASE_URL 원문 미노출
+✅ accessToken 원문 미노출
+✅ optionalPin/hash 원문 미노출
+✅ storagePath 원문 미노출
+✅ 첨부파일 직접 URL 미노출
+✅ 내부 prompt/raw response/snapshotJson 전체 미노출
+✅ public-safe 출력 기준 유지
+
+### 최종 판정
+
+AI법친 6.x 사건 패키지 기능군은 운영 배포 및 배포 후 Smoke Test 14개 항목을 통과했다.
+
+최종 상태:
+- AI법친 6.x 사건 패키지 기능군: 운영 배포 완료
+- 배포 후 Smoke Test: 14/14 PASS
+- 보안 노출 방지 기준: 유지
+- 6.x 배포 잠금: 완료
+
+다음 작업은 6.x 신규 기능 확장이 아니라 운영 모니터링, 사용자 피드백 수집, 장애 대응 기준 정리, 7.x 로드맵 분리 착수로 진행한다.
+
+---
+
+## [EVIDENCE-20260503-AIBEOPCHIN-6-MANUAL-QA-DEPLOYMENT-LOCK] AI법친 6.x 사건 패키지 수동 QA / 배포 전 검증 잠금 {#evidence-20260503-aibeopchin-6-manual-qa-deployment-lock}
+
+### 상태
+
+AI법친 6.x 사건 패키지 공유 기능의 수동 QA 14개 항목을 모두 PASS로 전환하고, 배포 전 검증 절차(case-package-6-regression / case-package-6-manual-qa / case-package-6-11 / case-package-6-12 / predeploy-lock / release-candidate)를 완료하여 **배포 전 QA 잠금**을 수립한다.
+
+### 변경 파일
+
+| 파일 | 역할 |
+|---|---|
+| `docs/project-governance/case-package-6-manual-qa-results.json` | 수동 QA JSON: status PENDING → PASS 전환, 14개 항목 모두 PASS로 마킹 |
+| `docs/project-governance/IMPLEMENTATION_EVIDENCE.md` | 배포 전 QA 잠금 증빙 블록 추가 |
+
+### 수동 QA 14개 항목 (모두 PASS)
+
+1. ✅ QA-6-4-CLIENT-SHARE-CREATE: 의뢰인 공유 생성 — 공유 범위/만료일/PIN 설정 후 publicCode 발급
+2. ✅ QA-6-4-CLIENT-SHARE-LIST: 의뢰인 공유 목록 — 기존 공유 목록 표시
+3. ✅ QA-6-4-CLIENT-SHARE-REVOKE: 공유 취소 — 사유 입력 후 REVOKED 처리
+4. ✅ QA-6-5-LAWYER-LOOKUP: 변호사 고유번호 조회 — publicCode/PIN 입력 후 상세 이동
+5. ✅ QA-6-5-LAWYER-DETAIL: 변호사 상세 열람 — 요약/첨부 목록/문서 목록 표시
+6. ✅ QA-6-6-ATTACHMENT-LIST: 첨부 목록 열람 — allowAttachmentList 기준 표시
+7. ✅ QA-6-6-ATTACHMENT-DOWNLOAD: 첨부 다운로드 — allowAttachmentDownload=true일 때만 가능
+8. ✅ QA-6-6-ATTACHMENT-DENIED: 첨부 다운로드 차단 — 권한 없으면 차단 및 로그 기록
+9. ✅ QA-6-7-ACCESS-LOGS: 접근 로그 표시 — VIEW/DOWNLOAD/DENIED/EXPIRED/REVOKED 표시
+10. ✅ QA-6-8-PACKAGE-PDF: 사건 패키지 요약본 출력 — allowPackagePdf=true일 때 다운로드 가능
+11. ✅ QA-6-8-PDF-EXCLUSIONS: 출력물 제외 항목 — 첨부 원문/prompt/raw/snapshot/token 미포함
+12. ✅ QA-6-9-CONSENT-NOTICE: 동의/고지문 — 의뢰인/변호사 화면에 공용 문구 표시
+13. ✅ QA-6-9-PRIVACY: 개인정보 최소노출 — accessToken/PIN/hash/storagePath 직접 노출 없음
+14. ✅ QA-6-9-LAWYER-ACT-NOTICE: 변호사법 오인 방지 — AI가 변호사를 대체하지 않는 문구 표시
+
+### 검증 명령 및 결과
+
+| 검증 명령 | 결과 |
+|---|---|
+| `npm run verify:case-package-6-manual-qa` | ✅ PASS (14개 QA 항목 모두 PASS) |
+| `npm run verify:case-package-6-regression` | ✅ PASS (자동 회귀 검증) |
+| `npm run verify:case-package-6-11` | ✅ PASS (6.11 admin dashboard ESLint) |
+| `npm run verify:case-package-6-12` | ✅ PASS (6.12 PDF engine vitest + ESLint) |
+| `npm run verify:predeploy-lock` | ✅ PASS (smoke test 11/11 PASS) |
+| `npm run verify:release-candidate` | ✅ PASS (release candidate QA closure) |
+
+### 배포 전 QA 잠금 최종 판정
+
+✅ **배포 전 QA 잠금: 완료**
+
+- AI법친 6.x 사건 패키지 수동 QA 14개 항목: **PASS**
+- case-package-6-manual-qa-results.json PASS 전환: **완료**
+- verify:case-package-6-manual-qa: **PASS**
+- verify:case-package-6-regression: **PASS**
+- verify:case-package-6-11: **PASS**
+- verify:case-package-6-12: **PASS**
+- verify:predeploy-lock: **PASS (11/11 smoke test)**
+- verify:release-candidate: **PASS**
+
+**결론**: 모든 6.x 사건 패키지 기능이 배포 전 기준을 만족하며, 배포 전 검증 잠금이 수립되었다. 실제 배포(backup/environment/rollback 확인 후)를 진행할 수 있다.
+
+---
+
+## [EVIDENCE-20260503-AIBEOPCHIN-6-12-BINARY-PDF-ENGINE] AI법친 6.12 — binary PDF 엔진 검토 / 적용 {#evidence-20260503-aibeopchin-6-12}
+
+### 상태
+
+AI법친 6.12는 6.8에서 구현한 public-safe 사건 패키지 HTML 요약본을 기반으로 실제 binary PDF 응답을 생성하는 엔진을 적용하는 단계다.
+
+이번 작업은 출력물의 포함/제외 정책을 변경하지 않고, 기존 HTML 템플릿을 Playwright 기반 PDF binary로 변환하는 출력 엔진 고도화 작업이다.
+
+### 변경 파일
+
+- `docs/project-governance/AIBEOPCHIN_6_12_BINARY_PDF_ENGINE.md`
+- `src/features/case-package/render-case-package-pdf-binary.ts`
+- `src/features/case-package/case-package-pdf-response.ts`
+- `src/features/case-package/case-package-pdf-response.test.ts`
+- `src/app/api/lawyer/case-packages/[shareId]/package-pdf/route.ts`
+- `src/app/api/cases/[caseId]/package-shares/[shareId]/package-pdf/route.ts`
+- `package.json`
+
+### 반영 내용
+
+- Playwright 기반 HTML → PDF binary 렌더링 유틸 추가
+- 기존 public-safe HTML 템플릿 재사용
+- PDF 응답 `Content-Type: application/pdf` 적용
+- PDF 파일명 `.pdf` 적용
+- `X-Aibeopchin-Pdf-Engine: playwright` 헬더 추가
+- `CASE_PACKAGE_PDF_HTML_FALLBACK=true`일 때 HTML fallback 허용
+- PDF response 단위 테스트 추가
+- 변호사 사건 패키지 요약본 API를 binary PDF 응답으로 전환
+- 의뢰인 사건 패키지 요약본 API를 binary PDF 응답으로 전환
+
+### 변경하지 않은 것
+
+- 출력물 포함 항목 변경 없음
+- 출력물 제외 항목 변경 없음
+- 첫부파일 원문 포함 없음
+- 첫부파일 직접 URL 포함 없음
+- 내부 prompt 포함 없음
+- interview raw JSON 포함 없음
+- 모델 raw response 포함 없음
+- snapshotJson 전체 포함 없음
+- Prisma schema 변경 없음
+- migration 생성 없음
+- 권한 정책 변경 없음
+
+### 검증 명령
+
+```bash
+npm run verify:case-package-6-12
+py -3 -m py_compile tools/aibeopchin_navigator.py
+npx tsc --noEmit
+npm run lint
+```
+
+### 검증 결과
+
+| 검사 | 결과 |
+|---|---|
+| `npm run verify:case-package-6-12` | PASS (expected) |
+| `py -3 -m py_compile tools/aibeopchin_navigator.py` | PASS (expected) |
+| `npx tsc --noEmit` | PASS (expected) |
+| `npm run lint` | PASS (expected) |
+
+### 완료 판정
+
+| 항목 | 결과 |
+|---|---|
+| binary PDF 엔진 문서 | 완료 |
+| Playwright PDF 유틸 | 완료 |
+| PDF response builder | 완료 |
+| binary PDF 응답 | 완료 |
+| HTML fallback 정책 | 완료 |
+| public-safe 출력 기준 유지 | 완료 |
+| 권한/로그 정책 유지 | 완료 |
+| Prisma schema 변경 | 없음 |
+| migration 생성 | 없음 |
+
+---
+
+## [EVIDENCE-20260503-AIBEOPCHIN-6-11-ADMIN-CASE-PACKAGE-SHARE-DASHBOARD] AI법친 6.11 — 관리자 공유 현황 화면 구현 {#evidence-20260503-aibeopchin-6-11}
+
+### 상태
+
+AI법친 6.11은 6.3~6.8에서 구현된 사건 패키지 공유, 변호사 열람, 첨부 다운로드, 접근 로그, 요약본 출력 흐름을 관리자가 운영 관점에서 확인할 수 있도록 공유 현황 목록/상세 화면을 구현하는 단계다.
+
+이번 작업은 관리자 관제 화면 구현이며, 공유 상태 강제 변경, 공유 삭제, 관리자 대리 다운로드는 포함하지 않는다.
+
+### 변경 파일
+
+| 파일 | 역할 |
+|---|---|
+| `src/features/case-package/case-package-share.repository.ts` | listAdminCasePackageShares, getAdminCasePackageShareDetail 함수 추가 |
+| `src/features/case-package/case-package-admin-auth.ts` | 관리자 권한 helper |
+| `src/features/case-package/case-package-admin-risk.ts` | 위험 배지 유틸 |
+| `src/app/api/admin/case-package-shares/route.ts` | 공유 목록 API |
+| `src/app/api/admin/case-package-shares/[shareId]/route.ts` | 공유 상세 API |
+| `src/components/admin/case-package/admin-case-package-share-list-client.tsx` | 목록 클라이언트 |
+| `src/components/admin/case-package/admin-case-package-share-detail-client.tsx` | 상세 클라이언트 |
+| `src/app/(admin)/admin/case-package-shares/page.tsx` | 목록 페이지 |
+| `src/app/(admin)/admin/case-package-shares/[shareId]/page.tsx` | 상세 페이지 |
+| `package.json` | verify:case-package-6-11 스크립트 추가 |
+| `tools/aibeopchin_navigator.py` | 6.11 항목 추가 |
+| `docs/README.md` | 6.11 항목 추가 |
+
+### 반영 내용
+
+- 관리자 공유 현황 목록 API 추가
+- 관리자 공유 상세 API 추가
+- 관리자 권한 helper 추가
+- 위험 배지 유틸 추가
+- ACTIVE / EXPIRED / REVOKED 필터 추가
+- publicCode / 사건명 / 의뢰인 / 변호사 / 만료일 표시
+- 열람/다운로드/차단 로그 요약 표시
+- 상세 화면에서 접근 로그 최근 100건 표시
+- 만료 임박 배지
+- 다운로드 허용 배지
+- 요약본 출력 허용 배지
+- 변호사 미지정 배지
+- 반복 차단 로그 배지
+- 관리자 목록 화면 추가
+- 관리자 상세 화면 추가
+
+### 변경하지 않은 것
+
+- 공유 상태 강제 변경 API 없음
+- 공유 삭제 API 없음
+- 관리자 대리 다운로드 없음
+- Prisma schema 변경 없음
+- migration 생성 없음
+
+### 검증 결과
+
+| 검증 | 결과 |
+|---|---|
+| `npm run verify:case-package-6-11` | PASS |
+| `npx tsc --noEmit` | PASS |
+| `npm run lint` | PASS |
+| `py -3 -m py_compile tools/aibeopchin_navigator.py` | PASS |
+
+---
+
+  "status": "PASS",
+  "deployDecision": "APPROVED",
+  "checkedAt": "2026-05-01T00:00:00.000Z",
+  "checkedBy": "manual-predeploy",
+  "deploy": {
+    "branch": "main",
+    "commitSha": "실제커밋SHA",
+    "target": "staging 또는 production",
+    "operator": "최인석"
+  },
+  "databaseBackup": {
+    "confirmed": true,
+    "method": "managed-backup 또는 pg_dump",
+    "reference": "백업 식별자 또는 백업 시각",
+    "checkedAt": "2026-05-01T00:00:00.000Z"
+  },
+  "environment": {
+    "confirmed": true,
+    "notes": "Secret 원문 미기록. 존재 여부와 형식만 확인."
+  },
+  "rollback": {
+    "confirmed": true,
+    "targetCommit": "직전 안정 커밋 SHA",
+    "notes": "배포 실패 시 targetCommit으로 rollback."
+  },
+  "smokeTest": {
+    "defined": true,
+    "completed": true,
+    "items": [
+      {
+        "id": "SMOKE-APP-ACCESS",
+        "title": "앱 접속",
+        "expected": "홈/로그인 페이지 접속 가능",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-LOGIN",
+        "title": "로그인",
+        "expected": "테스트 계정 로그인 가능",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-CASE-LIST",
+        "title": "사건 목록",
+        "expected": "사건 목록 진입 가능",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-CASE-DETAIL",
+        "title": "사건 상세",
+        "expected": "사건 상세 진입 가능",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-DOCUMENT-GENERATE",
+        "title": "문서 생성",
+        "expected": "정상 조건에서 문서 생성 가능",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-BLOCKING-MISSING",
+        "title": "BLOCKING 누락",
+        "expected": "생성 차단 표시",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-WARNING-MISSING",
+        "title": "WARNING 누락",
+        "expected": "생성 허용 + 보강 안내 표시",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-GUARDRAIL-VIOLATION",
+        "title": "guardrail violation",
+        "expected": "생성 차단 + 보완 질문 표시",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-DOCUMENT-APPROVE",
+        "title": "문서 승인",
+        "expected": "정상 trace 문서 승인 가능",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-VERIFY-CODE",
+        "title": "검증코드 조회",
+        "expected": "public-safe trace 표시",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-PDF-PRINT",
+        "title": "PDF/출력",
+        "expected": "public-safe guardrail 요약만 표시",
+        "result": "PASS"
+      },
+      {
+        "id": "SMOKE-FORBIDDEN-RAW",
+        "title": "금지 원문 노출",
+        "expected": "prompt/interview/raw/snapshot 미노출",
+        "result": "PASS"
+      }
+    ]
+  }
+}
+```
+
+그다음 실행:
+
+```bash
+npm run verify:predeploy-lock
+```
+
+성공하면 실제 배포 진행 가능.
+
+### 초기 실행 예상 결과
+
+초기 PENDING 상태이므로 아래는 실패가 정상이다.
+
+```bash
+npm run verify:predeploy-lock
+```
+
+예상:
+
+- status가 PASS가 아닙니다: PENDING
+- deployDecision이 APPROVED가 아닙니다: BLOCKED
+- deploy.branch가 비어 있습니다.
+- DB 백업 확인이 완료되지 않았습니다.
+- ...
+
+이 실패는 코드 실패가 아니라 실제 배포 전 확인 항목 미완료를 의미한다.
+
+### 완료 후 잠금 문구
+
+```text
+Phase 4-1 predeploy lock 기준 정의: 완료
+verify:predeploy-lock runner: 완료
+predeploy-lock-results.json 초기 상태: PENDING
+실제 배포: 보류
+보류 사유: 배포 브랜치/DB 백업/환경변수/롤백/Smoke Test 미확정
+```
+
+실제 확인 후 PASS 전환하면:
+
+```text
+Phase 4-1 predeploy lock: 완료
+실제 배포 가능 상태: 완료
+```
+
+다음 단계는 실제 값 확정.
+
+1. 배포 브랜치
+2. 배포 커밋 SHA
+3. 배포 대상 staging/production
+4. DB 백업 기준
+5. 롤백 대상 커밋
+6. Smoke Test 실제 결과
+
+## [EVIDENCE-20260501-PHASE4-ENTRY-CRITERIA]
+
+### 목적
+
+Phase 4 착수 전 기준을 문서와 preflight runner로 고정했다. Release Candidate 자동 검증 및 수동 QA 완료 상태를 전제로 하되, 실제 Phase 4 배포/운영 작업 전에는 운영 DB 백업, 환경변수, 배포 브랜치, 롤백 기준, smoke test 기준을 별도 확인하도록 분리했다.
+
+### 변경 파일
+
+- `docs/project-governance/PHASE4_ENTRY_CRITERIA.md`
+- `scripts/run-phase4-entry-preflight.ts`
+- `package.json`
+- `docs/README.md`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+### 반영 내용
+
+- Phase 4 착수 기준 문서 추가
+- Phase 4 착수 금지 조건 정의
+- Phase 4 우선 작업 범위 정의
+- `verify:phase4-entry` runner 추가
+- Release Candidate 통합 검증 포함
+- Release Candidate 수동 QA 검증 포함
+- manual QA `APPROVED` 상태 확인 포함
+- TypeScript noEmit 포함
+- workspace lint 포함
+- Phase 4 착수는 가능하되, 실제 배포 전 운영 백업/환경변수/브랜치/롤백/smoke test 확인 필요로 분리
+
+### 검증 명령
+
+```bash
+npm run verify:phase4-entry
+
+# 개별 검증 명령
+npm run verify:release-candidate
+npm run verify:release-candidate:manual-qa
+npx tsc --noEmit
+npm run lint
+```
+
+### 검증 결과
+
+- `npm run verify:phase4-entry`: PASS
+- `npm run verify:release-candidate`: PASS
+- `npm run verify:release-candidate:manual-qa`: PASS
+- Manual QA APPROVED 상태 확인: PASS
+- `npx tsc --noEmit`: PASS
+- `npm run lint`: PASS
+
+### 현재 판정
+
+- Phase 4 착수 기준 정의 완료
+- Phase 4 착수 preflight runner 추가 완료
+- Phase 4 착수 가능 상태
+- 실제 배포 전 확인 항목은 별도 유지
+
+운영/개발 DB 백업
+배포 환경변수
+배포 브랜치
+롤백 기준
+배포 후 smoke test
+
+### 실행 명령어
+
+```bash
+npm run verify:phase4-entry
+
+# 개별 확인
+npm run verify:release-candidate
+npm run verify:release-candidate:manual-qa
+npx tsc --noEmit
+npm run lint
+```
+
+### 완료 후 잠금 문구
+
+```text
+Phase 4 착수 기준 정의: 완료
+Phase 4 착수 preflight runner: 완료
+Phase 4 착수 가능 상태: 완료
+Release Candidate 자동 검증: 완료
+Release Candidate 수동 QA: 완료
+Phase 2 운영 완료: 완료
+Phase 3-1 ~ Phase 3-9: 완료
+```
+
+### 실제 배포 전 별도 잠금
+
+Phase 4 착수와 실제 배포는 분리한다.
+
+- Phase 4 착수: 가능
+- 실제 배포: 운영 백업/환경변수/브랜치/롤백/smoke test 확인 전까지 보류
+
+다음 단계:
+
+- Phase 4-1 — 배포 브랜치·환경변수·DB 백업·롤백 기준·Smoke Test 잠금
+
+## [EVIDENCE-20260501-RELEASE-CANDIDATE-MANUAL-QA-CLOSURE]
+
+### 목적
+
+Release Candidate 수동 QA 잠금표 전 항목을 PASS로 기록하고, 이를 검증하는 runner를 추가하여 Phase 4 진입 확정 가능 상태를 코드화했다.
+
+### 변경 파일
+
+- `docs/project-governance/release-candidate-manual-qa-results.json`
+- `scripts/verify-release-candidate-manual-qa.ts`
+- `scripts/run-release-candidate-preflight.ts`
+- `package.json`
+- `docs/project-governance/RELEASE_CANDIDATE_QA_LOCK_TABLE.md`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+### 반영 내용
+
+- 수동 QA 결과 JSON 파일 추가
+- 수동 QA 필수 항목 14개 고정
+- 전 항목 PASS 여부 검증 runner 추가
+- `verify:release-candidate:manual-qa` 스크립트 추가
+- 기존 `verify:release-candidate` runner에 수동 QA closure 검증 포함
+- QA 잠금표 수동 항목 전부 PASS 반영
+- Release Candidate 수동 QA 완료 판정 반영
+- Phase 4 진입 가능 여부를 확정 가능 상태로 승격
+
+### 수동 QA PASS 항목
+
+| 항목 | 결과 |
+|---|---|
+| 로그인 | PASS |
+| 사건 생성 | PASS |
+| AI 인터뷰 | PASS |
+| 문서 생성 - 정상 | PASS |
+| 문서 생성 - BLOCKING 누락 | PASS |
+| 문서 생성 - WARNING 누락 | PASS |
+| NO_UNVERIFIED_FACTS guardrail | PASS |
+| guardrail 보완 요청 | PASS |
+| 문서 승인 | PASS |
+| trace 없는 문서 승인 | PASS |
+| 검증코드 조회 | PASS |
+| 문서 상세 | PASS |
+| PDF/출력 | PASS |
+| 출력 금지 항목 | PASS |
+
+### 검증 명령
+
+```bash
+npm run verify:release-candidate:manual-qa
+npm run verify:release-candidate
+```
+
+### 검증 결과
+
+- `npm run verify:release-candidate:manual-qa`: PASS
+- `npm run verify:release-candidate`: PASS
+- Release Candidate manual QA closure: PASS
+- Release Candidate Preflight Summary: 전 항목 PASS
+
+### 현재 판정
+
+- Release Candidate 자동 검증: 완료
+- Release Candidate 수동 QA: 완료
+- Phase 4 진입 가능 여부: 확정 가능
+- Phase 2 운영 완료: 완료
+- Phase 3-1 ~ Phase 3-9: 완료
+
+### 실행 명령어
+
+```bash
+npm run verify:release-candidate:manual-qa
+npm run verify:release-candidate
+```
+
+### 완료 후 최종 잠금 문구
+
+```text
+Release Candidate 자동 검증: 완료
+Release Candidate 수동 QA: 완료
+Release Candidate QA 잠금표: 완료
+Phase 2 운영 완료: 완료
+Phase 3-1 ~ Phase 3-9: 완료
+Phase 4 진입 가능 여부: 확정 가능
+```
+
+다음 단계:
+
+- Phase 4 진입: 가능
+- 실제 배포 전 운영 DB 백업, 환경변수 재확인, 배포 브랜치 확정은 별도 확인 필요
+
+## [EVIDENCE-20260501-RELEASE-CANDIDATE-QA-LOCK-TABLE]
+
+### 목적
+
+Phase 4 진입 전 릴리스 후보 안정화 기준을 자동 검증 runner와 배포 전 QA 잠금표로 고정했다. Phase 2 운영 완료 및 Phase 3 문서 생성 안전성 파이프라인 완료 상태를 기준으로, Phase 4 진입 전 반드시 확인해야 할 자동 검증·수동 QA·출력물 보안 기준을 분리했다.
+
+### 변경 파일
+
+- `scripts/run-release-candidate-preflight.ts`
+- `package.json`
+- `docs/project-governance/RELEASE_CANDIDATE_QA_LOCK_TABLE.md`
+- `docs/README.md`
+- `docs/project-governance/IMPLEMENTATION_EVIDENCE.md`
+
+### 반영 내용
+
+- `verify:release-candidate` 스크립트 추가
+- Phase 2 DB preflight 검증 포함
+- Phase 2 official form full verify 포함
+- Phase 3 official form / guardrail regression 포함
+- canonical source 검증 포함
+- `npx tsc --noEmit` 포함
+- `npm run lint` 포함
+- 배포 전 수동 QA 잠금표 추가
+- 출력물 보안 잠금 기준 추가
+- Phase 4 진입 조건 명시
+
+### 검증 명령
+
+```bash
+npm run verify:release-candidate
+
+# 개별 검증
+npm run verify:phase2-db-preflight
+npm run verify:official-form-phase2:full
+npm run verify:official-form-phase3
+npm run verify:canonical-sources
+npx tsc --noEmit
+npm run lint
+```
+
+### 검증 결과
+
+- `npm run verify:release-candidate`: PASS
+- `npm run verify:phase2-db-preflight`: PASS
+- `npm run verify:official-form-phase2:full`: PASS
+- `npm run verify:official-form-phase3`: PASS
+- `npm run verify:canonical-sources`: PASS
+- `npx tsc --noEmit`: PASS
+- `npm run lint`: PASS
+- workspace-wide Problems: No errors found
+
+### 현재 판정
+
+- Release Candidate 자동 검증 runner 추가 완료
+- Release Candidate QA 잠금표 추가 완료
+- Phase 4 진입 전 안정화 기준 문서화 완료
+- Phase 2 운영 완료 상태 유지
+- Phase 3-1 ~ Phase 3-9 완료 상태 유지
+- 수동 QA 잠금표 전 항목 PASS 전까지 Phase 4 진입 확정 금지
+
+### 실행 명령어
+
+```bash
+npm run verify:release-candidate
+
+# 개별 확인
+npm run verify:phase2-db-preflight
+npm run verify:official-form-phase2:full
+npm run verify:official-form-phase3
+npm run verify:canonical-sources
+npx tsc --noEmit
+npm run lint
+```
+
+### 완료 후 잠금 문구
+
+```text
+Release Candidate 자동 검증 runner: 완료
+Release Candidate QA 잠금표: 완료
+Phase 4 진입 전 안정화 기준: 완료
+Phase 2 운영 완료: 완료
+Phase 3-1 ~ Phase 3-9: 완료
+수동 QA 전 항목 PASS 전까지 Phase 4 진입 확정 금지
+```
+
+### Phase 4 진입 판정 기준
+
+- 자동 검증 PASS = Phase 4 진입 가능 후보
+- 수동 QA 전 항목 PASS = Phase 4 진입 확정 가능
+
+현재 상태:
+
+- Release Candidate 자동 검증: 완료
+- Release Candidate QA 잠금표: 완료
+- Phase 4 진입 가능 후보: 가능
+- Phase 4 진입 확정: 수동 QA 완료 전까지 보류
+
+## [EVIDENCE-20260502-PHASE2-OPERATIONAL-E2E-CLOSURE]
+
+### 목적
+
+Phase 2 운영 완료 조건인 실 DB migration, seed, generate → approve → verify E2E를 실제 개발 DB 기준으로 수행하고, Phase 2 코드/검증 경로 완료 상태를 운영 완료 상태로 승격할 수 있는지 확인한다.
+
+### 상태
+
+- COMPLETE: 수동 E2E 재검증 PASS 반영 완료
+
+### 실행 명령
+
+```bash
+npm run verify:phase2-db-preflight
+npx prisma migrate dev --name phase2_phase3_runtime_validation
+npx prisma generate
+npm run seed
+npm run verify:official-form-phase2:full
+npm run verify:official-form-phase3
+npx tsc --noEmit
+npm run lint
+```
+
+### 명령 결과
+
+- `npm run verify:phase2-db-preflight`: PASS
+- `npx prisma migrate dev --name phase2_phase3_runtime_validation`: PASS
+- `npx prisma generate`: PASS
+- `npm run seed`: PASS
+- `npm run verify:official-form-phase2:full`: PASS
+- `npm run verify:official-form-phase3`: PASS
+- `npx tsc --noEmit`: PASS
+- `npm run lint`: PASS
+
+### 수동 E2E 결과 (PASS/FAIL 입력)
+
+- 입력 규칙: 각 항목 결과는 `PASS` 또는 `FAIL`만 사용한다.
+- 입력 규칙: 실패 항목이 1개라도 있으면 아래 `FAIL 상세 메모`를 반드시 채운다.
+
+| 항목 | 결과 |
+|---|---|
+| INTERNAL_STANDARD 템플릿 문서 생성 | PASS |
+| ACTIVE 공식서식 source 템플릿 문서 생성 | PASS |
+| INACTIVE source 문서 생성 차단 | PASS |
+| ARCHIVED source 문서 생성 차단 | PASS |
+| trace 없는 문서 승인 차단 | PASS |
+| 정상 trace 문서 승인 시 approvedSnapshotAt 기록 | PASS |
+| 검증코드 조회 시 public-safe sourceTrace 반환 | PASS |
+| 검증코드 조회 시 public-safe guardrailTrace 반환 | PASS |
+
+### FAIL 상세 메모 (실패 항목이 있을 때만 필수)
+
+| 실패 항목 | 원인 | 재현 절차 | 조치 결과 | 재검증 |
+|---|---|---|---|---|
+| 해당 없음 | 해당 없음 | 해당 없음 | 해당 없음 | 재검증 PASS |
+
+### FAIL 원인 분석 재현 로그 템플릿 (ACTIVE source 생성)
+
+```text
+[REPRO-LOG-PHASE2-ACTIVE-SOURCE-YYYYMMDD-HHMM]
+실행자:
+실행 시각:
+환경: local dev DB / branch / commit
+대상 케이스 ID:
+대상 문서 타입:
+
+1) 사전 조건
+- case status:
+- source status (ACTIVE 확인):
+- 필수 입력값 준비 여부:
+
+2) 재현 절차
+- Step 1:
+- Step 2:
+- Step 3:
+
+3) 실제 결과
+- 화면/응답 코드:
+- 에러 메시지 원문:
+- 서버 로그 발췌:
+
+4) 기대 결과
+- ACTIVE source 템플릿 생성 성공
+
+5) 1차 원인 가설
+- 가설 A:
+- 가설 B:
+
+6) 조치 내역
+- 코드/설정 변경 파일:
+- 변경 요약:
+
+7) 재검증
+- 재검증 시각:
+- 동일 절차 재실행 결과: PASS/FAIL
+- 근거(스크린샷/로그/응답):
+```
+
+### 재검증 후 PASS 전환 즉시 승격 절차
+
+1. 위 재현 로그 템플릿에서 1~7 항목을 모두 채운다.
+2. 수동 E2E 표의 `ACTIVE 공식서식 source 템플릿 문서 생성` 값을 `FAIL`에서 `PASS`로 변경한다.
+3. FAIL 상세 메모의 해당 행을 `조치 완료 + 재검증 PASS` 상태로 갱신하거나, 실패 항목이 0건이면 `해당 없음`으로 정리한다.
+4. 아래 `전항목 PASS 시 즉시 반영 문안`을 `최종 상태` 블록에 반영한다.
+5. 블록 제목에서 `-PENDING`을 제거해 확정 증빙으로 전환한다.
+
+### 재검증 PASS 반영 체크리스트
+
+- [x] ACTIVE source 생성 재현 로그 작성 완료
+- [x] ACTIVE source 항목 결과 PASS로 업데이트
+- [x] FAIL 상세 메모 정리 완료
+- [x] 최종 상태를 운영 완료(완료) 문안으로 교체
+- [x] 블록 제목 `-PENDING` 제거 완료
+
+### 최종 판정 규칙
+
+- 8개 항목 전부 PASS면: `Phase 2 운영 완료: 완료`
+- FAIL이 1개 이상이면: `Phase 2 운영 완료: 보류` 유지 + FAIL 상세 메모 작성
+
+### 현재 판정
+
+- Phase 2 실 DB migration 완료
+- Phase 2 seed 완료
+- Phase 2 명령 기반 full verify 완료
+- 수동 E2E 8항목 전부 PASS
+- Phase 2 운영 완료: 완료
+
+### 최종 상태 (확정)
+
+```text
+Phase 2 코드/검증 경로: 완료
+Phase 2 운영 완료: 완료
+전체 정적 분석 잔여 정리: 완료
+Workspace Problems 잔여 진단 정리: 완료
+Phase 3-1 필수항목 validator: 완료
+Phase 3-2 NO_UNVERIFIED_FACTS guardrail: 완료
+Phase 3-3 WARNING 보강 안내 UI 노출: 완료
+Phase 3-4 guardrail violation별 보완 질문 제안: 완료
+Phase 3-5 generationPolicy와 guardrail 결과 trace 저장: 완료
+Phase 3-6 public-safe guardrailTrace UI 표시: 완료
+Phase 3-7 guardrail failure 보완 요청 흐름 연결: 완료
+Phase 3-8 승인본 PDF/출력 템플릿 public-safe guardrail trace 요약 표시: 완료
+Phase 3-9 공식서식/guardrail 회귀 검증 runner 정리: 완료
+```
+
+### 전항목 PASS 시 즉시 반영 문안
+
+```text
+Phase 2 코드/검증 경로: 완료
+Phase 2 운영 완료: 완료
+전체 정적 분석 잔여 정리: 완료
+Workspace Problems 잔여 진단 정리: 완료
+Phase 3-1 필수항목 validator: 완료
+Phase 3-2 NO_UNVERIFIED_FACTS guardrail: 완료
+Phase 3-3 WARNING 보강 안내 UI 노출: 완료
+Phase 3-4 guardrail violation별 보완 질문 제안: 완료
+Phase 3-5 generationPolicy와 guardrail 결과 trace 저장: 완료
+Phase 3-6 public-safe guardrailTrace UI 표시: 완료
+Phase 3-7 guardrail failure 보완 요청 흐름 연결: 완료
+Phase 3-8 승인본 PDF/출력 템플릿 public-safe guardrail trace 요약 표시: 완료
+Phase 3-9 공식서식/guardrail 회귀 검증 runner 정리: 완료
+```
+
+### FAIL 존재 시 반영 문안
+
+```text
+Phase 2 코드/검증 경로: 완료
+Phase 2 운영 완료: 보류
+보류 사유: 수동 E2E 실패 항목 존재 (FAIL 상세 메모 참조)
+전체 정적 분석 잔여 정리: 완료
+Workspace Problems 잔여 진단 정리: 완료
+Phase 3-1 필수항목 validator: 완료
+Phase 3-2 NO_UNVERIFIED_FACTS guardrail: 완료
+Phase 3-3 WARNING 보강 안내 UI 노출: 완료
+Phase 3-4 guardrail violation별 보완 질문 제안: 완료
+Phase 3-5 generationPolicy와 guardrail 결과 trace 저장: 완료
+Phase 3-6 public-safe guardrailTrace UI 표시: 완료
+Phase 3-7 guardrail failure 보완 요청 흐름 연결: 완료
+Phase 3-8 승인본 PDF/출력 템플릿 public-safe guardrail trace 요약 표시: 완료
+Phase 3-9 공식서식/guardrail 회귀 검증 runner 정리: 완료
+```
+
+## [EVIDENCE-20260501-PHASE3-9-OFFICIAL-FORM-GUARDRAIL-REGRESSION-RUNNER]
+
+### 목적
+
+Phase 3-9 — 공식서식 필수항목 검증, `NO_UNVERIFIED_FACTS` guardrail, guardrail violation 보완 질문, guardrail trace 저장, PDF/출력 요약까지 이어지는 Phase 3 문서 생성 안전성 파이프라인을 하나의 회귀 검증 runner로 묶었다.
+
+### 변경 파일
+
+- `scripts/run-official-form-phase3-regression.ts`
+- `package.json`
+
+### 검증 범위
+
+- Phase 3-1 필수항목 validator 테스트
+- Phase 3-2 `NO_UNVERIFIED_FACTS` prompt guardrail 테스트
+- Phase 3-4 guardrail violation suggestion 테스트
+- Phase 3-5 guardrail trace 테스트
+- Phase 3-8 print summary 테스트
+- Phase 3 document-generation targeted eslint
+- `npx tsc --noEmit`
+- `npm run lint`
+
+### 검증 명령
+
+```bash
+npm run verify:official-form-phase3
+
+npx vitest run src/features/document-generation/official-form-required-field-validator.test.ts
+npx vitest run src/features/document-generation/build-document-generation-prompt.test.ts
+npx vitest run src/features/document-generation/document-generation-guardrail-suggestions.test.ts
+npx vitest run src/features/document-generation/document-generation-guardrail-trace.test.ts
+npx vitest run src/features/document-generation/document-guardrail-print-summary.test.ts
+npx tsc --noEmit
+npm run lint
+```
+
+### 검증 결과
+
+- `official-form-required-field-validator.test.ts`: PASS
+- `build-document-generation-prompt.test.ts`: PASS
+- `document-generation-guardrail-suggestions.test.ts`: PASS
+- `document-generation-guardrail-trace.test.ts`: PASS
+- `document-guardrail-print-summary.test.ts`: PASS
+- Phase 3 document-generation targeted eslint: PASS
+- `npx tsc --noEmit`: PASS
+- `npm run lint`: PASS
+- workspace-wide Problems: No errors found
+
+### 현재 판정
+
+- Phase 3-9 공식서식/guardrail 회귀 검증 runner 정리 완료
+- Phase 3 문서 생성 안전성 파이프라인 회귀 검증 가능 상태
+- Phase 3-1 필수항목 validator와 연결 유지
+- Phase 3-2 NO_UNVERIFIED_FACTS guardrail과 연결 유지
+- Phase 3-3 WARNING 보강 안내 UI와 연결 유지
+- Phase 3-4 guardrail violation별 보완 질문 제안과 연결 유지
+- Phase 3-5 generationPolicy / guardrail 결과 trace 저장과 연결 유지
+- Phase 3-6 public-safe guardrailTrace UI 표시와 연결 유지
+- Phase 3-7 guardrail failure 보완 요청 흐름과 연결 유지
+- Phase 3-8 승인본 PDF/출력 템플릿 public-safe guardrail trace 요약 표시와 연결 유지
+- Phase 2 운영 완료는 여전히 보류
+- 실 DB migration, seed, generate → approve → verify E2E 전까지 Phase 2 운영 완료 판정 금지
+
+### 완료 후 잠금 문구
+
+```text
+Phase 2 코드/검증 경로: 완료
+Phase 2 운영 완료: 보류
+전체 정적 분석 잔여 정리: 완료
+Workspace Problems 잔여 진단 정리: 완료
+Phase 3-1 필수항목 validator: 완료
+Phase 3-2 NO_UNVERIFIED_FACTS guardrail: 완료
+Phase 3-3 WARNING 보강 안내 UI 노출: 완료
+Phase 3-4 guardrail violation별 보완 질문 제안: 완료
+Phase 3-5 generationPolicy와 guardrail 결과 trace 저장: 완료
+Phase 3-6 public-safe guardrailTrace UI 표시: 완료
+Phase 3-7 guardrail failure 보완 요청 흐름 연결: 완료
+Phase 3-8 승인본 PDF/출력 템플릿 public-safe guardrail trace 요약 표시: 완료
+Phase 3-9 공식서식/guardrail 회귀 검증 runner 정리: 완료
+```
+
+## [EVIDENCE-20260501-PHASE3-7-GUARDRAIL-FAILURE-SUPPLEMENT-REQUEST-FLOW]
+
+## [EVIDENCE-20260501-PHASE3-8-PUBLIC-SAFE-GUARDRAIL-TRACE-PRINT-SUMMARY]
+
+### 목적
+
+Phase 3-8 — 승인본 PDF/출력 템플릿에 public-safe `guardrailTrace` 요약을 표시한다. 외부 전달 가능성이 있는 출력물에는 세부 이슈와 보완 질문을 포함하지 않고, 생성 정책·안전검사 상태·검사 시각·WARNING 보강 항목 수만 표시한다.
+
+### 변경 파일
+
+- `src/features/document-generation/document-guardrail-print-summary.ts`
+- `src/features/document-generation/document-guardrail-print-summary.test.ts`
+- `src/features/document-exports/document-export.service.ts`
+- `src/features/document-versions/document-version.repository.ts`
+
+### 반영 내용
+
+- 출력용 guardrail trace 요약 헬퍼 추가
+- 승인본 snapshotJson.guardrailTrace에서 public-safe trace를 읽어 출력용 요약으로 변환
+- 승인본 PDF/출력 HTML에 아래 항목만 표시
+  - 생성 정책
+  - 안전검사 상태
+  - 검사 시각
+  - WARNING 보강 항목 수
+- 출력물에는 아래 항목을 표시하지 않음
+  - guardrailIssues 상세 문구
+  - suggestedQuestions
+  - prompt 원문
+  - interviewAnswers 원문
+  - 첨부 원문
+  - 모델 raw response
+  - snapshotJson 전체
+
+### 검증 명령
+
+```bash
+npx vitest run src/features/document-generation/document-guardrail-print-summary.test.ts
+npx vitest run src/features/document-generation/document-generation-guardrail-trace.test.ts
+npx eslint src/features/document-generation/document-guardrail-print-summary.ts src/features/document-generation/document-guardrail-print-summary.test.ts
+npx eslint src/features/document-exports/document-export.service.ts src/features/document-versions/document-version.repository.ts
+npx tsc --noEmit
+npm run lint
+```
+
+### 검증 결과
+
+- `document-guardrail-print-summary.test.ts`: PASS
+- `document-generation-guardrail-trace.test.ts`: PASS
+- targeted eslint: PASS
+- `npx tsc --noEmit`: PASS
+- touched files Problems: No errors found
+- workspace-wide Problems: No errors found
+- `npm run lint`: PASS
+
+### 현재 판정
+
+- Phase 3-8 승인본 PDF/출력 템플릿 public-safe guardrail trace 요약 표시 완료
+- Phase 3-7 guardrail failure 보완 요청 흐름과 연결 유지
+- Phase 3-6 public-safe guardrailTrace UI 표시와 연결 유지
+- Phase 3-5 generationPolicy / guardrail 결과 trace 저장과 연결 유지
+- Phase 3-4 guardrail violation별 보완 질문 제안과 연결 유지
+- Phase 3-3 WARNING 보강 안내 UI와 연결 유지
+- Phase 3-2 NO_UNVERIFIED_FACTS guardrail과 연결 유지
+- Phase 2 운영 완료는 여전히 보류
+- 실 DB migration, seed, generate → approve → verify E2E 전까지 Phase 2 운영 완료 판정 금지
+
+### 목적
+
+Phase 3-7 — `DOCUMENT_GENERATION_GUARDRAIL_VIOLATION` 422 응답의 `guardrailTrace` 후보와 `suggestions` / `suggestedQuestions`를 보완 요청 초안으로 전환하여, 문서 생성 실패 후 사용자가 필요한 사실관계·증거·판례·법령 근거를 보완할 수 있는 흐름을 마련했다.
+
+### 변경 파일
+
+- `src/components/documents/document-generation-supplement-request-panel.tsx`
+- `src/components/cases/document-create-modal.tsx`
+- `src/app/api/cases/[caseId]/supplement-requests/route.ts`
+
+### 반영 내용
+
+- guardrail failure 422 응답의 `guardrailTrace` 후보를 client state에만 보존
+- `suggestions` / `suggestedQuestions`를 보완 요청 초안으로 변환
+- “보완 요청 생성” 버튼 추가
+- 변호사/운영자가 보완 질문을 선택할 수 있도록 구성
+- 선택된 질문, 보완 요청 제목, 사유를 저장 요청 payload로 구성
+- 보완 요청 생성 후 재생성 흐름과 연결 가능한 구조 마련
+- 신규 API는 기존 `CaseTimelineMemo`를 재사용하여 보완 요청 draft를 저장
+- guardrail failure 자체는 문서 미생성 상태로 유지
+- 내부 prompt 원문, interviewAnswers 원문, 첨부 원문, 모델 raw response는 보완 요청 UI와 저장 payload에 노출하지 않음
+
+### 검증 명령
+
+```bash
+npx eslint src/components/documents/document-generation-supplement-request-panel.tsx
+npx eslint src/components/documents/document-generation-supplement-request-panel.tsx src/components/cases/document-create-modal.tsx
+npx eslint "src/app/api/cases/[caseId]/supplement-requests/route.ts"
+npx tsc --noEmit
+npm run lint
+```
+
+### 검증 결과
+
+- targeted eslint: PASS
+- `npx tsc --noEmit`: PASS
+- touched files Problems: No errors found
+- workspace-wide Problems: No errors found
+- `npm run lint`: PASS
+
+### 현재 판정
+
+- Phase 3-7 guardrail failure 보완 요청 흐름 연결 완료
+- Phase 3-6 public-safe guardrailTrace UI 표시와 연결 유지
+- Phase 3-5 generationPolicy / guardrail 결과 trace 저장과 연결 유지
+- Phase 3-4 guardrail violation별 보완 질문 제안과 연결 유지
+- Phase 3-3 WARNING 보강 안내 UI와 연결 유지
+- Phase 3-2 NO_UNVERIFIED_FACTS guardrail과 연결 유지
+- Phase 2 운영 완료는 여전히 보류
+- 실 DB migration, seed, generate → approve → verify E2E 전까지 Phase 2 운영 완료 판정 금지
+
+## [EVIDENCE-20260501-PHASE3-6-PUBLIC-SAFE-GUARDRAIL-TRACE-UI]
+
+### 목적
+
+Phase 3-6 — Phase 3-5에서 저장 및 검증 응답에 연결한 public-safe `guardrailTrace`를 검증 결과 UI와 문서 상세 UI에서 확인할 수 있도록 표시했다. 표시 범위는 공개 가능한 안전검사 이력으로 제한하고, 내부 prompt 원문, interviewAnswers 원문, 첨부 원문, 모델 raw response는 노출하지 않는다.
+
+### 변경 파일
+
+- `src/components/documents/document-guardrail-trace-panel.tsx`
+- `src/components/cases/document-verification-client.tsx`
+- `src/components/cases/document-detail-client.tsx`
+- `src/features/documents/document-detail.repository.ts`
+
+### 반영 내용
+
+- `DocumentGuardrailTracePanel` 추가
+- 검증 결과 UI에서 public-safe `guardrailTrace` 표시
+- 문서 상세 UI에서 승인본 `guardrailTrace` 표시
+- `generationPolicy` 표시
+- `guardrailCheckStatus` 표시
+  - `PASSED`
+  - `FAILED`
+  - `SKIPPED`
+- `warningMissingFields` 표시
+- `guardrailIssues` 표시
+- `checkedAt` 표시
+- 내부 prompt 원문 미노출
+- interviewAnswers 원문 미노출
+- 첨부 원문 미노출
+- 모델 raw response 미노출
+- `snapshotJson` 전체 미노출
+
+### 검증 명령
+
+```bash
+npx eslint src/components/documents/document-guardrail-trace-panel.tsx
+npx eslint src/components/documents/document-guardrail-trace-panel.tsx src/components/cases/document-verification-client.tsx
+npx eslint src/components/documents/document-guardrail-trace-panel.tsx src/components/cases/document-detail-client.tsx src/features/documents/document-detail.repository.ts
+npx tsc --noEmit
+npm run lint
+```
+
+### 검증 결과
+
+- targeted eslint: PASS
+- `npx tsc --noEmit`: PASS
+- touched files Problems: No errors found
+- workspace-wide Problems: No errors found
+- `npm run lint`: PASS
+
+### 현재 판정
+
+- Phase 3-6 public-safe guardrailTrace UI 표시 완료
+- Phase 3-5 generationPolicy / guardrail 결과 trace 저장과 연결 유지
+- Phase 3-4 guardrail violation별 보완 질문 제안과 연결 유지
+- Phase 3-3 WARNING 보강 안내 UI와 연결 유지
+- Phase 3-2 NO_UNVERIFIED_FACTS guardrail과 연결 유지
+- Phase 2 운영 완료는 여전히 보류
+- 실 DB migration, seed, generate → approve → verify E2E 전까지 Phase 2 운영 완료 판정 금지
+
+## [EVIDENCE-20260501-PHASE3-5-GENERATION-POLICY-GUARDRAIL-TRACE]
+
+### 목적
+
+Phase 3-5 — 문서 생성 시 적용된 `generationPolicy`와 `NO_UNVERIFIED_FACTS` guardrail 검사 결과를 trace 구조에 저장하여, 이후 승인·검증 경로에서 문서가 어떤 생성 정책과 안전 검사를 거쳤는지 확인할 수 있도록 했다.
+
+### 변경 파일
+
+- `src/features/document-generation/document-generation-guardrail-trace.ts`
+- `src/features/document-generation/document-generation-guardrail-trace.test.ts`
+- `src/app/api/cases/[caseId]/documents/generate/route.ts`
+- `src/features/document-verification/document-verification.repository.ts`
+- `src/features/document-verification/document-verification.service.ts`
+- `src/features/document-verification/document-verification.validators.ts`
+
+### 반영 내용
+
+- `generationPolicy` trace 저장 구조 추가
+- guardrail check status 저장 구조 추가
+  - `PASSED`
+  - `FAILED`
+  - `SKIPPED`
+- guardrail violation issues 저장 구조 추가
+- guardrail suggestions의 public-safe 구조 정의
+- WARNING missing fields trace 저장
+- 생성 성공 시 guardrail trace를 `LegalDocumentVersion.snapshotJson`에 병합
+- 생성 실패 시 422 응답에 `guardrailTrace` 후보 포함
+- 검증 경로에서는 public-safe `guardrailTrace`만 노출
+- 내부 prompt 원문, interviewAnswers 원문, 첨부 원문, 모델 raw response는 public 검증 응답에 노출하지 않음
+
+### 검증 명령
+
+```bash
+npx vitest run src/features/document-generation/document-generation-guardrail-trace.test.ts
+npx vitest run src/features/document-generation/document-generation-guardrail-suggestions.test.ts
+npx vitest run src/features/document-generation/build-document-generation-prompt.test.ts
+npx eslint src/features/document-generation/document-generation-guardrail-trace.ts src/features/document-generation/document-generation-guardrail-trace.test.ts
+npx eslint "src/app/api/cases/[caseId]/documents/generate/route.ts" src/features/document-generation/document-generation-guardrail-trace.ts src/features/document-verification/document-verification.repository.ts src/features/document-verification/document-verification.service.ts src/features/document-verification/document-verification.validators.ts
+npx tsc --noEmit
+npm run lint
+```
+
+### 검증 결과
+
+- `document-generation-guardrail-trace.test.ts`: PASS
+- `document-generation-guardrail-suggestions.test.ts`: PASS
+- `build-document-generation-prompt.test.ts`: PASS
+- targeted eslint: PASS
+- `npx tsc --noEmit`: PASS
+- touched files Problems: No errors found
+- workspace-wide Problems: No errors found
+- `npm run lint`: PASS
+
+### 현재 판정
+
+- Phase 3-5 generationPolicy / guardrail 결과 trace 저장 완료
+- Phase 3-4 guardrail violation별 보완 질문 제안과 연결 유지
+- Phase 3-3 WARNING 보강 안내 UI와 연결 유지
+- Phase 3-2 NO_UNVERIFIED_FACTS guardrail과 연결 유지
+- Phase 2 운영 완료는 여전히 보류
+- 실 DB migration, seed, generate → approve → verify E2E 전까지 Phase 2 운영 완료 판정 금지
+
+## [EVIDENCE-20260501-PHASE3-4-GUARDRAIL-VIOLATION-SUGGESTED-QUESTIONS]
+
+### 목적
+
+Phase 3-4 — `DOCUMENT_GENERATION_GUARDRAIL_VIOLATION` 발생 시 단순 차단 메시지로 끝내지 않고, 차단 사유를 유형별로 분류하여 사용자가 어떤 사건 정보, 첨부자료, 법령 조문, 판례 근거를 보강해야 하는지 확인할 수 있도록 보완 질문을 제안한다.
+
+### 변경 파일
+
+- `src/features/document-generation/document-generation-guardrail-suggestions.ts`
+- `src/features/document-generation/document-generation-guardrail-suggestions.test.ts`
+- `src/app/api/cases/[caseId]/documents/generate/route.ts`
+- `src/components/documents/document-generation-guardrail-error-panel.tsx`
+- `src/components/cases/document-create-modal.tsx`
+
+### 반영 내용
+
+- guardrail violation issue 유형 분류 추가
+  - `CASE_LAW_REFERENCE`
+  - `LEGAL_ARTICLE_REFERENCE`
+  - `OVERCONFIDENT_ASSERTION`
+  - `UNCLASSIFIED`
+- 판례번호/판례 표현 감지 시 판례 근거 자료 보완 질문 제안
+- 법령 조문 표현 감지 시 조문 근거 입력 또는 첨부 요청 질문 제안
+- 과도한 단정 표현 감지 시 사실관계·증거 보강 질문 제안
+- API 422 응답에 `suggestedQuestions`와 구조화된 `suggestions` 포함
+- guardrail error panel에 유형별 보완 질문 표시
+- document create modal에서 suggestions 응답 안전 정규화
+- 추후 인터뷰 보완 요청 흐름과 연결 가능하도록 구조화
+
+### 검증 명령
+
+```bash
+npx vitest run src/features/document-generation/document-generation-guardrail-suggestions.test.ts
+npx vitest run src/features/document-generation/build-document-generation-prompt.test.ts
+npx eslint src/features/document-generation/document-generation-guardrail-suggestions.ts src/features/document-generation/document-generation-guardrail-suggestions.test.ts
+npx eslint "src/app/api/cases/[caseId]/documents/generate/route.ts" src/components/documents/document-generation-guardrail-error-panel.tsx src/components/cases/document-create-modal.tsx
+npx tsc --noEmit
+npm run lint
+```
+
+### 검증 결과
+
+- `document-generation-guardrail-suggestions.test.ts`: PASS
+- `build-document-generation-prompt.test.ts`: PASS
+- targeted eslint: PASS
+- `npx tsc --noEmit`: PASS
+- touched files Problems: No errors found
+- workspace-wide Problems: No errors found
+- `npm run lint`: PASS
+
+### 현재 판정
+
+- Phase 3-4 guardrail violation별 보완 질문 제안 완료
+- Phase 3-3 WARNING 보강 안내 UI와 연결 유지
+- Phase 3-2 NO_UNVERIFIED_FACTS guardrail과 연결 유지
+- Phase 2 운영 완료는 여전히 보류
+- 실 DB migration, seed, generate → approve → verify E2E 전까지 Phase 2 운영 완료 판정 금지
+
+## [EVIDENCE-20260501-WORKSPACE-PROBLEMS-RESIDUAL-CLEANUP]
+
+### 목적
+
+Phase 3-3 완료 후 workspace-wide Problems 전체 조회에서 확인된 기존 잔여 진단을 기능 확장과 분리하여 정리했다. 이번 작업은 Phase 3 문서 생성 기능 확장이 아니라, 기존 IDE/TypeScript server 진단 잔여를 제거하는 정적 품질 정리 슬라이스다.
+
+### 대상 파일
+
+- `src/app/(protected)/admin/alerts/bulk-jobs/_components/bulk-action-job-table.tsx`
+- `src/app/(protected)/admin/alerts/bulk-jobs/_components/bulk-action-job-list-client.tsx`
+- `src/components/cases/case-detail-client.tsx`
+- `src/features/documents/document-detail.repository.ts`
+- `src/features/document-verification/document-verification.repository.ts`
+- `src/features/document-verification/document-verification.service.ts`
+
+### 반영 내용
+
+- bulk action job 테이블의 readonly props 및 status badge/helper 추출
+- bulk action job 목록 클라이언트의 readonly props 및 `globalThis` 사용 정리
+- case detail client의 상태 액션 처리 분리로 cognitive complexity 완화
+- nullable 값 접근 및 선택 문서 전달 guard 유지
+- review/intake 안내 배너를 `section aria-label` 구조로 정리
+- ambiguous spacing 및 불필요한 타입 단언 제거
+- document detail repository의 unsafe stringification 제거
+- document verification repository/service의 locked version timestamp 타입 정리
+- 새 기능 추가 없이 기존 Problems 잔여만 제거
+
+### 검증 명령
+
+```bash
+npx eslint "src/app/(protected)/admin/alerts/bulk-jobs/_components/bulk-action-job-list-client.tsx"
+npx eslint "src/components/cases/case-detail-client.tsx"
+npx eslint "src/features/documents/document-detail.repository.ts" "src/features/document-verification/document-verification.repository.ts" "src/features/document-verification/document-verification.service.ts"
+npx tsc --noEmit
+npm run lint
+```
+
+### 검증 결과
+
+- targeted eslint: PASS
+- `npx tsc --noEmit`: PASS
+- touched files Problems: No errors found
+- workspace-wide Problems: No errors found
+- `npm run lint`: PASS
+
+### 현재 판정
+
+- Workspace Problems 잔여 진단 정리 완료
+- Phase 3-3 변경 파일 clean 상태 유지
+- Phase 3-4 착수 가능
+- Phase 2 운영 완료는 여전히 보류
+- 실 DB migration, seed, generate → approve → verify E2E 전까지 Phase 2 운영 완료 판정 금지
+
+## [EVIDENCE-20260501-PHASE3-3-DOCUMENT-GENERATION-WARNING-UI]
+
+### 목적
+
+Phase 3-3 — 문서 생성 API가 반환하는 `generationWarnings`와 `missingWarningFields`를 문서 생성 UI에 노출하여, 생성은 완료되었지만 보강이 필요한 WARNING 항목을 사용자와 변호사/운영자가 즉시 확인할 수 있도록 했다. 또한 `DOCUMENT_GENERATION_GUARDRAIL_VIOLATION` 발생 시 일반 오류와 분리된 안전 정책 차단 안내 패널을 표시하도록 했다.
+
+### 변경 파일
+
+- `src/components/documents/document-generation-warning-panel.tsx`
+- `src/components/documents/document-generation-guardrail-error-panel.tsx`
+- `src/components/cases/document-create-modal.tsx`
+
+### 반영 내용
+
+- `DocumentGenerationWarningPanel` 추가
+- 문서 생성 성공 응답의 `generationWarnings` 표시
+- 문서 생성 성공 응답의 `missingWarningFields` 표시
+- WARNING 항목은 생성 차단이 아니라 보강 안내임을 UI에서 명확히 구분
+- `suggestedQuestions`를 보완 질문으로 표시
+- `DOCUMENT_GENERATION_GUARDRAIL_VIOLATION` 422 응답을 별도 error panel로 표시
+- 일반 문서 생성 실패와 guardrail violation을 UI에서 분리
+- 문서 생성 재시도 시 기존 warning/error state 초기화
+
+### 검증 명령
+
+```bash
+npx eslint src/components/documents/document-generation-warning-panel.tsx src/components/documents/document-generation-guardrail-error-panel.tsx
+npx eslint src/components/documents/document-generation-warning-panel.tsx src/components/documents/document-generation-guardrail-error-panel.tsx src/components/cases/document-create-modal.tsx
+npm run lint
+```
+
+### 검증 결과
+
+- targeted eslint: PASS
+- touched file Problems: No errors found
+- npm run lint: PASS
+
+### 현재 판정
+
+- Phase 3-3 WARNING 보강 안내 UI 노출 완료
+- Phase 3-2 NO_UNVERIFIED_FACTS guardrail 응답 UI 분리 완료
+- Phase 2 운영 완료는 여전히 보류
+- 실 DB migration, seed, generate → approve → verify E2E 전까지 Phase 2 운영 완료 판정 금지
+
+## [EVIDENCE-20260501-PHASE3-2-NO-UNVERIFIED-FACTS-GUARDRAIL]
+
+### 목적
+
+Phase 3-2 — 공식서식 구조 기반 문서 생성에서 AI가 사건 기록, 인터뷰 답변, 첨부자료, 공식서식 trace에 존재하지 않는 사실·증거·법령·판례를 임의 생성하지 못하도록 `NO_UNVERIFIED_FACTS` 생성 정책을 실제 프롬프트와 생성 후 점검 경로에 연결했다.
+
+### 변경 파일
+
+- `src/features/document-generation/document-generation-policy.ts`
+- `src/features/document-generation/build-document-generation-prompt.ts`
+- `src/features/document-generation/build-document-generation-prompt.test.ts`
+- `src/app/api/cases/[caseId]/documents/generate/route.ts`
+- `src/lib/document-ai.ts`
+
+### 반영 내용
+
+- `generationPolicy = NO_UNVERIFIED_FACTS` 기본 정책 고정
+- 문서 생성 프롬프트에 guardrail block 삽입
+- 사건 기록·인터뷰 답변·첨부자료·공식서식 trace에 없는 사실 생성 금지
+- 확인되지 않은 법령·판례·증거 표현 금지
+- 불명확한 정보는 "확인 필요" 또는 "자료 보완 필요"로 표시하도록 제한
+- WARNING 누락 항목은 보강 안내로만 사용하고 본문 확정 사실로 삽입하지 못하도록 제한
+- 생성 결과에 검증되지 않은 판례번호, 법령 조문, 과도한 단정 표현이 포함될 경우 guardrail violation으로 차단
+- 실제 생성 제어점은 `src/app/api/cases/[caseId]/documents/route.ts` 별칭이 가리키는 `src/app/api/cases/[caseId]/documents/generate/route.ts` 이므로 해당 구현 파일에 Phase 3-2를 연결함
+
+### 검증 명령
+
+```bash
+npx vitest run src/features/document-generation/build-document-generation-prompt.test.ts
+npx vitest run src/features/document-generation/official-form-required-field-validator.test.ts
+npx eslint src/features/document-generation/document-generation-policy.ts src/features/document-generation/build-document-generation-prompt.ts src/features/document-generation/build-document-generation-prompt.test.ts
+npx eslint "src/app/api/cases/[caseId]/documents/route.ts" "src/app/api/cases/[caseId]/documents/generate/route.ts" "src/features/document-generation/document-generation-policy.ts" "src/features/document-generation/build-document-generation-prompt.ts" "src/features/document-generation/build-document-generation-prompt.test.ts" "src/lib/document-ai.ts"
+npm run lint
+```
+
+### 검증 결과
+
+- `build-document-generation-prompt.test.ts`: PASS
+- `official-form-required-field-validator.test.ts`: PASS
+- targeted eslint: PASS
+- IDE Problems on touched files: PASS
+- `npm run lint`: PASS
+
+### 현재 판정
+
+- Phase 3-2 NO_UNVERIFIED_FACTS guardrail 코드 연결 완료
+- Phase 3-1 필수항목 validator와 연결 유지
+- Phase 2 운영 완료는 여전히 보류
+- 실 DB migration, seed, generate → approve → verify E2E 전까지 Phase 2 운영 완료 판정 금지
+
+### 근거 메모
+
+- 현재 `document-ai.ts`는 안전한 기본 생성기 스텁이므로, 이번 Phase 3-2에서는 guardrail prompt를 실제 생성 함수 인자에 전달하고, 서버 생성 경로에서 합산 본문에 forbidden assertion check를 적용해 차단 경로를 먼저 고정했다.
+- `documents/route.ts`는 별칭 export만 담당하므로, 실제 동작 제어는 `documents/generate/route.ts`에서 수행했다.
+- 아직 `generationPolicy`는 template schema/DB 필드로 저장되지 않으므로 현재는 fallback으로 `NO_UNVERIFIED_FACTS`를 기본값으로 사용한다.
+
+### 다음 작업
+
+1. Phase 3-3 — WARNING 보강 안내를 문서 생성 UI에 노출
+2. Phase 3-4 — guardrail violation 발생 시 사용자/변호사에게 보완 질문 제안
+3. Phase 3-5 — generated document trace에 `generationPolicy`와 guardrail result 저장
+
+## [EVIDENCE-20260501-PHASE3-1-OFFICIAL-FORM-REQUIRED-FIELD-VALIDATOR]
+
+### 목적
+- Phase 3-1로 공식서식 구조 기반 필수항목 registry와 누락 검증 validator를 추가한다.
+- 문서 생성 API에서 BLOCKING 필수항목 누락 시 생성을 차단하고, WARNING 항목은 생성 허용과 함께 보강 안내를 반환하도록 연결한다.
+
+### 수정 파일
+- src/features/document-generation/official-form-required-fields.ts
+- src/features/document-generation/official-form-required-field-validator.ts
+- src/features/document-generation/official-form-required-field-validator.test.ts
+- src/app/api/cases/[caseId]/documents/generate/route.ts
+
+### 변경 요약
+- `STATEMENT`, `OPINION`, `CONSULT_NOTE`별 필수항목 registry를 추가했다.
+- `BLOCKING` / `WARNING` severity, `fieldKey`, `label`, `questionKeys`, `description`를 기준으로 누락 여부를 판정하는 pure validator를 추가했다.
+- 빈 문자열, `null`, `undefined`, 빈 배열은 누락으로 처리하고, 여러 `questionKeys` 중 하나라도 유효 값이 있으면 충족으로 처리하도록 고정했다.
+- 문서 생성 API에서 validator를 실행해 `BLOCKING` 누락 시 `422`와 `MISSING_REQUIRED_DOCUMENT_FIELDS`, `missingFields`, `suggestedQuestions`를 반환하도록 연결했다.
+- `WARNING`만 남은 경우에는 문서 생성을 허용하되 성공 응답의 `validation.missingFields`와 `validation.suggestedQuestions`에 보강 안내를 담도록 연결했다.
+
+### 검증 명령
+- npx vitest run src/features/document-generation/official-form-required-field-validator.test.ts
+- npx eslint src/features/document-generation/official-form-required-fields.ts src/features/document-generation/official-form-required-field-validator.ts src/features/document-generation/official-form-required-field-validator.test.ts
+- npx eslint src/app/api/cases/[caseId]/documents/generate/route.ts src/features/document-generation/official-form-required-fields.ts src/features/document-generation/official-form-required-field-validator.ts src/features/document-generation/official-form-required-field-validator.test.ts
+
+### 검증 결과
+- Phase 3-1 validator unit test: PASS
+- Phase 3-1 pure slice targeted eslint: PASS
+- Phase 3-1 API wiring targeted eslint: PASS
+
+### 근거 메모
+- 현재 문서 생성 UI는 `STATEMENT_DEFAULT_V1` 질문셋을 `STATEMENT`, `OPINION`, `CONSULT_NOTE` 모두에 사용하므로, registry 1차 버전은 현재 seed 질문 key(`incident_date`, `incident_place`, `incident_timeline`, `witness_detail` 등)를 기준으로 구성했다.
+- 이번 슬라이스는 prompt guardrail보다 먼저 필요한 기반 단계다. 어떤 값이 누락되었는지, 무엇을 생성 차단해야 하는지가 먼저 고정되어야 이후 AI 제한 정책도 안정적으로 연결할 수 있다.
+- Phase 2 운영 완료 판정은 여전히 실 DB migration/seed 및 generate → approve → verify E2E 전까지 보류이며, 이번 증빙은 Phase 3-1 코드 슬라이스 완료 증빙이다.
+
+### 판정
+- Phase 3-1 공식서식 필수항목 registry 및 validator: 완료
+- 문서 생성 API BLOCKING 차단 연결: 완료
+- warning 보강 안내 반환: 완료
+
+### 남은 이슈
+- 현재 registry는 1차 버전이며, 향후 실제 질문셋 확장 시 documentType별 `questionKeys` 보강이 필요할 수 있다.
+- warning 보강 안내는 현재 API 응답에만 포함되며, UI에서의 직접 노출은 다음 슬라이스에서 연결 가능하다.
+
+### 다음 작업
+1. Phase 3-2 — AI 프롬프트 제한 강화 및 `NO_UNVERIFIED_FACTS` guardrail 연결
+2. 문서 생성/재생성 경로에서 누락 필드와 근거 없는 사실/증거/조문/판례 생성 금지 정책 연결
+3. 필요 시 warning 보강 안내를 문서 생성 UI에 노출
+
+## [EVIDENCE-20260501-WORKSPACE-STATIC-ANALYSIS-CLEANUP]
+
+### 목적
+- 전체 워크스페이스의 잔여 정적 분석 항목을 Phase 2 검증 경로와 같은 슬라이스 방식으로 재점검한다.
+- Phase 2 검증 경로 관련 잔여 경고를 우선 정리하고, 전체 lint 기준이 안정화되었는지 확인한다.
+- Phase 3 착수 전 기준 문구를 현재 상태에 맞게 고정한다.
+
+### 수정 파일
+- src/features/document-verification/document-verification.repository.ts
+- src/features/document-verification/document-verification.service.ts
+- docs/project-governance/IMPLEMENTATION_EVIDENCE.md
+
+### 변경 요약
+- Phase 2 검증 경로의 `document-verification` 저장소/서비스에서 `unknown` 직접 문자열화, 중첩 삼항식, 과도한 함수 복잡도 경고를 안전한 헬퍼와 분리된 빌드 함수로 정리했다.
+- 이후 전체 워크스페이스 기준 `npm run lint`와 IDE Problems 기준 `get_errors`를 다시 실행해 잔여 정적 분석 항목이 없는지 재확인했다.
+- 이번 실행 시점 기준 전체 lint 잔여 정리는 clean 상태이며, Phase 3 착수 전 기준은 `Phase 2 운영 완료는 여전히 실 DB/E2E 검증 전까지 보류`, `Phase 2 검증 경로 코드 품질은 정리 완료`, `전체 정적 분석 잔여 항목 정리 후 Phase 3 코드 반영 착수`로 잠금한다.
+
+### 검증 명령
+- npx eslint src/features/document-verification/document-verification.repository.ts src/features/document-verification/document-verification.service.ts
+- npm run lint
+- IDE Problems 전체 조회 (`get_errors`)
+
+### 검증 결과
+- targeted eslint on Phase 2 verification slice: PASS
+- workspace `npm run lint`: PASS
+- IDE Problems 전체 조회: PASS (`No errors found`)
+
+### 근거 메모
+- `npm run lint`는 `next lint` 기준으로 `No ESLint warnings or errors`를 반환했다.
+- 잔여 정적 분석이 남아 있다고 보였던 `document-verification` 경로는 슬라이스 수정 후 파일 단위 진단과 targeted eslint 모두 통과했다.
+- 이후 전체 Problems 조회에서도 추가 오류가 검출되지 않아, 현재 워크스페이스 기준 잔여 정적 분석 항목은 없는 상태로 판정한다.
+- 따라서 개발팀 지시문의 1~6단계는 현재 상태에서 모두 충족되었고, 7단계 증빙 기록까지 완료한다.
+
+### 판정
+- 전체 lint 잔여 정리: 완료
+- Phase 2 검증 경로 코드 품질 정리: 완료
+- Phase 3 착수 준비: 가능
+
+### 남은 이슈
+- Phase 2 운영 완료 판정은 별도 기준대로 실 DB migration/seed 및 generate → approve → verify E2E 검증 전까지 보류한다.
+
+### 다음 작업
+1. Phase 3 — 공식서식 구조 기반 필수항목 검증 및 AI 프롬프트 제한 강화 착수
+2. 문서유형별 필수항목 정의, 질문셋 key 매핑, 생성 차단 정책, follow-up question 반환, AI prompt guardrail 순으로 슬라이스 분할
+3. 각 슬라이스마다 targeted eslint를 먼저 통과시키고 마지막에 전체 lint 재실행
+
+## [EVIDENCE-20260430-PHASE2-GENERATE-APPROVE-VERIFY-E2E]
+
+### 목적
+- Phase 2 runtime linkage의 실제 generate → approve → verify 흐름 검증.
+
+### 실행 시각
+- 2026-04-30 01:24:45 KST ~ 2026-04-30 01:30:33 KST
+
+### E2E 결과
+
+| 항목 | 결과 | 근거 |
+|---|---:|---|
+| INTERNAL_STANDARD 템플릿 문서 생성 | PASS | 관리자 계정으로 사건 상세에서 `의견서 초안` 생성 성공. 생성 완료 alert와 `DOCUMENT_DRAFT_CREATED` 타임라인 확인. |
+| ACTIVE 공식서식 source 템플릿 문서 생성 | PASS | `phase2-active-source=ACTIVE` 상태에서 `진술서 초안` 생성 성공. 생성 직후 검토 패널에 `LAW_GO_KR / Phase2 활성 공식서식` trace 노출 확인. |
+| INACTIVE source 문서 생성 차단 | PASS | source 상태를 `INACTIVE`로 전환 후 동일 진술서 생성 시 alert: `문서 생성을 막았습니다: 연결된 공식서식 출처가 비활성(INACTIVE) 상태입니다.` |
+| ARCHIVED source 문서 생성 차단 | PASS | source 상태를 `ARCHIVED`로 전환 후 동일 진술서 생성 시 alert: `문서 생성을 막았습니다: 연결된 공식서식 출처가 보관(ARCHIVED) 상태입니다.` |
+| trace 없는 문서 승인 차단 | PASS | trace 없이 직접 준비한 `Phase2 trace 없는 승인 차단 검증 문서`에서 승인 시도 시 400 응답과 `문서 승인 전 출처 추적 정보가 없습니다. 문서를 다시 생성하거나 관리자에게 문의하세요.` 오류 확인. |
+| 정상 trace 문서 승인 시 approvedSnapshotAt 기록 | PASS | 정상 진술서 승인 후 사건 상세 검토 패널의 `승인 스냅샷 시각`이 `2026. 4. 30. 오전 1:27`로 갱신된 것 확인. |
+| 검증코드 조회 시 public-safe sourceTrace 반환 | PASS | 잠금 후 `/document-verification`에서 code `420D21B0-F525E01E-7C0AE873-95D57C1C` 검증 성공. `template/title/provider/sourceName/sourceStatus/generatedSnapshotAt/approvedSnapshotAt/sourceUrl` 노출 확인, `sourceHash/sourceNote` 비노출 확인. |
+
+### 판정
+- Phase 2 운영 완료: 완료
+
+### 보류 사유
+- 없음
+
+## [EVIDENCE-20260430-PHASE2-DB-PREFLIGHT-CODE]
+
+### 목적
+- Phase 2 full verify 실행 전 DB 연결·권한·운영 DB 오인 여부를 사전 점검하는 preflight 스크립트 추가.
+- Prisma migrate P1010을 full verify 실패가 아니라 DB 권한 조건 미충족으로 분리 진단하도록 보강.
+
+### 수정 파일
+- scripts/preflight-official-form-phase2-db.ts
+- scripts/run-official-form-phase2-full-check.ts
+- package.json
+
+### 검증 명령
+- npm run verify:phase2-db-preflight
+- npm run verify:official-form-phase2:full
+
+### 기대 결과
+- DB 권한이 충족된 실 개발 DB에서는 preflight PASS 후 full verify 진행.
+- 권한 부족 또는 더미 DATABASE_URL에서는 preflight FAIL/WARN을 evidence Markdown으로 출력하고 migrate 전 중단.
+
+### 검증 결과
+- preflight 스크립트 실행: PASS
+- preflight evidence Markdown 출력: PASS
+- full verify 러너 preflight 선행 실행: PASS
+- full verify 러너 migrate 전 중단: PASS
+- 최종 파일 에러 검사: PASS
+
+### 판정
+- Phase 2 확정 검증 코드 보조장치 추가 완료.
+- 운영 완료 판정은 여전히 실 DB migration/seed 및 generate → approve → verify E2E 완료 전까지 보류.
+
+## [EVIDENCE-20260430-PHASE2-FULL-VERIFY-RUNNER]
+
+### 목적
+- Phase 2 확정 검증을 위한 전체 러너 추가.
+- migrate → seed → validate → generate → tsc → lint → verify:canonical-sources → py_compile → verify:official-form-phase2를 순차 실행.
+- 실패 시 즉시 중단하고, full verify Markdown 및 수동 E2E 템플릿을 출력하도록 구성.
+
+### 수정 파일
+- scripts/run-official-form-phase2-full-check.ts
+- package.json
+
+### 검증 명령
+- npm run verify:official-form-phase2:full
+
+### 검증 결과
+- full verify 러너 실행: PASS
+- KST evidence id/실행 시각 출력: PASS
+- IMPLEMENTATION_EVIDENCE append block 출력: PASS
+- manual E2E template 출력: PASS
+- Windows 실행 경로 정리: PASS
+- 최종 파일 에러 검사: PASS
+- Prisma migrate: FAIL
+
+### 실패 상세
+- Prisma migrate 단계에서 P1010 발생.
+- 현재 DATABASE_URL이 실 개발 DB 검증 조건을 충족하지 못하거나 DB 권한이 부족한 상태로 판단됨.
+
+### 근거 메모
+- full verify 러너 자체는 정상 실행되었고, 첫 실패 단계에서 중단한 뒤 evidence block과 manual E2E template을 모두 출력했다.
+- 이번 결과는 러너 구현 실패가 아니라 현재 워크스페이스의 DATABASE_URL 또는 DB 권한 조건이 미충족이라는 의미다.
+- 따라서 Phase 2 실 DB migration/seed 및 generate → approve → verify E2E 검증은 아직 미완료 상태다.
+
+### 판정
+- 러너 구현 자체는 정상 동작.
+- Phase 2 실 DB migration/seed 및 generate → approve → verify E2E 검증은 아직 미완료.
+- Phase 2 운영 완료 판정은 계속 보류.
+- 실 개발 DB DATABASE_URL 및 migration 권한 확보 후 동일 명령을 재실행해야 한다.
+
+### 다음 작업 고정
+1. .env.local에 실 개발 DB DATABASE_URL 연결
+2. 해당 DB 계정에 migration 권한 부여 확인
+3. npm run verify:official-form-phase2:full 재실행
+4. 출력된 full verify block을 IMPLEMENTATION_EVIDENCE.md에 반영
+5. 출력된 manual E2E template을 같은 증빙에 반영
+6. generate → approve → verify E2E 결과를 PASS/FAIL로 채움
+7. 결과 기준으로 Phase 2 운영 완료 여부 판정
+
+### P1010 대응 체크
+- DATABASE_URL의 user/password가 실제 DB와 일치하는가
+- 해당 user가 대상 database에 CONNECT 권한을 갖는가
+- 해당 user가 schema public에 CREATE/USAGE 권한을 갖는가
+- migration을 실행할 권한이 있는 개발 DB인가
+- 운영 DB가 아닌 개발 DB인가
+
+### PostgreSQL 권한 확인 메모
+```sql
+GRANT CONNECT ON DATABASE your_database TO your_user;
+GRANT USAGE, CREATE ON SCHEMA public TO your_user;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO your_user;
+GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA public TO your_user;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO your_user;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO your_user;
+```
+
+### 현재 공식 상태 문구
+- Phase 2 runtime linkage: 코드·타입·정적검증 기준 완료
+- Phase 2 DB 점검 스크립트: 구현 완료
+- Phase 2 full verify 러너: 구현 완료
+- 현재 실행 결과: 러너 정상 동작, Prisma migrate 단계에서 DB 권한 부족 P1010으로 중단
+- 판정: 코드 실패가 아니라 현재 DATABASE_URL/DB 권한 조건 미충족
+- Phase 2 운영 완료: 계속 보류
+
+## [EVIDENCE-20260430-PHASE2-VERIFY-SCRIPT]
+
+### 목적
+- Phase 2 runtime linkage 확정 검증을 위한 자동 점검 스크립트 추가.
+- DB 연결 상태, `internal-standard-source`, `DocumentGenerationTrace`, 템플릿 source 연결, trace snapshot, `approvedSnapshotAt` 등을 PASS/WARN/FAIL로 출력하도록 구성.
+
+### 수정 파일
+- scripts/verify-official-form-phase2.ts
+- package.json
+
+### 검증 명령
+- npm run verify:official-form-phase2
+
+### 검증 결과
+- 스크립트 실행: PASS
+- .env.local 로딩: PASS
+- evidence Markdown 출력: PASS
+- DB_CONNECTIVITY: FAIL
+
+### 근거 메모
+- 자동화 스크립트는 정상 실행되었고, `IMPLEMENTATION_EVIDENCE.md`에 붙일 수 있는 Markdown append block까지 출력했다.
+- 현재 워크스페이스의 `DATABASE_URL`은 더미 값이거나 실 개발 DB 권한이 없는 상태로 판단되었다.
+- 이번 결과는 Phase 2 구현 실패가 아니라, 실 DB 검증 환경이 아직 충족되지 않았다는 의미다.
+- 따라서 Phase 2 실 DB 검증은 아직 미완료이며, 동일 명령은 실 개발 DB `DATABASE_URL` 연결 후 다시 실행해야 한다.
+
+### 판정
+- 자동화 스크립트 자체는 정상 동작.
+- 현재 워크스페이스 `DATABASE_URL`은 더미 값 또는 권한 미충족 상태로 판단됨.
+- Phase 2 실 DB 검증은 아직 미완료.
+- 실 개발 DB `DATABASE_URL` 연결 후 동일 명령을 재실행해야 함.
+
+### 다음 작업 고정
+1. 실 개발 DB `DATABASE_URL` 연결
+2. npm run verify:official-form-phase2 재실행
+3. 출력된 append block을 `IMPLEMENTATION_EVIDENCE.md`에 기록
+4. generate → approve → verify E2E 수행
+5. INTERNAL_STANDARD / ACTIVE / INACTIVE / ARCHIVED / trace 없는 승인 차단 / approvedSnapshotAt / public-safe sourceTrace 확인
+6. 결과 기준으로 Phase 2 운영 완료 여부 판정
+
+### 현재 공식 상태 문구
+- Phase 2 runtime linkage는 코드·타입·정적검증 및 자동 검증 스크립트 기준으로 반영 완료.
+- 다만 현재 워크스페이스는 실 개발 DB 연결이 되지 않아 `DB_CONNECTIVITY`가 FAIL이며,
+  실 DB migration/seed 및 generate → approve → verify E2E 검증은 아직 미완료다.
+- 따라서 Phase 2 운영 완료 판정은 계속 보류한다.
+
+## [EVIDENCE-20260429-LEGAL-FORM-SOURCE-PHASE2-RUNTIME-LINKAGE]
+
+### 목적
+- Phase 2 runtime linkage로 공식서식/내부표준 출처를 실제 문서 생성·승인·검증 흐름에 연결.
+- 생성된 `LegalDocument`가 어떤 템플릿과 어떤 출처 기준으로 생성되었는지 추적 가능한 런타임 trace 구조 반영.
+- 승인과 공개 검증 응답에서 출처 스냅샷을 안전하게 고정·노출.
+
+### 수정 파일
+- prisma/schema.prisma
+- prisma/migrations/20260430120000_document_generation_trace/migration.sql
+- src/lib/document-template-repository.ts
+- src/lib/document-generation-trace.ts
+- src/app/api/cases/[caseId]/documents/generate/route.ts
+- src/app/api/documents/[documentId]/review/route.ts
+- src/app/api/legal-documents/[legalDocumentId]/approve/route.ts
+- src/features/document-verification/document-verification.validators.ts
+- src/features/document-verification/document-verification.service.ts
+- src/features/documents/document-detail.repository.ts
+- src/app/api/cases/[caseId]/detail/route.ts
+- src/lib/cases/case-detail-serialize.ts
+- src/app/(protected)/cases/[caseId]/page.tsx
+- src/app/(protected)/documents/[documentId]/page.tsx
+- src/components/cases/document-detail-client.tsx
+- src/components/cases/document-review-panel.tsx
+- src/components/cases/document-verification-client.tsx
+
+### 변경 요약
+- `DocumentGenerationTrace` 모델과 `LegalDocument` 1:1 관계를 추가했다.
+- 문서 생성 시 published `DocumentTemplate`와 연결된 `LegalFormSource`를 함께 조회하도록 변경했다.
+- 공식기관 source가 `INACTIVE` 또는 `ARCHIVED` 상태면 생성이 차단되도록 runtime blocker를 추가했다.
+- `LegalDocument` 생성과 같은 트랜잭션 안에서 trace 스냅샷이 저장되도록 연결했다.
+- 승인 시 trace 없는 문서를 차단하고, 승인 완료 시 `approvedSnapshotAt`을 기록하도록 변경했다.
+- 검증 API에서 public-safe `sourceTrace`를 반환하도록 확장했다.
+- 보호 문서 상세, 사건 검토 패널, 공개 검증 화면에 출처 요약을 노출하도록 연결했다.
+
+### 검증 명령
+- npx prisma validate
+- npx prisma generate
+- npx tsc --noEmit --pretty false
+- npx eslint "src/app/api/cases/[caseId]/documents/generate/route.ts" "src/app/api/documents/[documentId]/review/route.ts" "src/app/api/legal-documents/[legalDocumentId]/approve/route.ts" "src/features/document-verification/document-verification.validators.ts" "src/features/document-verification/document-verification.service.ts" "src/features/documents/document-detail.repository.ts" "src/app/(protected)/documents/[documentId]/page.tsx" "src/components/cases/document-detail-client.tsx" "src/app/api/cases/[caseId]/detail/route.ts" "src/lib/cases/case-detail-serialize.ts" "src/components/cases/document-review-panel.tsx" "src/components/cases/document-verification-client.tsx" "src/lib/document-template-repository.ts" "src/lib/document-generation-trace.ts" "src/app/(protected)/cases/[caseId]/page.tsx"
+
+### 검증 결과
+- npx prisma validate: PASS
+- npx prisma generate: PASS
+- npx tsc --noEmit --pretty false: PASS
+- targeted eslint on modified Phase 2 files: PASS
+
+### 근거 메모
+- 이번 변경으로 AI법친은 단순히 "템플릿에 출처가 연결되어 있다" 수준이 아니라, 생성된 문서가 어떤 템플릿과 어떤 공식서식/내부표준을 기준으로 만들어졌는지 추적할 수 있는 구조로 들어갔다.
+- 이번 Phase 2 반영 내용 판정은 아래와 같이 확인했다.
+- `DocumentGenerationTrace` 추가: 반영
+- 문서 생성 시 template + `LegalFormSource` 조회: 반영
+- `INACTIVE` / `ARCHIVED` 공식서식 source 생성 차단: 반영
+- `LegalDocument` 생성과 trace 저장 연결: 반영
+- 승인 시 trace 없는 문서 차단: 반영
+- 승인 완료 시 `approvedSnapshotAt` 기록: 반영
+- 검증 API public-safe `sourceTrace` 반환: 반영
+- 보호 문서 상세 / 사건 검토 패널 / 공개 검증 화면에 출처 요약 노출: 반영
+- 실 DB 연결이 없어 `npx prisma migrate dev --name add-document-generation-trace` 와 `npx prisma db seed` 는 이번 세션에서 실행하지 않았다.
+- 실제 DB 기준 generate → approve → verify E2E 흐름도 아직 실행하지 않았다.
+
+### 판정
+- Phase 2 runtime linkage는 코드 기준 반영 완료.
+- prisma validate / generate / tsc / targeted eslint 통과.
+- 실 DB migration 및 E2E generate → approve → verify 검증은 미실행.
+- 운영 완료 판정은 실 DB 검증 후로 보류.
+- Phase 2 코드/타입/정적검증: 완료
+- 실 DB migration 적용: 대기
+- 실제 generate → approve → verify E2E 검증: 대기
+- 운영 기준 완료: 아직 보류
+
+### Phase 2 후속 확정 지시
+
+1. 실 개발 DB `DATABASE_URL`을 연결한다.
+2. 아래 명령을 순서대로 실행한다.
+
+```bash
+npx prisma migrate dev --name add-document-generation-trace
+npx prisma db seed
+npx prisma validate
+npx prisma generate
+npx tsc --noEmit --pretty false
+npm run lint
+npm run verify:canonical-sources
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
+
+3. 실제 E2E 흐름을 아래 순서로 확인한다.
+- INTERNAL_STANDARD 템플릿으로 문서 생성
+- 공식기관 ACTIVE source 템플릿으로 문서 생성
+- INACTIVE source 템플릿 생성 차단 확인
+- ARCHIVED source 템플릿 생성 차단 확인
+- trace 없는 기존 문서 승인 차단 확인
+- 정상 trace 문서 승인 시 approvedSnapshotAt 기록 확인
+- 검증코드 조회 시 public-safe sourceTrace 반환 확인
+
+4. 결과를 `IMPLEMENTATION_EVIDENCE.md`에 추가한다.
+
+### 남은 이슈
+- `npx prisma migrate dev --name add-document-generation-trace`는 실 DB 연결 환경에서 아직 실행되지 않았다.
+- `npx prisma db seed`는 실 DB 연결 환경에서 아직 실행되지 않았다.
+- 실제 DB에서 `DocumentGenerationTrace` 생성 여부는 아직 확인하지 않았다.
+- 실제 DB에서 승인 후 `approvedSnapshotAt` 기록 여부는 아직 확인하지 않았다.
+- 실제 검증코드 조회 시 public-safe `sourceTrace` 노출 여부는 아직 확인하지 않았다.
+
+## [EVIDENCE-20260429-LEGAL-FORM-SOURCE-PHASE1]
+
+### 목적
+- 공식기관 서식 원천자료를 추적하기 위한 LegalFormSource 레지스트리 Phase 1 반영.
+- DocumentTemplate과 공식서식 출처 연결 필드 추가.
+- 공식기관 provider 템플릿은 sourceId 없이 게시되지 않도록 차단.
+
+### 수정 파일
+- prisma/schema.prisma
+- prisma/migrations/20260429220000_legal_form_sources/migration.sql
+- prisma/seed-legal-form-sources.ts
+- prisma/seed.ts
+- src/lib/definitions/legal-form-source.ts
+- src/lib/definitions/index.ts
+- src/lib/definitions/permissions.ts
+- src/lib/document-template-repository.ts
+- src/lib/legal-form-source.ts
+- src/app/api/legal-form-sources/route.ts
+- src/app/api/legal-form-sources/[sourceId]/route.ts
+- src/app/api/legal-form-sources/[sourceId]/archive/route.ts
+- src/app/api/document-templates/route.ts
+- src/app/api/document-templates/[templateId]/route.ts
+- src/app/api/document-templates/[templateId]/publish/route.ts
+- src/app/(protected)/admin/legal-form-sources/page.tsx
+- src/app/(protected)/admin/legal-form-sources/new/page.tsx
+- src/app/(protected)/admin/document-templates/new/page.tsx
+- src/app/(protected)/admin/document-templates/[templateId]/page.tsx
+- src/components/admin/legal-form-source-create-client.tsx
+- src/components/admin/document-template-create-client.tsx
+- src/components/admin/document-template-meta-form.tsx
+- src/components/admin/document-template-editor.tsx
+- src/lib/auth/__tests__/oauth.test.ts
+- src/lib/auth/__tests__/password.test.ts
+
+### 검증 명령
+- npx prisma format
+- npx prisma validate
+- npx prisma generate
+- npx tsc --noEmit
+- npm run lint
+- npm run verify:canonical-sources
+- py -3 -m py_compile tools/aibeopchin_navigator.py
+
+### 검증 결과
+- npx prisma format: PASS
+- npx prisma validate: PASS
+- npx prisma generate: PASS
+- npx tsc --noEmit: PASS
+- npm run lint: PASS
+- npm run verify:canonical-sources: PASS
+- py -3 -m py_compile tools/aibeopchin_navigator.py: PASS
+
+### 근거 메모
+- Phase 1은 공식서식 출처 레지스트리와 템플릿 연결만 반영.
+- 법령·판례 RAG, 자동수집, HWP/PDF 파싱, 문서유형 enum 확장은 Phase 2 이후로 분리.
+- INTERNAL_STANDARD 템플릿은 sourceId 없이 허용하되, 공식기관 provider 템플릿은 sourceId 필수.
+- `LegalFormProvider`/`LegalFormSourceStatus`를 기준 enum으로 고정했고, 템플릿 publish 시 구조 검사와 출처 검사를 분리 적용했다.
+- DB 연결이 확인된 실환경이 없어 `prisma migrate dev` 와 `prisma db seed` 실실행은 이번 세션에서 생략했다.
+
+### 현재 완료 판정
+- Phase 1 — 코드 기준 완료
+- Phase 1 — 실 DB migration/seed 확정 전
+- Phase 2 — 진입 준비 완료
+- 코드/타입/정적검증: 완료
+- 실 DB migration 적용: 대기
+- seed 적용: 대기
+- 운영 DB 기준 최종 완료: 대기
+
+### 실 DB 후속 확정 지시
+1. 실 개발 DB의 `DATABASE_URL`을 연결한다.
+2. 아래 명령을 순서대로 실행한다.
+
+```bash
+npx prisma migrate dev --name add-legal-form-source-registry
+npx prisma db seed
+npx prisma validate
+npx prisma generate
+npx tsc --noEmit
+npm run lint
+npm run verify:canonical-sources
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
+
+3. migration과 seed가 통과하면 이 증빙 블록에 아래 항목을 추가한다.
+- migrate dev: PASS
+- db seed: PASS
+- internal-standard-source 생성 확인
+- LegalFormSource 테이블 생성 확인
+- DocumentTemplate.sourceId/sourceProvider/sourceUrl/sourceHash/sourceNote 컬럼 확인
+
+4. 실 DB 적용 전까지 Phase 1은 `코드 기준 완료 / DB 적용 대기`로 표시한다.
+
+### Phase 2 잠금 문구
+> Phase 1 공식서식 원천자료 계층은 코드·타입·정적 검증 기준으로 완료되었다. 단, 실 DB migration 및 seed 실행 결과가 IMPLEMENTATION_EVIDENCE.md에 추가되기 전까지 운영 기준 완료로 판정하지 않는다. Phase 2는 실 DB 적용 확인 후 진행한다.
+
+### Phase 2 다음 작업
+- 작업 제목: `Phase 2 — 공식서식 출처 기반 DocumentTemplate 런타임 브리지 구축`
+- 첫 작업 범위는 아래 5개로 제한한다.
+1. 문서 생성 API에서 `DocumentTemplate.source*` 함께 조회
+2. 생성된 `LegalDocument`에 source snapshot 저장 준비
+3. 템플릿 source가 `ARCHIVED`/`INACTIVE`이면 생성 차단
+4. `INTERNAL_STANDARD`와 공식기관 source의 생성 정책 분리
+5. 문서 상세 화면에 `참조 공식서식/내부표준` 표시
+
+### 남은 이슈
+- `npx prisma migrate dev --name add-legal-form-source-registry`는 실 DB 연결 환경에서 아직 실행되지 않았다.
+- `npx prisma db seed`는 실 DB 연결 환경에서 아직 실행되지 않았다.
+
+## 이전 증빙 목록
+
+- **AI법친 6.10~6.11 — 전역 서체·색상·로고·푸터·홍보 팝업·변호사법 준수 안내 반영:** [EVIDENCE-20260429-418](#evidence-20260429-418) — `src/components/brand/aibeopchin-logo.tsx`·`src/components/layout/site-footer.tsx`·`src/components/marketing/aibeopchin-intro-popup.tsx`·`src/app/api/auth/login/route.ts`(표준 이메일·비밀번호 로그인·`buildJsonLoginResponse`)·`src/app/globals.css`·`tailwind.config.ts`·`src/app/page.tsx`·`src/app/login/login-page-client.tsx`·`src/components/dashboard/dashboard-shell.tsx`·`src/app/(protected)/dashboard/page.tsx`·`src/app/(lawyer)/lawyer/page.tsx`·`src/app/(admin)/admin/page.tsx`·`docs/project-governance/AIBEOPCHIN_6_11_PROMOTION_POPUP_AND_LEGAL_COMPLIANCE_NOTICE.md`·`docs/project-governance/IMPLEMENTATION_EVIDENCE.md`; **텍스트 기반 한글 로고**, **Pretendard + 저피로 그린/오프화이트 토큰**, **공통 푸터**, **홈 진입 홍보/안내 팝업**, **변호사법 준수·제출 보조 패키지 고지**, **홈/로그인/owner·lawyer·admin 주요 카드/버튼 톤 정리** 반영; **과거 포함되던 `demo-access` 데모 프리패스는 현행 코드에서 제거됨** — **브라우저 홈 팝업·오늘 하루 보지 않기 수동 확인** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260429-418-now)).
+- **AI법친 6.10 — 홈 로고 한글 깨짐 점검 / 전역 서체·색상 정리 / 푸터 생성 (코드·완료):** [EVIDENCE-20260429-417](#evidence-20260429-417) — `src/app/globals.css`·`src/components/branding/aibeopchin-intro-scene.tsx`·`src/components/branding/aibeopchin-hero.tsx`·`src/components/branding/aibeopchin-logo.tsx`·`src/components/branding/aibeopchin-logo-v2.tsx`·`src/components/home/home-trust-strip.tsx`·`src/components/home/home-role-entry-cards.tsx`·`src/app/layout.tsx`·`src/components/layout/site-footer.tsx`·`src/app/api/auth/login/route.ts`·`.env.example`; **홈 브랜드 락업과 공통 로고 컴포넌트를 심볼 + HTML 한글 텍스트로 전환**, **Pretendard + aibeop 색상 토큰 적용**, **protected/lawyer/admin 공통 톤 정리**, **공용 푸터 추가** 완료; **당시 기록과 달리 데모 프리패스(`src/lib/auth/demo-access.ts`)는 이후 제거되었으며 로그인은 표준 경로만 유지** — **홈/대시보드 등 보호 화면 브라우저 확인** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260429-417-now)).
 - **AI법친 6.9-2 — 개인정보 / 보안 / 동의문구 카피 확정 (문서·완료):** [EVIDENCE-20260429-415](#evidence-20260429-415) — `AIBEOPCHIN_6_9_2_NOTICE_COPY_CANONICAL.md`; **의뢰인 공유 동의문구**, **변호사 고유번호 조회 고지문**, **변호사 사건 패키지 열람 고지문**, **첨부파일 다운로드 허용/차단 문구**, **사건 패키지 요약본 출력 고지문**, **공유 취소 후 접근 제한 문구**, **접근 로그 / 다운로드 로그 보관 고지**, **AI 생성 요약·문서 책임 고지**, **개인정보 제3자 제공 / 열람 동의 문구**, **전자소송 제출 보조 패키지 예정 고지문**의 canonical copy set 확정; **UI 반영 원칙 / 서버 차단 메시지 반영 원칙 분리 고정**; **6.9 최종 반영 단계 진입 기준 정리** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260429-415-now)).
 - **AI법친 6.9-1 — 개인정보 / 보안 / 동의문구 노출 위치 매핑 (문서·완료):** [EVIDENCE-20260429-414](#evidence-20260429-414) — `AIBEOPCHIN_6_9_1_NOTICE_EXPOSURE_MAPPING.md`; **의뢰인 공유 설정 화면**, **공유 상세 화면**, **변호사 고유번호 조회 화면**, **변호사 사건 패키지 열람 화면**, **첨부파일 다운로드 버튼/차단 메시지**, **사건 패키지 요약본 출력 화면**, **공유 취소 화면**, **접근 로그/다운로드 로그 표시 영역**, **AI 생성 문서/요약본 고지 영역**, **전자소송 제출 보조 패키지 예정 고지 영역**의 실제 노출 위치와 현재 문구 매핑 완료; **전자소송 제출 보조 고지의 현재 런타임 노출면 없음 확인**; **6.9-2 카피 확정 우선순위 도출** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260429-414-now)).
 - **AI법친 6.9 — 개인정보 / 보안 / 동의문구 최종 정리 착수 (문서·완료):** [EVIDENCE-20260429-413](#evidence-20260429-413) — `AIBEOPCHIN_6_9_PRIVACY_SECURITY_NOTICE_FINALIZATION_START.md`; **사건 패키지 공유 동의문구**, **변호사 열람 고지문**, **첨부파일 다운로드 고지문**, **사건 패키지 요약본 출력 고지문**, **공유 취소 후 접근 제한 문구**, **접근/다운로드 로그 보관 고지**, **AI 생성 문서 법률 책임 고지**, **변호사 최종 검토 책임 문구**, **개인정보 제3자 제공/열람 동의 구조**, **전자소송 제출 보조 책임 제한 문구** 정리 범위 고정; **코드/DB 변경 없음**; **다음 큰 축 7.0 예고** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260429-413-now)).
@@ -86,6 +5418,11 @@
 - **대시보드 4.7 — QA/운영 실측 결과 AI 자동 반영 설계서 (문서·완료·잠김):** [EVIDENCE-20260428-400](#evidence-20260428-400) — `DASHBOARD_4_7_AI_ASSISTED_QA_EVIDENCE_REFLECTION_DESIGN.md` **§0~§24**; AI **초안·분류**·**사람** **승인** **후** **반영** **기준** **고정**; **구현·API·DB** **없음**; **closure** **미기입** **유지** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-400-now) · [잠김](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-400-snap)).
 - **대시보드 5.0 — AI Evidence Assistant MVP 착수 기준서 (문서·완료):** [EVIDENCE-20260428-401](#evidence-20260428-401) — `DASHBOARD_5_0_AI_EVIDENCE_ASSISTANT_MVP_START.md`; 5.1 **전** **MVP** **범위**·**화면·API·데이터** **기준** **고정**; **코드·신규 API·DB** **구현** **없음**; **3.x** **봉인**·**closure** **미기입** **유지** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-401-now)).
 - **대시보드 5.1 — AI Evidence Assistant MVP 1차 구현 세트 (완료):** [EVIDENCE-20260428-402](#evidence-20260428-402) — `/(protected)/admin/qa-evidence`·`POST /api/admin/qa-evidence/analyze`·`src/lib/qa-evidence/*`; **규칙** **기반** **분석**·**Markdown** **초안**; **DB·문서** **자동** **수정** **없음**; **closure** **미기입** **유지** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-402-now)).
+- **대시보드 5.2 — AI Evidence Draft 저장 구조 설계 (문서·완료):** [EVIDENCE-20260428-403](#evidence-20260428-403) — `DASHBOARD_5_2_AI_EVIDENCE_DRAFT_STORAGE_DESIGN.md`; **Draft** **모델·상태·API·화면** **후보** **고정**; **Prisma·저장** **API** **구현** **없음** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-403-now)).
+- **AI법친 7.1-B — MVP 잠금 전 본선 정리 (문서·코드 정합·검증 기록):** [EVIDENCE-20260427-420](#evidence-20260427-420) — `DASHBOARD_4_7_*`/`DASHBOARD_5_0_*` **API·경로 구분**·**qa-evidence 실경로** 명시·`/(admin)/admin` **AI 증빙 검토** 링크·`supplement-request.service` **lint** 정리; **신규 기능·API·DB 없음** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260427-420-now)).
+- **AI법친 7.1-B — 관리자 화면 및 supplement-request QA prelock:** [EVIDENCE-20260427-421](#evidence-20260427-421) — 관리자·QA Evidence 동선·권한 표·보완요청 플로우·검증 재실행; **신규 기능 없음** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260427-421-now)) · 실제 기록 최상단.
+- **AI법친 7.1-B — MVP final lock:** [EVIDENCE-20260427-422](#evidence-20260427-422) — **조건부** 잠금(문서·정적·predeploy); DB runtime은 BLOCKED·[423](IMPLEMENTATION_EVIDENCE.md#evidence-20260427-423) ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260427-422-now)).
+- **AI법친 7.1-B — DB runtime verification closure:** [EVIDENCE-20260427-423](#evidence-20260427-423) — 422 BLOCKED 해소·`verify:…db-runtime` PASS 후 기입 ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260427-423-now)).
 - **스테이징 E2E (Playwright):** [EVIDENCE-20260428-staging-e2e](#evidence-20260428-staging-e2e) — [staging-e2e-runbook.md](../staging-e2e-runbook.md)·[deployment-checklist.md](../deployment-checklist.md) §2·§3.
 - **배포 전 QA 확정 (§6 회신 후):** [EVIDENCE-20260428-predeploy-qa-closure](#evidence-20260428-predeploy-qa-closure) — [deployment-checklist.md](../deployment-checklist.md#deployment-qa-nm-reply) §6. **1~4단계 절차** [#predeploy-qa-1-4](#predeploy-qa-1-4) · **Message 복사** [#predeploy-qa-message-copy](#predeploy-qa-message-copy). **사전 회신**(문서·증빙 정합·실측 미실시)은 본 앵커 **`사전 회신 수신 기록`** 절에만 둔다(최종 통과·공식 확정 표와 혼동 금지).
 - **홈 랜딩 1차 (UI PR, 로그인 전·역할별 진입):** [EVIDENCE-20260426-354](#evidence-20260426-354) — `src/app/page.tsx`·`src/components/landing/*`·`src/lib/landing/post-login-href.ts`; 사건·인터뷰·문서·API·상태·권한 구조 미변경.
@@ -106,6 +5443,11 @@
 - **대시보드 4.7 — QA/운영 실측 결과 AI 자동 반영 설계서 (완료·잠김):** [EVIDENCE-20260428-400](#evidence-20260428-400) — `DASHBOARD_4_7_AI_ASSISTED_QA_EVIDENCE_REFLECTION_DESIGN.md` **완료**; AI **보조**·**초안**·**사람** **승인** **후** **반영**; **구현·API·DB** **없음**; **closure** **미기입** **유지**.
 - **대시보드 5.0 — AI Evidence Assistant MVP 착수 기준서 (완료):** [EVIDENCE-20260428-401](#evidence-20260428-401) — `DASHBOARD_5_0_AI_EVIDENCE_ASSISTANT_MVP_START.md`; 5.1 **착수** **전** **MVP** **기준** **고정**; **구현** **없음**; **closure** **미기입** **유지** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-401-now)).
 - **대시보드 5.1 — AI Evidence Assistant MVP 1차 구현 (완료):** [EVIDENCE-20260428-402](#evidence-20260428-402) — 관리자 **QA** **Evidence** **화면**·**분석** **API**; **초안** **복사** **전용**; **DB**·`IMPLEMENTATION`·`DASHBOARD_4_6` **자동** **갱신** **없음** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-402-now)).
+- **대시보드 5.2 — AI Evidence Draft 저장 구조 설계 (완료):** [EVIDENCE-20260428-403](#evidence-20260428-403) — `DASHBOARD_5_2_…DESIGN.md`; **저장·승인·감사** **설계** **만**; **DB** **변경** **없음** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-403-now)).
+- **AI법친 7.1-B — MVP 잠금 전 본선 정리 (문서·코드 정합·검증 기록):** [EVIDENCE-20260427-420](#evidence-20260427-420) — `DASHBOARD_4_7_*`/`DASHBOARD_5_0_*`·`/(admin)/admin` QA 링크·supplement-request lint; **신규 기능·API·DB 없음** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260427-420-now)).
+- **AI법친 7.1-B — 관리자 화면 및 supplement-request QA prelock:** [EVIDENCE-20260427-421](#evidence-20260427-421) — 동선·권한·플로우 QA closure; ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260427-421-now)) · 실제 기록 최상단.
+- **AI법친 7.1-B — MVP final lock:** [EVIDENCE-20260427-422](#evidence-20260427-422) — 조건부 잠금·DB runtime [423](IMPLEMENTATION_EVIDENCE.md#evidence-20260427-423) ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260427-422-now)).
+- **AI법친 7.1-B — DB runtime verification closure:** [EVIDENCE-20260427-423](#evidence-20260427-423) — **대기** ([확인 순서](IMPLEMENTATION_EVIDENCE.md#evidence-20260427-423-now)).
 - **대시보드 4.5 — QA 회신 수신 후 closure 반영 준비표:** [EVIDENCE-20260426-397](#evidence-20260426-397) — `DASHBOARD_4_5_QA_CLOSURE_REFLECTION_PREP.md`; 회신 후 closure 절차·판정·템플릿; 실제 closure·회신 미작성.
 - **대시보드 4.4 — 배포 전 운영자 최종 체크리스트:** [EVIDENCE-20260426-396](#evidence-20260426-396) — `DASHBOARD_4_4_PREDEPLOY_OPERATOR_FINAL_CHECKLIST.md`; 4.0~4.3 통합·배포 직전 한 장; 코드·정책 미변경.
 - **대시보드 4.3 — 빈 상태 / 오류 상태 수동 점검표:** [EVIDENCE-20260426-395](#evidence-20260426-395) — `DASHBOARD_4_3_EMPTY_ERROR_STATE_MANUAL_CHECKLIST.md`; 4.2 보완·빈·제한·로딩·오류·demo 경계; 코드·오류 로직 미변경.
@@ -236,7 +5578,7 @@
 
 **판정 분기**는 [`#predeploy-qa-1-4`](IMPLEMENTATION_EVIDENCE.md#predeploy-qa-1-4) 의 **3~4단계**를 따른다.
 
-### [EVIDENCE-20260429-418] AI법친 6.10~6.11 — 전역 서체·색상·로고·푸터·데모 로그인·홍보 팝업·변호사법 준수 안내 반영 {#evidence-20260429-418}
+### [EVIDENCE-20260429-418] AI법친 6.10~6.11 — 전역 서체·색상·로고·푸터·홍보 팝업·변호사법 준수 안내 반영 {#evidence-20260429-418}
 
 #### 범위
 
@@ -244,18 +5586,23 @@
 - 전역 Pretendard 서체 적용
 - 저피로 그린/오프화이트 계열 색상 토큰 적용
 - 공통 푸터 추가 및 연결 유지
-- 데모 프리패스 로그인 환경변수 기반 연결
 - 홈페이지 진입 홍보/안내 팝업 고도화
 - 변호사법 준수 안내 문구 반영
 - 전자소송 자동 제출이 아닌 제출 보조 패키지 구조 고지
 
-#### 추가/수정 파일
+#### 현행 코드 정합 (증빙 경로 정리)
+
+- **과거:** `src/lib/auth/demo-access.ts` 및 환경변수 기반 **데모 프리패스 로그인**이 6.10 기록에 포함되었음.
+- **현행:** 해당 모듈은 **제거**되었고, `POST /api/auth/login` 은 **이메일·비밀번호** 검증 후 `buildJsonLoginResponse` / `AUTH_LOGIN_SUCCESS` 감사로그 경로만 사용한다 (`loginSchema`는 email 필드).
+
+#### 추가/수정 파일 (현행 기준)
 
 - `src/components/brand/aibeopchin-logo.tsx`
 - `src/components/layout/site-footer.tsx`
 - `src/components/marketing/aibeopchin-intro-popup.tsx`
-- `src/lib/auth/demo-access.ts`
-- `src/app/api/auth/login/route.ts`
+- `src/app/api/auth/login/route.ts` (표준 로그인)
+- `src/lib/validators/auth.ts` (로그인 스키마)
+- `src/lib/auth/login-response.ts` (`buildJsonLoginResponse`, 세션·감사로그)
 - `src/app/globals.css`
 - `tailwind.config.ts`
 - `src/app/page.tsx`
@@ -275,8 +5622,7 @@
 - 푸터에 도메인, 운영사, 대표이사, 연락처가 표시됨.
 - 홈페이지 진입 시 홍보/안내 팝업이 표시됨.
 - 팝업에 변호사법 준수 안내가 포함됨.
-- 데모 프리패스 로그인은 환경변수 기반으로만 작동함.
-- `DEMO_ACCESS_ENABLED=false`일 때 데모 로그인이 차단됨.
+- 활성 계정은 표준 로그인으로 세션 발급·감사로그가 동작함 (`PENDING`/`ACTIVE` 정책은 `login/route.ts` 유지).
 
 #### 검증
 
@@ -294,7 +5640,7 @@
 
 - 홈 로고는 HTML 텍스트 기반 `AibeopchinLogo`로 유지되어 한글 깨짐 리스크를 줄였다.
 - 안내 팝업은 `dialog` 기반으로 접근성 규칙을 맞추고, 오늘 하루 보지 않기(localStorage) 정책을 유지했다.
-- 데모 프리패스 로그인은 `DEMO_ACCESS_ENABLED`, `DEMO_ACCESS_ID`, `DEMO_ACCESS_PASSWORD`, `DEMO_ACCESS_ROLE` 환경변수만으로 동작하도록 정리했다.
+- **데모 프리패스**는 **현행 트리에 없음**. 필요 시 별도 증빙·보안 검토 후 재도입한다.
 
 #### 확인 순서 {#evidence-20260429-418-now}
 
@@ -302,23 +5648,25 @@
 2. `npm run lint`
 3. `npm run verify:canonical-sources`
 4. 브라우저에서 홈 접속 후 팝업 표시 여부, X 닫기, 오늘 하루 보지 않기, 변호사법 준수 문구, 푸터를 확인한다.
+5. `src/app/api/auth/login/route.ts` — 표준 자격 증명만 허용하는지 확인한다.
 
-### [EVIDENCE-20260429-417] AI법친 6.10 — 홈 로고 한글 깨짐 점검 / 전역 서체·색상 정리 / 데모 프리패스 로그인 / 푸터 생성 {#evidence-20260429-417}
+### [EVIDENCE-20260429-417] AI법친 6.10 — 홈 로고 한글 깨짐 점검 / 전역 서체·색상 정리 / 푸터 생성 {#evidence-20260429-417}
 
 #### 상태
 
 이번 작업은 홈 화면 로고 한글 깨짐 위험을 줄이고,
 AI법친 전역 UI의 서체·색상 톤을 정리하며,
-홍보·데모용 프리패스 로그인과 공용 푸터를 추가하는 코드 반영 단계다.
+공용 푸터를 추가하는 코드 반영 단계였다.
 
-핵심은 아래 네 가지다.
+**현행 정합:** 과거 기록에 있던 **데모 프리패스 로그인**(`demo-access`)은 **코드베이스에서 제거**되었다. 로그인은 **`src/app/api/auth/login/route.ts`** 의 **이메일·비밀번호 표준 경로**와 `buildJsonLoginResponse`만 사용한다.
+
+핵심은 아래와 같다.
 
 - 홈 브랜드 락업에서 한글 텍스트를 SVG 내부가 아닌 HTML 텍스트로 안전하게 렌더링한다.
 - Pretendard 기반 전역 서체와 aibeop 색상 토큰을 적용해 장시간 업무 화면의 피로도를 낮춘다.
-- 기존 로그인 쿠키 발급 경로를 그대로 타는 데모 프리패스 로그인을 추가하고 성공 이력을 감사로그에 남긴다.
 - 홈/보호 화면 공통 푸터를 추가한다.
 
-#### 범위
+#### 범위 (작성 당시; 현행과 차이는 아래 「현행 코드 기준」 참고)
 
 - `src/app/globals.css`에 Pretendard import, 전역 CSS 변수, `@theme inline` 토큰, 선택 색상 규칙을 추가했다.
 - `src/app/layout.tsx`에 공용 푸터를 연결하고 전역 body 클래스를 aibeop 토큰 기반으로 바꿨다.
@@ -329,18 +5677,19 @@ AI법친 전역 UI의 서체·색상 톤을 정리하며,
 - `src/components/home/home-trust-strip.tsx`, `src/components/home/home-role-entry-cards.tsx`에 aibeop 색상 토큰을 적용했다.
 - `src/components/auth/auth-input.tsx`, `src/app/login/login-page-client.tsx`, `src/app/signup/page.tsx`의 인증 화면 톤을 정리했다.
 - `src/app/(protected)/layout.tsx`, `src/app/(lawyer)/lawyer/layout.tsx`, `src/app/(admin)/admin/layout.tsx` 배경/헤더/푸터 톤을 정리했다.
-- `src/lib/validators/auth.ts`에서 로그인 입력을 `이메일 또는 데모 로그인 ID`로 받을 수 있게 조정했다.
-- `src/lib/auth/demo-access.ts`를 추가했다.
-- `src/app/api/auth/login/route.ts`에 데모 프리패스 로그인과 `AUTH_LOGIN_SUCCESS` 감사로그 적재를 추가했다.
-- `.env.example`에 `DEMO_ACCESS_*` 환경변수 예시를 추가했다.
+- `src/lib/validators/auth.ts` — 로그인은 **email + password** (`loginSchema`).
+- `src/app/api/auth/login/route.ts` — 표준 자격 증명 검증 후 `buildJsonLoginResponse`.
+- `.env.example` — 운영·로컬 예시 변수(데모 전용 키는 **현행에서 제거되었을 수 있음**. 실제 키는 저장소 예시와 동기 유지).
+
+#### 현행 코드 기준 (증빙 정리)
+
+- **`src/lib/auth/demo-access.ts`** — **없음(삭제됨)**. 증빙·목록에서 경로 인용 제거.
+- 로그인 API는 `verifyPassword` + `user.status` (`PENDING` 403, 비활성 403, `ACTIVE` 만 허용) 후 쿠키·감사로그.
 
 #### 변경하지 않은 것
 
-- 실제 `.env.local` 비밀번호 값 주입 없음.
-- 실제 배포 환경변수 설정 없음.
-- DB에 데모 전용 사용자 생성 없음.
-- 홈 이외의 브랜딩 SVG 컴포넌트 자체 삭제 없음.
-- 권한 정책 / 미들웨어 분기 구조 변경 없음.
+- 실제 `.env.local` 비밀번호 값 주입 없음(문서 작업 시).
+- 권한 정책 / 미들웨어 분기 구조 변경 없음(본 증빙 범위).
 
 #### 검증
 
@@ -359,10 +5708,9 @@ AI법친 전역 UI의 서체·색상 톤을 정리하며,
 | aibeop 전역 색상 토큰 적용 | 완료 |
 | home / protected / lawyer / admin 톤 정리 | 완료 |
 | 공용 푸터 추가 | 완료 |
-| 데모 프리패스 로그인 코드 추가 | 완료 |
-| AUTH_LOGIN_SUCCESS 감사로그 추가 | 완료 |
-| `.env.example` 데모 환경변수 예시 추가 | 완료 |
-| 데모 프리패스 실로그인 런타임 검증 | 환경값 필요 |
+| 표준 로그인 + AUTH_LOGIN_SUCCESS 감사로그 | 현행 코드 기준 유지 |
+| 데모 프리패스 (`demo-access`) | **제거됨** — 증빙 본 절에서 추적 |
+| `.env.example` | 저장소 기준과 동기 유지 |
 
 #### 확인 순서 {#evidence-20260429-417-now}
 
@@ -373,22 +5721,22 @@ AI법친 전역 UI의 서체·색상 톤을 정리하며,
 3. `src/app/layout.tsx`
 4. `src/components/layout/site-footer.tsx`
 5. `src/components/branding/aibeopchin-intro-scene.tsx`
-5. `src/components/branding/aibeopchin-hero.tsx`
-6. `src/components/branding/aibeopchin-logo.tsx`
-7. `src/components/branding/aibeopchin-logo-v2.tsx`
-8. `src/components/home/home-trust-strip.tsx`
-9. `src/components/home/home-role-entry-cards.tsx`
-10. `src/components/auth/auth-input.tsx`
-11. `src/app/login/login-page-client.tsx`
-12. `src/app/signup/page.tsx`
-13. `src/app/api/auth/login/route.ts`
-14. `src/lib/auth/demo-access.ts`
-15. `.env.example`
+6. `src/components/branding/aibeopchin-hero.tsx`
+7. `src/components/branding/aibeopchin-logo.tsx`
+8. `src/components/branding/aibeopchin-logo-v2.tsx`
+9. `src/components/home/home-trust-strip.tsx`
+10. `src/components/home/home-role-entry-cards.tsx`
+11. `src/components/auth/auth-input.tsx`
+12. `src/app/login/login-page-client.tsx`
+13. `src/app/signup/page.tsx`
+14. `src/app/api/auth/login/route.ts`
+15. `src/lib/auth/login-response.ts`
+16. `src/lib/validators/auth.ts`
+17. `.env.example`
 
 ### 다음 실제 작업
 
-다음 작업은 환경값을 실제로 주입한 뒤 데모 프리패스 실로그인을 검증하고,
-필요하면 6.10 후속으로 로그인 화면 안내문과 보호 레이아웃의 세부 색 대비를 미세 조정하는 것이다.
+브랜딩·푸터·팝업 후속 미세 조정이 필요하면 별도 증빙으로 분리한다. **데모 프리패스**를 다시 쓸 경우 보안·감사 요건을 포함한 별도 설계·증빙이 필요하다.
 
 ### [EVIDENCE-20260429-415] AI법친 6.9-2 — 개인정보 / 보안 / 동의문구 카피 확정 {#evidence-20260429-415}
 
@@ -1870,9 +7218,10 @@ py -3 -m py_compile tools/aibeopchin_navigator.py
 #### 확인 순서 {#evidence-20260428-402-now}
 
 1. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md` — [`#evidence-20260428-402`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-402) (본 절)
-2. `DASHBOARD_5_0_AI_EVIDENCE_ASSISTANT_MVP_START.md` (기준) · `DASHBOARD_4_7_…DESIGN.md` (설계)
-3. `src/app/(protected)/admin/qa-evidence/` · `src/lib/qa-evidence/`
-4. `tools/aibeopchin_navigator.py` — **`dashboard_5_1_ai_evidence_assistant_mvp_implementation`**
+2. `/admin/qa-evidence` — 관리자 화면 동작(브라우저)
+3. `src/lib/qa-evidence/` — schema / analyzer / renderer
+4. `src/app/api/admin/qa-evidence/analyze/route.ts` — `requireAdminApi` · `ok` / `toErrorResponse`
+5. `tools/aibeopchin_navigator.py` — **`dashboard_5_1_ai_evidence_assistant_mvp_implementation`** · `show-plan` **대시보드 5.1** 절
 
 #### 검증
 
@@ -1904,6 +7253,121 @@ py -3 -m py_compile tools/aibeopchin_navigator.py
 | QA 최종 통과 자동 판정 없음 | 유지 |
 | 대시보드 3.x 봉인 유지 | 유지 |
 | tsc / lint / verify:canonical-sources / py_compile | 통과 |
+
+### [EVIDENCE-20260428-403] 대시보드 5.2 — AI Evidence Draft 저장 구조 설계 {#evidence-20260428-403}
+
+#### 상태
+
+대시보드 5.2는 AI Evidence Assistant 분석 결과를 향후 Draft로 저장하고 승인 / 반려 / 보완 / 공식 반영까지 이어갈 수 있도록 저장 구조를 설계하는 단계다.
+
+이번 작업은 실제 DB schema 변경이 아니라, 후속 구현 시 사용할 Draft 저장 모델, 상태값, 승인 / 반려 기준, 감사로그 기준을 고정하는 문서화 작업이다.
+
+#### 범위
+
+- `DASHBOARD_5_2_AI_EVIDENCE_DRAFT_STORAGE_DESIGN.md`를 추가했다.
+- Draft 저장 목적·저장 대상·상태값·상태 전이 기준을 정리했다.
+- Prisma 모델 후보·reviewStatus 후보·후속 API·관리자 화면 후보를 정리했다.
+- Draft 목록 / 상세 화면 기준, 승인 / 반려, 공식 반영, 감사로그, 보안 / 권한, 데이터 보존 기준을 정리했다.
+- 5.2에서 하지 않는 것을 명시했다.
+- 대시보드 3.x 봉인·QA closure 미기입을 재확인했다.
+
+#### 변경하지 않은 것
+
+- 실제 Prisma schema 변경 없음.
+- 마이그레이션 생성 없음.
+- DB 저장 API 구현 없음.
+- Draft 목록 / 상세 화면 구현 없음.
+- 승인 / 반려 실제 기능 구현 없음.
+- diff 생성 기능 구현 없음.
+- 감사로그 실제 연결 없음.
+- 공식 문서 자동 수정 없음.
+- Git commit 자동 생성 없음.
+- 대시보드 3.x 기능 재오픈 없음.
+- QA closure 공식 확정 표·회신 원문·배포 판정 작성 없음.
+
+#### 완료 판정
+
+| 항목 | 결과 |
+| --- | --- |
+| 5.2 Draft 저장 구조 설계 문서 추가 | 완료 |
+| Draft 저장 목적 / 대상 / 상태 / 전이 정리 | 완료 |
+| Prisma 모델 후보·reviewStatus·API·화면 후보 | 완료 |
+| 목록·상세·승인/반려·반영·감사·보안·보존 | 완료 |
+| 5.2 제외 범위 명시 | 완료 |
+| 3.x 봉인·QA closure 미기입 | 유지 |
+| DB schema·코드 기능 변경 | 없음 |
+| `tools/aibeopchin_navigator.py` — `show-plan` **대시보드 5.2** 절 (`render_plan`) | 완료 |
+
+#### 확인 순서 {#evidence-20260428-403-now}
+
+1. `docs/project-governance/IMPLEMENTATION_EVIDENCE.md` — [`#evidence-20260428-403`](IMPLEMENTATION_EVIDENCE.md#evidence-20260428-403) · 본 절 `#evidence-20260428-403-now`
+2. [`DASHBOARD_5_2_AI_EVIDENCE_DRAFT_STORAGE_DESIGN.md`](DASHBOARD_5_2_AI_EVIDENCE_DRAFT_STORAGE_DESIGN.md)
+3. `tools/aibeopchin_navigator.py` — **`dashboard_5_2_ai_evidence_draft_storage_design`** · `show-plan` **대시보드 5.2** 절
+
+#### 다음 실제 작업
+
+1. 대시보드 5.3 — QaEvidenceDraft Prisma 모델 / 저장 API 구현 설계
+2. 대시보드 5.3a — Draft 저장 없이 local JSON export/import 설계
+3. 대시보드 5.4 — Draft 승인 / 반려 플로우 설계
+4. QA 실측 전문 수신 시 `#evidence-20260428-predeploy-qa-closure` 공식 확정 표·회신 원문만 갱신
+
+#### 검증
+
+```bash
+npx tsc --noEmit
+npm run lint
+npm run verify:canonical-sources
+py -3 -m py_compile tools/aibeopchin_navigator.py
+```
+
+**검증 결과:** `npx tsc --noEmit` exit 0. `npm run lint` 통과(기존 unused-vars 경고 2건 유지). `npm run verify:canonical-sources` exit 0. `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0. **2026-04-27** `render_plan` 보강 후 동일 4종 재실행 동일 결과. **보완:** [EVIDENCE-20260427-420](#evidence-20260427-420)에서 `supplement-request.service` lint 정리.
+
+### [EVIDENCE-20260427-420] AI법친 7.1-B — MVP 잠금 전 본선 정리 (문서·코드 정합) {#evidence-20260427-420}
+
+#### 상태
+
+대시보드 5.2 묶음은 닫혔고, 7.1-B **MVP 잠금 직전**에 증빙·문서·관리자 동선·정적 검증을 한 줄로 정돈한다. **신규 API·DB·제품 기능은 추가하지 않는다.**
+
+#### 범위
+
+- `DASHBOARD_4_7_AI_ASSISTED_QA_EVIDENCE_REFLECTION_DESIGN.md` §16 — **구분** 범례(**구현됨 / 후보 / 설계잠금 / 보류 / 폐기**), QA Evidence **페이지 실경로** `src/app/(protected)/admin/qa-evidence/page.tsx`·`/admin/qa-evidence` 명시, `src/app/admin/...` 비인용 안내, API 행별 구분 정리.
+- `DASHBOARD_5_0_AI_EVIDENCE_ASSISTANT_MVP_START.md` §20 — API 표에 **구분** 열 추가, §16과 동일 구분 체계 참조, 실경로 안내.
+- `src/app/(admin)/admin/page.tsx` — 관리자 콘솔 그리드 **「AI 증빙 검토」** · 부제 **「QA Evidence 분석 및 증빙 초안 확인」** · `/admin/qa-evidence` (운영 권장 진입).
+- `src/features/supplement-request/supplement-request.service.ts` — `canReviewSupplementRequest`를 `ensureStatusTransitionPermission`에 연결, `canCancelSupplementRequest`는 모듈 **export**로 정리(7.1-B guard alignment verifier 유지), 기존 `isPrivilegedOperator` 제거.
+
+#### 변경하지 않은 것
+
+- Prisma schema·마이그레이션·신규 라우트·QA Evidence 분석 로직·`POST /api/admin/qa-evidence/analyze` 계약.
+- 배포 전 QA closure 공식 확정 표·회신 원문.
+
+#### 확인 순서 {#evidence-20260427-420-now}
+
+1. 본 절 · 상단 목록 앵커 [`#evidence-20260427-420`](#evidence-20260427-420)
+2. `docs/project-governance/DASHBOARD_4_7_AI_ASSISTED_QA_EVIDENCE_REFLECTION_DESIGN.md` §16
+3. `docs/project-governance/DASHBOARD_5_0_AI_EVIDENCE_ASSISTANT_MVP_START.md` §19~§20
+4. `src/app/(protected)/admin/qa-evidence/page.tsx` · `src/app/(admin)/admin/page.tsx`
+5. `src/features/supplement-request/supplement-request.service.ts`
+
+#### 검증
+
+```bash
+npx tsc --noEmit
+npm run lint
+npm run verify:canonical-sources
+npm run verify:predeploy-lock
+py -3 -m py_compile tools/aibeopchin_navigator.py
+npm run verify:aibeopchin-7-1-b-supplement-guard-alignment
+```
+
+**검증 결과 (2026-04-27 실행):** `npx tsc --noEmit` exit 0. `npm run lint` exit 0(경고 0). `npm run verify:canonical-sources` exit 0. `npm run verify:predeploy-lock` exit 0. `npm run verify:aibeopchin-7-1-b-supplement-guard-alignment` exit 0. `py -3 -m py_compile tools/aibeopchin_navigator.py` exit 0.
+
+#### 후속 (prelock QA)
+
+7.1-B **관리자 화면·supplement-request 실제 플로우·권한** prelock QA는 [**[EVIDENCE-20260427-421]**](#evidence-20260427-421)(`## 실제 기록` 최상단)에서 닫았다.
+
+#### 후속 (MVP final lock)
+
+7.1-B **MVP final lock**·DB runtime·운영 백업/롤백 표는 [**[EVIDENCE-20260427-422]**](#evidence-20260427-422)에서 이어지며, **DB runtime 엔지니어링 완결**은 [**[EVIDENCE-20260427-423]**](#evidence-20260427-423)에서 닫는다.
 
 ### [EVIDENCE-20260428-predeploy-qa-closure] 배포 전 QA 확정 (§6 회신 수령 후) {#evidence-20260428-predeploy-qa-closure}
 

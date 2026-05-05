@@ -3,15 +3,20 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import type { DocumentTemplateDefinition, DocumentType } from "@/lib/definitions";
 import {
   DOCUMENT_TYPE_LABELS,
   QUESTION_SET_CATALOG_STATUS_LABELS,
+  type DocumentType,
+  type DocumentTemplateDefinition,
   type QuestionSetStatus,
 } from "@/lib/definitions";
+import type { LegalFormSourceOption } from "@/lib/legal-form-source";
 import { DocumentTemplateMetaForm } from "@/components/admin/document-template-meta-form";
 import { DocumentTemplateSectionEditor } from "@/components/admin/document-template-section-editor";
-import { getDocumentTemplatePublishBlockerMessage } from "@/lib/document-template-repository";
+import {
+  getDocumentTemplatePublishBlockerMessage,
+  getDocumentTemplateSourceBlockerMessage,
+} from "@/lib/document-template-repository";
 import { readJsonApiErrorMessage, requireOkData } from "@/lib/client/api-error";
 
 type Props = {
@@ -22,12 +27,17 @@ type Props = {
     type: string;
     title: string;
     description: string | null;
+    sourceId: string | null;
+    sourceProvider: string | null;
+    sourceUrl: string | null;
+    sourceHash: string | null;
     definitionJson: unknown;
     updatedAt: string;
     catalogStatus: string;
     publishedAt: string | null;
     archivedAt: string | null;
   };
+  sources: LegalFormSourceOption[];
 };
 
 function asDocType(s: string): DocumentType {
@@ -65,15 +75,24 @@ function mergeDefinition(item: Props["item"]): DocumentTemplateDefinition {
   return fallback;
 }
 
-export function DocumentTemplateEditor({ item }: Props) {
+export function DocumentTemplateEditor({ item, sources }: Readonly<Props>) {
   const router = useRouter();
   const [definition, setDefinition] = useState<DocumentTemplateDefinition>(() =>
     mergeDefinition(item),
   );
+  const [sourceMode, setSourceMode] = useState<
+    "UNSPECIFIED" | "OFFICIAL_SOURCE" | "INTERNAL_STANDARD"
+  >(() => {
+    if (item.sourceId) return "OFFICIAL_SOURCE";
+    if (item.sourceProvider === "INTERNAL_STANDARD") return "INTERNAL_STANDARD";
+    return "UNSPECIFIED";
+  });
+  const [selectedSourceId, setSelectedSourceId] = useState(item.sourceId ?? "");
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [archiving, setArchiving] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
+  const selectedSource = sources.find((source) => source.id === selectedSourceId) ?? null;
 
   const catalogStatusKey = (
     item.catalogStatus in QUESTION_SET_CATALOG_STATUS_LABELS
@@ -85,6 +104,12 @@ export function DocumentTemplateEditor({ item }: Props) {
   const isArchived = item.catalogStatus === "ARCHIVED";
   const isDraft = item.catalogStatus === "DRAFT";
   const isPublished = item.catalogStatus === "PUBLISHED";
+  let publishButtonTitle = "서버에 저장된 정의 기준으로 게시 검사 후 게시합니다.";
+  if (isPublished) {
+    publishButtonTitle = "이미 게시된 템플릿입니다. 변경 사항은 저장으로 반영됩니다.";
+  } else if (isDraft) {
+    publishButtonTitle = "게시 시 서버가 최소 섹션·문단 구조를 검사합니다. 클릭 시 확인 창이 열립니다.";
+  }
 
   const sectionCount = definition.sections.length;
   const paragraphCount = useMemo(
@@ -94,8 +119,22 @@ export function DocumentTemplateEditor({ item }: Props) {
 
   /** 편집 중 정의 기준 미리보기(실제 게시 검사는 DB에 저장된 definitionJson). */
   const publishBlockerPreview = useMemo(
-    () => getDocumentTemplatePublishBlockerMessage(definition),
-    [definition],
+    () => {
+      const structureBlocker = getDocumentTemplatePublishBlockerMessage({
+        definitionJson: definition,
+      });
+
+      if (structureBlocker) {
+        return structureBlocker;
+      }
+
+      return getDocumentTemplateSourceBlockerMessage({
+        sourceId: sourceMode === "OFFICIAL_SOURCE" ? selectedSourceId : null,
+        sourceProvider: sourceMode === "INTERNAL_STANDARD" ? "INTERNAL_STANDARD" : null,
+        sourceUrl: sourceMode === "OFFICIAL_SOURCE" ? selectedSource?.sourceUrl ?? null : null,
+      });
+    },
+    [definition, selectedSource?.sourceUrl, selectedSourceId, sourceMode],
   );
 
   function updateMeta(patch: Partial<DocumentTemplateDefinition>) {
@@ -103,6 +142,13 @@ export function DocumentTemplateEditor({ item }: Props) {
       ...prev,
       ...patch,
     }));
+  }
+
+  function updateSourceMode(mode: "UNSPECIFIED" | "OFFICIAL_SOURCE" | "INTERNAL_STANDARD") {
+    setSourceMode(mode);
+    if (mode !== "OFFICIAL_SOURCE") {
+      setSelectedSourceId("");
+    }
   }
 
   function addSection() {
@@ -164,7 +210,7 @@ export function DocumentTemplateEditor({ item }: Props) {
 
   async function publishTemplate() {
     if (isDraft) {
-      const ok = window.confirm(
+      const ok = globalThis.confirm(
         "게시 시 서버가 정의 JSON 스키마와 최소 구조(섹션 1개 이상·문단 합계 1개 이상)를 검사합니다. 통과하지 못하면 게시되지 않습니다. 저장된 내용으로 게시할까요?",
       );
       if (!ok) return;
@@ -234,6 +280,8 @@ export function DocumentTemplateEditor({ item }: Props) {
           title: definition.title,
           description: definition.description ?? "",
           definitionJson: definition,
+          sourceId: sourceMode === "OFFICIAL_SOURCE" ? selectedSourceId || null : null,
+          sourceProvider: sourceMode === "INTERNAL_STANDARD" ? "INTERNAL_STANDARD" : null,
         }),
       });
 
@@ -395,6 +443,7 @@ export function DocumentTemplateEditor({ item }: Props) {
             <strong className="font-semibold">definitionJson</strong>만 스키마·최소 구조(섹션 ≥1·문단
             합계 ≥1)로 검사합니다. 화면에서만 고치고 저장하지 않으면 검사에 반영되지 않습니다. 문단
             본문·필수 플래그 등은 이 단계에서 막지 않습니다.
+            {" "}
             <span className="mt-2 block border-t border-amber-200/80 pt-2">
               <strong className="font-semibold">편집 중 구성 미리보기</strong> — 지금 편집기에 보이는
               트리 기준입니다. 게시 검사는 DB에 마지막으로 저장된 정의와만 대조하므로, 미리보기 메시지와
@@ -460,13 +509,7 @@ export function DocumentTemplateEditor({ item }: Props) {
               type="button"
               onClick={() => void publishTemplate()}
               disabled={publishing || isArchived || isPublished}
-              title={
-                isPublished
-                  ? "이미 게시된 템플릿입니다. 변경 사항은 저장으로 반영됩니다."
-                  : isDraft
-                    ? "게시 시 서버가 최소 섹션·문단 구조를 검사합니다. 클릭 시 확인 창이 열립니다."
-                    : "서버에 저장된 정의 기준으로 게시 검사 후 게시합니다."
-              }
+              title={publishButtonTitle}
               className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
             >
               {publishing ? "게시 중..." : "게시"}
@@ -501,7 +544,18 @@ export function DocumentTemplateEditor({ item }: Props) {
         </div>
       </div>
 
-      <DocumentTemplateMetaForm definition={definition} onChange={updateMeta} />
+      <DocumentTemplateMetaForm
+        definition={definition}
+        sources={sources}
+        sourceMode={sourceMode}
+        selectedSourceId={selectedSourceId}
+        selectedSourceProvider={item.sourceProvider}
+        selectedSourceUrl={item.sourceUrl}
+        selectedSourceHash={item.sourceHash}
+        onChange={updateMeta}
+        onSourceModeChange={updateSourceMode}
+        onSourceIdChange={setSelectedSourceId}
+      />
 
       <div className="space-y-4">
         <div className="flex items-center justify-between">

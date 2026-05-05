@@ -39,6 +39,17 @@ export async function POST(
       throw new NotFoundError("문서를 찾을 수 없습니다.");
     }
 
+    const trace = await prisma.documentGenerationTrace.findUnique({
+      where: { legalDocumentId },
+      select: { id: true },
+    });
+
+    if (!trace) {
+      throw new ValidationError(
+        "문서 승인 전 출처 추적 정보가 없습니다. 문서를 다시 생성하거나 관리자에게 문의하세요.",
+      );
+    }
+
     /** Batch A-3: 승인 가능 상태만 허용 (`LegalDocumentStatus` 기준) */
     const APPROVABLE_STATUSES = ["DRAFT", "REVIEW_REQUIRED"] as const;
     if (document.status === "ARCHIVED") {
@@ -96,6 +107,13 @@ export async function POST(
             .sort((a, b) => a.displayOrder - b.displayOrder)
             .map((p) => p.content)
             .join("\n\n"),
+        },
+      });
+
+      await tx.documentGenerationTrace.update({
+        where: { legalDocumentId },
+        data: {
+          approvedSnapshotAt: now,
         },
       });
 

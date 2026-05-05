@@ -22,6 +22,32 @@ enum UserStatus {
   DELETED
 }
 
+enum AuthProvider {
+  GOOGLE
+  KAKAO
+  NAVER
+}
+
+/// 공식서식 원천자료 제공기관
+/// Phase 1에서는 실제 자동수집이 아니라 수동 등록/추적용 레지스트리로 사용한다.
+enum LegalFormProvider {
+  SCOURT
+  POLICE
+  SPO
+  LAW_GO_KR
+  KLAC
+  INTERNAL_STANDARD
+  OTHER
+}
+
+/// 공식서식 원천자료 상태
+/// ACTIVE: 사용 가능, INACTIVE: 사용 중지, ARCHIVED: 보관
+enum LegalFormSourceStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
 /// 앱 단일 기준: `src/lib/definitions/case-status.ts` 의 `CaseStatusEnum` 과 값·순서를 맞출 것.
 /// (`npm run verify:canonical-sources` + 선택적 `POST /api/admin/verify-canonical-sources`)
 enum CaseStatus {
@@ -109,6 +135,52 @@ enum CasePackageAccessAction {
   REVOKED
 }
 
+enum SupplementRequestStatus {
+  DRAFT
+  SENT
+  CLIENT_VIEWED
+  CLIENT_RESPONDED
+  UNDER_REVIEW
+  NEEDS_MORE_INFO
+  ACCEPTED
+  CLOSED
+  CANCELLED
+  EXPIRED
+}
+
+enum SupplementRequestType {
+  MISSING_FACT
+  UNCLEAR_FACT
+  ADDITIONAL_EVIDENCE
+  DOCUMENT_CLARIFICATION
+  PARTY_INFO
+  TIMELINE_CONFIRMATION
+  DAMAGE_DETAIL
+  CONSENT_OR_NOTICE
+  OTHER
+}
+
+enum SupplementAttachmentRole {
+  EVIDENCE
+  REFERENCE
+  OTHER
+}
+
+enum SupplementRequestAuditActionType {
+  CREATE
+  UPDATE
+  SEND
+  CANCEL
+  EXPIRE
+  RESPOND
+  START_REVIEW
+  ACCEPT
+  NEEDS_MORE_INFO
+  CLOSE
+  STATUS_LOG_VIEW
+  AUDIT_LOG_VIEW
+}
+
 enum TimelineMemoType {
   USER_NOTE
   STAFF_NOTE
@@ -158,7 +230,7 @@ enum TimelineExportFormat {
 model User {
   id           String     @id @default(uuid())
   email        String     @unique
-  passwordHash String
+  passwordHash String?
   name         String
   phone        String?
   role         UserRole   @default(USER)
@@ -174,26 +246,49 @@ model User {
   assignedCases       CaseAssignment[]   @relation("UserAssignedCases")
   createdAssignments  CaseAssignment[]   @relation("UserCreatedAssignments")
 
-  createdAlertRules       AlertRule[]         @relation("AlertRuleCreatedBy")
-  updatedAlertRules       AlertRule[]         @relation("AlertRuleUpdatedBy")
-  alertEventsActed        AlertEvent[]        @relation("AlertEventActor")
-  alertEventsAcknowledged AlertEvent[]        @relation("AlertEventAcknowledgedBy")
-  alertEventsIgnored      AlertEvent[]        @relation("AlertEventIgnoredBy")
-  alertEventsResolved     AlertEvent[]        @relation("AlertEventResolvedBy")
-  alertEventsAssigned     AlertEvent[]        @relation("AlertAssignee")
-  escalationsReleased       AlertEscalation[]        @relation("EscalationReleasedBy")
+  createdAlertRules         AlertRule[]                       @relation("AlertRuleCreatedBy")
+  updatedAlertRules         AlertRule[]                       @relation("AlertRuleUpdatedBy")
+  alertEventsActed          AlertEvent[]                      @relation("AlertEventActor")
+  alertEventsAcknowledged   AlertEvent[]                      @relation("AlertEventAcknowledgedBy")
+  alertEventsIgnored        AlertEvent[]                      @relation("AlertEventIgnoredBy")
+  alertEventsResolved       AlertEvent[]                      @relation("AlertEventResolvedBy")
+  alertEventsAssigned       AlertEvent[]                      @relation("AlertAssignee")
+  escalationsReleased       AlertEscalation[]                 @relation("EscalationReleasedBy")
   adminNotifications        AdminNotification[]
-  alertBoardFilterPresets     AlertBoardFilterPreset[]
-  bulkActionJobs              BulkActionJob[]          @relation("BulkActionJobActor")
-  canceledBulkActionJobs      BulkActionJob[]          @relation("BulkActionJobCanceledBy")
-  opsQueueTicketsAssigned     OpsQueueTicket[]       @relation("OpsQueueTicketAssignee")
-  timelineExportLogs          TimelineExportLog[]
-  paragraphRewriteHistories   DocumentParagraphRewriteHistory[]
-  documentParagraphVersions   DocumentParagraphVersion[] @relation("UserParagraphVersions")
-  ownedCasePackageShares      CasePackageShare[]        @relation("CasePackageShareOwner")
-  lawyerCasePackageShares     CasePackageShare[]        @relation("CasePackageShareLawyer")
-  casePackageAccessLogs       CasePackageAccessLog[]    @relation("CasePackageAccessLogActor")
+  alertBoardFilterPresets   AlertBoardFilterPreset[]
+  bulkActionJobs            BulkActionJob[]                   @relation("BulkActionJobActor")
+  canceledBulkActionJobs    BulkActionJob[]                   @relation("BulkActionJobCanceledBy")
+  opsQueueTicketsAssigned   OpsQueueTicket[]                  @relation("OpsQueueTicketAssignee")
+  timelineExportLogs        TimelineExportLog[]
+  paragraphRewriteHistories DocumentParagraphRewriteHistory[]
+  documentParagraphVersions DocumentParagraphVersion[]        @relation("UserParagraphVersions")
+  ownedCasePackageShares    CasePackageShare[]                @relation("CasePackageShareOwner")
+  lawyerCasePackageShares   CasePackageShare[]                @relation("CasePackageShareLawyer")
+  casePackageAccessLogs     CasePackageAccessLog[]            @relation("CasePackageAccessLogActor")
+  requestedSupplementRequests SupplementRequest[]             @relation("SupplementRequestRequester")
+  targetSupplementRequests    SupplementRequest[]             @relation("SupplementRequestTarget")
+  supplementResponses         SupplementResponse[]            @relation("SupplementResponseResponder")
+  supplementRequestStatusLogs SupplementRequestStatusLog[]    @relation("SupplementRequestStatusLogActor")
+  supplementRequestAuditLogs  SupplementRequestAuditLog[]     @relation("SupplementRequestAuditLogActor")
+  authAccounts              AuthAccount[]
 
+  @@index([email])
+}
+
+model AuthAccount {
+  id                String       @id @default(cuid())
+  userId            String
+  provider          AuthProvider
+  providerAccountId String
+  email             String?
+  emailVerified     Boolean      @default(false)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
   @@index([email])
 }
 
@@ -212,20 +307,20 @@ model BulkActionJob {
   canceledById  String?
   cancelReason  String?
 
-  retryOfJobId String?
-  lockedAt     DateTime?
-  lockToken    String?
+  retryOfJobId  String?
+  lockedAt      DateTime?
+  lockToken     String?
   lockExpiresAt DateTime?
-  lockId       String?
+  lockId        String?
 
   lastHeartbeatAt DateTime?
   heartbeatCount  Int       @default(0)
 
-  priority         BulkActionJobPriority @default(NORMAL)
-  queueGroup       String?
-  concurrencyKey   String?
-  maxConcurrency   Int                   @default(2)
-  metadata         Json?
+  priority       BulkActionJobPriority @default(NORMAL)
+  queueGroup     String?
+  concurrencyKey String?
+  maxConcurrency Int                   @default(2)
+  metadata       Json?
 
   totalItems     Int @default(0)
   completedItems Int @default(0)
@@ -237,9 +332,9 @@ model BulkActionJob {
 
   retryScheduledAt DateTime?
 
-  actor      User           @relation("BulkActionJobActor", fields: [actorId], references: [id], onDelete: Cascade)
-  canceledBy User?          @relation("BulkActionJobCanceledBy", fields: [canceledById], references: [id], onDelete: SetNull)
-  retryOfJob BulkActionJob? @relation("BulkActionJobRetry", fields: [retryOfJobId], references: [id], onDelete: SetNull)
+  actor         User            @relation("BulkActionJobActor", fields: [actorId], references: [id], onDelete: Cascade)
+  canceledBy    User?           @relation("BulkActionJobCanceledBy", fields: [canceledById], references: [id], onDelete: SetNull)
+  retryOfJob    BulkActionJob?  @relation("BulkActionJobRetry", fields: [retryOfJobId], references: [id], onDelete: SetNull)
   retryChildren BulkActionJob[] @relation("BulkActionJobRetry")
 
   items BulkActionJobItem[]
@@ -259,26 +354,26 @@ model BulkActionJob {
 }
 
 model BulkActionJobItem {
-  id          String   @id @default(cuid())
-  jobId       String
-  job         BulkActionJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  id    String        @id @default(cuid())
+  jobId String
+  job   BulkActionJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
 
-  targetType      String
-  targetId        String
-  action          String
-  status          String
-  sequence        Int     @default(0)
+  targetType String
+  targetId   String
+  action     String
+  status     String
+  sequence   Int    @default(0)
 
-  errorCode             String?
-  errorMessage          String?
-  errorPayload          Json?
+  errorCode    String?
+  errorMessage String?
+  errorPayload Json?
 
-  failureCategory       BulkActionFailureCategory?
-  failureTaxonomyCode   String?
-  autoGuideCode         String?
-  autoGuideLabel        String?
-  autoGuideDescription  String?
-  retryable             Boolean @default(false)
+  failureCategory      BulkActionFailureCategory?
+  failureTaxonomyCode  String?
+  autoGuideCode        String?
+  autoGuideLabel       String?
+  autoGuideDescription String?
+  retryable            Boolean                    @default(false)
 
   startedAt   DateTime?
   completedAt DateTime?
@@ -313,37 +408,37 @@ model BulkActionSchedule {
 }
 
 model OpsQueueTicket {
-  id             String   @id @default(cuid())
-  sourceJobId    String
-  caseId         String?
-  taxonomy       String
-  bulkVariant    String
-  status         String   @default("OPEN")
-  title          String
-  description    String?
-  severity       String   @default("MEDIUM")
-  priority       OpsQueuePriority @default(NORMAL)
-  dedupeKey      String   @unique
-  assigneeUserId String?
-  metadata       Json?
-  dueAt               DateTime?
-  slaMinutes          Int?
-  overdueNotifiedAt   DateTime?
-  slaLastCheckedAt    DateTime?
-  boardColumn         OpsQueueBoardColumn @default(TRIAGE)
-  boardOrder          Int                  @default(0)
-  retryScheduledAt    DateTime?
-  retrySourceJobId    String?
-  queueGroup          String?
-  concurrencyKey      String?
-  maxConcurrency      Int?
-  completedAt         DateTime?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id                String              @id @default(cuid())
+  sourceJobId       String
+  caseId            String?
+  taxonomy          String
+  bulkVariant       String
+  status            String              @default("OPEN")
+  title             String
+  description       String?
+  severity          String              @default("MEDIUM")
+  priority          OpsQueuePriority    @default(NORMAL)
+  dedupeKey         String              @unique
+  assigneeUserId    String?
+  metadata          Json?
+  dueAt             DateTime?
+  slaMinutes        Int?
+  overdueNotifiedAt DateTime?
+  slaLastCheckedAt  DateTime?
+  boardColumn       OpsQueueBoardColumn @default(TRIAGE)
+  boardOrder        Int                 @default(0)
+  retryScheduledAt  DateTime?
+  retrySourceJobId  String?
+  queueGroup        String?
+  concurrencyKey    String?
+  maxConcurrency    Int?
+  completedAt       DateTime?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
 
   sourceJob BulkActionJob @relation(fields: [sourceJobId], references: [id], onDelete: Cascade)
-  assignee  User?     @relation("OpsQueueTicketAssignee", fields: [assigneeUserId], references: [id], onDelete: SetNull)
-  case      Case?     @relation(fields: [caseId], references: [id], onDelete: SetNull)
+  assignee  User?         @relation("OpsQueueTicketAssignee", fields: [assigneeUserId], references: [id], onDelete: SetNull)
+  case      Case?         @relation(fields: [caseId], references: [id], onDelete: SetNull)
 
   @@index([status, dueAt])
   @@index([assigneeUserId, status])
@@ -407,19 +502,20 @@ model Case {
   createdAt            DateTime   @default(now())
   updatedAt            DateTime   @updatedAt
 
-  owner                       User                            @relation("UserCases", fields: [ownerUserId], references: [id], onDelete: Cascade)
-  attachments                 CaseAttachment[]
-  timelineMemos               CaseTimelineMemo[]
-  assignments                 CaseAssignment[]
-  opsQueueTickets             OpsQueueTicket[]
-  paragraphRewriteHistories   DocumentParagraphRewriteHistory[]
-  caseTimelineMemoParagraphs  CaseTimelineMemoParagraph[]
-  documentApprovalReviews     DocumentApprovalReview[]
-  documentParagraphVersions   DocumentParagraphVersion[]
-  interviews                  Interview[]
-  legalDocuments              LegalDocument[]
-  caseTimelineEvents          CaseTimelineEvent[]
-  casePackageShares           CasePackageShare[]
+  owner                      User                              @relation("UserCases", fields: [ownerUserId], references: [id], onDelete: Cascade)
+  attachments                CaseAttachment[]
+  timelineMemos              CaseTimelineMemo[]
+  assignments                CaseAssignment[]
+  opsQueueTickets            OpsQueueTicket[]
+  paragraphRewriteHistories  DocumentParagraphRewriteHistory[]
+  caseTimelineMemoParagraphs CaseTimelineMemoParagraph[]
+  documentApprovalReviews    DocumentApprovalReview[]
+  documentParagraphVersions  DocumentParagraphVersion[]
+  interviews                 Interview[]
+  legalDocuments             LegalDocument[]
+  caseTimelineEvents         CaseTimelineEvent[]
+  casePackageShares          CasePackageShare[]
+  supplementRequests         SupplementRequest[]
 
   @@index([ownerUserId, status, createdAt])
   @@index([status, createdAt])
@@ -428,42 +524,42 @@ model Case {
 }
 
 model CasePackageShare {
-  id                      String                 @id @default(cuid())
-  caseId                  String
-  ownerUserId             String
-  lawyerUserId            String?
+  id           String  @id @default(cuid())
+  caseId       String
+  ownerUserId  String
+  lawyerUserId String?
 
-  publicCode              String                 @unique
-  accessTokenHash         String?
-  optionalPinHash         String?
+  publicCode      String  @unique
+  accessTokenHash String?
+  optionalPinHash String?
 
-  shareMode               CasePackageShareMode   @default(DESIGNATED_LAWYER)
-  status                  CasePackageShareStatus @default(ACTIVE)
+  shareMode CasePackageShareMode   @default(DESIGNATED_LAWYER)
+  status    CasePackageShareStatus @default(ACTIVE)
 
-  allowSummary            Boolean                @default(true)
-  allowInterview          Boolean                @default(true)
-  allowAttachmentList     Boolean                @default(true)
-  allowAttachmentDownload Boolean                @default(false)
-  allowDocumentDraft      Boolean                @default(true)
-  allowDocumentPdf        Boolean                @default(false)
-  allowPackagePdf         Boolean                @default(false)
-  allowClientContact      Boolean                @default(false)
-  allowOpponentDetail     Boolean                @default(false)
+  allowSummary            Boolean @default(true)
+  allowInterview          Boolean @default(true)
+  allowAttachmentList     Boolean @default(true)
+  allowAttachmentDownload Boolean @default(false)
+  allowDocumentDraft      Boolean @default(true)
+  allowDocumentPdf        Boolean @default(false)
+  allowPackagePdf         Boolean @default(false)
+  allowClientContact      Boolean @default(false)
+  allowOpponentDetail     Boolean @default(false)
 
-  consentText             String                 @db.Text
-  consentedAt             DateTime
-  expiresAt               DateTime?
-  revokedAt               DateTime?
-  revokeReason            String?
+  consentText  String    @db.Text
+  consentedAt  DateTime
+  expiresAt    DateTime?
+  revokedAt    DateTime?
+  revokeReason String?
 
-  createdAt               DateTime               @default(now())
-  updatedAt               DateTime               @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  case                    Case                   @relation(fields: [caseId], references: [id], onDelete: Cascade)
-  owner                   User                   @relation("CasePackageShareOwner", fields: [ownerUserId], references: [id], onDelete: Cascade)
-  lawyer                  User?                  @relation("CasePackageShareLawyer", fields: [lawyerUserId], references: [id], onDelete: SetNull)
+  case   Case  @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  owner  User  @relation("CasePackageShareOwner", fields: [ownerUserId], references: [id], onDelete: Cascade)
+  lawyer User? @relation("CasePackageShareLawyer", fields: [lawyerUserId], references: [id], onDelete: SetNull)
 
-  accessLogs              CasePackageAccessLog[]
+  accessLogs CasePackageAccessLog[]
 
   @@index([caseId, status])
   @@index([ownerUserId, createdAt])
@@ -473,19 +569,19 @@ model CasePackageShare {
 
 model CasePackageAccessLog {
   id            String                  @id @default(cuid())
-  shareId        String
-  caseId         String
-  actorUserId    String?
-  action         CasePackageAccessAction
-  targetType     String
-  targetId       String?
-  ip             String?
-  userAgent      String?
-  resultMessage  String?
-  createdAt      DateTime                @default(now())
+  shareId       String
+  caseId        String
+  actorUserId   String?
+  action        CasePackageAccessAction
+  targetType    String
+  targetId      String?
+  ip            String?
+  userAgent     String?
+  resultMessage String?
+  createdAt     DateTime                @default(now())
 
-  share          CasePackageShare        @relation(fields: [shareId], references: [id], onDelete: Cascade)
-  actor          User?                   @relation("CasePackageAccessLogActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+  share CasePackageShare @relation(fields: [shareId], references: [id], onDelete: Cascade)
+  actor User?            @relation("CasePackageAccessLogActor", fields: [actorUserId], references: [id], onDelete: SetNull)
 
   @@index([shareId, createdAt])
   @@index([caseId, createdAt])
@@ -493,22 +589,160 @@ model CasePackageAccessLog {
   @@index([action, createdAt])
 }
 
+model SupplementRequest {
+  id              String                  @id @default(cuid())
+  caseId          String
+  requesterUserId String
+  targetUserId    String
+  status          SupplementRequestStatus @default(DRAFT)
+  requestType     SupplementRequestType
+  title           String
+  description     String                  @db.Text
+  dueAt           DateTime?
+  sentAt          DateTime?
+  clientViewedAt  DateTime?
+  lastRespondedAt DateTime?
+  acceptedAt      DateTime?
+  closedAt        DateTime?
+  cancelledAt     DateTime?
+  expiredAt       DateTime?
+  revisionRound   Int                     @default(0)
+  isDeleted       Boolean                 @default(false)
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
+
+  case      Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  requester User @relation("SupplementRequestRequester", fields: [requesterUserId], references: [id], onDelete: Cascade)
+  target    User @relation("SupplementRequestTarget", fields: [targetUserId], references: [id], onDelete: Cascade)
+
+  items      SupplementRequestItem[]
+  responses  SupplementResponse[]
+  statusLogs SupplementRequestStatusLog[]
+  auditLogs  SupplementRequestAuditLog[]
+
+  @@index([caseId, status, createdAt])
+  @@index([requesterUserId, createdAt])
+  @@index([targetUserId, createdAt])
+  @@index([isDeleted, updatedAt])
+}
+
+model SupplementRequestItem {
+  id             String               @id @default(cuid())
+  requestId      String
+  itemType       SupplementRequestType
+  itemLabel      String
+  itemPrompt     String               @db.Text
+  isRequired     Boolean              @default(true)
+  sortOrder      Int                  @default(0)
+  expectedFormat String?
+  maxLength      Int?
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+
+  request SupplementRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+
+  responses SupplementResponse[]
+
+  @@index([requestId, sortOrder])
+}
+
+model SupplementResponse {
+  id                String   @id @default(cuid())
+  requestId         String
+  requestItemId     String?
+  responderUserId   String
+  responderRole     UserRole
+  responseText      String?  @db.Text
+  responseJson      Json?
+  submittedAt       DateTime @default(now())
+  revisionRound     Int      @default(0)
+  isAcceptedSnapshot Boolean @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  request     SupplementRequest     @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  requestItem SupplementRequestItem? @relation(fields: [requestItemId], references: [id], onDelete: SetNull)
+  responder   User                  @relation("SupplementResponseResponder", fields: [responderUserId], references: [id], onDelete: Cascade)
+
+  attachments SupplementResponseAttachment[]
+
+  @@index([requestId, submittedAt])
+  @@index([responderUserId, submittedAt])
+}
+
+model SupplementResponseAttachment {
+  id               String                 @id @default(cuid())
+  responseId       String
+  caseAttachmentId String
+  attachmentRole   SupplementAttachmentRole @default(EVIDENCE)
+  note             String?
+  uploadedAt       DateTime               @default(now())
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+
+  response       SupplementResponse @relation(fields: [responseId], references: [id], onDelete: Cascade)
+  caseAttachment CaseAttachment    @relation(fields: [caseAttachmentId], references: [id], onDelete: Cascade)
+
+  @@index([responseId, createdAt])
+  @@index([caseAttachmentId])
+}
+
+model SupplementRequestStatusLog {
+  id           String                  @id @default(cuid())
+  requestId    String
+  fromStatus   SupplementRequestStatus
+  toStatus     SupplementRequestStatus
+  actorUserId  String?
+  actorRole    UserRole
+  reasonCode   String?
+  reasonMemo   String?
+  ipMasked     String?
+  userAgentMasked String?
+  createdAt    DateTime                @default(now())
+
+  request SupplementRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  actor   User?             @relation("SupplementRequestStatusLogActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([requestId, createdAt])
+  @@index([actorUserId, createdAt])
+}
+
+model SupplementRequestAuditLog {
+  id                  String                           @id @default(cuid())
+  requestId           String
+  actionType          SupplementRequestAuditActionType
+  actorUserId         String?
+  actorRole           UserRole
+  actionSummary       String
+  actionPayloadMasked Json?
+  createdAt           DateTime                         @default(now())
+
+  request SupplementRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  actor   User?             @relation("SupplementRequestAuditLogActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([requestId, createdAt])
+  @@index([actorUserId, createdAt])
+  @@index([actionType, createdAt])
+}
+
 model CaseAttachment {
-  id             String                  @id @default(cuid())
+  id             String                 @id @default(cuid())
   caseId         String
   uploaderUserId String
-  category       CaseAttachmentCategory  @default(OTHER)
+  category       CaseAttachmentCategory @default(OTHER)
   originalName   String
   storedName     String
   mimeType       String
   sizeBytes      Int
   storagePath    String
-  status         AttachmentStatus @default(ACTIVE)
-  createdAt      DateTime         @default(now())
+  status         AttachmentStatus       @default(ACTIVE)
+  createdAt      DateTime               @default(now())
   deletedAt      DateTime?
 
   case     Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
   uploader User @relation("UserUploadedCaseAttachments", fields: [uploaderUserId], references: [id], onDelete: Cascade)
+
+  supplementResponseAttachments SupplementResponseAttachment[]
 
   @@index([caseId, status, createdAt])
   @@index([uploaderUserId, createdAt])
@@ -527,9 +761,9 @@ model CaseTimelineMemo {
   alertEventId String?
   noteType     String?
 
-  case       Case         @relation(fields: [caseId], references: [id], onDelete: Cascade)
-  author     User         @relation("UserCaseTimelineMemos", fields: [authorUserId], references: [id], onDelete: Cascade)
-  alertEvent AlertEvent?  @relation(fields: [alertEventId], references: [id], onDelete: SetNull)
+  case       Case        @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  author     User        @relation("UserCaseTimelineMemos", fields: [authorUserId], references: [id], onDelete: Cascade)
+  alertEvent AlertEvent? @relation(fields: [alertEventId], references: [id], onDelete: SetNull)
 
   caseTimelineMemoParagraphs CaseTimelineMemoParagraph[]
   documentApprovalReview     DocumentApprovalReview?
@@ -729,25 +963,25 @@ enum AlertEscalationTargetGroup {
 }
 
 model AlertRule {
-  id              String        @id @default(cuid())
-  name            String
-  code            String        @unique
-  type            AlertRuleType
-  enabled         Boolean       @default(true)
-  severity        AlertSeverity @default(WARNING)
-  configJson      Json
-  description     String?
-  slaHours                 Int?
-  dueSoonHours             Int?
-  escalationLevel1Hours    Int?
-  escalationLevel2Hours    Int?
-  escalationLevel3Hours    Int?
-  escalationTargetGroups  AlertEscalationTargetGroup[] @default([ADMINS])
-  escalationUserIdsJson   Json?
-  createdByUserId String?
-  updatedByUserId String?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  id                     String                       @id @default(cuid())
+  name                   String
+  code                   String                       @unique
+  type                   AlertRuleType
+  enabled                Boolean                      @default(true)
+  severity               AlertSeverity                @default(WARNING)
+  configJson             Json
+  description            String?
+  slaHours               Int?
+  dueSoonHours           Int?
+  escalationLevel1Hours  Int?
+  escalationLevel2Hours  Int?
+  escalationLevel3Hours  Int?
+  escalationTargetGroups AlertEscalationTargetGroup[] @default([ADMINS])
+  escalationUserIdsJson  Json?
+  createdByUserId        String?
+  updatedByUserId        String?
+  createdAt              DateTime                     @default(now())
+  updatedAt              DateTime                     @updatedAt
 
   createdByUser User?        @relation("AlertRuleCreatedBy", fields: [createdByUserId], references: [id], onDelete: SetNull)
   updatedByUser User?        @relation("AlertRuleUpdatedBy", fields: [updatedByUserId], references: [id], onDelete: SetNull)
@@ -758,17 +992,17 @@ model AlertRule {
 }
 
 model AlertEvent {
-  id               String           @id @default(cuid())
+  id               String               @id @default(cuid())
   ruleId           String?
-  status           AlertEventStatus @default(OPEN)
+  status           AlertEventStatus     @default(OPEN)
   severity         AlertSeverity
   title            String
   message          String
-  fingerprint      String           @unique
+  fingerprint      String               @unique
   entityType       String?
   entityId         String?
   actorUserId      String?
-  detectedAt       DateTime         @default(now())
+  detectedAt       DateTime             @default(now())
   acknowledgedAt   DateTime?
   acknowledgedById String?
   ignoredAt        DateTime?
@@ -778,11 +1012,11 @@ model AlertEvent {
   payloadJson      Json
   assigneeUserId   String?
   dueAt            DateTime?
-  slaState         AlertSlaState       @default(ON_TRACK)
-  slaHours                 Int?
-  dueSoonHours             Int?
-  escalationLevel          AlertEscalationLevel @default(NONE)
-  boardOrder              Int                  @default(0)
+  slaState         AlertSlaState        @default(ON_TRACK)
+  slaHours         Int?
+  dueSoonHours     Int?
+  escalationLevel  AlertEscalationLevel @default(NONE)
+  boardOrder       Int                  @default(0)
 
   rule           AlertRule?          @relation(fields: [ruleId], references: [id], onDelete: SetNull)
   actorUser      User?               @relation("AlertEventActor", fields: [actorUserId], references: [id], onDelete: SetNull)
@@ -807,38 +1041,38 @@ model AlertEvent {
 }
 
 model AlertEscalation {
-  id                 String                  @id @default(cuid())
-  alertEventId       String
-  level              AlertEscalationLevel
-  status             AlertEscalationStatus   @default(PENDING)
-  message            String
-  createdAt          DateTime                @default(now())
-  sentAt             DateTime?
-  clearedAt          DateTime?
-  releaseReason      String?
-  releasedByUserId   String?
+  id               String                @id @default(cuid())
+  alertEventId     String
+  level            AlertEscalationLevel
+  status           AlertEscalationStatus @default(PENDING)
+  message          String
+  createdAt        DateTime              @default(now())
+  sentAt           DateTime?
+  clearedAt        DateTime?
+  releaseReason    String?
+  releasedByUserId String?
 
-  alertEvent   AlertEvent @relation(fields: [alertEventId], references: [id], onDelete: Cascade)
-  releasedBy   User?      @relation("EscalationReleasedBy", fields: [releasedByUserId], references: [id], onDelete: SetNull)
+  alertEvent AlertEvent @relation(fields: [alertEventId], references: [id], onDelete: Cascade)
+  releasedBy User?      @relation("EscalationReleasedBy", fields: [releasedByUserId], references: [id], onDelete: SetNull)
 
-  @@index([status, createdAt])
   @@unique([alertEventId, level, status])
+  @@index([status, createdAt])
 }
 
 model AlertSlaWarning {
-  id           String                  @id @default(cuid())
+  id           String                @id @default(cuid())
   alertEventId String
-  status       AlertSlaWarningStatus   @default(OPEN)
+  status       AlertSlaWarningStatus @default(OPEN)
   warningType  String
   message      String
-  createdAt    DateTime                @default(now())
+  createdAt    DateTime              @default(now())
   clearedAt    DateTime?
 
   alertEvent AlertEvent @relation(fields: [alertEventId], references: [id], onDelete: Cascade)
 
+  @@unique([alertEventId, warningType, status])
   @@index([status, createdAt])
   @@index([warningType, createdAt])
-  @@unique([alertEventId, warningType, status])
 }
 
 model AdminNotification {
@@ -867,11 +1101,11 @@ enum CronJobStatus {
 }
 
 model AlertBoardFilterPreset {
-  id              String    @id @default(cuid())
-  name            String
-  userId          String
-  isDefault       Boolean   @default(false)
-  scope           String    @default("PRIVATE")
+  id        String  @id @default(cuid())
+  name      String
+  userId    String
+  isDefault Boolean @default(false)
+  scope     String  @default("PRIVATE")
 
   status          String?
   severity        String?
@@ -882,17 +1116,17 @@ model AlertBoardFilterPreset {
   dueTo           DateTime?
   q               String?
 
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId, createdAt])
   @@unique([userId, name])
+  @@index([userId, createdAt])
 }
 
 model CronJobExecutionLog {
-  id            String         @id @default(cuid())
+  id            String        @id @default(cuid())
   jobCode       String
   jobName       String
   status        CronJobStatus
@@ -907,7 +1141,7 @@ model CronJobExecutionLog {
   triggeredBy   String?
   retryOfRunId  String?
 
-  createdAt     DateTime       @default(now())
+  createdAt DateTime @default(now())
 
   @@index([jobCode, createdAt])
   @@index([status, createdAt])
@@ -916,7 +1150,7 @@ model CronJobExecutionLog {
 model Interview {
   id                 String          @id @default(cuid())
   caseId             String
-  questionSetId    String?
+  questionSetId      String?
   questionSetCode    String?
   questionSetVersion String?
   status             InterviewStatus @default(NOT_STARTED)
@@ -929,6 +1163,488 @@ model Interview {
   case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
 
   @@index([caseId, status])
+}
+
+// ────────────────────────────────────────────────
+// 불법사금융 피해 신고서 모듈
+// ────────────────────────────────────────────────
+
+enum IllegalLendingReporterType {
+  VICTIM
+  FAMILY_OR_RELATED
+  THIRD_PARTY
+}
+
+enum IllegalLendingDamageType {
+  ULTRA_HIGH_INTEREST
+  ILLEGAL_COLLECTION
+  THREAT_OR_INTIMIDATION
+  CONTACT_FAMILY_OR_WORKPLACE
+  PERSONAL_INFO_THREAT
+  SEXUAL_IMAGE_THREAT
+  UNREGISTERED_LENDER
+  FALSE_OR_MISLEADING_CONTRACT
+  OTHER
+}
+
+enum IllegalLendingReportStatus {
+  DRAFT_SUBMITTED
+  REVIEW_READY
+  REFERRED_TO_LAWYER
+  CLOSED
+}
+
+enum JeonseReporterType {
+  TENANT
+  FAMILY_OR_RELATED
+  REPRESENTATIVE
+  OTHER
+}
+
+enum JeonseDamageType {
+  DEPOSIT_NOT_RETURNED
+  AUCTION_OR_PUBLIC_SALE
+  LANDLORD_BANKRUPTCY_OR_REHABILITATION
+  MULTIPLE_TENANT_DAMAGE
+  DOUBLE_CONTRACT_OR_FALSE_CONTRACT
+  EXCESSIVE_SENIOR_DEBT
+  TAX_ARREARS_OR_SEIZURE
+  LANDLORD_DISAPPEARED
+  BROKER_INVOLVEMENT_SUSPECTED
+  OTHER
+}
+
+enum JeonseReportStatus {
+  DRAFT_SUBMITTED
+  REVIEW_READY
+  DOCUMENTS_CHECKED
+  REFERRED_TO_LAWYER
+  CLOSED
+}
+
+model IllegalLendingReport {
+  id                   String                         @id @default(cuid())
+  reporterType         IllegalLendingReporterType
+  reporterName         String
+  reporterPhone        String
+  reporterEmail        String?
+  uploadToken          String?                        @unique
+  victimName           String?
+  victimPhone          String?
+
+  creditorName         String?
+  creditorPhone        String?
+  creditorBusinessName String?
+  creditorAccount      String?
+  creditorMemo         String?
+
+  loanDate             DateTime?
+  principalAmount      Int?
+  receivedAmount       Int?
+  repaidAmount         Int?
+  demandedAmount       Int?
+  interestRateMemo     String?
+
+  damageTypes          IllegalLendingDamageType[]
+  collectionMethods    String?
+  damageSummary        String
+  requestedHelp        String?
+
+  evidenceSummary      String?
+  generatedReport      String
+
+  consentPrivacy       Boolean                        @default(false)
+  consentNoLegalAdvice Boolean                        @default(false)
+
+  status               IllegalLendingReportStatus     @default(DRAFT_SUBMITTED)
+
+  createdAt            DateTime                       @default(now())
+  updatedAt            DateTime                       @updatedAt
+
+  statusHistories      IllegalLendingReportStatusHistory[]
+  accessLogs           IllegalLendingReportAccessLog[]
+  attachments          IllegalLendingReportAttachment[]
+  lawyerReviewRequests IllegalLendingLawyerReviewRequest[]
+  lawyerAssignmentHistories IllegalLendingLawyerAssignmentHistory[]
+
+  @@index([createdAt])
+  @@index([status])
+  @@index([reporterPhone])
+}
+
+model IllegalLendingReportStatusHistory {
+  id         String                     @id @default(cuid())
+  reportId   String
+  fromStatus IllegalLendingReportStatus?
+  toStatus   IllegalLendingReportStatus
+  reason     String?
+  actorId    String?
+  actorName  String?
+  actorRole  String?
+  createdAt  DateTime                   @default(now())
+
+  report IllegalLendingReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@index([createdAt])
+  @@index([toStatus])
+}
+
+model IllegalLendingReportAccessLog {
+  id        String   @id @default(cuid())
+  reportId  String
+  action    String
+  actorId   String?
+  actorName String?
+  actorRole String?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  report IllegalLendingReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+enum IllegalLendingAttachmentType {
+  MESSAGE_CAPTURE
+  CALL_RECORDING
+  BANK_TRANSFER
+  CONTRACT_OR_NOTE
+  ID_OR_PERSONAL_INFO_REQUEST
+  THREAT_EVIDENCE
+  OTHER
+}
+
+enum IllegalLendingLawyerReviewStatus {
+  REQUESTED
+  ASSIGNED
+  REVIEWING
+  COMPLETED
+  CANCELLED
+}
+
+model IllegalLendingReportAttachment {
+  id              String                        @id @default(cuid())
+  reportId        String
+  attachmentType  IllegalLendingAttachmentType @default(OTHER)
+  originalName    String
+  storedName      String
+  mimeType        String
+  sizeBytes       Int
+  storageProvider String                        @default("local")
+  storageKey      String?
+  storagePath     String
+  downloadCount   Int                           @default(0)
+  lastDownloadedAt DateTime?
+  memo            String?
+  uploadedByName  String?
+  uploadedByPhone String?
+  createdAt       DateTime                      @default(now())
+
+  report IllegalLendingReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@index([attachmentType])
+  @@index([createdAt])
+}
+
+model IllegalLendingLawyerReviewRequest {
+  id                 String                           @id @default(cuid())
+  reportId           String
+  status             IllegalLendingLawyerReviewStatus @default(REQUESTED)
+  requestedById      String?
+  requestedByName    String?
+  requestedByRole    String?
+  memo               String?
+  assignedLawyerId   String?
+  assignedLawyerName String?
+  autoAssigned       Boolean                          @default(false)
+  assignmentReason   String?
+  createdAt          DateTime                         @default(now())
+  updatedAt          DateTime                         @updatedAt
+
+  report IllegalLendingReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model IllegalLendingLawyerAssignmentHistory {
+  id              String   @id @default(cuid())
+  reportId         String
+  reviewRequestId  String?
+  lawyerId         String?
+  lawyerName       String?
+  reason           String?
+  createdAt        DateTime @default(now())
+
+  report           IllegalLendingReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@index([lawyerId])
+  @@index([createdAt])
+}
+
+model JeonseDamageReport {
+  id                   String             @id @default(cuid())
+  reporterType         JeonseReporterType
+  reporterName         String
+  reporterPhone        String
+  reporterEmail        String?
+  tenantName           String?
+  tenantPhone          String?
+  propertyAddress      String
+  propertyType         String?
+  moveInDate           DateTime?
+  fixedDate            DateTime?
+  hasMoveInReport      Boolean            @default(false)
+  hasFixedDate         Boolean            @default(false)
+  hasPossession        Boolean            @default(false)
+  hasLeaseRegistration Boolean            @default(false)
+  hasJeonseRight       Boolean            @default(false)
+  leaseStartDate       DateTime?
+  leaseEndDate         DateTime?
+  depositAmount        Int?
+  monthlyRentAmount    Int?
+  contractMemo         String?
+  landlordName         String?
+  landlordPhone        String?
+  landlordAddress      String?
+  landlordMemo         String?
+  brokerName           String?
+  brokerOfficeName     String?
+  brokerPhone          String?
+  brokerMemo           String?
+  damageTypes          JeonseDamageType[]
+  returnRequestHistory String?
+  auctionOrSaleStatus  String?
+  investigationStatus  String?
+  damageSummary        String
+  requestedHelp        String?
+  evidenceSummary      String?
+  generatedSummary     String
+  generatedChecklist   String
+  consentPrivacy       Boolean            @default(false)
+  consentNoLegalAdvice Boolean            @default(false)
+  uploadToken          String?            @unique
+  status               JeonseReportStatus @default(DRAFT_SUBMITTED)
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  statusHistories      JeonseDamageReportStatusHistory[]
+  accessLogs           JeonseDamageReportAccessLog[]
+  attachments          JeonseDamageReportAttachment[]
+  lawyerReviewRequests JeonseDamageLawyerReviewRequest[]
+
+  @@index([createdAt])
+  @@index([status])
+  @@index([reporterPhone])
+  @@index([propertyAddress])
+}
+
+enum JeonseDamageAttachmentType {
+  LEASE_CONTRACT
+  RESIDENT_REGISTRATION
+  FIXED_DATE_PROOF
+  REGISTRY_CERTIFICATE
+  DEPOSIT_TRANSFER
+  RETURN_REQUEST_MESSAGE
+  CONTENT_CERTIFIED_MAIL
+  AUCTION_OR_SEIZURE_DOCUMENT
+  INVESTIGATION_DOCUMENT
+  BROKER_DOCUMENT
+  OTHER
+}
+
+enum JeonseDamageLawyerReviewStatus {
+  REQUESTED
+  ASSIGNED
+  REVIEWING
+  COMPLETED
+  CANCELLED
+}
+
+enum WageClaimReporterType {
+  WORKER
+  FAMILY_OR_RELATED
+  REPRESENTATIVE
+  OTHER
+}
+
+enum WageClaimEmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  DAILY
+  FREELANCER_DISPUTED
+  OTHER
+}
+
+enum WageClaimDamageType {
+  UNPAID_WAGES
+  UNPAID_SEVERANCE
+  UNPAID_OVERTIME
+  UNPAID_NIGHT_HOLIDAY
+  UNPAID_ALLOWANCE
+  MINIMUM_WAGE_VIOLATION
+  WAGE_STATEMENT_NOT_PROVIDED
+  DELAYED_PAYMENT_AFTER_RESIGNATION
+  OTHER
+}
+
+enum WageClaimReportStatus {
+  DRAFT_SUBMITTED
+  REVIEW_READY
+  DOCUMENTS_CHECKED
+  REFERRED_TO_LAWYER
+  CLOSED
+}
+
+model JeonseDamageReportStatusHistory {
+  id         String             @id @default(cuid())
+  reportId   String
+  fromStatus JeonseReportStatus?
+  toStatus   JeonseReportStatus
+  reason     String?
+  actorId    String?
+  actorName  String?
+  actorRole  String?
+  createdAt  DateTime           @default(now())
+
+  report JeonseDamageReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@index([createdAt])
+  @@index([toStatus])
+}
+
+model JeonseDamageReportAccessLog {
+  id        String   @id @default(cuid())
+  reportId  String
+  action    String
+  actorId   String?
+  actorName String?
+  actorRole String?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  report JeonseDamageReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+model JeonseDamageReportAttachment {
+  id               String                     @id @default(cuid())
+  reportId         String
+  attachmentType   JeonseDamageAttachmentType @default(OTHER)
+  originalName     String
+  storedName       String
+  mimeType         String
+  sizeBytes        Int
+  storageProvider  String                     @default("local")
+  storageKey       String?
+  storagePath      String
+  memo             String?
+  uploadedByName   String?
+  uploadedByPhone  String?
+  downloadCount    Int                        @default(0)
+  lastDownloadedAt DateTime?
+  createdAt        DateTime                   @default(now())
+
+  report JeonseDamageReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@index([attachmentType])
+  @@index([createdAt])
+}
+
+model JeonseDamageLawyerReviewRequest {
+  id                 String                         @id @default(cuid())
+  reportId           String
+  status             JeonseDamageLawyerReviewStatus @default(REQUESTED)
+  requestedById      String?
+  requestedByName    String?
+  requestedByRole    String?
+  memo               String?
+  assignedLawyerId   String?
+  assignedLawyerName String?
+  autoAssigned       Boolean                        @default(false)
+  assignmentReason   String?
+  createdAt          DateTime                       @default(now())
+  updatedAt          DateTime                       @updatedAt
+
+  report JeonseDamageReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model WageClaimReport {
+  id                    String                  @id @default(cuid())
+
+  reporterType          WageClaimReporterType
+  reporterName          String
+  reporterPhone         String
+  reporterEmail         String?
+
+  workerName            String?
+  workerPhone           String?
+
+  employerName          String?
+  companyName           String
+  companyAddress        String?
+  companyPhone          String?
+  workplaceAddress      String?
+
+  employmentType        WageClaimEmploymentType
+  jobDescription        String?
+  hireDate              DateTime?
+  resignationDate       DateTime?
+  isResigned            Boolean                 @default(false)
+
+  monthlyWageAmount     Int?
+  dailyWageAmount       Int?
+  hourlyWageAmount      Int?
+  agreedPayMemo         String?
+
+  unpaidWageAmount      Int?
+  unpaidSeveranceAmount Int?
+  unpaidAllowanceAmount Int?
+  unpaidTotalAmount     Int?
+  unpaidPeriod          String?
+  paymentDueDate        DateTime?
+
+  damageTypes           WageClaimDamageType[]
+  requestHistory        String?
+  evidenceSummary       String?
+  damageSummary         String
+  requestedHelp         String?
+
+  generatedStatement    String
+  generatedTable        String
+  generatedChecklist    String
+
+  consentPrivacy        Boolean                 @default(false)
+  consentNoLegalAdvice  Boolean                 @default(false)
+
+  uploadToken           String?                 @unique
+  status                WageClaimReportStatus   @default(DRAFT_SUBMITTED)
+
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+
+  @@index([createdAt])
+  @@index([status])
+  @@index([reporterPhone])
+  @@index([companyName])
 }
 
 model LegalDocument {
@@ -949,6 +1665,7 @@ model LegalDocument {
   updatedAt          DateTime            @updatedAt
 
   case       Case                     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  generationTrace DocumentGenerationTrace?
   paragraphs LegalDocumentParagraph[]
   versions   LegalDocumentVersion[]
 
@@ -1000,19 +1717,45 @@ model LegalDocumentParagraphHistory {
 }
 
 model LegalDocumentVersion {
-  id           String   @id @default(cuid())
-  documentId String
-  versionNo  Int
+  id           String    @id @default(cuid())
+  documentId   String
+  versionNo    Int
   snapshotJson Json
-  approved   Boolean  @default(false)
-  approvedAt DateTime?
+  approved     Boolean   @default(false)
+  approvedAt   DateTime?
   approvedById String?
-  createdAt  DateTime @default(now())
+  createdAt    DateTime  @default(now())
 
   document LegalDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
 
   @@unique([documentId, versionNo])
   @@index([documentId, approved])
+}
+
+model DocumentGenerationTrace {
+  id                  String                 @id @default(cuid())
+  legalDocumentId     String                 @unique
+  templateCode        String
+  templateVersion     String
+  templateTitle       String
+  sourceProvider      LegalFormProvider
+  sourceId            String?
+  sourceName          String?
+  sourceUrl           String?
+  sourceHash          String?
+  sourceStatus        LegalFormSourceStatus?
+  sourceNote          String?
+  generatedSnapshotAt DateTime               @default(now())
+  approvedSnapshotAt  DateTime?
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @updatedAt
+
+  legalDocument LegalDocument @relation(fields: [legalDocumentId], references: [id], onDelete: Cascade)
+
+  @@index([sourceProvider])
+  @@index([sourceId])
+  @@index([generatedSnapshotAt])
+  @@index([approvedSnapshotAt])
 }
 
 model CaseTimelineEvent {
@@ -1055,6 +1798,38 @@ model QuestionSet {
   @@index([catalogStatus])
 }
 
+model LegalFormSource {
+  id               String                @id @default(cuid())
+  provider         LegalFormProvider
+  sourceName       String
+  sourceUrl        String
+  documentType     String
+  category         String?
+  officialFormCode String?
+  fileName         String?
+  fileMimeType     String?
+  fileHash         String?
+  storageKey       String?
+  licenseNote      String?
+  downloadedAt     DateTime?
+  effectiveDate    DateTime?
+  parsedText       String?               @db.Text
+  status           LegalFormSourceStatus @default(ACTIVE)
+  memo             String?               @db.Text
+  createdByUserId  String?
+  updatedByUserId  String?
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+
+  templates DocumentTemplate[]
+
+  @@index([provider, status])
+  @@index([documentType, status])
+  @@index([sourceName])
+  @@index([fileHash])
+  @@index([createdAt])
+}
+
 /// 문서 템플릿(섹션/문단 정의) — definitionJson에 DocumentTemplateDefinition 저장
 /// catalogStatus는 질문셋과 동일 enum(`QuestionSetStatus`)을 재사용한다.
 model DocumentTemplate {
@@ -1065,13 +1840,23 @@ model DocumentTemplate {
   title          String
   description    String?
   definitionJson Json
+  /// 공식서식 출처 연결. 내부 표준 템플릿이면 sourceProvider = INTERNAL_STANDARD, sourceId = null 허용.
+  sourceId       String?
+  sourceProvider LegalFormProvider @default(INTERNAL_STANDARD)
+  sourceUrl      String?
+  sourceHash     String?
+  sourceNote     String?
   catalogStatus  QuestionSetStatus @default(DRAFT)
   publishedAt    DateTime?
   archivedAt     DateTime?
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
 
+  source LegalFormSource? @relation(fields: [sourceId], references: [id], onDelete: SetNull)
+
   @@unique([code, version])
   @@index([type])
   @@index([catalogStatus])
+  @@index([sourceId])
+  @@index([sourceProvider])
 }

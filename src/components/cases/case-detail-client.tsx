@@ -17,6 +17,7 @@ import { DocumentReviewPanel } from "@/components/cases/document-review-panel";
 import { ParagraphStructurePanel } from "@/components/cases/paragraph-structure-panel";
 import { TimelinePanel } from "@/components/cases/timeline-panel";
 import { CaseSummaryPanel } from "@/components/cases/case-summary-panel";
+import { CasePackageShareSettingsPanel } from "@/components/case-package/case-package-share-settings-panel";
 import type { SerializedCaseDetail } from "@/lib/cases/case-detail-serialize";
 import { requireOkData } from "@/lib/client/api-error";
 import { postDocumentDelivery } from "@/lib/client/post-document-delivery";
@@ -24,7 +25,6 @@ import {
   caseDetailHubReturnHref,
   supplementHubHref,
   supplementHubLinkTitle,
-  type SupplementHubUiRole,
 } from "@/features/cases/case.utils";
 import type { UiFourPanelRole } from "@/lib/role-map";
 
@@ -36,7 +36,32 @@ type CaseDetailClientProps = {
   };
 };
 
-export function CaseDetailClient({ caseRecord, currentUser }: CaseDetailClientProps) {
+function needsStatusReason(action: string) {
+  return ["PUT_ON_HOLD", "REJECT_CASE", "REOPEN_CASE"].includes(action);
+}
+
+function resolveStatusReason(action: string, reason?: string) {
+  if (!needsStatusReason(action)) {
+    return reason ?? null;
+  }
+
+  if (reason?.trim()) {
+    return reason;
+  }
+
+  const promptedReason = globalThis.prompt("사유를 입력하세요.") ?? "";
+  if (!promptedReason.trim()) {
+    alert("사유가 필요합니다.");
+    return null;
+  }
+
+  return promptedReason;
+}
+
+export function CaseDetailClient({
+  caseRecord,
+  currentUser,
+}: Readonly<CaseDetailClientProps>) {
   const [localCase, setLocalCase] = useState(caseRecord);
   const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(
     caseRecord.documents[0]?.id ?? null,
@@ -127,28 +152,63 @@ export function CaseDetailClient({ caseRecord, currentUser }: CaseDetailClientPr
     }
   }, [localCase.id]);
 
+  async function completeInterviewAction() {
+    const res = await fetch(`/api/cases/${localCase.id}/interview/complete`, {
+      method: "POST",
+    });
+    const raw = await res.json().catch(() => null);
+    requireOkData(res, raw, "인터뷰 완료 처리에 실패했습니다.");
+    await refreshCase();
+    alert("인터뷰가 완료 처리되었습니다.");
+  }
+
+  async function deliverDocumentAction(documentId: string) {
+    const channel =
+      globalThis.prompt("전달 채널을 입력하세요. (예: 이메일, 등기)", "이메일")?.trim() ?? "";
+
+    if (!channel) {
+      alert("전달 채널이 필요합니다.");
+      return;
+    }
+
+    await postDocumentDelivery(documentId, {
+      channel,
+      recipient: null,
+    });
+    await refreshCase();
+    alert("문서 전달이 반영되었습니다. 타임라인에 채널 정보가 기록됩니다.");
+  }
+
+  async function updateCaseStatusAction(action: string, reason: string | null) {
+    const res = await fetch(`/api/cases/${localCase.id}/status`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        action,
+        reason,
+      }),
+    });
+
+    const raw = await res.json().catch(() => null);
+    requireOkData(res, raw, "상태 변경에 실패했습니다.");
+
+    await refreshCase();
+    alert("상태가 변경되었습니다.");
+  }
+
   async function handleStatusAction(action: string, reason?: string) {
-    const needsReason = ["PUT_ON_HOLD", "REJECT_CASE", "REOPEN_CASE"].includes(action);
-    let resolvedReason = reason;
-    if (needsReason && !resolvedReason?.trim()) {
-      resolvedReason = window.prompt("사유를 입력하세요.") ?? "";
-      if (!resolvedReason.trim()) {
-        alert("사유가 필요합니다.");
-        return;
-      }
+    const resolvedReason = resolveStatusReason(action, reason);
+    if (needsStatusReason(action) && !resolvedReason) {
+      return;
     }
 
     try {
       setIsBusy(true);
 
       if (action === "COMPLETE_INTERVIEW") {
-        const res = await fetch(`/api/cases/${localCase.id}/interview/complete`, {
-          method: "POST",
-        });
-        const raw = await res.json().catch(() => null);
-        requireOkData(res, raw, "인터뷰 완료 처리에 실패했습니다.");
-        await refreshCase();
-        alert("인터뷰가 완료 처리되었습니다.");
+        await completeInterviewAction();
         return;
       }
 
@@ -157,43 +217,13 @@ export function CaseDetailClient({ caseRecord, currentUser }: CaseDetailClientPr
           alert("전달할 문서를 목록에서 선택하세요.");
           return;
         }
-        const channel =
-          window.prompt("전달 채널을 입력하세요. (예: 이메일, 등기)", "이메일")?.trim() ?? "";
-        if (!channel) {
-          alert("전달 채널이 필요합니다.");
-          return;
-        }
-        try {
-          await postDocumentDelivery(selectedDocumentId, {
-            channel,
-            recipient: null,
-          });
-          await refreshCase();
-          alert("문서 전달이 반영되었습니다. 타임라인에 채널 정보가 기록됩니다.");
-        } catch (e) {
-          alert(e instanceof Error ? e.message : "전달 처리에 실패했습니다.");
-        } finally {
-          setIsBusy(false);
-        }
+        await deliverDocumentAction(selectedDocumentId);
         return;
       }
 
-      const res = await fetch(`/api/cases/${localCase.id}/status`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          action,
-          reason: needsReason ? resolvedReason ?? null : reason ?? null,
-        }),
-      });
-
-      const raw = await res.json().catch(() => null);
-      requireOkData(res, raw, "상태 변경에 실패했습니다.");
-
-      await refreshCase();
-      alert("상태가 변경되었습니다.");
+      await updateCaseStatusAction(action, resolvedReason);
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "상태 처리 중 오류가 발생했습니다.");
     } finally {
       setIsBusy(false);
     }
@@ -236,16 +266,14 @@ export function CaseDetailClient({ caseRecord, currentUser }: CaseDetailClientPr
   const showReviewPendingClientGuide =
     localCase.status === "REVIEW_PENDING" && currentUser.role === "CLIENT";
 
-  const hubRole = currentUser.role as SupplementHubUiRole;
-  const supplementHubPath = supplementHubHref(localCase.id, localCase.status, hubRole);
+  const supplementHubPath = supplementHubHref(localCase.id, localCase.status, currentUser.role);
 
   return (
     <div className="space-y-6 p-0">
       {localCase.status === "INTAKE_PENDING" ? (
-        <div
+        <section
           id="case-detail-intake-banner"
           className="scroll-mt-24 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-950"
-          role="region"
           aria-label={`${CASE_STATUS_LABELS.INTAKE_PENDING} 안내`}
         >
           <span className="font-semibold">
@@ -297,14 +325,13 @@ export function CaseDetailClient({ caseRecord, currentUser }: CaseDetailClientPr
               → 진행 액션 영역으로 이동
             </Link>
           </p>
-        </div>
+        </section>
       ) : null}
 
       {showReviewPendingGuide ? (
-        <div
+        <section
           id="case-detail-review-staff-banner"
           className="scroll-mt-24 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm leading-relaxed text-sky-950"
-          role="region"
           aria-label={`${CASE_STATUS_LABELS.REVIEW_PENDING} 담당 안내`}
         >
           <p className="text-xs font-medium text-sky-900/90">
@@ -340,14 +367,13 @@ export function CaseDetailClient({ caseRecord, currentUser }: CaseDetailClientPr
             담당(관리자·변호사·스태프): 문서가 없으면 이 화면에서 문서를 만든 뒤, 같은 순서로 이어가면
             됩니다.
           </span>
-        </div>
+        </section>
       ) : null}
 
       {showReviewPendingClientGuide ? (
-        <div
+        <section
           id="case-detail-review-client-banner"
           className="scroll-mt-24 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-relaxed text-slate-800"
-          role="region"
           aria-label={`${CASE_STATUS_LABELS.REVIEW_PENDING} 의뢰인 안내`}
         >
           <p className="mb-2 text-xs text-slate-600">
@@ -371,7 +397,7 @@ export function CaseDetailClient({ caseRecord, currentUser }: CaseDetailClientPr
             보완 안내
           </Link>
           의 의뢰인 안내 문구를 참고하세요.
-        </div>
+        </section>
       ) : null}
 
       <div className="grid gap-4 lg:grid-cols-3">
@@ -412,15 +438,18 @@ export function CaseDetailClient({ caseRecord, currentUser }: CaseDetailClientPr
           />
           {caseActionsForUi.DELIVER_DOCUMENT ? (
             <p className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs leading-relaxed text-emerald-900">
-              <span className="font-semibold text-emerald-950">다음 액션:</span> 같은 열 상단 「
-              <strong>전달 완료 처리</strong>」— 잠금·검증 확인 후 실제 전달을 마칠 때만 누르세요. (채널 입력 →
-              타임라인 기록)
+              <span className="font-semibold text-emerald-950">다음 액션:</span>
+              {" "}
+              같은 열 상단 「<strong>전달 완료 처리</strong>」를 잠금·검증 확인 후 실제 전달을 마칠 때만
+              누르세요. (채널 입력 → 타임라인 기록)
             </p>
           ) : null}
         </div>
       </div>
 
       <CaseSummaryPanel caseId={localCase.id} interviewCompleted={facts.interviewCompleted} />
+
+      <CasePackageShareSettingsPanel caseId={localCase.id} />
 
       <div className="grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)_360px]">
         <div className="space-y-4">

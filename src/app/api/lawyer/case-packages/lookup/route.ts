@@ -1,93 +1,147 @@
-import { ok, toErrorResponse } from "@/lib/domain-api-response";
+import { NextResponse } from "next/server";
+import { z } from "zod";
 import { requireSessionUser } from "@/lib/auth/require-session-user";
-import { prisma } from "@/lib/prisma";
-import { NotFoundError } from "@/lib/errors";
-import { LawyerCasePackageLookupSchema } from "@/lib/case-package/case-package-share-schema";
-import { normalizePublicCode } from "@/lib/case-package/public-code";
 import {
-  assertLawyerCanLookupShare,
-  normalizeShareStatusByTime,
-} from "@/lib/case-package/case-package-share-policy";
-import { createCasePackageAccessLog } from "@/lib/case-package/case-package-access-log";
-import { serializeCasePackageShare } from "@/lib/case-package/case-package-share-serializer";
+  findShareByPublicCode,
+  logCasePackageAccess,
+  resolveShareStatusForResponse,
+} from "@/features/case-package/case-package-share.repository";
+import {
+  evaluateCasePackageAccess,
+  verifyOptionalPin,
+} from "@/features/case-package/case-package-share-policy-utils";
 
-export const dynamic = "force-dynamic";
+const lookupSchema = z.object({
+  publicCode: z.string().min(1),
+  pin: z.string().nullable().optional(),
+});
+
+function getRequestContext(request: Request, actorUserId: string) {
+  return {
+    actorUserId,
+    ip: request.headers.get("x-forwarded-for"),
+    userAgent: request.headers.get("user-agent"),
+  };
+}
 
 export async function POST(request: Request) {
-  try {
-    const currentUser = await requireSessionUser();
-    const body: unknown = await request.json();
-    const input = LawyerCasePackageLookupSchema.parse(body);
-    const publicCode = normalizePublicCode(input.publicCode);
+  const user = await requireSessionUser();
+  const body: unknown = await request.json();
+  const parsed = lookupSchema.safeParse(body);
 
-    const share = await prisma.casePackageShare.findUnique({
-      where: { publicCode },
-      include: {
-        case: {
-          include: {
-            attachments: {
-              where: { status: "ACTIVE" },
-              orderBy: { createdAt: "desc" },
-            },
-            legalDocuments: {
-              orderBy: { createdAt: "desc" },
-            },
-          },
-        },
-        owner: {
-          select: { id: true, name: true, email: true, phone: true },
-        },
-        lawyer: {
-          select: { id: true, name: true, email: true, phone: true },
-        },
+  if (!parsed.success) {
+    return NextResponse.json(
+      {
+        ok: false,
+        code: "INVALID_LOOKUP_PAYLOAD",
+        message: "고유번호 조회 입력값이 올바르지 않습니다.",
+        issues: parsed.error.flatten(),
       },
-    });
+      { status: 422 },
+    );
+  }
 
-    if (!share) {
-      throw new NotFoundError("사건 고유번호를 확인할 수 없습니다.");
-    }
+  const share = await findShareByPublicCode(parsed.data.publicCode.trim());
 
-    try {
-      assertLawyerCanLookupShare(currentUser, share);
-    } catch (error) {
-      const effectiveStatus = normalizeShareStatusByTime(
-        share.status,
-        share.expiresAt,
-      );
+  if (!share) {
+    return NextResponse.json(
+      {
+        ok: false,
+        code: "SHARE_NOT_FOUND",
+        message: "사건 패키지 공유 정보를 찾을 수 없습니다.",
+      },
+      { status: 404 },
+    );
+  }
 
-      await createCasePackageAccessLog({
-        shareId: share.id,
-        caseId: share.caseId,
-        actorUserId: currentUser.id,
-        action:
-          effectiveStatus === "EXPIRED"
-            ? "EXPIRED"
-            : effectiveStatus === "REVOKED"
-              ? "REVOKED"
-              : "DENIED",
-        targetType: "CASE_PACKAGE_SHARE",
-        targetId: share.id,
-        resultMessage:
-          error instanceof Error ? error.message : "접근이 거부되었습니다.",
-        request,
-      });
+  const pinRequired = Boolean(share.optionalPinHash);
+  const pinValid = pinRequired
+    ? verifyOptionalPin({
+        pin: parsed.data.pin ?? "",
+        pinHash: share.optionalPinHash ?? "",
+      })
+    : true;
 
-      throw error;
-    }
+  const decision = evaluateCasePackageAccess({
+    publicCode: share.publicCode,
+    shareExists: true,
+    status: resolveShareStatusForResponse({
+      status: share.status,
+      expiresAt: share.expiresAt,
+      revokedAt: share.revokedAt,
+    }),
+    expiresAt: share.expiresAt,
+    revokedAt: share.revokedAt,
+    isLawyerAuthenticated:
+      user.role === "LAWYER" || user.role === "ADMIN" || user.role === "SUPER_ADMIN",
+    lawyerMatchesShare: !share.lawyerUserId || share.lawyerUserId === user.id,
+    pinRequired,
+    pinValid,
+  });
 
-    await createCasePackageAccessLog({
+  let deniedAction: "DENIED" | "EXPIRED" | "REVOKED" = "DENIED";
+  if (decision.code === "SHARE_EXPIRED") {
+    deniedAction = "EXPIRED";
+  } else if (decision.code === "SHARE_REVOKED") {
+    deniedAction = "REVOKED";
+  }
+
+  if (!decision.allowed) {
+    await logCasePackageAccess({
       shareId: share.id,
       caseId: share.caseId,
-      actorUserId: currentUser.id,
-      action: "VIEW",
-      targetType: "CASE_PACKAGE_SHARE",
-      targetId: share.id,
-      resultMessage: "변호사 고유번호 조회 성공",
-      request,
+      action: deniedAction,
+      targetType: "PACKAGE",
+      resultMessage: decision.message,
+      context: getRequestContext(request, user.id),
     });
 
-    return ok(serializeCasePackageShare(share));
-  } catch (error) {
-    return toErrorResponse(error);
+    return NextResponse.json(
+      {
+        ok: false,
+        code: decision.code,
+        message: decision.message,
+      },
+      { status: 403 },
+    );
   }
+
+  await logCasePackageAccess({
+    shareId: share.id,
+    caseId: share.caseId,
+    action: "VIEW",
+    targetType: "PACKAGE",
+    resultMessage: "고유번호 조회 성공",
+    context: getRequestContext(request, user.id),
+  });
+
+  return NextResponse.json({
+    ok: true,
+    share: {
+      id: share.id,
+      caseId: share.caseId,
+      publicCode: share.publicCode,
+      status: share.status,
+      allowSummary: share.allowSummary,
+      allowInterview: share.allowInterview,
+      allowAttachmentList: share.allowAttachmentList,
+      allowAttachmentDownload: share.allowAttachmentDownload,
+      allowDocumentDraft: share.allowDocumentDraft,
+      allowPackagePdf: share.allowPackagePdf,
+      expiresAt: share.expiresAt,
+      case: {
+        id: share.case.id,
+        title: share.case.title,
+        status: share.case.status,
+        caseType: share.case.category,
+        summary: share.case.description,
+        createdAt: share.case.createdAt,
+        updatedAt: share.case.updatedAt,
+      },
+      owner: {
+        id: share.owner.id,
+        name: share.owner.name,
+      },
+    },
+  });
 }

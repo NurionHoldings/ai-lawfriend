@@ -32,6 +32,7 @@ export default async function CaseDetailPage({
       },
       legalDocuments: {
         include: {
+          generationTrace: true,
           paragraphs: {
             orderBy: [{ sectionKey: "asc" }, { displayOrder: "asc" }],
           },

@@ -158,56 +158,72 @@ PROJECT_PLAN = {
         "관리자 /admin/qa-evidence, POST /api/admin/qa-evidence/analyze, "
         "src/lib/qa-evidence/* / [EVIDENCE-20260428-402] 기준"
     ),
+    "dashboard_5_2_ai_evidence_draft_storage_design": (
+        "대시보드 5.2 — AI Evidence Draft 저장 구조 설계: "
+        "DASHBOARD_5_2_AI_EVIDENCE_DRAFT_STORAGE_DESIGN.md / "
+        "[EVIDENCE-20260428-403] 기준"
+    ),
     "aibeopchin_6_0_case_package_share_lawyer_access_plan": (
         "AI법친 6.0 — 사건 패키지 / 고유번호 공유 / 변호사 열람 연계 기획서: "
-        "AIBEOPCHIN_6_0_CASE_PACKAGE_SHARE_LAWYER_ACCESS_PLAN.md / "
-        "[EVIDENCE-20260428-404] 기준"
+        "docs/project-governance/AIBEOPCHIN_6_0_CASE_PACKAGE_SHARE_LAWYER_ACCESS_PLAN.md / "
+        "[EVIDENCE-20260501-AIBEOPCHIN-6-0-CASE-PACKAGE-SHARE-LAWYER-ACCESS-PLAN] 기준"
     ),
-    "aibeopchin_6_1_case_package_data_structure_and_generation_rules": (
+    "aibeopchin_6_1_case_package_data_structure": (
         "AI법친 6.1 — 사건 패키지 데이터 구조 / 생성 기준 설계: "
-        "AIBEOPCHIN_6_1_CASE_PACKAGE_DATA_STRUCTURE_AND_GENERATION_RULES.md / "
-        "[EVIDENCE-20260428-405] 기준"
+        "docs/project-governance/AIBEOPCHIN_6_1_CASE_PACKAGE_DATA_STRUCTURE.md / "
+        "[EVIDENCE-20260501-AIBEOPCHIN-6-1-CASE-PACKAGE-DATA-STRUCTURE] 기준"
     ),
-    "aibeopchin_6_2_public_code_and_share_consent_rules": (
+    "aibeopchin_6_2_case_package_code_consent_policy": (
         "AI법친 6.2 — 고유번호 발급 정책 / 공유 동의 구조 설계: "
-        "AIBEOPCHIN_6_2_PUBLIC_CODE_AND_SHARE_CONSENT_RULES.md / "
-        "[EVIDENCE-20260428-406] 기준"
+        "docs/project-governance/AIBEOPCHIN_6_2_CASE_PACKAGE_CODE_CONSENT_POLICY.md / "
+        "[EVIDENCE-20260501-AIBEOPCHIN-6-2-CASE-PACKAGE-CODE-CONSENT-POLICY] 기준"
     ),
     "aibeopchin_6_3_case_package_share_prisma_api": (
         "AI법친 6.3 — CasePackageShare Prisma 모델 / API 구현: "
-        "prisma/schema.prisma / src/lib/case-package/* / "
+        "prisma/schema.prisma / src/features/case-package/case-package-share.repository.ts / "
         "src/app/api/cases/[caseId]/package-shares/* / "
-        "src/app/api/lawyer/case-packages/lookup/route.ts / "
-        "[EVIDENCE-20260428-407] 기준"
+        "src/app/api/lawyer/case-packages/lookup/route.ts / src/app/api/lawyer/case-packages/[shareId]/route.ts / "
+        "[EVIDENCE-20260501-AIBEOPCHIN-6-3-CASE-PACKAGE-SHARE-PRISMA-API] 기준"
     ),
-    "aibeopchin_6_4_client_case_package_share_screen": (
+    "aibeopchin_6_4_client_share_settings_ui": (
         "AI법친 6.4 — 의뢰인 공유 설정 화면 구현: "
-        "src/app/(protected)/cases/[caseId]/share/page.tsx / "
-        "src/components/case-package/case-package-share-client.tsx / "
-        "공유 범위 설정, 고유번호 발급, 공유 취소, 전달 문구 복사 / "
-        "[EVIDENCE-20260428-408] 기준"
+        "CasePackageShareSettingsPanel / "
+        "[EVIDENCE-20260501-AIBEOPCHIN-6-4-CLIENT-SHARE-SETTINGS-UI] 기준"
     ),
-    "aibeopchin_6_5_lawyer_case_package_lookup_screen": (
+    "aibeopchin_6_5_lawyer_case_package_lookup_detail_ui": (
         "AI법친 6.5 — 변호사 고유번호 조회 / 열람 화면 구현: "
-        "src/app/(lawyer)/lawyer/case-packages/lookup/page.tsx / "
-        "src/components/lawyer/case-package/lawyer-case-package-lookup-client.tsx / "
-        "고유번호 입력, lookup API 연결, 사건 패키지 열람 UI / "
-        "[EVIDENCE-20260428-409] 기준"
+        "LawyerCasePackageLookupClient / LawyerCasePackageDetailClient / "
+        "[EVIDENCE-20260501-AIBEOPCHIN-6-5-LAWYER-CASE-PACKAGE-LOOKUP-DETAIL-UI] 기준"
     ),
-    "aibeopchin_6_6_shared_attachment_download_permission": (
+    "aibeopchin_6_6_attachment_view_download_permissions": (
         "AI법친 6.6 — 첨부파일 열람 / 다운로드 권한 분리: "
-        "공유 사건 패키지 첨부 다운로드 API, allowAttachmentDownload 검증, 다운로드 로그 / "
-        "[EVIDENCE-20260428-410] 기준"
+        "attachment download API / [EVIDENCE-20260501-AIBEOPCHIN-6-6-ATTACHMENT-VIEW-DOWNLOAD-PERMISSIONS] 기준"
     ),
-    "aibeopchin_6_7_case_package_access_log_and_revoke_hardening": (
+    "aibeopchin_6_7_access_logs_revoke_enhancement": (
         "AI법친 6.7 — 열람 로그 / 다운로드 로그 / 공유 취소 고도화: "
-        "접근 로그 조회 API, 공유 상세 화면, 취소 사유 UI / "
-        "[EVIDENCE-20260428-411] 기준"
+        "access log API / share settings log UI / [EVIDENCE-20260501-AIBEOPCHIN-6-7-ACCESS-LOGS-REVOKE-ENHANCEMENT] 기준"
     ),
     "aibeopchin_6_8_case_package_summary_output": (
         "AI법친 6.8 — 사건 패키지 PDF / 요약본 출력: "
-        "allowPackagePdf 검증, 인쇄 가능한 HTML 요약본 출력 API, 출력 로그 / "
-        "[EVIDENCE-20260428-412] 기준"
+        "public-safe package summary output / [EVIDENCE-20260501-AIBEOPCHIN-6-8-CASE-PACKAGE-PDF-SUMMARY] 기준"
+    ),
+    "aibeopchin_6_9_privacy_security_consent_finalization": "AI법친 6.9 — 개인정보 / 보안 / 동의문구 최종 정리: privacy/security/consent policy / [EVIDENCE-20260501-AIBEOPCHIN-6-9-PRIVACY-SECURITY-CONSENT-FINALIZATION] 기준",
+    "aibeopchin_6_10_qa_regression_predeploy": (
+        "AI법친 6.10 — QA / 회귀 / 배포 전 점검: "
+        "자동 회귀 runner(scripts/run-case-package-6-regression.ts), "
+        "수동 QA 체크리스트(docs/project-governance/case-package-6-manual-qa-results.json), "
+        "수동 QA runner(scripts/verify-case-package-6-manual-qa.ts) / "
+        "[EVIDENCE-20260503-AIBEOPCHIN-6-10-QA-REGRESSION-PREDEPLOY] 기준"
+    ),
+    "aibeopchin_6_12_binary_pdf_engine": (
+        "AI법친 6.12 — binary PDF 엔진 검토 / 적용: "
+        "Playwright PDF renderer / "
+        "[EVIDENCE-20260503-AIBEOPCHIN-6-12-BINARY-PDF-ENGINE] 기준"
+    ),
+    "aibeopchin_6_11_admin_case_package_share_dashboard": (
+        "AI법친 6.11 — 관리자 공유 현황 화면 구현: "
+        "공유 목록/상세 API, 관리자 목록/상세 화면, 위험 배지, 로그 요약 / "
+        "[EVIDENCE-20260503-AIBEOPCHIN-6-11-ADMIN-CASE-PACKAGE-SHARE-DASHBOARD] 기준"
     ),
     "aibeopchin_6_3_migration_closeout_and_runtime_verification": (
         "AI법친 6.3 migration 마감 및 6.4~6.8 런타임 검증: .env.local 템플릿 생성 완료, 실제 DATABASE_URL 입력 대기, add-case-package-share migration 실행, 6.4~6.8 런타임 검증, 407~412 증빙 갱신"
@@ -866,6 +882,38 @@ def render_plan() -> str:
             "3.x 봉인·closure 미기입 유지; tsc+lint+verify+py_compile 통과."
         )
 
+    dash52 = PROJECT_PLAN.get("dashboard_5_2_ai_evidence_draft_storage_design")
+    if dash52:
+        lines.append("")
+        lines.append("## 대시보드 5.2 — AI Evidence Draft 저장 구조 설계")
+        lines.append(
+            "- 기준 문서: docs/project-governance/"
+            "DASHBOARD_5_2_AI_EVIDENCE_DRAFT_STORAGE_DESIGN.md"
+        )
+        lines.append("- 기준 증빙: [EVIDENCE-20260428-403]")
+        lines.append(
+            "- 목적: AI Evidence Assistant 분석 결과를 향후 Draft로 저장하고 "
+            "승인 / 반려 / 보완 / 공식 반영까지 이어갈 수 있도록 저장 모델, 상태값, "
+            "승인 기준, 감사로그 기준을 설계한다."
+        )
+        lines.append(
+            "- 범위: 실제 DB schema 변경 없음, 마이그레이션 없음, 저장 API 구현 없음, "
+            "문서 자동 수정 없음."
+        )
+        lines.append(dash52)
+        lines.append("")
+        lines.append("### 검증 명령 (5.2)")
+        lines.append("npx tsc --noEmit")
+        lines.append("npm run lint")
+        lines.append("npm run verify:canonical-sources")
+        lines.append("py -3 -m py_compile tools/aibeopchin_navigator.py")
+        lines.append("")
+        lines.append("### 5.2 완료 기준 (요약)")
+        lines.append(
+            "5.2 설계 MD·Draft 목적/상태/전이·모델·API·화면·승인·감사·403 증빙·"
+            "navigator·코드·DB 미변경·검증 통과."
+        )
+
     plan60 = PROJECT_PLAN.get("aibeopchin_6_0_case_package_share_lawyer_access_plan")
     if plan60:
         lines.append("")
@@ -874,7 +922,7 @@ def render_plan() -> str:
             "- 기준 문서: docs/project-governance/"
             "AIBEOPCHIN_6_0_CASE_PACKAGE_SHARE_LAWYER_ACCESS_PLAN.md"
         )
-        lines.append("- 기준 증빙: [EVIDENCE-20260428-404]")
+        lines.append("- 기준 증빙: [EVIDENCE-20260501-AIBEOPCHIN-6-0-CASE-PACKAGE-SHARE-LAWYER-ACCESS-PLAN]")
         lines.append(
             "- 목적: 일반 사용자가 AI 질문 흐름으로 사건을 정리하고, "
             "변호사가 고유번호와 권한 승인으로 사건 패키지를 열람·다운로드할 수 있는 구조를 설계한다."
@@ -885,41 +933,41 @@ def render_plan() -> str:
         )
         lines.append(plan60)
 
-    plan61 = PROJECT_PLAN.get("aibeopchin_6_1_case_package_data_structure_and_generation_rules")
+    plan61 = PROJECT_PLAN.get("aibeopchin_6_1_case_package_data_structure")
     if plan61:
         lines.append("")
         lines.append("## AI법친 6.1 — 사건 패키지 데이터 구조 / 생성 기준 설계")
         lines.append(
             "- 기준 문서: docs/project-governance/"
-            "AIBEOPCHIN_6_1_CASE_PACKAGE_DATA_STRUCTURE_AND_GENERATION_RULES.md"
+            "AIBEOPCHIN_6_1_CASE_PACKAGE_DATA_STRUCTURE.md"
         )
-        lines.append("- 기준 증빙: [EVIDENCE-20260428-405]")
+        lines.append("- 기준 증빙: [EVIDENCE-20260501-AIBEOPCHIN-6-1-CASE-PACKAGE-DATA-STRUCTURE]")
         lines.append(
-            "- 목적: 기존 Case / Attachment / LegalDocument / Interview / Summary 데이터를 기준으로 "
-            "사건 패키지에 포함할 데이터, 생성 조건, 공유 가능 / 비공유 데이터, 변호사 열람용 구조를 정의한다."
+            "- 목적: 기존 Case / Attachment / Interview / Summary / LegalDocument 데이터를 "
+            "변호사 검토용 사건 패키지 DTO로 조합하는 기준을 확정한다."
         )
         lines.append(
-            "- 범위: 실제 Prisma schema 변경 없음, 신규 API 구현 없음, 화면 구현 없음, "
-            "데이터 구조와 생성 기준만 기획서로 고정한다."
+            "- 범위: Prisma schema 변경 없음, 신규 API 구현 없음, 신규 화면 구현 없음, "
+            "데이터 구조 / 생성 기준 / public-safe DTO / 순수 builder만 고정한다."
         )
         lines.append(plan61)
 
-    plan62 = PROJECT_PLAN.get("aibeopchin_6_2_public_code_and_share_consent_rules")
+    plan62 = PROJECT_PLAN.get("aibeopchin_6_2_case_package_code_consent_policy")
     if plan62:
         lines.append("")
         lines.append("## AI법친 6.2 — 고유번호 발급 정책 / 공유 동의 구조 설계")
         lines.append(
             "- 기준 문서: docs/project-governance/"
-            "AIBEOPCHIN_6_2_PUBLIC_CODE_AND_SHARE_CONSENT_RULES.md"
+            "AIBEOPCHIN_6_2_CASE_PACKAGE_CODE_CONSENT_POLICY.md"
         )
-        lines.append("- 기준 증빙: [EVIDENCE-20260428-406]")
+        lines.append("- 기준 증빙: [EVIDENCE-20260501-AIBEOPCHIN-6-2-CASE-PACKAGE-CODE-CONSENT-POLICY]")
         lines.append(
-            "- 목적: 사건 패키지를 변호사에게 안전하게 공유하기 위한 publicCode 발급 규칙, "
-            "accessToken / PIN 후보, 공유 동의, 공유 범위, 만료 / 취소, 변호사 조회 전 검증 조건을 정의한다."
+            "- 목적: 사건 패키지 공유를 위한 publicCode, accessToken, optionalPin, consent snapshot, "
+            "shareStatus, access decision 기준을 확정한다."
         )
         lines.append(
-            "- 범위: 실제 Prisma schema 변경 없음, 신규 API 구현 없음, 화면 구현 없음, "
-            "고유번호와 공유 동의 정책만 문서로 고정한다."
+            "- 범위: Prisma schema 변경 없음, 신규 API 구현 없음, 신규 화면 구현 없음, "
+            "고유번호/동의/상태/접근 판정 정책과 순수 유틸만 고정한다."
         )
         lines.append(plan62)
 
@@ -951,93 +999,55 @@ def render_plan() -> str:
         )
         lines.append(plan63)
 
-    plan64 = PROJECT_PLAN.get("aibeopchin_6_4_client_case_package_share_screen")
+    plan64 = PROJECT_PLAN.get("aibeopchin_6_4_client_share_settings_ui")
     if plan64:
         lines.append("")
         lines.append("## AI법친 6.4 — 의뢰인 공유 설정 화면 구현")
-        lines.append("- 기준 증빙: [EVIDENCE-20260428-408]")
+        lines.append("- 기준 증빙: [EVIDENCE-20260501-AIBEOPCHIN-6-4-CLIENT-SHARE-SETTINGS-UI]")
         lines.append(
-            "- 목적: 의뢰인이 사건별 공유 범위, 다운로드 허용 여부, 공유 만료일, 동의문구를 확인한 뒤 "
-            "사건 고유번호를 발급하고 공유 상태를 관리할 수 있는 화면을 구현한다."
+            "- 목적: 의뢰인이 사건 상세 화면에서 사건 패키지 공유 범위, 다운로드 권한, 만료일, PIN을 설정하고 고유번호를 발급·취소할 수 있게 한다."
         )
         lines.append(
-            "- 범위: /cases/[caseId]/share 화면, 공유 범위 체크박스, 고유번호 발급, 공유 목록, 공유 취소, "
-            "변호사 전달 문구 복사."
-        )
-        lines.append(
-            "- 주의: 실제 공유 생성 / 목록 / 취소 런타임 검증은 6.3 DB migration 완료 후 진행한다."
-        )
-        lines.append(
-            "- 다음 실제 작업: DATABASE_URL 설정 후 add-case-package-share migration을 먼저 마감한 다음, 6.4 공유 생성 / 목록 / 취소 런타임 검증으로 이어간다."
-        )
-        lines.append(
-            "- 런타임 확인 포인트: 고유번호 발급, 공유 목록 조회, 공유 취소."
+            "- 범위: 의뢰인 공유 설정 UI와 기존 6.3 API 연결만 구현한다. 변호사 조회/열람 화면은 6.5로 분리한다."
         )
         lines.append(plan64)
 
-    plan65 = PROJECT_PLAN.get("aibeopchin_6_5_lawyer_case_package_lookup_screen")
+    plan65 = PROJECT_PLAN.get("aibeopchin_6_5_lawyer_case_package_lookup_detail_ui")
     if plan65:
         lines.append("")
         lines.append("## AI법친 6.5 — 변호사 고유번호 조회 / 열람 화면 구현")
-        lines.append("- 기준 증빙: [EVIDENCE-20260428-409]")
+        lines.append("- 기준 증빙: [EVIDENCE-20260501-AIBEOPCHIN-6-5-LAWYER-CASE-PACKAGE-LOOKUP-DETAIL-UI]")
         lines.append(
-            "- 목적: 변호사가 사건 고유번호를 입력해 공유 상태와 권한 검증을 통과한 사건 패키지를 열람할 수 있는 화면을 구현한다."
+            "- 목적: 변호사가 고유번호와 선택형 PIN으로 사건 패키지를 조회하고, 허용된 범위 내에서 사건 요약·첨부자료 목록·문서 초안의 기초를 열람할 수 있게 한다."
         )
         lines.append(
-            "- 범위: /lawyer/case-packages/lookup 화면, 고유번호 입력, lookup API 연결, 사건 기본 정보 / 첨부자료 목록 / 문서 초안 표시."
-        )
-        lines.append(
-            "- 주의: 실제 고유번호 조회 런타임 검증은 6.3 DB migration 완료 후 진행한다."
-        )
-        lines.append(
-            "- 다음 실제 작업: DATABASE_URL 설정 후 add-case-package-share migration을 먼저 마감한 다음, 6.5 고유번호 조회 런타임 검증으로 이어간다."
-        )
-        lines.append(
-            "- 런타임 확인 포인트: 고유번호 입력, 사건 패키지 조회, 공유 범위별 표시 확인."
+            "- 범위: 변호사 lookup/detail 화면과 기존 6.3 API 연결만 구현한다. 첨부파일 실제 다운로드 권한 분리는 6.6으로 분리한다."
         )
         lines.append(plan65)
 
-    plan66 = PROJECT_PLAN.get("aibeopchin_6_6_shared_attachment_download_permission")
+    plan66 = PROJECT_PLAN.get("aibeopchin_6_6_attachment_view_download_permissions")
     if plan66:
         lines.append("")
         lines.append("## AI법친 6.6 — 첨부파일 열람 / 다운로드 권한 분리")
-        lines.append("- 기준 증빙: [EVIDENCE-20260428-410]")
+        lines.append("- 기준 증빙: [EVIDENCE-20260501-AIBEOPCHIN-6-6-ATTACHMENT-VIEW-DOWNLOAD-PERMISSIONS]")
         lines.append(
-            "- 목적: 변호사가 사건 패키지에서 첨부자료 목록은 볼 수 있더라도, 의뢰인이 다운로드를 허용한 경우에만 별도 API로 원본 파일을 내려받을 수 있게 한다."
+            "- 목적: 변호사 사건 패키지에서 첨부자료 목록 열람과 실제 파일 다운로드 권한을 분리하고, 다운로드 성공/차단 로그를 기록한다."
         )
         lines.append(
-            "- 범위: 공유 첨부 다운로드 API, shareId / attachmentId 검증, allowAttachmentDownload 검증, 만료 / 취소 / 지정 변호사 조건 차단, 다운로드 로그 기록."
-        )
-        lines.append(
-            "- 주의: 실제 다운로드 런타임 검증은 6.3 DB migration 완료 후 진행한다."
-        )
-        lines.append(
-            "- 다음 실제 작업: DATABASE_URL 설정 후 add-case-package-share migration을 먼저 마감한 다음, 6.6 공유 첨부 다운로드 런타임 검증으로 이어간다."
-        )
-        lines.append(
-            "- 런타임 확인 포인트: 다운로드 허용 시 성공, 비허용 시 차단, DOWNLOAD 로그 확인."
+            "- 범위: allowAttachmentList / allowAttachmentDownload 분리, 다운로드 API, 로그 기록, 상세 화면 버튼 연결까지 구현한다. 사건 패키지 PDF는 6.8로 분리한다."
         )
         lines.append(plan66)
 
-    plan67 = PROJECT_PLAN.get("aibeopchin_6_7_case_package_access_log_and_revoke_hardening")
+    plan67 = PROJECT_PLAN.get("aibeopchin_6_7_access_logs_revoke_enhancement")
     if plan67:
         lines.append("")
         lines.append("## AI법친 6.7 — 열람 로그 / 다운로드 로그 / 공유 취소 고도화")
-        lines.append("- 기준 증빙: [EVIDENCE-20260428-411]")
+        lines.append("- 기준 증빙: [EVIDENCE-20260501-AIBEOPCHIN-6-7-ACCESS-LOGS-REVOKE-ENHANCEMENT]")
         lines.append(
-            "- 목적: 사건 패키지 공유 이후 열람, 다운로드, 접근 거부, 만료, 취소 이력을 의뢰인이 확인할 수 있도록 공유 상세 화면과 접근 로그 조회 API를 구현한다."
+            "- 목적: 공유별 열람/다운로드/차단 로그를 의뢰인이 확인하고, 공유 취소 사유를 기록할 수 있게 한다."
         )
         lines.append(
-            "- 범위: 접근 로그 serializer, 접근 로그 조회 API, 공유 상세 화면, 열람 / 다운로드 통계, 공유 취소 사유 선택 UI."
-        )
-        lines.append(
-            "- 주의: 실제 로그 런타임 검증은 6.3 DB migration 완료 후 진행한다."
-        )
-        lines.append(
-            "- 다음 실제 작업: DATABASE_URL 설정 후 add-case-package-share migration을 먼저 마감한 다음, 6.7 접근 로그 / 취소 이력 런타임 검증으로 이어간다."
-        )
-        lines.append(
-            "- 런타임 확인 포인트: VIEW / DOWNLOAD / DENIED / REVOKED 로그 확인, 의뢰인 공유 상세 화면 표시 확인."
+            "- 범위: access log API, 의뢰인 공유 패널 로그 표시, 취소 사유 입력, 취소 후 로그 새로고침까지 구현한다. 사건 패키지 PDF는 6.8로 분리한다."
         )
         lines.append(plan67)
 
@@ -1045,23 +1055,68 @@ def render_plan() -> str:
     if plan68:
         lines.append("")
         lines.append("## AI법친 6.8 — 사건 패키지 PDF / 요약본 출력")
-        lines.append("- 기준 증빙: [EVIDENCE-20260428-412]")
+        lines.append("- 기준 증빙: [EVIDENCE-20260501-AIBEOPCHIN-6-8-CASE-PACKAGE-PDF-SUMMARY]")
         lines.append(
-            "- 목적: 공유된 사건 패키지를 변호사 검토용 요약본으로 출력할 수 있도록 하고, allowPackagePdf와 공유 상태 검증을 통과한 경우에만 내려받을 수 있게 한다."
+            "- 목적: allowPackagePdf가 허용된 공유에 한해 public-safe 사건 패키지 요약본을 출력하고 다운로드 로그를 기록한다."
         )
         lines.append(
-            "- 범위: 요약본 출력 정책 유틸, HTML 요약본 renderer, 요약본 출력 API, 출력 성공 / 실패 로그, 변호사 열람 화면 출력 버튼."
-        )
-        lines.append(
-            "- 주의: 실제 요약본 출력 런타임 검증은 6.3 DB migration 완료 후 진행한다."
-        )
-        lines.append(
-            "- 다음 실제 작업: DATABASE_URL 설정 후 add-case-package-share migration을 먼저 마감한 다음, 6.8 요약본 출력 런타임 검증으로 이어간다."
-        )
-        lines.append(
-            "- 런타임 확인 포인트: allowPackagePdf 허용 시 HTML 요약본 출력, 비허용 시 차단, PACKAGE_SUMMARY 로그 확인."
+            "- 범위: 사건 요약, 첨부자료 목록, 문서 목록, 안전 고지만 출력한다. 첨부 원문, prompt, raw response, snapshot 전체는 출력하지 않는다."
         )
         lines.append(plan68)
+
+    plan69 = PROJECT_PLAN.get("aibeopchin_6_9_privacy_security_consent_finalization")
+    if plan69:
+        lines.append("")
+        lines.append("## AI법친 6.9 — 개인정보 / 보안 / 동의문구 최종 정리")
+        lines.append("- 기준 증빙: [EVIDENCE-20260501-AIBEOPCHIN-6-9-PRIVACY-SECURITY-CONSENT-FINALIZATION]")
+        lines.append(
+            "- 목적: 사건 패키지 공유 기능 전체의 개인정보 최소노출, 공유 동의, 변호사 열람 고지, 출력물 제외 항목, 변호사법 오인 방지 문구를 최종 정리한다."
+        )
+        lines.append(
+            "- 범위: 문서·공용 상수·검증 helper·기존 UI/출력물 문구 연결만 수행한다. Prisma/API/화면 신규 구현은 하지 않는다."
+        )
+        lines.append(plan69)
+
+    pq = PROJECT_PLAN.get("predeploy_qa_closure_procedure")
+    plan610 = PROJECT_PLAN.get("aibeopchin_6_10_qa_regression_predeploy")
+    if plan610:
+        lines.append("")
+        lines.append("## AI법친 6.10 — QA / 회귀 / 배포 전 점검")
+        lines.append("- 기준 증빙: [EVIDENCE-20260503-AIBEOPCHIN-6-10-QA-REGRESSION-PREDEPLOY]")
+        lines.append(
+            "- 목적: 6.0~6.9 사건 패키지 공유 기능 전체를 자동 회귀 + 수동 QA로 잠그고 배포 전 점검 체계를 확립한다."
+        )
+        lines.append(
+            "- 범위: 회귀 runner / 수동 QA JSON / 수동 QA 검증 runner / package.json 스크립트 추가. 신규 기능 구현 없음."
+        )
+        lines.append(plan610)
+
+    plan612 = PROJECT_PLAN.get("aibeopchin_6_12_binary_pdf_engine")
+    if plan612:
+        lines.append("")
+        lines.append("## AI법친 6.12 — binary PDF 엔진 검토 / 적용")
+        lines.append("- 기중 문서: docs/project-governance/AIBEOPCHIN_6_12_BINARY_PDF_ENGINE.md")
+        lines.append("- 기중 증빠: [EVIDENCE-20260503-AIBEOPCHIN-6-12-BINARY-PDF-ENGINE]")
+        lines.append(
+            "- 목적: 6.8 public-safe HTML 요약본을 Playwright 기반 binary PDF 응답으로 고도화한다."
+        )
+        lines.append(
+            "- 범위: PDF 엔진/응답만 변경한다. 출력물 포함·제외 정책, 권한 정책, 로그 정책은 변경하지 않는다."
+        )
+        lines.append(plan612)
+
+    plan611 = PROJECT_PLAN.get("aibeopchin_6_11_admin_case_package_share_dashboard")
+    if plan611:
+        lines.append("")
+        lines.append("## AI법친 6.11 — 관리자 공유 현황 화면 구현")
+        lines.append("- 기중 증빠: [EVIDENCE-20260503-AIBEOPCHIN-6-11-ADMIN-CASE-PACKAGE-SHARE-DASHBOARD]")
+        lines.append(
+            "- 목적: 관리자가 사건 패키지 공유 현황, 상태, 권한, 위험 배지, 접근 로그를 운영 관점에서 확인할 수 있게 한다."
+        )
+        lines.append(
+            "- 범위: 공유 목록/상세 API 및 화면 구현. 공유 강제 변경, 삭제, 관리자 대리 다운로드는 미구현."
+        )
+        lines.append(plan611)
 
     pq = PROJECT_PLAN.get("predeploy_qa_closure_procedure")
     if pq:

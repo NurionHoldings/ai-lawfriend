@@ -108,12 +108,25 @@ npm run predeploy:lint-test
 
 - [ ] 통과
 
+### 5.5 Supplement migration 적용 순서 확인
+
+```bash
+npm run verify:supplement-migration-predeploy
+npm run db:deploy:supplement-phase1
+```
+
+- [ ] 통과
+- [ ] 실행 순서/롤백 기준 확인: [docs/supplement-request-migration-runbook.md](./docs/supplement-request-migration-runbook.md)
+
 ---
 
 ## 6. 배포 환경 변수 점검
 
 - [ ] `DATABASE_URL` 설정 확인
 - [ ] 운영 환경에서 필요한 auth 관련 env 확인
+- [ ] 다중 프리패스 사용 시 `DEMO_ACCESS_1_*`, `DEMO_ACCESS_2_*`, `DEMO_ACCESS_3_*` 세트가 모두 적용됨
+- [ ] 각 프리패스 세트에 `ID`, `PASSWORD`, `USER_ID` 누락 없음
+- [ ] 각 프리패스 세트의 `ROLE` 값이 실제 대상 역할과 일치함
 - [ ] release meta 에 표시될 build 환경 값 확인 가능
 - [ ] env 누락 시 system page 또는 server route에서 즉시 확인 가능
 

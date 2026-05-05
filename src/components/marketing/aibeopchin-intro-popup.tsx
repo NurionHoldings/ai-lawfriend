@@ -123,10 +123,10 @@ export function AibeopchinIntroPopup() {
           </div>
 
           <div className="mt-4 rounded-2xl border border-aibeop-line bg-white px-4 py-4 text-sm leading-6 text-aibeop-muted">
-            <div className="font-extrabold text-aibeop-text">데모 접근 안내</div>
+            <div className="font-extrabold text-aibeop-text">접근 안내</div>
             <p className="mt-2">
-              데모 프리패스 로그인은 운영 환경변수에서 활성화된 경우에만 동작하며,
-              비활성화 상태에서는 일반 계정 인증만 허용됩니다.
+              회원가입 또는 활성화된 소셜 로그인 제공자를 통해 접근할 수 있으며,
+              승인 대기 상태에서는 보호 화면에 로그인할 수 없습니다.
             </p>
           </div>
 
@@ -136,7 +136,7 @@ export function AibeopchinIntroPopup() {
               onClick={close}
               className="flex-1 rounded-2xl bg-aibeop-green px-5 py-3 text-center text-sm font-extrabold text-white shadow-soft hover:bg-aibeop-deep"
             >
-              로그인 / 데모 접속
+              로그인 / 회원가입
             </Link>
 
             <button

@@ -4,14 +4,28 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { requireOkData } from "@/lib/client/api-error";
+import {
+  formatLegalFormSourceLabel,
+  LEGAL_FORM_SOURCE_PROVIDER_LABELS,
+  type LegalFormSourceOption,
+} from "@/lib/legal-form-source";
 
-export function DocumentTemplateCreateClient() {
+type TemplateSourceMode = "OFFICIAL_SOURCE" | "INTERNAL_STANDARD";
+
+type Props = Readonly<{
+  sources: LegalFormSourceOption[];
+}>;
+
+export function DocumentTemplateCreateClient({ sources }: Props) {
   const router = useRouter();
   const [title, setTitle] = useState("새 문서 템플릿");
   const [code, setCode] = useState("NEW_TEMPLATE");
   const [version, setVersion] = useState("1.0.0");
   const [type, setType] = useState("STATEMENT");
+  const [sourceMode, setSourceMode] = useState<TemplateSourceMode>("INTERNAL_STANDARD");
+  const [sourceId, setSourceId] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const selectedSource = sources.find((item) => item.id === sourceId) ?? null;
 
   async function handleCreate() {
     try {
@@ -27,6 +41,8 @@ export function DocumentTemplateCreateClient() {
           code,
           version,
           type,
+          sourceId: sourceMode === "OFFICIAL_SOURCE" ? sourceId || null : null,
+          sourceProvider: sourceMode === "INTERNAL_STANDARD" ? "INTERNAL_STANDARD" : null,
         }),
       });
 
@@ -61,6 +77,16 @@ export function DocumentTemplateCreateClient() {
           title="상태 열과 같은 한글: 초안·게시됨·보관됨"
         >
           인터뷰 질문셋 관리
+        </Link>
+        <span className="text-gray-300" aria-hidden>
+          |
+        </span>
+        <Link
+          href="/admin/legal-form-sources"
+          className="underline hover:text-gray-900"
+          title="공식서식 원천자료 목록"
+        >
+          공식서식 소스
         </Link>
         <span className="text-gray-300" aria-hidden>
           |
@@ -100,8 +126,11 @@ export function DocumentTemplateCreateClient() {
 
       <div className="mt-5 space-y-4">
         <div>
-          <label className="mb-1 block text-sm font-medium">제목</label>
+          <label htmlFor="template-create-title" className="mb-1 block text-sm font-medium">
+            제목
+          </label>
           <input
+            id="template-create-title"
             className="w-full rounded-xl border px-3 py-2 text-sm"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -109,8 +138,11 @@ export function DocumentTemplateCreateClient() {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">코드</label>
+          <label htmlFor="template-create-code" className="mb-1 block text-sm font-medium">
+            코드
+          </label>
           <input
+            id="template-create-code"
             className="w-full rounded-xl border px-3 py-2 text-sm"
             value={code}
             onChange={(e) => setCode(e.target.value)}
@@ -118,8 +150,11 @@ export function DocumentTemplateCreateClient() {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">버전</label>
+          <label htmlFor="template-create-version" className="mb-1 block text-sm font-medium">
+            버전
+          </label>
           <input
+            id="template-create-version"
             className="w-full rounded-xl border px-3 py-2 text-sm"
             value={version}
             onChange={(e) => setVersion(e.target.value)}
@@ -127,8 +162,11 @@ export function DocumentTemplateCreateClient() {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">문서 타입</label>
+          <label htmlFor="template-create-type" className="mb-1 block text-sm font-medium">
+            문서 타입
+          </label>
           <select
+            id="template-create-type"
             className="w-full rounded-xl border px-3 py-2 text-sm"
             value={type}
             onChange={(e) => setType(e.target.value)}
@@ -138,6 +176,68 @@ export function DocumentTemplateCreateClient() {
             <option value="CONSULT_NOTE">CONSULT_NOTE</option>
           </select>
         </div>
+
+        <div>
+          <label htmlFor="template-create-source-mode" className="mb-1 block text-sm font-medium">
+            출처 기준
+          </label>
+          <select
+            id="template-create-source-mode"
+            className="w-full rounded-xl border px-3 py-2 text-sm"
+            value={sourceMode}
+            onChange={(e) => setSourceMode(e.target.value as TemplateSourceMode)}
+          >
+            <option value="INTERNAL_STANDARD">내부표준 템플릿</option>
+            <option value="OFFICIAL_SOURCE">공식서식 소스 연결</option>
+          </select>
+        </div>
+
+        {sourceMode === "OFFICIAL_SOURCE" ? (
+          <div>
+            <label htmlFor="template-create-source-id" className="mb-1 block text-sm font-medium">
+              공식서식 소스
+            </label>
+            <select
+              id="template-create-source-id"
+              className="w-full rounded-xl border px-3 py-2 text-sm"
+              value={sourceId}
+              onChange={(e) => setSourceId(e.target.value)}
+            >
+              <option value="">소스를 선택하세요</option>
+              {sources.map((source) => (
+                <option key={source.id} value={source.id}>
+                  {formatLegalFormSourceLabel(source)}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-xs leading-relaxed text-gray-500">
+              선택한 소스의 provider, URL, 해시는 템플릿에 스냅샷으로 저장됩니다.
+            </p>
+          </div>
+        ) : null}
+
+        {sourceMode === "OFFICIAL_SOURCE" && sourceId ? (
+          <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs leading-6 text-slate-700">
+            {selectedSource ? (
+              <>
+                <div>
+                  <strong>출처명:</strong> {formatLegalFormSourceLabel(selectedSource)}
+                </div>
+                <div>
+                  <strong>출처군:</strong> {LEGAL_FORM_SOURCE_PROVIDER_LABELS[selectedSource.provider]}
+                </div>
+                <div>
+                  <strong>문서유형:</strong> {selectedSource.documentType}
+                </div>
+                <div>
+                  <strong>해시:</strong> {selectedSource.fileHash ?? "-"}
+                </div>
+              </>
+            ) : (
+              "선택한 소스 정보를 찾을 수 없습니다."
+            )}
+          </div>
+        ) : null}
       </div>
 
       <div className="mt-6 flex justify-end">
