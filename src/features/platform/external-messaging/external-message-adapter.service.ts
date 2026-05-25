@@ -1,3 +1,5 @@
+import "server-only";
+
 /**
  * Product Phase 20-A — External message adapter orchestration (dry-run default · log prep).
  */
@@ -6,7 +8,7 @@ import { ValidationError } from "@/lib/errors";
 import { assertExternalMessagingEntitlement } from "@/features/platform/tenant-entitlement/tenant-entitlement.service";
 import { recordTenantExternalMessageUsage } from "@/features/platform/tenant-metering/tenant-metering.service";
 import { redactExternalMessagePayload } from "@/lib/data-governance/data-redaction.service";
-import { DATA_GOVERNANCE_REDACTION_POLICY_MARKER_PHASE19B } from "@/lib/data-governance/data-redaction-policy.schema";
+import { EXTERNAL_MESSAGE_DEFAULT_REDACTION_POLICY_VERSION } from "./external-message-adapter.constants";
 import { EXTERNAL_MESSAGE_REDELIVERY_SAFE_PAYLOAD_KEYS } from "@/features/platform/reliability/external-message-redelivery.schema";
 import type { ExternalMessageAdapter } from "./external-message-adapter.contract";
 import type {
@@ -49,8 +51,7 @@ export const REAL_MESSAGING_ADAPTER_SERVICE_MARKER_PHASE20B =
 export const REAL_MESSAGING_ADAPTER_SERVICE_MARKER_PHASE20C =
   "phase20c-real-messaging-kakao-adapter-service" as const;
 
-export const EXTERNAL_MESSAGE_DEFAULT_REDACTION_POLICY_VERSION =
-  DATA_GOVERNANCE_REDACTION_POLICY_MARKER_PHASE19B;
+export { EXTERNAL_MESSAGE_DEFAULT_REDACTION_POLICY_VERSION } from "./external-message-adapter.constants";
 
 const adapterRegistry = new Map<string, ExternalMessageAdapter>();
 

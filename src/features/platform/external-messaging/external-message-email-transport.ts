@@ -1,3 +1,5 @@
+import "server-only";
+
 /**
  * Product Phase 20-B — Injectable email transport (SMTP · test doubles).
  */

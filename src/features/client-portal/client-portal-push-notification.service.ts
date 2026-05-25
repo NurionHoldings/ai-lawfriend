@@ -2,7 +2,7 @@
  * Product Phase 21-D — Notification center + web push dispatch preparation.
  */
 import type { ExternalMessageSendSurface } from "@/features/platform/external-messaging/external-message-adapter.schema";
-import { SECURE_DELIVERY_TEMPLATE_BY_SURFACE } from "@/features/platform/external-messaging/secure-delivery-message-builder";
+import { SECURE_DELIVERY_TEMPLATE_BY_SURFACE } from "@/features/platform/external-messaging/secure-delivery-message-constants";
 import { createExternalMessageLogRow } from "@/features/secure-document-delivery/secure-document-delivery.repository";
 import type { SessionUser } from "@/lib/auth/require-session-user";
 import { assertClientPortalUser } from "./client-portal.policy";

@@ -1,3 +1,5 @@
+import "server-only";
+
 /**
  * Product Phase 20-E — Secure delivery external message payload builder (portal link only).
  */
@@ -13,7 +15,7 @@ import {
   SECURE_DELIVERY_NOTICE_BY_SURFACE,
   SECURE_DELIVERY_TEMPLATE_BY_SURFACE,
 } from "./secure-delivery-message-constants";
-import { EXTERNAL_MESSAGE_DEFAULT_REDACTION_POLICY_VERSION } from "./external-message-adapter.service";
+import { EXTERNAL_MESSAGE_DEFAULT_REDACTION_POLICY_VERSION } from "./external-message-adapter.constants";
 import {
   emailProviderForResolved,
   resolveEmailProvider,
