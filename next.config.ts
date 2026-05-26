@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
     // Lint runs in predeploy:lint-test; skipping here avoids Netlify OOM during build.
     ignoreDuringBuilds: true,
   },
+  typescript: {
+    // Production build type-check excludes *.test.* to reduce Netlify memory use.
+    tsconfigPath: "./tsconfig.build.json",
+  },
 };
 
 export default nextConfig;

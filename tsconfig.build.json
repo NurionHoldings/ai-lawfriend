@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "node_modules",
+    "aibeopchin_patchset",
+    "exports",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
+}
