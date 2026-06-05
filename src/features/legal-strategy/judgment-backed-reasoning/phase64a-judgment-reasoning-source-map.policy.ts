@@ -305,7 +305,9 @@ function buildCounterArgumentBasisEntries(
       relevanceNote: `Counter-argument basis ${basis.basisKind}`,
       favorability: "UNCERTAIN" as const,
       linkedSourceTraceIds: candidate.sourceTrace.map((trace) => trace.traceId),
-      canonicalSourceRef: basis.basisKind === "JUDGMENT_LINK" ? basis.ref : undefined,
+      // JUDGMENT_LINK의 경우 실제 법원 판례 번호(canonicalSourceRef)를 우선 사용;
+      // 없으면 undefined — 64-A NO_JUDGMENT_USE_WITHOUT_CANONICAL_SOURCE 경계가 uncertainty signal로 처리
+      canonicalSourceRef: basis.basisKind === "JUDGMENT_LINK" ? basis.canonicalSourceRef : undefined,
     };
   });
 }

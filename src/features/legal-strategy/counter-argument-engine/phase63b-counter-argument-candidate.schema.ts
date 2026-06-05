@@ -87,6 +87,8 @@ export const counterArgumentGongbuhoBasisRefSchema = z.object({
   ]),
   ref: z.string().min(1),
   summary: z.string().min(1),
+  /** JUDGMENT_LINK 시 실제 법원 판례 번호 (예: "SCOURT:2023DA12345"). 64-A canonical check에 사용. */
+  canonicalSourceRef: z.string().min(1).optional(),
 });
 
 export type CounterArgumentGongbuhoBasisRef = z.infer<

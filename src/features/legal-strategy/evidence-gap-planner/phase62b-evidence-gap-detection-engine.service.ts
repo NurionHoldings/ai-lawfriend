@@ -93,6 +93,22 @@ function buildSupplementDraft(input: {
   };
 }
 
+/**
+ * EvidenceGapCandidate 빌드용 컨텍스트 준비 함수.
+ *
+ * [설계 의도 — 의도적 우회]
+ * Phase 59-C `buildGongbuhoReasoningContextBundle()`은 미승인 signal·AI_CANDIDATE 메모리를
+ * `approvedRealTimeSignals` / `memoryGrounds`에서 이미 제거하고, 제거된 수량만 `excludedItems`에
+ * 카운팅한다. 즉, 실제 사용되는 데이터(memoryGrounds, approvedRealTimeSignals)는 이미 안전하다.
+ *
+ * 그런데 Phase 62-A `evaluateReasoningContextForStrategy()`는 `unapprovedSignalCount > 0`이면
+ * throw한다. 이를 그대로 적용하면, 사건에 미승인 signal이 1개라도 있으면 EvidenceGap 탐지 전체가
+ * 막힌다 — 이미 제거된 데이터에 대해 과도하게 차단하는 부작용이 생긴다.
+ *
+ * 따라서 EvidenceGapCandidate 생성 시에만 이 카운트를 0으로 재설정하여 탐지를 허용한다.
+ * 단, 실제 memoryGrounds / approvedRealTimeSignals 데이터는 변경하지 않으므로
+ * 미승인·AI_CANDIDATE 데이터가 탐지 로직에 흘러드는 일은 없다.
+ */
 function reasoningContextForGapCandidateBuild(
   reasoningContext: GongbuhoReasoningContextBundle,
 ): GongbuhoReasoningContextBundle {
@@ -356,6 +372,13 @@ function detectStrategyEvidenceGaps(input: {
   const results: Array<{ draft: GapDraft; strategyCandidate: StrategyCandidate }> = [];
 
   for (const candidate of input.detectInput.strategyCandidates) {
+    // Phase 62-A evaluateLinkedStrategyCandidate는 EVIDENCE_GAP · COMPOSITE 종류만 허용한다.
+    // 다른 종류(COUNTER_ARGUMENT, PRECEDENT_LINK 등)를 buildEvidenceGapCandidate에 넘기면
+    // NO_EVIDENCE_GAP_WITHOUT_SOURCE_TRACE로 throw된다 — 여기서 사전 필터링한다.
+    if (candidate.candidateKind !== "EVIDENCE_GAP" && candidate.candidateKind !== "COMPOSITE") {
+      continue;
+    }
+
     const evaluation = evaluateStrategyCandidateForDetection({
       candidate,
       targetCaseId: input.detectInput.caseId,

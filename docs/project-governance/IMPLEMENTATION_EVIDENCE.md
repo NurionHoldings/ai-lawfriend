@@ -6,6 +6,30 @@
 
 ---
 
+## [EVIDENCE-20260605-AIBEOPCHIN-GONGBUHO-PIPELINE-BUGFIX-ANALYSIS]
+
+### Status
+
+COMPLETE · HOTFIX — 공부호 기반 AI 지원능력 전수분석 후 3건 수정.
+
+### One-line Standard
+
+공부호 파이프라인 전수분석에서 발견된 (1) JUDGMENT_LINK canonical 오류, (2) reasoningContextForGapCandidateBuild 우회 미문서화, (3) detectStrategyEvidenceGaps candidateKind 불일치를 수정·문서화한다.
+
+### Scope
+
+- `src/features/legal-strategy/counter-argument-engine/phase63b-counter-argument-candidate.schema.ts` — `counterArgumentGongbuhoBasisRefSchema`에 `canonicalSourceRef` 필드 추가
+- `src/features/legal-strategy/counter-argument-engine/phase63b-counter-argument-candidate.service.ts` — `buildGongbuhoBasisRefs()`에서 `link.canonicalSourceRef` 전달
+- `src/features/legal-strategy/judgment-backed-reasoning/phase64a-judgment-reasoning-source-map.policy.ts` — `buildCounterArgumentBasisEntries()`에서 `basis.canonicalSourceRef` 사용
+- `src/features/legal-strategy/evidence-gap-planner/phase62b-evidence-gap-detection-engine.service.ts` — `reasoningContextForGapCandidateBuild()` 설계 의도 문서화 + `detectStrategyEvidenceGaps()` candidateKind 사전 필터링 추가
+
+### Verification
+
+- 테스트: 15개 파일 165개 테스트 PASS (Phase 62-A~F, 63-A~F, 64-A~C 전체)
+- Lint: 수정 파일 전체 오류 없음
+
+---
+
 ## [EVIDENCE-20260605-AIBEOPCHIN-LEGAL-STRATEGY-PHASE64C-JUDGMENT-REASONING-VIEW-RC]
 
 ### Status

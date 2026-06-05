@@ -47,6 +47,8 @@ function buildGongbuhoBasisRefs(
       basisKind: "JUDGMENT_LINK" as const,
       ref: link.referenceId,
       summary: link.relevanceSummary,
+      // 원본 판례 canonical 번호가 있으면 전달 — 64-A NO_JUDGMENT_USE_WITHOUT_CANONICAL_SOURCE 검사에 사용
+      ...(link.canonicalSourceRef ? { canonicalSourceRef: link.canonicalSourceRef } : {}),
     });
   }
 
