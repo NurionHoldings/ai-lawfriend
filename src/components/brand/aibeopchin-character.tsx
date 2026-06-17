@@ -311,7 +311,7 @@ export function AibeopchinCharacter({
             {/*
              * 머리 — translate(0 -38): 얼굴 중심 anchor y=-38, ry=36.
              * 얼굴 하단: anchor y=-2. 몸통 상단: anchor y=-3 → 1 unit 중첩으로 목 연결.
-             * 판사 가발: 얼굴 상단 60% 를 덮어 머리 위에 자연스럽게 착좌.
+             * 모자는 머리 그룹 밖 최상위 레이어에서 별도 렌더링해 항상 보이게 한다.
              */}
             <g transform="translate(0 -38)">
               {/* 헤드셋 외형 */}
@@ -342,36 +342,6 @@ export function AibeopchinCharacter({
               <ellipse cx="-18" cy="8" rx="6" ry="3.5" fill="#fda4af" opacity="0.45" />
               <ellipse cx="18" cy="8" rx="6" ry="3.5" fill="#fda4af" opacity="0.45" />
 
-              {/* 판사 모자 — 얼굴 위 레이어에서 머리 상단에 고정 */}
-              <g transform="translate(0 -35)">
-                <path
-                  d="M-26 6 Q-20 -13 0 -16 Q20 -13 26 6 Q14 14 0 14 Q-14 14 -26 6 Z"
-                  fill="#172554"
-                  stroke="#c9a227"
-                  strokeWidth="1.4"
-                />
-                <path
-                  d="M-34 8 Q-18 0 0 0 Q18 0 34 8 Q20 16 0 16 Q-20 16 -34 8 Z"
-                  fill="#1e3a8a"
-                  stroke="#c9a227"
-                  strokeWidth="1.2"
-                />
-                <path
-                  d="M-18 5 Q0 -2 18 5"
-                  stroke="#fde68a"
-                  strokeWidth="1"
-                  fill="none"
-                  opacity="0.75"
-                />
-                <circle cx="0" cy="7" r="4" fill="#c9a227" />
-                <path
-                  d="M-2.8 7 H2.8 M0 4.2 V9.8"
-                  stroke="#172554"
-                  strokeWidth="0.9"
-                  strokeLinecap="round"
-                />
-              </g>
-
               {/* 눈 깜빡임 */}
               <motion.g
                 animate={blink}
@@ -394,6 +364,40 @@ export function AibeopchinCharacter({
                 strokeLinecap="round"
                 animate={smilePulse}
                 style={{ ...FB, transformOrigin: "50% 50%" }}
+              />
+            </g>
+
+            {/*
+             * 판사 모자 — 캐릭터 최상위 레이어.
+             * anchor y=-78, brim y=12 → SVG y≈52로 얼굴 상단(y≈44)에 확실히 겹친다.
+             */}
+            <g transform="translate(0 -78)">
+              <ellipse cx="0" cy="17" rx="42" ry="8" fill="#020617" opacity="0.22" />
+              <path
+                d="M-28 6 Q-22 -18 0 -22 Q22 -18 28 6 Q15 16 0 16 Q-15 16 -28 6 Z"
+                fill="#172554"
+                stroke="#facc15"
+                strokeWidth="2"
+              />
+              <path
+                d="M-42 11 Q-21 1 0 1 Q21 1 42 11 Q22 22 0 22 Q-22 22 -42 11 Z"
+                fill="#1e3a8a"
+                stroke="#facc15"
+                strokeWidth="1.8"
+              />
+              <path
+                d="M-20 8 Q0 0 20 8"
+                stroke="#fde68a"
+                strokeWidth="1.4"
+                fill="none"
+                opacity="0.9"
+              />
+              <circle cx="0" cy="11" r="5.2" fill="#facc15" stroke="#92400e" strokeWidth="0.8" />
+              <path
+                d="M-3.2 11 H3.2 M0 7.8 V14.2"
+                stroke="#172554"
+                strokeWidth="1.1"
+                strokeLinecap="round"
               />
             </g>
           </motion.g>
