@@ -1,5 +1,6 @@
 import { AibeopchinHero } from "@/components/branding/aibeopchin-hero";
 import { AibeopchinLogo } from "@/components/brand/aibeopchin-logo";
+import { AibeopchinEntryAnimation } from "@/components/brand/aibeopchin-entry-animation";
 import { HomeFlowSection } from "@/components/home/home-flow-section";
 import { HomeRoleEntryCards } from "@/components/home/home-role-entry-cards";
 import { HomeTrustStrip } from "@/components/home/home-trust-strip";
@@ -16,6 +17,8 @@ export default async function HomePage() {
 
   return (
     <div className="flex min-h-full flex-col bg-aibeop-bg text-aibeop-text">
+      {/* 인트로 애니메이션 — 세션당 1회, 클라이언트 전용 */}
+      <AibeopchinEntryAnimation />
       {user ? <LoggedInStrip user={user} /> : null}
       <header className="sticky top-0 z-30 border-b border-aibeop-line bg-aibeop-surface/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
