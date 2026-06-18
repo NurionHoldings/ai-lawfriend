@@ -27,10 +27,15 @@ function main() {
     "Full Legal Ops Platform RC master gate (Phase 16-A)",
     "npm run verify:aibeopchin-full-legal-ops-platform-rc",
   );
+  run(
+    "Predeploy code protection gate",
+    "npm run verify:aibeopchin-predeploy-code-protection",
+  );
   console.log(
     "\n[PREDEPLOY] Build — stop `npm run dev` first (Windows: Prisma DLL lock). See docs/operations/AIBEOPCHIN_PREDEPLOY_LOCAL_CI_RUNBOOK.md §1",
   );
   run("Build", "npm run build", { NODE_ENV: "production" });
+  run("Protect build assets", "npm run protect:build-assets", { NODE_ENV: "production" });
 }
 
 main();

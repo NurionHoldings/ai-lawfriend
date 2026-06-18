@@ -24,7 +24,54 @@ type Props = {
 };
 
 type Filter = "PENDING" | "ALL" | "CLAIM" | "RADAR_SIGNAL" | "CONTRADICTION_EDGE";
-type ConsoleTab = "intelligence" | "document-intelligence";
+type ConsoleTab = "intelligence" | "document-intelligence" | "gongbuho-strategy";
+
+type GongbuhoStrategyWorkspaceResponse = {
+  memoryPacketSummary: {
+    packetId: string;
+    reviewStatus: string;
+    confirmedFactCount: number;
+    evidenceMapCount: number;
+    sourceTraceCount: number;
+  };
+  workspaceSummary: {
+    strategyCandidateCount: number;
+    evidenceGapCount: number;
+    reasoningViewCount: number;
+    aiCandidateMemoryExcludedCount: number;
+    unapprovedSignalExcludedCount: number;
+    lawyerReviewRequired: true;
+    clientVisibleAllowed: false;
+  };
+  diagnostics: Array<{
+    stage: string;
+    status: "OK" | "SKIPPED" | "BLOCKED";
+    message: string;
+  }>;
+  strategyCandidates: Array<{
+    candidateId: string;
+    candidateKind: string;
+    title: string;
+    summary: string;
+    reviewStatus: string;
+    sourceTraceCount: number;
+  }>;
+  evidenceGapSummary: {
+    totalGapCount: number;
+    criticalGapCount: number;
+    highPriorityGapCount: number;
+    supplementDraftCount: number;
+  } | null;
+  reasoningViews: Array<{
+    viewId: string;
+    targetKind: string;
+    targetRef: string;
+    reasoningCardCount: number;
+    uncertaintySeverity: string;
+    reviewStatus: string;
+    clientVisibleAllowed: false;
+  }>;
+};
 
 const SUBJECT_LABELS: Record<LawyerJudgmentBoundaryEntry["subjectKind"], string> = {
   CLAIM: "Claim",
@@ -61,6 +108,8 @@ export function LawyerIntelligenceReviewConsole({
   const [editText, setEditText] = useState("");
   const [rejectEntryId, setRejectEntryId] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState("");
+  const [gongbuhoWorkspace, setGongbuhoWorkspace] =
+    useState<GongbuhoStrategyWorkspaceResponse | null>(null);
 
   const entries = snapshot?.intelligenceGraph.ledger.entries ?? [];
   const summary = snapshot?.intelligenceGraph.ledger.summary;
@@ -89,6 +138,28 @@ export function LawyerIntelligenceReviewConsole({
       setSnapshot(data.snapshot);
     } catch (e) {
       setErrorMsg(e instanceof Error ? e.message : "새로고침 실패");
+    } finally {
+      setBusy(false);
+    }
+  }, [caseId]);
+
+  const refreshGongbuhoWorkspace = useCallback(async () => {
+    setBusy(true);
+    setErrorMsg(null);
+    try {
+      const res = await fetch(`/api/cases/${caseId}/gongbuho/legal-strategy-workspace`, {
+        method: "GET",
+        credentials: "include",
+      });
+      const raw = await res.json().catch(() => null);
+      const data = requireOkData<GongbuhoStrategyWorkspaceResponse>(
+        res,
+        raw,
+        "공부호 전략 워크스페이스 조회에 실패했습니다.",
+      );
+      setGongbuhoWorkspace(data);
+    } catch (e) {
+      setErrorMsg(e instanceof Error ? e.message : "공부호 전략 워크스페이스 조회 실패");
     } finally {
       setBusy(false);
     }
@@ -227,6 +298,18 @@ export function LawyerIntelligenceReviewConsole({
         >
           서류·증거 분석
         </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("gongbuho-strategy")}
+          className={`rounded-full px-4 py-1.5 text-sm font-semibold ${
+            activeTab === "gongbuho-strategy"
+              ? "bg-aibeop-primary text-white"
+              : "bg-aibeop-soft text-aibeop-muted"
+          }`}
+          data-testid="gongbuho-strategy-tab"
+        >
+          공부호 전략 워크스페이스
+        </button>
       </section>
 
       {activeTab === "document-intelligence" ? (
@@ -235,6 +318,99 @@ export function LawyerIntelligenceReviewConsole({
           readOnly={readOnly}
           initialQueue={initialDocumentIntelligenceQueue}
         />
+      ) : null}
+
+      {activeTab === "gongbuho-strategy" ? (
+        <section
+          className="space-y-4 rounded-2xl border border-aibeop-line bg-aibeop-card p-5 shadow-soft"
+          data-testid="gongbuho-strategy-workspace"
+        >
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-aibeop-muted">
+                P3-P7 · Gongbuho Legal Strategy Workspace
+              </p>
+              <h2 className="mt-1 text-lg font-semibold text-aibeop-text">
+                공부호 기반 전략·증거공백·근거뷰 연결
+              </h2>
+              <p className="mt-1 text-sm text-aibeop-muted">
+                기본 조회는 AI 후보 메모리를 제외하고, 변호사 검토가 필요한 단계는 diagnostics로 표시합니다.
+              </p>
+            </div>
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => void refreshGongbuhoWorkspace()}
+              className="rounded-xl bg-aibeop-primary px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
+            >
+              워크스페이스 조회
+            </button>
+          </div>
+
+          {gongbuhoWorkspace ? (
+            <>
+              <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="rounded-xl bg-aibeop-soft px-3 py-2">
+                  <dt className="text-xs text-aibeop-muted">Strategy</dt>
+                  <dd className="text-lg font-semibold text-aibeop-text">
+                    {gongbuhoWorkspace.workspaceSummary.strategyCandidateCount}
+                  </dd>
+                </div>
+                <div className="rounded-xl bg-aibeop-soft px-3 py-2">
+                  <dt className="text-xs text-aibeop-muted">Evidence gaps</dt>
+                  <dd className="text-lg font-semibold text-aibeop-text">
+                    {gongbuhoWorkspace.workspaceSummary.evidenceGapCount}
+                  </dd>
+                </div>
+                <div className="rounded-xl bg-aibeop-soft px-3 py-2">
+                  <dt className="text-xs text-aibeop-muted">Reasoning views</dt>
+                  <dd className="text-lg font-semibold text-aibeop-text">
+                    {gongbuhoWorkspace.workspaceSummary.reasoningViewCount}
+                  </dd>
+                </div>
+                <div className="rounded-xl bg-aibeop-soft px-3 py-2">
+                  <dt className="text-xs text-aibeop-muted">Excluded AI memory</dt>
+                  <dd className="text-lg font-semibold text-amber-800">
+                    {gongbuhoWorkspace.workspaceSummary.aiCandidateMemoryExcludedCount}
+                  </dd>
+                </div>
+              </dl>
+
+              <div className="rounded-xl border border-aibeop-line p-4">
+                <p className="text-sm font-semibold text-aibeop-text">Diagnostics</p>
+                <div className="mt-3 space-y-2">
+                  {gongbuhoWorkspace.diagnostics.map((item) => (
+                    <div key={`${item.stage}:${item.message}`} className="rounded-lg bg-aibeop-soft px-3 py-2 text-sm">
+                      <span className="font-semibold text-aibeop-text">{item.stage}</span>{" "}
+                      <span className="text-aibeop-muted">[{item.status}] {item.message}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {gongbuhoWorkspace.strategyCandidates.length ? (
+                <div className="space-y-2">
+                  <p className="text-sm font-semibold text-aibeop-text">Strategy candidates</p>
+                  {gongbuhoWorkspace.strategyCandidates.map((candidate) => (
+                    <article key={candidate.candidateId} className="rounded-xl border border-aibeop-line p-4">
+                      <div className="flex flex-wrap gap-2 text-xs text-aibeop-muted">
+                        <span>{candidate.candidateKind}</span>
+                        <span>{candidate.reviewStatus}</span>
+                        <span>sourceTrace {candidate.sourceTraceCount}</span>
+                      </div>
+                      <h3 className="mt-2 text-sm font-semibold text-aibeop-text">{candidate.title}</h3>
+                      <p className="mt-1 text-sm text-aibeop-muted">{candidate.summary}</p>
+                    </article>
+                  ))}
+                </div>
+              ) : null}
+            </>
+          ) : (
+            <p className="text-sm text-aibeop-muted">
+              아직 조회된 공부호 전략 워크스페이스가 없습니다.
+            </p>
+          )}
+        </section>
       ) : null}
 
       {activeTab === "intelligence" && !snapshot && !readOnly ? (

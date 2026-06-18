@@ -19,6 +19,18 @@ describe("parseGongbuhoSummaryHeadings", () => {
   it("returns null when outputContract.summary is missing", () => {
     expect(parseGongbuhoSummaryHeadings({ code: "X" })).toBeNull();
   });
+
+  it("returns headings from Legal Knowledge Pipeline summary.sections shape", () => {
+    const h = parseGongbuhoSummaryHeadings({
+      outputContract: {
+        summary: {
+          sections: ["사실관계", "쟁점", "증거", "다음 단계"],
+        },
+      },
+    });
+
+    expect(h).toEqual(["사실관계", "쟁점", "증거", "다음 단계"]);
+  });
 });
 
 describe("extractGongbuhoExpertReviewPoints", () => {

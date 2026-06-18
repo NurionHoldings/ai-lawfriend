@@ -6,6 +6,73 @@
 
 ---
 
+## [EVIDENCE-20260618-AIBEOPCHIN-PREDEPLOY-CODE-PROTECTION]
+
+### Status
+
+COMPLETE · PREDEPLOY HARDENING — 난독화 패키지 + 미니파이 패키지 보강.
+
+### One-line Standard
+
+배포 전 코드 보호는 Next 기본 프로덕션 미니파이를 유지하면서 브라우저 소스맵을 금지하고, `terser` + `javascript-obfuscator` 기반 post-build 보호 스크립트로 앱 chunk를 선택적으로 미니파이·난독화하되 Next runtime/framework chunk는 제외해 배포 안정성을 우선한다.
+
+### Scope
+
+- `package.json` — `terser`, `javascript-obfuscator`, `build:protected`, `protect:build-assets`, `verify:aibeopchin-predeploy-code-protection` 추가.
+- `next.config.ts` — `productionBrowserSourceMaps: false`, production `removeConsole` 명시.
+- `scripts/protect-next-build-assets.mjs` — `.next/static/chunks/app`, `.next/static/chunks/pages` 후보 파일을 `terser` 미니파이 후 보수적 `javascript-obfuscator` 옵션으로 보호.
+- `scripts/verify-aibeopchin-predeploy-code-protection.mjs` — 패키지·설정·스크립트·증빙 및 `.next` 산출물 소스맵 금지 검증.
+- `scripts/predeploy-check.ts` — 배포 전 verify와 build asset protection 단계를 predeploy gate에 연결.
+
+### Guardrails
+
+- Next runtime/framework/main/polyfills/build manifest chunk는 post-build 난독화 대상에서 제외.
+- 브라우저 `.map` 파일과 inline `sourceMappingURL`/`sourcesContent` 참조를 배포 차단 조건으로 처리.
+- 난독화는 `.next` 빌드 산출물에만 적용하며 원본 `src` 파일은 변형하지 않음.
+- 보호 manifest는 `.aibeopchin/build-protection-manifest.json`에 생성되어 로컬 도구 상태로만 유지.
+
+### Verification
+
+- `npm run verify:aibeopchin-predeploy-code-protection` PASS.
+- `npm run build:protected` PASS — 474 `.next/static/chunks/app|pages` candidate file(s) protected; manifest: `.aibeopchin/build-protection-manifest.json`.
+
+---
+
+## [EVIDENCE-20260618-AIBEOPCHIN-GONGBUHO-AI-ROLE-P3-P7-OPERATING-BRIDGE]
+
+### Status
+
+COMPLETE · OPERATING BRIDGE — 공부호 AI 역할 P3~P7 보완.
+
+### One-line Standard
+
+P3~P7은 P2 case-scoped `GongbuhoReasoningContextBundle`을 Phase 61~64 법률전략 산출물, sourceTrace 근거뷰, 변호사 피드백 학습, 실시간 법령·판례 signal, 변호사 화면/API에 연결하되, 변호사 검토 전 의뢰인 노출·확정 전략·미승인 signal 권위화를 차단한다.
+
+### Scope
+
+- P3: `src/features/legal-strategy/gongbuho-legal-strategy-workspace.service.ts` — P2 reasoning context → Phase 61 StrategyCandidate → Phase 62 EvidenceGapDetectionReport → Phase 64 JudgmentReasoningView 오케스트레이터.
+- P4: `src/features/legal-strategy/judgment-backed-reasoning/phase64a-judgment-reasoning-source-map.policy.ts` — `reasoningContext.sourceTrace`를 `jrs-context-trace-*` source entry로 후속 reasoning source map까지 전파.
+- P5: `src/features/gongbuho-intelligence-layer/case-gongbuho-learning-bridge.service.ts` — 변호사 승인/수정 decision trace를 59-D ledger와 59-E reusable pattern 후보로 연결.
+- P6: `src/features/gongbuho-intelligence-layer/case-real-time-legal-signal-bridge.service.ts` — 사건 기준 실시간 법령·판례 signal 생성 및 lifecycle transition gate.
+- P7: `src/app/api/cases/[caseId]/gongbuho/legal-strategy-workspace/route.ts` + `src/components/cases/lawyer-intelligence-review-console.tsx` — 사건 기준 API와 변호사 검토 콘솔 탭 연결.
+- Verification: `scripts/verify-aibeopchin-gongbuho-ai-role-p3-p7.mjs` + `verify:aibeopchin-gongbuho-ai-role-p3-p7`.
+
+### Guardrails
+
+- `clientVisibleAllowed: false`
+- `lawyerReviewRequired: true`
+- `AI_CANDIDATE` memory는 strong reasoning에서 제외하고 diagnostics로 표시
+- 실시간 signal은 59-B 상태 전이·sourceTrace gate 통과 후에만 승인 사용
+- 변호사 피드백 재사용 패턴은 승인/수정 decision과 익명화 전제를 요구
+
+### Verification
+
+- `npm test -- --run src/features/legal-strategy/gongbuho-legal-strategy-workspace.service.test.ts src/features/gongbuho-intelligence-layer/case-gongbuho-reasoning-context.service.test.ts src/features/legal-strategy/judgment-backed-reasoning/phase64a-judgment-reasoning-source-map.test.ts` PASS — 3 files / 17 tests.
+- `npm run verify:aibeopchin-gongbuho-ai-role-p3-p7` PASS.
+- `npm run build` PASS.
+
+---
+
 ## [EVIDENCE-20260605-AIBEOPCHIN-GONGBUHO-PIPELINE-BUGFIX-ANALYSIS]
 
 ### Status
@@ -36154,6 +36221,64 @@ npx tsc --noEmit
 - **§9 재스캔(당시):** post-[278] 클러스터 구분 — **[EVIDENCE-20260423-266]**.
 - **P0:** `api-error.ts` — `requireOkData`, `requireOkResponseBody`.
 - **post-[278] V1 계획 범위 잔여(코드):** **없음** — **§12 선언** · V1 **밖** `fetch`는 **후속** (문서 `POST_278` §12).
+
+---
+
+## [EVIDENCE-20260618-AIBEOPCHIN-GONGBUHO-AI-ROLE-P0-HARDENING]
+
+### Status
+
+COMPLETE · HOTFIX — 공부호 AI 역할 구현흐름 정밀분석 후 P0 보완.
+
+### One-line Standard
+
+공부호 기반 AI가 요약·문서 규칙·반박 후보·판례근거 뷰에서 검증된 근거만 사용하도록, Legal Knowledge 패킷 형식 불일치와 무근거 fallback, 승인 signal 정합성을 보완한다.
+
+### Scope
+
+- `src/features/gongbuho/gongbuho-summary-contract.service.ts` — `outputContract.summary`가 문자열 배열이거나 `summary.sections` 객체형이어도 요약 heading으로 반영
+- `src/features/gongbuho/gongbuho-document-rules.service.ts` — `validationRules` / `forbiddenRules` / `expertReviewPoints`가 문자열 배열 또는 `{ pattern, message, text, title, description }` 객체형이어도 런타임 규칙으로 추출
+- `src/features/legal-strategy/counter-argument-engine/phase63b-counter-argument-candidate.service.ts` — `fallback-basis` 제거, 공부호 근거가 없으면 `NO_COUNTER_ARGUMENT_WITHOUT_GONGBUHO_CONTEXT`로 차단
+- `src/features/legal-strategy/judgment-backed-reasoning/phase64a-judgment-reasoning-source-map.policy.ts` — `APPROVED_REAL_TIME_SIGNAL` source entry는 실제 `APPROVED_FOR_AI_USE` signal만 생성하도록 정합화
+- 테스트 보강:
+  - `src/features/gongbuho/gongbuho-summary-contract.service.test.ts`
+  - `src/features/gongbuho/gongbuho-document-rules.service.test.ts`
+  - `src/features/legal-strategy/counter-argument-engine/phase63b-counter-argument-candidate.test.ts`
+
+### Verification
+
+- `npx vitest run src/features/gongbuho/gongbuho-summary-contract.service.test.ts src/features/gongbuho/gongbuho-document-rules.service.test.ts src/features/legal-strategy/counter-argument-engine/phase63b-counter-argument-candidate.test.ts src/features/legal-strategy/judgment-backed-reasoning/phase64a-judgment-reasoning-source-map.test.ts` — PASS, 4 files / 37 tests
+- `npm run build` — PASS
+
+---
+
+## [EVIDENCE-20260618-AIBEOPCHIN-GONGBUHO-AI-ROLE-P1-P2-BRIDGE]
+
+### Status
+
+COMPLETE · BRIDGE — 공부호 AI 역할 P1/P2 런타임 브릿지 구현.
+
+### One-line Standard
+
+사건 메타·인터뷰 답변·첨부 메타·GongbuhoTrace를 59-A `GongbuhoMemoryPacket`으로 변환하고, 이를 59-C `GongbuhoReasoningContextBundle`로 조립해 Phase 61~64가 실제 사건 범위 자료를 입력으로 받을 수 있는 기반을 마련한다.
+
+### Scope
+
+- `src/features/gongbuho-intelligence-layer/case-gongbuho-memory-packet.builder.ts` — 사건 스냅샷 기반 `GongbuhoMemoryPacket` 빌더 추가
+  - 기본 `reviewStatus`는 `AI_CANDIDATE`
+  - 변호사 확인 경로에서만 `LAWYER_CONFIRMED` / `LOCKED` 전달 가능
+  - 사건 메타, 인터뷰 답변, 첨부 메타, 적용된 GongbuhoTrace를 `sourceTrace`로 연결
+  - tenant 없는 사건은 `GONGBUHO_MEMORY_PACKET_TENANT_REQUIRED`로 차단
+- `src/features/gongbuho-intelligence-layer/case-gongbuho-reasoning-context.service.ts` — case-scoped reasoning context bridge 추가
+  - 순수 스냅샷 함수: `buildCaseGongbuhoReasoningContextFromSnapshot()`
+  - DB-backed 함수: `buildCaseGongbuhoReasoningContextForCase()`
+  - P1 Memory Packet을 59-C `buildGongbuhoReasoningContextBundle()`로 연결
+- `src/features/gongbuho-intelligence-layer/case-gongbuho-reasoning-context.service.test.ts` — P1/P2 회귀 테스트 추가
+
+### Verification
+
+- `npx vitest run src/features/gongbuho-intelligence-layer/case-gongbuho-reasoning-context.service.test.ts src/features/gongbuho/gongbuho-summary-contract.service.test.ts src/features/gongbuho/gongbuho-document-rules.service.test.ts src/features/legal-strategy/counter-argument-engine/phase63b-counter-argument-candidate.test.ts src/features/legal-strategy/judgment-backed-reasoning/phase64a-judgment-reasoning-source-map.test.ts` — PASS, 5 files / 41 tests
+- `npm run build` — PASS
 
 ---
 

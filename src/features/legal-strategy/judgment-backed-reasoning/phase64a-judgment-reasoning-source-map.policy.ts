@@ -215,6 +215,24 @@ function mapArtifactTrace(
   };
 }
 
+function buildReasoningContextTraceEntries(
+  reasoningContext: GongbuhoReasoningContextBundle,
+): JudgmentReasoningSourceEntry[] {
+  return reasoningContext.sourceTrace.map((trace, index) => ({
+    entryId: `jrs-context-trace-${trace.traceId}-${index}`,
+    sourceKind: "ARTIFACT_SOURCE_TRACE" as const,
+    sourceRef: trace.sourceRef,
+    summary: `Gongbuho context source trace ${trace.sourceKind}`,
+    relevanceNote: `Reasoning context ${reasoningContext.auditRef} inherited source ${trace.sourceRef}`,
+    favorability: "NEUTRAL" as const,
+    linkedSourceTraceIds: [trace.traceId],
+    uncertaintyNote:
+      trace.lawyerReviewStatus === "AI_CANDIDATE"
+        ? "Inherited memory trace remains AI_CANDIDATE and requires lawyer review."
+        : undefined,
+  }));
+}
+
 function buildJudgmentLinkEntries(
   reasoningContext: GongbuhoReasoningContextBundle,
 ): JudgmentReasoningSourceEntry[] {
@@ -237,23 +255,11 @@ function buildJudgmentLinkEntries(
 function buildApprovedSignalEntries(
   reasoningContext: GongbuhoReasoningContextBundle,
 ): JudgmentReasoningSourceEntry[] {
-  const approvedSignalStatuses = new Set<NonNullable<JudgmentReasoningSourceEntry["realTimeSignalStatus"]>>([
-    "LAWYER_REVIEW_REQUIRED",
-    "FETCHED",
-    "NORMALIZED",
-    "RELEVANCE_SCORED",
-    "CONFLICT_CHECKED",
-    "APPROVED_FOR_AI_USE",
-  ]);
   const signals = [
     ...reasoningContext.approvedRealTimeSignals.statutes,
     ...reasoningContext.approvedRealTimeSignals.judgments,
     ...reasoningContext.approvedRealTimeSignals.operationalSignals,
-  ].filter((signal) =>
-    approvedSignalStatuses.has(
-      signal.status as NonNullable<JudgmentReasoningSourceEntry["realTimeSignalStatus"]>,
-    ),
-  );
+  ].filter((signal) => signal.status === "APPROVED_FOR_AI_USE");
 
   return signals.map((signal) => ({
     entryId: `jrs-signal-${signal.signalId}`,
@@ -263,8 +269,7 @@ function buildApprovedSignalEntries(
     relevanceNote: `Approved real-time signal (${signal.signalKind})`,
     canonicalSourceRef: signal.sourceTrace.canonicalSourceRef,
     favorability: "UNCERTAIN" as const,
-    realTimeSignalStatus:
-      signal.status as NonNullable<JudgmentReasoningSourceEntry["realTimeSignalStatus"]>,
+    realTimeSignalStatus: "APPROVED_FOR_AI_USE" as const,
     linkedSourceTraceIds: [signal.sourceTrace.traceId],
   }));
 }
@@ -523,6 +528,7 @@ export function buildJudgmentReasoningSourceMap(
 
   const artifactEntries = input.artifactSourceTrace.map(mapArtifactTrace);
   const contextEntries = [
+    ...buildReasoningContextTraceEntries(input.reasoningContext),
     ...buildConfirmedFactEntries(input.reasoningContext),
     ...buildEvidenceMapEntries(input.reasoningContext),
     ...buildJudgmentLinkEntries(input.reasoningContext),

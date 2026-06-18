@@ -13,7 +13,32 @@ function readPacketRoot(packetJson: unknown): Record<string, unknown> | null {
   return packetJson as Record<string, unknown>;
 }
 
-/** 패킷 `validationRules` / `forbiddenRules` / 루트 `expertReviewPoints` 문자열 배열 안전 로드 */
+function readRuleText(item: unknown): string | null {
+  if (typeof item === "string") {
+    const trimmed = item.trim();
+    return trimmed.length ? trimmed : null;
+  }
+
+  if (typeof item !== "object" || item === null || Array.isArray(item)) {
+    return null;
+  }
+
+  const record = item as Record<string, unknown>;
+  const candidates = [record.message, record.pattern, record.text, record.title, record.description];
+  const parts = candidates
+    .filter((value): value is string => typeof value === "string" && value.trim().length > 0)
+    .map((value) => value.trim());
+
+  return parts.length ? [...new Set(parts)].join(" — ") : null;
+}
+
+/**
+ * 패킷 `validationRules` / `forbiddenRules` / 루트 `expertReviewPoints` 안전 로드.
+ *
+ * 지원 형식:
+ * - 레거시/샘플: `["확정 표현 금지", ...]`
+ * - Legal Knowledge Pipeline: `[{ id, pattern, message }, ...]`
+ */
 export function extractGongbuhoRuleStringArrays(packetJson: unknown): {
   validationRules: string[];
   forbiddenRules: string[];
@@ -27,8 +52,8 @@ export function extractGongbuhoRuleStringArrays(packetJson: unknown): {
   const asLines = (v: unknown): string[] => {
     if (!Array.isArray(v)) return [];
     return v
-      .filter((item): item is string => typeof item === "string" && item.trim().length > 0)
-      .map((s) => s.trim());
+      .map(readRuleText)
+      .filter((item): item is string => Boolean(item));
   };
 
   return {

@@ -31,13 +31,6 @@ export type GongbuhoSummaryResolution =
       version: string;
     };
 
-const outputContractSchema = z
-  .object({
-    summary: z.array(z.string()).optional(),
-    documents: z.array(z.string()).optional(),
-  })
-  .passthrough();
-
 function readPacketJsonRoot(packetJson: unknown): Record<string, unknown> | null {
   if (typeof packetJson !== "object" || packetJson === null || Array.isArray(packetJson)) {
     return null;
@@ -45,15 +38,40 @@ function readPacketJsonRoot(packetJson: unknown): Record<string, unknown> | null
   return packetJson as Record<string, unknown>;
 }
 
-/** 패킷 `outputContract.summary` 목차를 안전히 파싱한다. 빈 배열·누락 시 `null`. */
+function readStringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .filter((item): item is string => typeof item === "string" && item.trim().length > 0)
+    .map((item) => item.trim());
+}
+
+function readSummaryHeadings(summary: unknown): string[] {
+  const direct = readStringArray(summary);
+  if (direct.length) return direct;
+
+  if (typeof summary !== "object" || summary === null || Array.isArray(summary)) {
+    return [];
+  }
+  const sections = (summary as Record<string, unknown>).sections;
+  return readStringArray(sections);
+}
+
+/**
+ * 패킷 `outputContract.summary` 목차를 안전히 파싱한다. 빈 배열·누락 시 `null`.
+ *
+ * 지원 형식:
+ * - 레거시/샘플: `{ outputContract: { summary: ["사건 개요", ...] } }`
+ * - Legal Knowledge Pipeline: `{ outputContract: { summary: { sections: ["사실관계", ...] } } }`
+ */
 export function parseGongbuhoSummaryHeadings(packetJson: unknown): string[] | null {
   const root = readPacketJsonRoot(packetJson);
   if (!root) return null;
   const ocRaw = root.outputContract;
-  const oc = outputContractSchema.safeParse(ocRaw);
-  if (!oc.success) return null;
-  const headings = oc.data.summary?.map((s) => s.trim()).filter((s) => s.length > 0);
-  return headings?.length ? headings : null;
+  if (typeof ocRaw !== "object" || ocRaw === null || Array.isArray(ocRaw)) {
+    return null;
+  }
+  const headings = readSummaryHeadings((ocRaw as Record<string, unknown>).summary);
+  return headings.length ? headings : null;
 }
 
 export function extractGongbuhoExpertReviewPoints(packetJson: unknown): string[] {

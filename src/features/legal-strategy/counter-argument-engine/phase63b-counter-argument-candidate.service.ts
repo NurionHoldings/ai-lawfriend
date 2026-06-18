@@ -2,6 +2,7 @@
  * Product Phase 63-B — Counter-Argument Candidate Builder service SSOT.
  */
 import { randomUUID } from "node:crypto";
+import { ValidationError } from "@/lib/errors";
 import type { GongbuhoReasoningContextBundle } from "@/features/gongbuho-intelligence-layer/phase59c-gongbuho-reasoning-context.schema";
 import type { ReusableLegalPattern } from "@/features/gongbuho-intelligence-layer/phase59e-reusable-legal-pattern.schema";
 import type { StrategyCandidate } from "@/features/legal-strategy-assistant/phase61a-strategy-candidate.schema";
@@ -70,15 +71,6 @@ function buildGongbuhoBasisRefs(
     });
   }
 
-  if (basisRefs.length === 0) {
-    basisRefs.push({
-      basisId: randomUUID(),
-      basisKind: "CONFIRMED_FACT" as const,
-      ref: "fallback-basis",
-      summary: "변호사 확인 공부호 근거 검토 필요",
-    });
-  }
-
   return basisRefs;
 }
 
@@ -123,6 +115,9 @@ export function buildCounterArgumentDecomposition(input: {
     input.reasoningContext,
     input.reusablePatterns,
   );
+  if (!gongbuhoBasisRefs.length) {
+    throw new ValidationError("NO_COUNTER_ARGUMENT_WITHOUT_GONGBUHO_CONTEXT");
+  }
   const primaryBasis = gongbuhoBasisRefs[0]?.summary ?? "공부호 근거";
 
   return {

@@ -240,6 +240,28 @@ describe("Phase 63-B Counter-Argument Candidate Builder", () => {
     expect(decomposition.gongbuhoBasisRefs.length).toBeGreaterThan(0);
   });
 
+  it("blocks decomposition when no gongbuho basis exists", () => {
+    const reasoningContext = buildReasoningContext();
+    const opponentArgument = buildOpponentArgumentBundle();
+    const emptyBasisContext = {
+      ...reasoningContext,
+      memoryGrounds: {
+        ...reasoningContext.memoryGrounds,
+        confirmedFacts: [],
+        judgmentLinks: [],
+        evidenceMap: [],
+      },
+    };
+
+    expect(() =>
+      buildCounterArgumentDecomposition({
+        opponentArgument,
+        reasoningContext: emptyBasisContext,
+        reusablePatterns: [],
+      }),
+    ).toThrow("NO_COUNTER_ARGUMENT_WITHOUT_GONGBUHO_CONTEXT");
+  });
+
   it("blocks counter-argument without opponent argument", () => {
     const gate = evaluateOpponentArgumentForCounterArgument({
       opponentArgument: undefined,

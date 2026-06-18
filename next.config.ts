@@ -8,6 +8,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const nextConfig: NextConfig = {
   outputFileTracingRoot: __dirname,
   serverExternalPackages: ["playwright", "playwright-core"],
+  productionBrowserSourceMaps: false,
+  compiler: {
+    removeConsole:
+      process.env.NODE_ENV === "production" ? { exclude: ["error", "warn"] } : false,
+  },
   eslint: {
     // Lint runs in predeploy:lint-test; skipping here avoids Netlify OOM during build.
     ignoreDuringBuilds: true,
