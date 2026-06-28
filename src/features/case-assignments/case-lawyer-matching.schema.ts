@@ -71,13 +71,13 @@ export type StoredCaseLawyerMatchingRecommendation = CaseLawyerMatchingRecommend
   updatedAt: string;
 };
 
-export const APPROVABLE_CASE_LAWYER_MATCHING_RECOMMENDATION_STATUSES = [
+export const APPROVABLE_CASE_LAWYER_MATCHING_RECOMMENDATION_STATUSES: readonly CaseLawyerMatchingRecommendationStatus[] = [
   "REVIEW_REQUIRED",
   "ASSIGNMENT_READY",
-] as const satisfies readonly CaseLawyerMatchingRecommendationStatus[];
+] as const;
 
-export const TERMINAL_CASE_LAWYER_MATCHING_RECOMMENDATION_STATUSES = [
+export const TERMINAL_CASE_LAWYER_MATCHING_RECOMMENDATION_STATUSES: readonly CaseLawyerMatchingRecommendationStatus[] = [
   "APPROVED",
   "REJECTED",
   "EXPIRED",
-] as const satisfies readonly CaseLawyerMatchingRecommendationStatus[];
+] as const;
