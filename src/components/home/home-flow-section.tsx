@@ -1,3 +1,4 @@
+import { AibeopchinCharacterModel } from "@/components/brand/aibeopchin-character-model";
 import { KoreanPhraseBlock } from "@/components/ui/korean-lines";
 import {
   AIBEOPCHIN_HOME_FLOW_HEADING_LINES,
@@ -16,15 +17,24 @@ export function HomeFlowSection() {
       className="mx-auto max-w-7xl px-4 py-12 sm:px-5 sm:py-16 md:px-8"
       aria-labelledby="home-flow-heading"
     >
-      <div className="max-w-3xl">
-        <p className={`${KOREAN_EYEBROW_CLASS} text-cyan-600 normal-case tracking-normal sm:tracking-wide`}>
-          Workflow
-        </p>
-        <KoreanPhraseBlock
-          as="h2"
-          id="home-flow-heading"
-          phrases={AIBEOPCHIN_HOME_FLOW_HEADING_LINES}
-          className={`mt-2 ${KOREAN_SECTION_HEADING_CLASS} text-slate-950`}
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(260px,360px)] lg:items-end">
+        <div className="max-w-3xl">
+          <p className={`${KOREAN_EYEBROW_CLASS} text-cyan-600 normal-case tracking-normal sm:tracking-wide`}>
+            Workflow
+          </p>
+          <KoreanPhraseBlock
+            as="h2"
+            id="home-flow-heading"
+            phrases={AIBEOPCHIN_HOME_FLOW_HEADING_LINES}
+            className={`mt-2 ${KOREAN_SECTION_HEADING_CLASS} text-slate-950`}
+          />
+        </div>
+
+        <AibeopchinCharacterModel
+          variant="victory"
+          label="사건 흐름 완료를 표현하는 AI법친 승리 3D 캐릭터"
+          compact
+          className="border-slate-200 bg-[radial-gradient(circle_at_50%_22%,rgba(201,162,39,0.24),transparent_34%),linear-gradient(145deg,rgba(31,76,56,0.72),rgba(15,23,42,0.92))]"
         />
       </div>
 

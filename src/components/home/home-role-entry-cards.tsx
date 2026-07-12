@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AibeopchinCharacterModel } from "@/components/brand/aibeopchin-character-model";
 import { KoreanPhraseBlock } from "@/components/ui/korean-lines";
 import {
   AIBEOPCHIN_HOME_ROLE_CARDS,
@@ -34,20 +35,29 @@ export function HomeRoleEntryCards() {
       className="mx-auto max-w-7xl px-4 py-12 sm:px-5 sm:py-14 md:px-8"
       aria-labelledby="home-role-entry-heading"
     >
-      <div className="mb-6 sm:mb-8">
-        <p className={`${KOREAN_EYEBROW_CLASS} text-aibeop-green normal-case tracking-normal sm:tracking-wide`}>
-          Role Entry
-        </p>
-        <KoreanPhraseBlock
-          as="h2"
-          id="home-role-entry-heading"
-          phrases={AIBEOPCHIN_HOME_ROLE_HEADING_LINES}
-          className={`mt-2 ${KOREAN_SECTION_HEADING_CLASS} text-aibeop-text`}
-        />
-        <KoreanPhraseBlock
-          as="p"
-          phrases={AIBEOPCHIN_HOME_ROLE_SUBCOPY_LINES}
-          className={`mt-3 max-w-2xl ${KOREAN_BODY_COMPACT_CLASS} text-aibeop-muted`}
+      <div className="mb-6 grid gap-5 sm:mb-8 lg:grid-cols-[minmax(0,1fr)_minmax(260px,360px)] lg:items-end">
+        <div>
+          <p className={`${KOREAN_EYEBROW_CLASS} text-aibeop-green normal-case tracking-normal sm:tracking-wide`}>
+            Role Entry
+          </p>
+          <KoreanPhraseBlock
+            as="h2"
+            id="home-role-entry-heading"
+            phrases={AIBEOPCHIN_HOME_ROLE_HEADING_LINES}
+            className={`mt-2 ${KOREAN_SECTION_HEADING_CLASS} text-aibeop-text`}
+          />
+          <KoreanPhraseBlock
+            as="p"
+            phrases={AIBEOPCHIN_HOME_ROLE_SUBCOPY_LINES}
+            className={`mt-3 max-w-2xl ${KOREAN_BODY_COMPACT_CLASS} text-aibeop-muted`}
+          />
+        </div>
+
+        <AibeopchinCharacterModel
+          variant="handbow"
+          label="역할별 진입을 안내하는 AI법친 손인사 3D 캐릭터"
+          compact
+          className="border-aibeop-line bg-[radial-gradient(circle_at_50%_22%,rgba(220,252,231,0.42),transparent_34%),linear-gradient(145deg,rgba(47,107,79,0.72),rgba(24,35,29,0.92))]"
         />
       </div>
 
