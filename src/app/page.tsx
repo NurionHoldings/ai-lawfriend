@@ -1,42 +1,15 @@
-import { AibeopchinHero } from "@/components/branding/aibeopchin-hero";
-import { AibeopchinLogo } from "@/components/brand/aibeopchin-logo";
 import { AibeopchinEntryAnimation } from "@/components/brand/aibeopchin-entry-animation";
-import { HomeFlowSection } from "@/components/home/home-flow-section";
-import { HomeRoleEntryCards } from "@/components/home/home-role-entry-cards";
-import { HomeTrustStrip } from "@/components/home/home-trust-strip";
-import LoggedInStrip from "@/components/landing/logged-in-strip";
-import { getSessionUser } from "@/lib/auth/session";
-import Link from "next/link";
+import { AibeopchinSpaceMenuHome } from "@/components/brand/aibeopchin-space-menu-home";
 
 /**
- * 공개 홈 랜딩(2차). 시네마틱 인트로·Living Logo·역할별 진입.
- * 사건·인터뷰·문서·API·상태 전이·권한 로직은 변경하지 않음.
+ * 공개 진입 화면.
+ * 진입 애니메이션 후 우주 배경 + 3D 캐릭터 + 말풍선 + 메뉴 버튼만 노출한다.
  */
-export default async function HomePage() {
-  const user = await getSessionUser();
-
+export default function HomePage() {
   return (
-    <div className="flex min-h-full flex-col bg-aibeop-bg text-aibeop-text">
-      {/* 인트로 애니메이션 — 세션당 1회, 클라이언트 전용 */}
+    <>
       <AibeopchinEntryAnimation />
-      {user ? <LoggedInStrip user={user} /> : null}
-      <header className="sticky top-0 z-30 border-b border-aibeop-line bg-aibeop-surface/90 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
-          <AibeopchinLogo href="/" />
-          <Link
-            href={user ? "/dashboard" : "/login"}
-            className="rounded-2xl bg-aibeop-green px-5 py-3 text-sm font-extrabold text-white shadow-soft transition hover:bg-aibeop-deep"
-          >
-            {user ? "대시보드" : "로그인"}
-          </Link>
-        </div>
-      </header>
-      <main id="main-content" className="flex-1">
-        <AibeopchinHero />
-        <HomeTrustStrip />
-        <HomeRoleEntryCards />
-        <HomeFlowSection />
-      </main>
-    </div>
+      <AibeopchinSpaceMenuHome />
+    </>
   );
 }

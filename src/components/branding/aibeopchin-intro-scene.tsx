@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { AibeopchinCharacter } from "@/components/brand/aibeopchin-character";
 import { AibeopchinCharacterModel } from "@/components/brand/aibeopchin-character-model";
 import { KoreanPhraseBlock } from "@/components/ui/korean-lines";
 import {
@@ -51,9 +50,7 @@ export function AibeopchinIntroScene({ reducedMotion = false }: Readonly<Props>)
             ease: "easeOut",
           }}
         >
-          <div className="flex flex-col items-center gap-4 text-center md:flex-row md:text-left">
-            <AibeopchinCharacter variant="hero" size={112} className="shrink-0" />
-
+          <div className="flex flex-col items-center gap-4 text-center md:items-start md:text-left">
             <div className="min-w-0">
               <p className={`${KOREAN_EYEBROW_CLASS} text-aibeop-pale/90`}>
                 {AIBEOPCHIN_BRAND_COPY.eyebrow}

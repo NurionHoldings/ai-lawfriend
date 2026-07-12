@@ -1,4 +1,34 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+
 export function SiteFooter() {
+  const pathname = usePathname();
+
+  if (pathname === "/") {
+    return (
+      <footer className="relative overflow-hidden border-t border-cyan-100/10 bg-[#01020d]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_24%,rgba(56,189,248,0.14),transparent_24%),radial-gradient(circle_at_72%_52%,rgba(14,165,233,0.12),transparent_28%),linear-gradient(180deg,rgba(1,8,22,0.88)_0%,#01020d_100%)]" />
+        <div className="absolute inset-0 opacity-60 [background-image:radial-gradient(circle,rgba(255,255,255,0.76)_1px,transparent_1.5px),radial-gradient(circle,rgba(125,211,252,0.52)_1px,transparent_1.7px)] [background-position:0_0,28px_18px] [background-size:72px_72px,118px_118px]" />
+        <div className="relative mx-auto flex max-w-7xl flex-col gap-6 px-6 py-8 text-sm text-cyan-50/70 md:flex-row md:items-end md:justify-between">
+          <div className="max-w-xl">
+            <div className="text-base font-extrabold text-white">AI법친</div>
+            <div className="mt-1 font-medium text-cyan-100/80">www.ai법친.com</div>
+            <div className="mt-2 text-xs leading-5 text-cyan-50/62">
+              AI법친은 변호사의 판단과 책임 아래 법률업무를 보조하는 AI 업무지원 플랫폼입니다.
+            </div>
+          </div>
+
+          <div className="space-y-1 rounded-2xl border border-cyan-100/15 bg-slate-950/34 px-4 py-3 text-cyan-50/72 shadow-[inset_0_0_24px_rgba(14,165,233,0.1)] backdrop-blur md:text-right">
+            <div>운영사: (주)누리온홀딩스</div>
+            <div>법률고문: 양 희 완</div>
+            <div>연락처: 010-5945-5925</div>
+          </div>
+        </div>
+      </footer>
+    );
+  }
+
   return (
     <footer className="mt-16 border-t border-aibeop-line bg-aibeop-surface/95">
       <div className="mx-auto flex max-w-7xl flex-col gap-6 px-6 py-8 text-sm text-aibeop-muted md:flex-row md:items-end md:justify-between">
