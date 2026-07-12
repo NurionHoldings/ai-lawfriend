@@ -50,7 +50,10 @@ function createStar(): Star {
   };
 }
 
-function SpaceBackgroundCanvas() {
+export function SpaceBackgroundCanvas({
+  className = "",
+  id = "space-background",
+}: Readonly<{ className?: string; id?: string }>) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -228,7 +231,7 @@ function SpaceBackgroundCanvas() {
     };
   }, []);
 
-  return <canvas id="space-background" ref={canvasRef} className="absolute inset-0 h-full w-full" aria-hidden />;
+  return <canvas id={id} ref={canvasRef} className={`absolute inset-0 h-full w-full ${className}`} aria-hidden />;
 }
 
 function TypewriterBubbleText({ text }: Readonly<{ text: string }>) {
@@ -297,7 +300,7 @@ export function AibeopchinSpaceMenuHome() {
         className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl items-center px-4 py-6 sm:px-8 sm:py-8 lg:px-10"
       >
         <div className="relative h-[calc(100svh-3rem)] min-h-[680px] w-full sm:h-[calc(100vh-4rem)] sm:min-h-[680px]">
-          <div className="absolute left-1/2 top-0 flex w-[112%] -translate-x-1/2 flex-col items-center sm:left-[4%] sm:w-[68%] sm:translate-x-0 sm:items-start lg:left-[3%] lg:w-[62%]">
+          <div className="absolute -left-[14%] top-[2%] flex w-[88%] flex-col items-start sm:left-[4%] sm:top-0 sm:w-[68%] lg:left-[3%] lg:w-[62%]">
             <div
               id="character-glow"
               className="pointer-events-none absolute bottom-[18%] left-1/2 h-28 w-[72%] -translate-x-1/2 rounded-[50%] border border-cyan-200/30 bg-cyan-300/10 blur-sm shadow-[0_0_56px_rgba(34,211,238,0.38),inset_0_0_44px_rgba(125,211,252,0.22)] lg:left-[43%]"
@@ -314,27 +317,27 @@ export function AibeopchinSpaceMenuHome() {
                 motionMode="greetingThenIdle"
                 idleVariant="standard"
                 idleDurationMs={15 * 60 * 1000}
-                className="h-[65vh] min-h-[412px] w-full max-w-[700px] sm:h-[75vh] lg:h-[82vh]"
+                className="h-[54svh] min-h-[350px] w-full max-w-[560px] sm:h-[75vh] sm:min-h-[412px] sm:max-w-[700px] lg:h-[82vh]"
               />
             </div>
 
           </div>
 
-          <div className="absolute right-0 top-[14%] z-40 flex w-[250px] flex-col items-end gap-3 sm:right-[3%] sm:top-[14%] sm:w-[460px] md:right-[5%] lg:right-[4%] lg:top-[16%]">
+          <div className="absolute right-0 top-[8%] z-40 flex w-[185px] flex-col items-end gap-3 sm:right-[3%] sm:top-[14%] sm:w-[460px] md:right-[5%] lg:right-[4%] lg:top-[16%]">
             <section
               id="intro-message"
-              className="relative flex min-h-[210px] w-full max-w-[250px] animate-[bubble-pop_720ms_ease-out_520ms_both] items-center justify-center rounded-[50%] border border-white/40 bg-white/[0.94] px-7 py-8 text-center text-slate-950 shadow-[0_20px_56px_rgba(14,165,233,0.24),inset_0_0_30px_rgba(255,255,255,0.82)] backdrop-blur sm:min-h-[250px] sm:max-w-[285px] sm:px-8 sm:py-9"
+              className="relative flex min-h-[160px] w-full max-w-[185px] animate-[bubble-pop_720ms_ease-out_520ms_both] items-center justify-center rounded-[50%] border border-white/40 bg-white/[0.94] px-5 py-6 text-center text-slate-950 shadow-[0_20px_56px_rgba(14,165,233,0.24),inset_0_0_30px_rgba(255,255,255,0.82)] backdrop-blur sm:min-h-[250px] sm:max-w-[285px] sm:px-8 sm:py-9"
               aria-label="AI법친 안내 문구"
             >
               <div className="absolute -left-6 top-1/2 hidden h-12 w-12 -translate-y-1/2 rounded-full border border-white/35 bg-white/[0.94] shadow-[0_12px_34px_rgba(14,165,233,0.2)] lg:block" />
               <div className="absolute -left-10 top-[62%] hidden h-5 w-5 rounded-full border border-white/30 bg-white/[0.9] lg:block" />
               <div className="relative z-10">
-                <h1 className="text-lg font-black tracking-[-0.05em] text-slate-950 sm:text-xl">
+                <h1 className="text-base font-black tracking-[-0.05em] text-slate-950 sm:text-xl">
                   AI법친
                   <br />
                   어디로 안내할까요?
                 </h1>
-                <p className="mx-auto mt-3 max-w-[180px] text-[11px] font-bold leading-5 text-slate-600 sm:max-w-[205px] sm:text-xs sm:leading-6">
+                <p className="mx-auto mt-2 max-w-[140px] text-[10px] font-bold leading-4 text-slate-600 sm:mt-3 sm:max-w-[205px] sm:text-xs sm:leading-6">
                   <TypewriterBubbleText text={speechMessage} />
                 </p>
               </div>
@@ -342,7 +345,7 @@ export function AibeopchinSpaceMenuHome() {
           </div>
 
           <nav
-            className="absolute bottom-0 left-1/2 z-30 grid w-full max-w-[460px] -translate-x-1/2 grid-cols-2 gap-2 rounded-[2rem] border border-cyan-100/10 bg-slate-950/25 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.34),inset_0_0_42px_rgba(14,165,233,0.08)] backdrop-blur-sm sm:gap-3"
+            className="absolute bottom-0 left-1/2 z-30 grid w-full max-w-[460px] -translate-x-1/2 grid-cols-2 gap-2 sm:gap-3"
             aria-label="AI법친 시작 메뉴"
           >
             {menuItems.map((item) => (
