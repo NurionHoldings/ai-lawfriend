@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { AibeopchinCharacter } from "@/components/brand/aibeopchin-character";
+import { AibeopchinCharacterModel } from "@/components/brand/aibeopchin-character-model";
 import { KoreanPhraseBlock } from "@/components/ui/korean-lines";
 import {
   AIBEOPCHIN_HERO_DESCRIPTION_LINES,
@@ -41,7 +42,7 @@ export function AibeopchinIntroScene({ reducedMotion = false }: Readonly<Props>)
 
       <div className="relative z-10">
         <motion.div
-          className="mx-auto flex w-full max-w-3xl flex-col items-center gap-4 rounded-[1.5rem] border border-white/10 bg-white/[0.04] px-4 py-5 shadow-soft backdrop-blur-md sm:gap-5 sm:rounded-[2rem] sm:px-6 sm:py-6 md:flex-row md:justify-center"
+          className="mx-auto grid w-full max-w-5xl gap-5 rounded-[1.5rem] border border-white/10 bg-white/[0.04] px-4 py-5 shadow-soft backdrop-blur-md sm:gap-6 sm:rounded-[2rem] sm:px-6 sm:py-6 md:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] md:items-center"
           initial={reducedMotion ? false : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -50,21 +51,30 @@ export function AibeopchinIntroScene({ reducedMotion = false }: Readonly<Props>)
             ease: "easeOut",
           }}
         >
-          <AibeopchinCharacter variant="hero" size={112} className="shrink-0" />
+          <div className="flex flex-col items-center gap-4 text-center md:flex-row md:text-left">
+            <AibeopchinCharacter variant="hero" size={112} className="shrink-0" />
 
-          <div className="min-w-0 text-center md:text-left">
-            <p className={`${KOREAN_EYEBROW_CLASS} text-aibeop-pale/90`}>
-              {AIBEOPCHIN_BRAND_COPY.eyebrow}
-            </p>
-            <p className="mt-2 text-3xl font-black tracking-[-0.05em] text-white sm:text-4xl md:text-5xl">
-              AI법친
-            </p>
-            <KoreanPhraseBlock
-              as="p"
-              phrases={AIBEOPCHIN_HERO_TAGLINE_LINES}
-              className={`mt-2 ${KOREAN_TAGLINE_CLASS} text-white/78`}
-            />
+            <div className="min-w-0">
+              <p className={`${KOREAN_EYEBROW_CLASS} text-aibeop-pale/90`}>
+                {AIBEOPCHIN_BRAND_COPY.eyebrow}
+              </p>
+              <p className="mt-2 text-3xl font-black tracking-[-0.05em] text-white sm:text-4xl md:text-5xl">
+                AI법친
+              </p>
+              <KoreanPhraseBlock
+                as="p"
+                phrases={AIBEOPCHIN_HERO_TAGLINE_LINES}
+                className={`mt-2 ${KOREAN_TAGLINE_CLASS} text-white/78`}
+              />
+            </div>
           </div>
+
+          <AibeopchinCharacterModel
+            variant="standard"
+            label="AI법친 홈 대표 3D 캐릭터"
+            compact
+            className="min-h-56"
+          />
         </motion.div>
 
         <motion.div
