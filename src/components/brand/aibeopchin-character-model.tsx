@@ -103,12 +103,15 @@ export function AibeopchinCharacterModel({
         renderer.setClearColor(0x000000, 0);
         renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-        scene.add(new THREE.AmbientLight(0xffffff, 1.08));
-        const keyLight = new THREE.DirectionalLight(0xffffff, 1.22);
-        keyLight.position.set(3, 4, 5);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.72));
+        const keyLight = new THREE.DirectionalLight(0xffffff, 0.82);
+        keyLight.position.set(2.2, 4.2, 4.8);
         scene.add(keyLight);
-        const rimLight = new THREE.PointLight(config.accent, 0.72, 9);
-        rimLight.position.set(-2.6, 2.5, 3);
+        const fillLight = new THREE.DirectionalLight(0xdbeafe, 0.32);
+        fillLight.position.set(-3.5, 2.2, 3.5);
+        scene.add(fillLight);
+        const rimLight = new THREE.PointLight(config.accent, 0.34, 8);
+        rimLight.position.set(-2.8, 2.6, 2.6);
         scene.add(rimLight);
 
         const ring = new THREE.Mesh(
@@ -139,15 +142,27 @@ export function AibeopchinCharacterModel({
               roughness?: number;
               metalness?: number;
               envMapIntensity?: number;
+              reflectivity?: number;
+              shininess?: number;
+              specular?: { set?: (color: number) => void };
             };
             if (typeof litMaterial.roughness === "number") {
-              litMaterial.roughness = Math.max(litMaterial.roughness, 0.72);
+              litMaterial.roughness = Math.max(litMaterial.roughness, 0.92);
             }
             if (typeof litMaterial.metalness === "number") {
-              litMaterial.metalness = Math.min(litMaterial.metalness, 0.18);
+              litMaterial.metalness = Math.min(litMaterial.metalness, 0.04);
             }
             if (typeof litMaterial.envMapIntensity === "number") {
-              litMaterial.envMapIntensity = Math.min(litMaterial.envMapIntensity, 0.45);
+              litMaterial.envMapIntensity = Math.min(litMaterial.envMapIntensity, 0.16);
+            }
+            if (typeof litMaterial.reflectivity === "number") {
+              litMaterial.reflectivity = Math.min(litMaterial.reflectivity, 0.08);
+            }
+            if (typeof litMaterial.shininess === "number") {
+              litMaterial.shininess = Math.min(litMaterial.shininess, 8);
+            }
+            if (litMaterial.specular?.set) {
+              litMaterial.specular.set(0x161b22);
             }
             material.side = THREE.FrontSide;
             material.needsUpdate = true;
