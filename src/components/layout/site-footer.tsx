@@ -1,5 +1,6 @@
 "use client";
 
+import { SpaceBackgroundCanvas } from "@/components/brand/aibeopchin-space-menu-home";
 import { usePathname } from "next/navigation";
 
 export function SiteFooter() {
@@ -8,8 +9,8 @@ export function SiteFooter() {
   if (pathname === "/") {
     return (
       <footer className="relative overflow-hidden border-t border-cyan-100/10 bg-[#01020d]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_24%,rgba(56,189,248,0.14),transparent_24%),radial-gradient(circle_at_72%_52%,rgba(14,165,233,0.12),transparent_28%),linear-gradient(180deg,rgba(1,8,22,0.88)_0%,#01020d_100%)]" />
-        <div className="absolute inset-0 opacity-60 [background-image:radial-gradient(circle,rgba(255,255,255,0.76)_1px,transparent_1.5px),radial-gradient(circle,rgba(125,211,252,0.52)_1px,transparent_1.7px)] [background-position:0_0,28px_18px] [background-size:72px_72px,118px_118px]" />
+        <SpaceBackgroundCanvas id="space-footer-background" className="opacity-75" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_24%,rgba(56,189,248,0.16),transparent_24%),radial-gradient(circle_at_72%_52%,rgba(14,165,233,0.14),transparent_28%),linear-gradient(180deg,rgba(1,8,22,0.72)_0%,rgba(1,2,13,0.94)_100%)]" />
         <div className="relative mx-auto flex max-w-7xl flex-col gap-6 px-6 py-8 text-sm text-cyan-50/70 md:flex-row md:items-end md:justify-between">
           <div className="max-w-xl">
             <div className="text-base font-extrabold text-white">AI법친</div>
