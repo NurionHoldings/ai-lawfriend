@@ -127,7 +127,25 @@ export function AibeopchinCharacterModel({
         scene.add(ring);
 
         const loader = new loaderModule.FBXLoader();
-        const model = await loader.loadAsync(config.src);
+        const loadFbx = async (src: string) => {
+          const originalWarn = console.warn;
+          console.warn = (...args: Parameters<typeof console.warn>) => {
+            const [message] = args;
+            if (
+              typeof message === "string" &&
+              message.includes("THREE.FBXLoader: Vertex has more than 4 skinning weights")
+            ) {
+              return;
+            }
+            originalWarn(...args);
+          };
+          try {
+            return await loader.loadAsync(src);
+          } finally {
+            console.warn = originalWarn;
+          }
+        };
+        const model = await loadFbx(config.src);
         if (cancelled) return;
 
         model.rotation.y = config.rotationY;
@@ -182,6 +200,8 @@ export function AibeopchinCharacterModel({
         const modelBaseY = model.position.y;
         scene.add(model);
 
+        let elapsed = 0;
+        let previousTimestamp = performance.now();
         const mixer = model.animations.length > 0 ? new THREE.AnimationMixer(model) : null;
         let greetingFinished = motionMode !== "greetingThenIdle";
         let idleStartedAt = 0;
@@ -193,7 +213,7 @@ export function AibeopchinCharacterModel({
             greetingAction.clampWhenFinished = true;
             const idleConfig = MODEL_CONFIG[idleVariant];
             if (idleConfig.src !== config.src) {
-              idleSourceModel = await loader.loadAsync(idleConfig.src);
+              idleSourceModel = await loadFbx(idleConfig.src);
               if (cancelled) return;
               if (idleSourceModel.animations.length > 0) {
                 idleAction = mixer.clipAction(idleSourceModel.animations[0], model);
@@ -203,7 +223,7 @@ export function AibeopchinCharacterModel({
             }
             const onGreetingFinished = () => {
               greetingFinished = true;
-              idleStartedAt = clock.elapsedTime;
+              idleStartedAt = elapsed;
               greetingAction.stop();
               if (idleAction) {
                 idleAction.enabled = true;
@@ -216,7 +236,6 @@ export function AibeopchinCharacterModel({
           greetingAction.play();
         }
 
-        const clock = new THREE.Clock();
         if (!mixer && motionMode === "greetingThenIdle") {
           greetingFinished = true;
         }
@@ -236,8 +255,10 @@ export function AibeopchinCharacterModel({
 
         const animate = () => {
           if (cancelled) return;
-          const delta = clock.getDelta();
-          const elapsed = clock.elapsedTime;
+          const now = performance.now();
+          const delta = Math.min((now - previousTimestamp) / 1000, 0.05);
+          previousTimestamp = now;
+          elapsed += delta;
           mixer?.update(delta);
           const idleElapsed = idleStartedAt > 0 ? elapsed - idleStartedAt : elapsed;
           const idleEnabled = greetingFinished && idleElapsed * 1000 <= idleDurationMs;
