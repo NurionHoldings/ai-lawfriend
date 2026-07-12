@@ -294,10 +294,10 @@ export function AibeopchinSpaceMenuHome() {
 
       <section
         id="character-stage"
-        className="relative z-10 mx-auto flex min-h-screen max-w-7xl items-center px-5 py-8 sm:px-8 lg:px-10"
+        className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl items-center px-4 py-6 sm:px-8 sm:py-8 lg:px-10"
       >
-        <div className="relative h-auto min-h-[680px] w-full sm:h-[calc(100vh-4rem)] sm:min-h-[680px]">
-          <div className="relative flex flex-col items-center sm:absolute sm:left-[4%] sm:top-0 sm:w-[68%] sm:items-start lg:left-[3%] lg:w-[62%]">
+        <div className="relative h-[calc(100svh-3rem)] min-h-[680px] w-full sm:h-[calc(100vh-4rem)] sm:min-h-[680px]">
+          <div className="absolute left-1/2 top-0 flex w-[112%] -translate-x-1/2 flex-col items-center sm:left-[4%] sm:w-[68%] sm:translate-x-0 sm:items-start lg:left-[3%] lg:w-[62%]">
             <div
               id="character-glow"
               className="pointer-events-none absolute bottom-[18%] left-1/2 h-28 w-[72%] -translate-x-1/2 rounded-[50%] border border-cyan-200/30 bg-cyan-300/10 blur-sm shadow-[0_0_56px_rgba(34,211,238,0.38),inset_0_0_44px_rgba(125,211,252,0.22)] lg:left-[43%]"
@@ -320,7 +320,7 @@ export function AibeopchinSpaceMenuHome() {
 
           </div>
 
-          <div className="relative z-40 mt-[-120px] flex flex-col items-center gap-3 sm:absolute sm:right-[3%] sm:top-[14%] sm:mt-0 sm:w-[460px] sm:items-end md:right-[5%] lg:right-[4%] lg:top-[16%]">
+          <div className="absolute right-0 top-[14%] z-40 flex w-[250px] flex-col items-end gap-3 sm:right-[3%] sm:top-[14%] sm:w-[460px] md:right-[5%] lg:right-[4%] lg:top-[16%]">
             <section
               id="intro-message"
               className="relative flex min-h-[210px] w-full max-w-[250px] animate-[bubble-pop_720ms_ease-out_520ms_both] items-center justify-center rounded-[50%] border border-white/40 bg-white/[0.94] px-7 py-8 text-center text-slate-950 shadow-[0_20px_56px_rgba(14,165,233,0.24),inset_0_0_30px_rgba(255,255,255,0.82)] backdrop-blur sm:min-h-[250px] sm:max-w-[285px] sm:px-8 sm:py-9"
@@ -342,18 +342,18 @@ export function AibeopchinSpaceMenuHome() {
           </div>
 
           <nav
-            className="relative z-30 mx-auto mt-4 grid w-full max-w-[460px] grid-cols-1 gap-3 rounded-[2rem] border border-cyan-100/10 bg-slate-950/25 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.34),inset_0_0_42px_rgba(14,165,233,0.08)] backdrop-blur-sm sm:absolute sm:bottom-0 sm:left-1/2 sm:mt-0 sm:-translate-x-1/2 sm:grid-cols-2"
+            className="absolute bottom-0 left-1/2 z-30 grid w-full max-w-[460px] -translate-x-1/2 grid-cols-2 gap-2 rounded-[2rem] border border-cyan-100/10 bg-slate-950/25 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.34),inset_0_0_42px_rgba(14,165,233,0.08)] backdrop-blur-sm sm:gap-3"
             aria-label="AI법친 시작 메뉴"
           >
             {menuItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="group rounded-2xl border border-cyan-100/20 bg-slate-950/[0.42] px-4 py-3 text-center font-extrabold text-white shadow-[0_16px_44px_rgba(0,0,0,0.35),inset_0_0_24px_rgba(14,165,233,0.12)] backdrop-blur-md transition hover:-translate-y-0.5 hover:border-cyan-100/50 hover:bg-cyan-300/[0.16] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200"
+                className="group rounded-2xl border border-cyan-100/20 bg-slate-950/[0.42] px-2 py-2 text-center font-extrabold text-white shadow-[0_16px_44px_rgba(0,0,0,0.35),inset_0_0_24px_rgba(14,165,233,0.12)] backdrop-blur-md transition hover:-translate-y-0.5 hover:border-cyan-100/50 hover:bg-cyan-300/[0.16] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200 sm:px-4 sm:py-3"
                 title={item.description}
               >
-                <span className="block text-base sm:text-lg">{item.label}</span>
-                <span className="mt-1 block text-xs font-semibold leading-relaxed text-cyan-50/60 group-hover:text-cyan-50">
+                <span className="block text-sm sm:text-lg">{item.label}</span>
+                <span className="mt-1 hidden text-xs font-semibold leading-relaxed text-cyan-50/60 group-hover:text-cyan-50 sm:block">
                   {item.description}
                 </span>
               </Link>

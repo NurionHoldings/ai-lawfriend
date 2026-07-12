@@ -103,11 +103,11 @@ export function AibeopchinCharacterModel({
         renderer.setClearColor(0x000000, 0);
         renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-        scene.add(new THREE.AmbientLight(0xffffff, 1.65));
-        const keyLight = new THREE.DirectionalLight(0xffffff, 2.1);
+        scene.add(new THREE.AmbientLight(0xffffff, 1.08));
+        const keyLight = new THREE.DirectionalLight(0xffffff, 1.22);
         keyLight.position.set(3, 4, 5);
         scene.add(keyLight);
-        const rimLight = new THREE.PointLight(config.accent, 1.45, 9);
+        const rimLight = new THREE.PointLight(config.accent, 0.72, 9);
         rimLight.position.set(-2.6, 2.5, 3);
         scene.add(rimLight);
 
@@ -135,6 +135,20 @@ export function AibeopchinCharacterModel({
           const materials: Material[] = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
           materials.forEach((material: Material) => {
             if (!material) return;
+            const litMaterial = material as Material & {
+              roughness?: number;
+              metalness?: number;
+              envMapIntensity?: number;
+            };
+            if (typeof litMaterial.roughness === "number") {
+              litMaterial.roughness = Math.max(litMaterial.roughness, 0.72);
+            }
+            if (typeof litMaterial.metalness === "number") {
+              litMaterial.metalness = Math.min(litMaterial.metalness, 0.18);
+            }
+            if (typeof litMaterial.envMapIntensity === "number") {
+              litMaterial.envMapIntensity = Math.min(litMaterial.envMapIntensity, 0.45);
+            }
             material.side = THREE.FrontSide;
             material.needsUpdate = true;
           });
