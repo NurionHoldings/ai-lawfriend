@@ -24,29 +24,29 @@ export const CONTROL_TOWER_BRAIN_ORCHESTRATOR_MARKER =
 
 export async function scanControlTowerBrain(input: BrainScanInput) {
   const result = runControlTowerBrainScan(input);
-  upsertIssues(result.issues);
-  setLastScanAt(result.scannedAt);
+  await upsertIssues(result.issues);
+  await setLastScanAt(result.scannedAt);
   return result;
 }
 
 export async function diagnoseControlTowerBrain(issueIds?: string[]) {
-  const issues = listIssues().filter((issue) =>
+  const issues = (await listIssues()).filter((issue) =>
     issueIds?.length ? issueIds.includes(issue.issueId) : true,
   );
   const result = runControlTowerBrainDiagnosis(issues);
-  upsertDiagnoses(result.diagnoses);
+  await upsertDiagnoses(result.diagnoses);
   return result;
 }
 
 export async function buildControlTowerBrainPatchPlans(issueIds?: string[], diagnosisIds?: string[]) {
-  const issues = listIssues().filter((issue) =>
+  const issues = (await listIssues()).filter((issue) =>
     issueIds?.length ? issueIds.includes(issue.issueId) : true,
   );
-  const diagnoses = listDiagnoses().filter((d) =>
+  const diagnoses = (await listDiagnoses()).filter((d) =>
     diagnosisIds?.length ? diagnosisIds.includes(d.diagnosisId) : issues.some((i) => i.issueId === d.issueId),
   );
   const result = generateControlTowerBrainPatchPlans({ issues, diagnoses });
-  upsertPlans(result.plans);
+  await upsertPlans(result.plans);
   return result;
 }
 
@@ -59,7 +59,7 @@ export async function autoFixControlTowerBrain(input: {
   dryRun: boolean;
   actorUserId: string;
 }) {
-  const plan = getPlan(input.planId);
+  const plan = await getPlan(input.planId);
   if (!plan) {
     throw new Error("Patch plan not found.");
   }
@@ -71,8 +71,8 @@ export async function autoFixControlTowerBrain(input: {
 }
 
 export async function getControlTowerBrainSnapshot() {
-  const issues = listIssues();
-  const plans = listPlans();
+  const issues = await listIssues();
+  const plans = await listPlans();
   const pendingApprovalCount = plans.filter((p) => p.requiresHumanApproval && !p.approved).length;
   const safeAutoFixQueueCount = plans.filter((p) => p.riskLevel === "SAFE" && !p.approved).length;
   const criticalCount = issues.filter((i) => i.severity === "CRITICAL").length;
@@ -87,11 +87,11 @@ export async function getControlTowerBrainSnapshot() {
       openIssueCount: issues.length,
       pendingApprovalCount,
       safeAutoFixQueueCount,
-      lastScanAt: getLastScanAt(),
+      lastScanAt: await getLastScanAt(),
       health,
     }),
     issues,
-    diagnoses: listDiagnoses(),
+    diagnoses: await listDiagnoses(),
     plans,
   };
 }

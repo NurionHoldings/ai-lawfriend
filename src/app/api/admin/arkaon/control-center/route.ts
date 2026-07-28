@@ -1,17 +1,14 @@
 import { ok, handleApiError } from "@/lib/api-response";
 import { requireRoleApi } from "@/lib/auth/guards";
-import { listPlans } from "@/features/control-tower-brain/control-tower-brain.repository";
+import { getArkaonControlCenterSnapshot } from "@/features/arkaon/arkaon.service";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
     const auth = await requireRoleApi("ADMIN");
-    if (!auth.ok) {
-      return auth.response;
-    }
-
-    return ok({ plans: await listPlans() });
+    if (!auth.ok) return auth.response;
+    return ok(await getArkaonControlCenterSnapshot());
   } catch (error) {
     return handleApiError(error);
   }

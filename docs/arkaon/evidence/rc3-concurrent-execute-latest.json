@@ -1,0 +1,34 @@
+{
+  "scenario": "concurrent_execute_same_proposal",
+  "platform": "AI법친",
+  "skillId": "retry_failed_internal_job_after_human_approval",
+  "proposalId": "arkaon_skill_retry_cron_rc3_lock_1785233788355",
+  "retryJobId": "cms4i3r2c00007sjglyvqwi36",
+  "requestCount": 2,
+  "claimSuccess": 1,
+  "claimRejected": 1,
+  "mutationCount": 1,
+  "activeExecutionCount": 1,
+  "finalRetryJobStatus": "PENDING_RETRY",
+  "verification": "VERIFIED",
+  "hardDenyViolations": 0,
+  "approveTriggeredExecutions": 0,
+  "requestResults": [
+    {
+      "request": 1,
+      "ok": false,
+      "blocked": true,
+      "reason": "Idempotency Gate: proposal already has EXECUTED execution. Re-execute is blocked."
+    },
+    {
+      "request": 2,
+      "ok": true,
+      "blocked": false,
+      "status": "EXECUTED",
+      "executionId": "cms4i3r3900047sjgkyqk1lk4"
+    }
+  ],
+  "capturedAt": "2026-07-28T10:16:28.472Z",
+  "environment": "localhost-postgres (not official staging)",
+  "rc3Status": "LOCAL_REALDB_CONCURRENT_PASS — official LOCKED_SAFE_L2 still needs staging DATABASE_URL lock-gate"
+}

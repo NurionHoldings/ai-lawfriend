@@ -98,11 +98,11 @@ export async function executeControlTowerBrainSafeAutoFix(input: {
     marker: PHASE60E_SAFE_AUTO_FIX_MARKER,
     version: PHASE60E_SAFE_AUTO_FIX_VERSION,
     planId: input.plan.planId,
-    executed: true,
+    executed: false,
     dryRun: false,
     fixType,
     message:
-      "Safe auto-fix audit recorded. Doc/meta file writes remain manual — Brain never auto-writes production code.",
+      "Safe auto-fix approval/audit recorded. No repository mutation was executed; manual apply remains required.",
     verificationCommands: input.plan.testPlan,
     rollbackCommands: input.plan.rollbackPlan,
     auditAction: CONTROL_TOWER_BRAIN_AUDIT_ACTION,

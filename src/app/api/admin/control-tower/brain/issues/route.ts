@@ -11,7 +11,7 @@ export async function GET() {
       return auth.response;
     }
 
-    return ok({ issues: listIssues() });
+    return ok({ issues: await listIssues() });
   } catch (error) {
     return handleApiError(error);
   }

@@ -1988,6 +1988,157 @@ model AuditLog {
   @@index([entityType, entityId, createdAt])
 }
 
+/// ARKAON RC2 — business state (not AuditLog). EXECUTE remains OFF.
+model ArkaonIssue {
+  id         String   @id
+  source     String
+  severity   String
+  phase      String?
+  files      Json
+  summary    String
+  rawLogRef  String
+  detectedAt DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  diagnoses ArkaonDiagnosis[]
+  plans     ArkaonPlan[]
+
+  @@index([severity, detectedAt])
+  @@index([detectedAt])
+}
+
+model ArkaonDiagnosis {
+  id                  String   @id
+  issueId             String
+  code                String
+  summary             String
+  likelyRootCause     String
+  affectedPhase       String?
+  boundaryViolations  Json
+  safeMitigationHints Json
+  diagnosedAt         DateTime
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  issue ArkaonIssue  @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  plans ArkaonPlan[]
+
+  @@index([issueId, diagnosedAt])
+}
+
+model ArkaonPlan {
+  id                    String    @id
+  issueId               String
+  diagnosisId           String?
+  riskLevel             String
+  filesToChange         Json
+  proposedChanges       Json
+  testPlan              Json
+  rollbackPlan          Json
+  requiresHumanApproval Boolean
+  approved              Boolean   @default(false)
+  approvedAt            DateTime?
+  approvedByUserId      String?
+  createdAt             DateTime
+  updatedAt             DateTime  @updatedAt
+
+  issue     ArkaonIssue      @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  diagnosis ArkaonDiagnosis? @relation(fields: [diagnosisId], references: [id], onDelete: SetNull)
+
+  @@index([riskLevel, approved, createdAt])
+  @@index([issueId, createdAt])
+}
+
+model ArkaonRun {
+  id             String   @id @default(cuid())
+  windowHours    Int
+  actorUserId    String
+  observedAt     DateTime
+  proposalCount  Int      @default(0)
+  executeEnabled Boolean  @default(false)
+  policyVersion  String
+  snapshot       Json?
+  createdAt      DateTime @default(now())
+
+  proposals ArkaonProposal[]
+
+  @@index([createdAt])
+}
+
+model ArkaonProposal {
+  id                String   @id
+  platform          String   @default("AI법친")
+  domain            String
+  severity          String
+  title             String
+  rationale         String
+  evidence          Json
+  risk              String
+  recommendedAction String
+  policyResult      Json
+  status            String
+  executeAllowed    Boolean  @default(false)
+  skillId           String?
+  targetRef         Json?
+  executionStatus   String?
+  runId             String?
+  planId            String?
+  issueId           String?
+  createdAt         DateTime
+  updatedAt         DateTime @updatedAt
+
+  run         ArkaonRun?         @relation(fields: [runId], references: [id], onDelete: SetNull)
+  approvals   ArkaonApproval[]
+  executions  ArkaonExecution[]
+
+  @@index([status, createdAt])
+  @@index([runId, createdAt])
+  @@index([skillId, executionStatus])
+}
+
+model ArkaonApproval {
+  id             String   @id @default(cuid())
+  proposalId     String
+  decision       String
+  actorUserId    String
+  reason         String?
+  executeAllowed Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  proposal ArkaonProposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+
+  @@unique([proposalId, decision])
+  @@index([proposalId, createdAt])
+}
+
+/// RC3 — separate from Approval. approve() never writes execution rows.
+model ArkaonExecution {
+  id             String    @id @default(cuid())
+  proposalId     String
+  skillId        String
+  status         String
+  actorUserId    String
+  payload        Json?
+  result         Json?
+  verifyResult   Json?
+  executeAllowed Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  verifiedAt     DateTime?
+
+  proposal ArkaonProposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+
+  @@index([proposalId, createdAt])
+  @@index([skillId, status, createdAt])
+}
+
+model ArkaonBrainMeta {
+  id         String    @id @default("default")
+  lastScanAt DateTime?
+  updatedAt  DateTime  @updatedAt
+}
+
 enum AlertRuleType {
   ROLE_SPIKE
   NIGHT_ACTIVITY
