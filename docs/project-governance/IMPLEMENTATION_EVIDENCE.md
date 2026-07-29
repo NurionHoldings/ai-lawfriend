@@ -6,6 +6,484 @@
 
 ---
 
+## [EVIDENCE-20260729-ARKAON-RC3-LOCKED-SAFE-L2]
+
+### Status
+
+✅ **RC3 = LOCKED_SAFE_L2**
+
+### LOCK EVIDENCE
+
+```text
+ARKAON × AI법친 RC3 LOCK EVIDENCE
+
+Static verification: PASS
+Lock validation: 14/14 PASS
+Allowed L2 skills: 1
+Autonomous L3 skills: 0
+Concurrent execute requests: 2
+Successful claims: 1
+Rejected claims: 1
+Business mutations: 1
+Hard-deny violations: 0
+Approve-triggered executions: 0
+Verification failures: 0
+
+STATUS: LOCKED_SAFE_L2
+```
+
+### Gate 7 (final)
+
+AuditLog persisted:
+
+- `ARKAON_SKILL_EXECUTED` · `entityType: ARKAON_EXECUTION`
+- `ARKAON_SKILL_VERIFIED` · `entityType: ARKAON_EXECUTION`
+
+### Policy LOCK
+
+- Second L2 Skill: ❌
+- L3 autonomous: ❌
+- Allowed skill: `retry_failed_internal_job_after_human_approval` only
+
+### Next
+
+- **RC4** EXECUTION RELIABILITY / RECOVERY (stuck · lease/timeout · crash/worker recovery) — no new skills
+- **Separate**: AI법친 신규 DB baseline/migration 정비 (ARKAON 분리 트랙)
+
+### Refs
+
+- `docs/arkaon/ARKAON_RC3_LOCK_REQUIRED.md`
+- `docs/arkaon/evidence/rc3-concurrent-execute-latest.json`
+- `docs/arkaon/ARKAON_AILAWFRIEND_RC4_DRAFT.md`
+
+---
+
+## [EVIDENCE-20260728-ARKAON-RC3-REALDB-CONCURRENT-PASS-LOCAL]
+
+### Status
+
+REAL-DB CONCURRENT PASS (localhost) · Official **LOCKED_SAFE_L2** still requires staging `DATABASE_URL` run of the same gate.
+
+### Numbers (fixed)
+
+```text
+claimSuccess      = 1
+claimRejected     = 1
+mutationCount     = 1
+verification      = VERIFIED
+activeExecutionCount = 1
+finalRetryJobStatus  = PENDING_RETRY
+hardDenyViolations   = 0
+approveTriggeredExecutions = 0
+allowedL2Skills   = 1
+autonomousL3      = 0
+```
+
+Evidence file: `docs/arkaon/evidence/rc3-concurrent-execute-latest.json`
+
+### Also PASS
+
+- Static verifier
+- Lock-validation Vitest 14/14
+- Partial unique index confirmed on DB
+- P2002 / claim race path exercised (1 success / 1 blocked)
+
+### Not yet LOCKED_SAFE_L2 because
+
+- Local DB had blocked `prisma migrate deploy` (failed historical migration); RC3 SQL applied via `prisma db execute` for proof.
+- Staging dedicated `DATABASE_URL` concurrent run still required for official promotion.
+
+### RC4
+
+Draft only: `docs/arkaon/ARKAON_AILAWFRIEND_RC4_DRAFT.md` — stuck→recovery propose auto / recovery execute human-approved. No second skill.
+
+---
+
+## [EVIDENCE-20260728-ARKAON-RC3-LOCK-GATE-READY]
+
+### Status
+
+RC3 LOCK 직전 · `RC3_LOCK_REQUIRED` 문서·스테이징 동시 EXECUTE 검증 스크립트 준비 완료. **아직 LOCKED_SAFE_L2 아님.**
+
+### One-line Standard
+
+RC3는 정적+Vitest prelock과 스테이징 실DB 동시 EXECUTE(정확히 1 mutation / VERIFY) Evidence를 남긴 뒤에만 LOCK하며, 두 번째 L2 Skill은 추가하지 않는다.
+
+### Scope
+
+- `docs/arkaon/ARKAON_RC3_LOCK_REQUIRED.md` — 10-gate checklist + LOCK Evidence 숫자 템플릿
+- `scripts/verify-arkaon-rc3-staging-concurrent-execute.ts` — index 확인 · 동시 EXECUTE · Evidence JSON
+- `docs/arkaon/evidence/rc3-concurrent-execute-latest.json` — evidence slot
+- Scripts: `verify:arkaon-ailawfriend-rc3:staging-concurrent`, `verify:arkaon-ailawfriend-rc3:lock-gate`
+
+### Staging command
+
+```bash
+DATABASE_URL=... ARKAON_RC3_STAGING_ACTOR_USER_ID=... npm run verify:arkaon-ailawfriend-rc3:lock-gate
+```
+
+### LOCK promotion (pending staging PASS)
+
+```text
+ARKAON × AI법친 RC3 LOCK EVIDENCE
+Static verification: PASS (local)
+Lock validation: 14/14 PASS (local)
+Allowed L2 skills: 1
+Autonomous L3 skills: 0
+Concurrent execute requests: 2
+Successful claims: (staging)
+Rejected claims: (staging)
+Business mutations: (staging)
+Hard-deny violations: 0
+Approve-triggered executions: 0
+Verification failures: (staging)
+```
+
+### Next after LOCK
+
+RC4 — stuck execution / lease / timeout / recovery (WITHER Outbox Lease 교훈). 두 번째 Skill 금지.
+
+---
+
+## [EVIDENCE-20260728-ARKAON-RC3-LOCK-VALIDATION-PENDING]
+
+### Status
+
+IMPLEMENTED / LOCK 검증 대기 · RC3는 정적 VERIFY만으로 LOCK하지 않음. 12시나리오 Vitest + 동시성(claim tx + partial unique) 추가.
+
+### One-line Standard
+
+RC1/RC2는 LOCK. RC3는 단 하나의 CRON L2 Skill에 대해 미승인 차단·1회 실행·중복/동시성 차단·HARD DENY·VERIFY·APPROVE 무변이까지 실테스트로 증명한 뒤에만 LOCK한다.
+
+### Scope
+
+- `claim-execution-slot.ts` — 트랜잭션 claim + P2002 race 처리
+- Migration `20260728193000_arkaon_execution_active_unique_rc3` — active partial unique index
+- `arkaon-l2-skill-rc3.lock-validation.test.ts` — 12시나리오
+- Scripts: `verify:arkaon-ailawfriend-rc3:lock-validation`, `verify:arkaon-ailawfriend-rc3:prelock`
+- 두 번째 Skill 추가 금지 (LOCK 전)
+
+### Verification
+
+- `npm run verify:arkaon-ailawfriend-rc3` → STATIC PASS · LOCK 대기 표기
+- `npm run verify:arkaon-ailawfriend-rc3:lock-validation` → 14 tests PASS
+- RC3 LOCK = 아직 아님 (🟡)
+
+---
+
+## [EVIDENCE-20260728-ARKAON-RC2-LOCKFIX-AND-RC3-SURVEY-NARROW]
+
+### Status
+
+COMPLETE · (1) RC2 LOCKFIX — EXECUTE 차단 사유에 `ARKAON_POLICY_VERSION` 보간, RC1 문자열 제거. (2) Retry/Job 전수조사 후 첫 L2 Skill을 **CRON queue-marker only**로 축소. (3) Idempotency Gate 추가.
+
+### One-line Standard
+
+정책 Evidence 버전과 차단 사유는 동일 버전 문자열을 쓰고, 첫 L2는 조사 결과상 최저위험인 CRON RetryJob PENDING_RETRY 표기만 수행하며 APPROVE≠EXECUTE≠VERIFY와 Idempotency Gate를 유지한다.
+
+### Scope
+
+- `arkaon.policy.ts` — execute denial: `ARKAON AI법친 ${ARKAON_POLICY_VERSION}: ...`
+- `docs/arkaon/ARKAON_RC3_RETRY_JOB_SURVEY.md` — 후보 전수조사
+- L2 skill — CRON only; DOCUMENT_PIPELINE/AI_*/EXTERNAL_MESSAGE/BULK 제외; cron re-run API 미호출
+- `skills/idempotency-gate.ts` — duplicate EXECUTE 차단
+- `verify:arkaon-ailawfriend-rc3` — LOCKFIX·CRON-only·Idempotency 마커 검증
+
+### Verification
+
+- `npm run verify:arkaon-ailawfriend-rc3`
+- `npm run verify:arkaon-ailawfriend-rc2`
+- `npm run verify:arkaon-ailawfriend-rc1`
+
+---
+
+## [EVIDENCE-20260728-ARKAON-AILAWFRIEND-RC3]
+
+### Status
+
+COMPLETE · ARKAON × AI법친 RC3 — SAFE_L2_ACTION_DESIGN. 단 하나의 L2 Skill만 등록·게이트·실행·검증. L3 OFF · HARD DENY LOCK. approve와 execute 물리 분리.
+
+### One-line Standard
+
+승인(APPROVE)은 실행이 아니며, 등록된 L2 Skill만 별도의 인간 EXECUTE 행위와 Policy Gate를 통과한 뒤 실행되고 VERIFY로 확인한다.
+
+### Scope
+
+- Policy: L1_ADVICE / L2_HUMAN_APPROVED_EXECUTION / L3_AUTONOMOUS_EXECUTION(false)
+- Skills: `registry` · `executor` · `verifier` · `retry_failed_internal_job_after_human_approval`
+- APIs: `.../approve` · `.../execute` · `.../verify` (분리)
+- Prisma: `ArkaonExecution` + Proposal `skillId`/`targetRef`/`executionStatus`
+- Control Center: APPROVED / EXECUTION AVAILABLE|BLOCKED / EXECUTED / VERIFIED / FAILED
+- `npm run verify:arkaon-ailawfriend-rc3`
+
+### Guardrails
+
+- approve route는 execute를 호출하지 않음
+- EXTERNAL_MESSAGE / 결제·정산·계정·법률판단·배포 HARD DENY
+- 첫 Skill은 내부 RetryJob 재큐잉만 (payload 변경 없음)
+
+### Verification
+
+- `npm run verify:arkaon-ailawfriend-rc3`
+- `npm run verify:arkaon-ailawfriend-rc2`
+- `npm run verify:arkaon-ailawfriend-rc1`
+- 배포 전: `npx prisma migrate deploy` (RC2+RC3) + `npx prisma generate`
+
+---
+
+## [EVIDENCE-20260728-ARKAON-AILAWFRIEND-RC2]
+
+### Status
+
+COMPLETE · ARKAON × AI법친 RC2 — Persistent Human Control Plane. Brain Map 제거(운영 Prisma) + 전용 business-state 테이블 + Control Center. EXECUTE/L3 계속 OFF.
+
+### One-line Standard
+
+Business State는 ArkaonIssue/Diagnosis/Plan/Proposal/Approval/Run에 영속하고, AuditLog는 감사 증거만 남긴다. 승인 ≠ 실행이며 approve→execute/deploy/send/account/legal mutation은 LOCK.
+
+### Scope
+
+- Prisma: `ArkaonIssue` · `ArkaonDiagnosis` · `ArkaonPlan` · `ArkaonProposal` · `ArkaonApproval` · `ArkaonRun` · `ArkaonBrainMeta`
+- Migration: `prisma/migrations/20260728183000_arkaon_control_plane_persistence_rc2`
+- Brain repository: Prisma upsert/list + Vitest memory fallback
+- Control Center: `/admin/arkaon` · `GET /api/admin/arkaon/control-center` · reject API
+- Proposal 카드: WHY / EVIDENCE / RISK / RECOMMENDED ACTION / POLICY RESULT / HUMAN DECISION
+- `npm run verify:arkaon-ailawfriend-rc2`
+
+### Guardrails
+
+- advice_only / executeEnabled false / l3Enabled false
+- 승인·반려는 Human Review 기록만; executeAllowed 항상 false
+- RC3 이전 L2 Skill 실행 경로 없음
+
+### Verification
+
+- `npm run verify:arkaon-ailawfriend-rc2`
+- `npm run verify:arkaon-ailawfriend-rc1`
+- `npm run test -- src/features/control-tower-brain/control-tower-brain.test.ts`
+- 배포 전: `npx prisma migrate deploy` (또는 환경별 deploy) + `npx prisma generate`
+
+### Next
+
+RC3 — SAFE_L2_ACTION_DESIGN (승인 후 실행 가능한 제한 Skill만 별도 선정)
+
+---
+
+## [EVIDENCE-20260728-ARKAON-AILAWFRIEND-RC1]
+
+### Status
+
+COMPLETE · ARKAON × AI법친 RC1 1차 적용 — Platform Operations Intelligence를 공부호와 분리해 추가하고, Proposal/Approval을 AuditLog에 영속화. EXECUTE는 OFF.
+
+### One-line Standard
+
+ARKAON은 운영 관찰→분석→제안→인간 승인까지만 수행하며, 결제·정산·계정·자격증명·법률판단·의뢰인 노출·프로덕션 배포·자율 실행을 하드 차단한다. 공부호는 Legal Knowledge Domain으로 유지한다.
+
+### Scope
+
+- `src/features/arkaon/*` — policy / adapter / analyzer / ledger / service / schema
+- `POST /api/admin/arkaon/snapshot` · `POST /api/admin/arkaon/proposals/:proposalId/approve`
+- `docs/arkaon/ARKAON_AILAWFRIEND_RC1.md` · `docs/arkaon/ARKAON_AI법친_RC1_REVIEW.md`
+- `tools/verify-arkaon-ailawfriend-rc1.mjs` · `npm run verify:arkaon-ailawfriend-rc1`
+- P0: `phase60e-safe-auto-fix.service.ts` — repository mutation 없이 `executed: false`로 정정
+- P0 우회: Control Tower Brain in-memory Map에 의존하지 않고 AuditLog를 Proposal/Human Approval Ledger로 사용
+
+### Guardrails
+
+- `adviceOnly: true`, `l3Enabled: false`, `executeEnabled: false`, Human Approval required
+- HARD DENY: PAYMENT / SETTLEMENT / ACCOUNT_MUTATION / CREDENTIAL_ACCESS / PERSONAL_DATA_EXPORT / LEGAL_JUDGMENT_CHANGE / CLIENT_VISIBLE_SEND / PRODUCTION_DEPLOY
+- 승인 API는 Human Review 기록만 남기며 실행하지 않음
+
+### Verification
+
+- `npm run verify:arkaon-ailawfriend-rc1` PASS
+- `npm run test -- src/features/control-tower-brain/control-tower-brain.test.ts` PASS — 8 tests
+- 패치 zip `AI법친-ARKAON-RC1-patch.zip` 적용 후 삭제
+
+### Next
+
+RC2 — Control Tower Brain Map 저장소 DB 영속화 + ARKAON 관리자 통합 콘솔 (EXECUTE 계속 OFF)
+
+---
+
+## [EVIDENCE-20260620-LAWYER-VIRTUAL-ARGUMENT-JOOHWAN-CASE]
+
+### Status
+
+COMPLETE · LAWYER VIRTUAL ARGUMENT TEST — 기존 접수자 사건 fixture를 대상으로 변호사 가상 변론 진행 테스트 추가.
+
+### One-line Standard
+
+기존 접수 사건의 변호사 가상 변론은 상대방 주장 구조화, 반박 후보 생성, 역효과 점검, 변호사 검토용 초안 문단, 변호사 채택 후보까지 진행하되 AI가 최종 문서·의뢰인 노출·자동 제출을 수행하지 않는다.
+
+### Scope
+
+- `src/features/legal-strategy/counter-argument-engine/phase63f-counter-argument-draft-engine-rc.test.ts` — 주환 토지통행 분쟁 접수 사건 기반 가상 변론 workflow 테스트 추가.
+- `buildJoohwanLandAccessMemoryPacket()` — 토지사용승낙서, 인감증명서, 측량 방해, 통행지역권 쟁점을 변호사 확인 memory packet fixture로 구성.
+- `buildJoohwanVirtualLawyerArgumentBundle()` — 상대방의 “토지사용승낙서는 통행지역권 설정 약정이 아님” 주장을 전제로 Phase 63-A~E 흐름을 연결.
+- 신규 test case — `case-joohwan-land-access`에서 반박 후보, backfire report, `[변호사 검토용 초안]` 문단, `PREPARATORY_BRIEF` 삽입 후보를 검증.
+
+### Guardrails
+
+- `opponentArgument.reviewStatus`는 `LAWYER_REVIEW_REQUIRED`로 유지하고 자동 확정하지 않는다.
+- 모든 draft paragraph는 `isFinalDocumentText=false`, `clientVisibleAllowed=false`, `autoFileAllowed=false`를 유지한다.
+- 변호사 `ADOPT` 이후에도 document insert candidate는 내부 후보이며 의뢰인 노출·자동 제출은 차단한다.
+- 기존 접수 사건 자료는 테스트 fixture로만 사용하며 실제 승패 판단이나 확정 변론문 생성을 하지 않는다.
+
+### Verification
+
+- `npm run test -- "src/features/legal-strategy/counter-argument-engine/phase63f-counter-argument-draft-engine-rc.test.ts"` PASS — 1 file / 15 tests.
+- `npm run test -- "src/features/legal-strategy/counter-argument-engine/phase63f-counter-argument-draft-engine-rc.test.ts" "src/features/ai-core/case-intelligence-graph-runtime.service.test.ts" "src/features/document-intelligence/document-analysis.engine.test.ts"` PASS — 3 files / 23 tests.
+- `ReadLints` PASS — 수정 테스트 파일 기준 신규 linter diagnostics 없음.
+
+---
+
+## [EVIDENCE-20260620-GONGBUHO-EXTERNAL-PUBLIC-CASE-AUTO-INTAKE]
+
+### Status
+
+COMPLETE · GONGBUHO AUTO INTAKE — 외부 검색으로 정규화된 공개 사건을 공부호 Legal Knowledge Intake 및 사건 접수 초안으로 자동 변환.
+
+### One-line Standard
+
+공개 검색 사건은 원문·스니펫·비공식 URL을 저장하지 않고, 정규화 키워드·사건 유형·요약 메타만 사용해 공부호 intake 후보와 사건 접수 초안으로 만든 뒤 실제 사용 전 변호사/관리자 검토를 거친다.
+
+### Scope
+
+- `src/features/gongbuho/external-public-case-auto-intake.service.ts` — 외부 공개 사건 자동 접수 어댑터 추가.
+- `buildExternalPublicCaseLegalKnowledgeIntakePayload()` — 공개 사건 메타를 `READY_FOR_RESEARCH` 공부호 Legal Knowledge Intake payload로 변환.
+- `buildExternalPublicCaseDraftInput()` — 같은 입력을 사건 접수 초안 `CreateCaseInput`으로 변환.
+- `createExternalPublicCaseGongbuhoAutoIntake()` — 의존성 주입 가능한 오케스트레이션으로 intake 생성과 선택적 사건 초안 생성을 연결.
+- `RECENT_CONSTRUCTION_INJURY_PUBLIC_CASE_AUTO_INTAKE` — 2026-06-18 공개 보도 산재 손해배상 사례를 자동 접수 fixture로 추가.
+- `src/features/gongbuho/external-public-case-auto-intake.service.test.ts` — payload 변환, 사건 초안 변환, 금지 원문 키 차단, DB 없는 오케스트레이션 테스트 추가.
+
+### Guardrails
+
+- `rawSnippet`, `rawBody`, `sourceUrl`, `naverSearchResult` 등 Legal Knowledge 금지 JSON key가 들어오면 접수를 차단한다.
+- `intakeCompliance.noRawUgcStored=true`, `intakeMethod=AGGREGATE_IMPORT`, `prohibitedFieldScan=PASS`를 고정한다.
+- 외부 검색 실행 자체는 앱 런타임에 넣지 않고, 이미 정규화된 공개 사건 메타만 입력으로 받는다.
+- 사건 초안 설명에는 “실제 사건으로 사용하기 전 변호사 검토와 원문 판결·공식자료 확인 필요” 문구를 포함한다.
+
+### Verification
+
+- `npx vitest run "src/features/gongbuho/external-public-case-auto-intake.service.test.ts"` PASS — 1 file / 4 tests.
+- `ReadLints` PASS — 신규 서비스/테스트 파일 기준 linter diagnostics 없음.
+- `npm run verify:gongbuho` PARTIAL — 정적 게이트 PASS, 신규 자동 접수 테스트 PASS. 단, 기존 13개 Gongbuho suite가 Prisma generated client `#main-entry-point` 로딩 오류로 collect 단계 실패.
+- `npx prisma generate` PASS — Prisma Client v6.19.3 생성.
+- `npx tsc --noEmit` FAILED — 기존 Phase 62/63 및 external messaging 테스트 타입 오류 다수. 신규 자동 접수 파일은 오류 목록에 없음.
+
+---
+
+## [EVIDENCE-20260620-PREINTAKE-ANON-SOCIAL-PROOF]
+
+### Status
+
+COMPLETE · PRE-INTAKE PROMOTION — 사건 접수 전 일반 사용자에게 익명 접수 흐름만 노출.
+
+### One-line Standard
+
+사건 접수 이력은 내부 기록으로 남기되, 접수 전 일반 사용자 화면에는 사건명·상대방·파일명·작성내용·정확한 건수를 노출하지 않고 “최근에도 비슷한 고민을 정리하는 분들이 있다” 정도의 익명 홍보 신호만 표시한다.
+
+### Scope
+
+- `src/app/(protected)/cases/new/page.tsx` — 새 사건 등록 전 익명 접수 흐름 카드 추가.
+- `src/components/cases/case-intake-social-proof-card.tsx` — 접수 전 홍보용 카드 UI 추가.
+- `src/lib/cases/case-intake-social-proof.ts` — 최근 접수/진행 건수는 내부 판단에만 쓰고, exact count 없는 문구로 변환.
+- 이전 개인 제출 활동 카드 경로 제거 — 대시보드에 제출 메시지·파일명 기반 이력을 직접 표시하지 않음.
+
+### Guardrails
+
+- 공개 문구에는 개별 사건 식별자, 사건명, 상대방, 제출 파일명, 제출 메시지, 검토 메모, 정확한 접수 건수를 포함하지 않는다.
+- 접수 후 상세 내용은 본인과 권한 있는 담당자만 확인한다는 안내를 함께 표시한다.
+- 내부 집계는 “최근 접수 활동 있음 / 새 접수 준비 가능” 톤 결정에만 사용한다.
+
+### Verification
+
+- `npm run test -- src/lib/cases/case-intake-social-proof.test.ts` PASS — 1 file / 2 tests.
+- `ReadLints` PASS — 수정 파일 기준 신규 linter diagnostics 없음.
+- `rg client-submission-activity|ClientSubmissionActivityPreview|submissionActivityPreview src` — stale reference 없음.
+
+---
+
+## [EVIDENCE-20260620-RECENT-CONSTRUCTION-INJURY-CASE-FIXTURE]
+
+### Status
+
+COMPLETE · RECENT PUBLIC CASE TEST — 2026년 6월 인터넷 보도 산재 손해배상 사례를 AI법친 사건지능/문서지능 테스트에 추가.
+
+### One-line Standard
+
+최근 건설현장 소화배관 추락 산재 손해배상 사례는 원청·하청의 작업계획·안전교육·관리감독 책임, 개인 과실 및 소멸시효 항변, 향후 치료비·의료보조비·간병비 손해 산정을 검증하는 공개 사건 fixture로 사용한다.
+
+### Scope
+
+- Source: 한겨레, `사지마비 산재에 '남 탓' 현대엔지니어링...법원 "9억 배상하라"` (2026-06-18 보도).
+- `src/features/ai-core/case-intelligence-graph-runtime.service.test.ts` — 기사 사실관계를 인터뷰 답변 구조로 입력해 사건지능 graph/radar/ledger runtime을 검증.
+- `src/features/document-intelligence/document-analysis.engine.test.ts` — 기사형 문장을 문서 페이지 입력으로 넣어 주장 후보, 금액 사실 후보, 증거번호, 일자 후보 추출 및 최종판단 금지 필드를 검증.
+
+### Verification
+
+- `npm run test -- src/features/ai-core/case-intelligence-graph-runtime.service.test.ts src/features/document-intelligence/document-analysis.engine.test.ts` PASS — 2 files / 8 tests.
+- `ReadLints` PASS — 수정 테스트 파일 기준 신규 linter diagnostics 없음.
+
+---
+
+## [EVIDENCE-20260620-JOOHWAN-LAND-ACCESS-CASE-INPUT-TEST]
+
+### Status
+
+COMPLETE · CASE FIXTURE TEST — `E:\보관자료\주환파일` 사건 사례를 AI법친 사건지능/문서지능 테스트에 입력.
+
+### One-line Standard
+
+주환 사건은 세종 월하리 24번지/24-1번지 분할 후 통행로 제공 약정, 토지사용승낙서·인감증명서, 장기 이행거부와 측량 방해를 핵심으로 하는 토지 통행로 분쟁 fixture로 검증한다.
+
+### Scope
+
+- `src/features/ai-core/case-intelligence-graph-runtime.service.test.ts` — 사건 진행 개요를 인터뷰 답변 구조로 입력해 claim graph, contradiction radar, lawyer ledger runtime을 검증.
+- `src/features/document-intelligence/document-analysis.engine.test.ts` — 소장 견본/내용증명 핵심 문장을 문서 페이지 입력으로 넣어 주장 후보, 증거번호, 기한 후보, deadline risk signal 추출을 검증.
+- Source case files reviewed: `E:\보관자료\주환파일\사건진행개요.hwpx`, `E:\보관자료\주환파일\실행 지시서.hwpx`, `E:\보관자료\주환파일\내용증명.hwpx`, `E:\보관자료\주환파일\소장 견본.docx`, and `E:\보관자료\주환파일\joohwan_netlify_site\documents.json`.
+
+### Verification
+
+- `npm run test -- src/features/ai-core/case-intelligence-graph-runtime.service.test.ts src/features/document-intelligence/document-analysis.engine.test.ts` PASS — 2 files / 6 tests.
+- `ReadLints` PASS — 수정 테스트 파일 기준 신규 linter diagnostics 없음.
+
+---
+
+## [EVIDENCE-20260620-AIBEOPCHIN-NURION-FINANCE-ENGINE-ADAPTATION]
+
+### Status
+
+COMPLETE · OPERATIONS ENGINE ADAPTATION — `nurion-engine-v1.5-finance`를 AI법친 운영 환경용 dry-run 정산 안전장치로 적용.
+
+### One-line Standard
+
+누리온 finance 엔진은 AI법친에서 수임료·파트너 정산의 대사, 중복 지급 탐지, 승인 매트릭스, 세금계산서 감시, 월마감 증빙 초안을 수행하되 실제 송금·계좌 변경·환불 확정·세금계산서 발행·가격 변경은 수행하지 않는다.
+
+### Scope
+
+- `tools/nurion-engine/` — 원본 `nurion-engine-v1.5-finance`를 프로젝트 도구 영역에 격리 적용.
+- `tools/nurion-engine/config/nurion.config.json` — `platformId: aibeopchin` 기본 설정과 AI법친 manual probe 추가.
+- `tools/nurion-engine/platform-profiles/aibeopchin/profile.json` — 법률 SaaS 수임료·파트너 정산용 finance skill 조합, 사람 승인 게이트, KRW 오차 정책, 파트너 프로필 추가.
+- `tools/nurion-engine/platform-profiles/aibeopchin/slo-targets.json` — 배포 전 검증, 정산 경계, 변호사 검토 경계 SLO 초안 추가.
+- `scripts/verify-aibeopchin-nurion-finance.mjs` + `verify:aibeopchin-nurion-finance` — finance 단위/운영안전/시나리오 회귀/AI법친 dry-run smoke 검증 추가.
+- `package.json` — `nurion:aibeopchin`, `nurion:aibeopchin:apply`, `nurion:aibeopchin:finance:test`, `verify:aibeopchin-nurion-finance` 명령 연결.
+
+### Guardrails
+
+- 원격 자동조치는 기본 비활성화하며 `NURION_REMOTE_ACTIONS=1`과 별도 webhook 없이는 실행되지 않는다.
+- `payout-control`, `approval-matrix`, `audit-evidence`는 apply 모드에서도 사람 승인 대상이다.
+- 누리온 runtime archive, active incident, month-close 산출물은 로컬 상태로 취급하고 `.gitignore`에 추가했다.
+- AI 산출물 변호사 검토 전 의뢰인 확정 노출 금지 경계를 manual probe와 SLO 목표로 유지한다.
+
+### Verification
+
+- `npm run verify:aibeopchin-nurion-finance` PASS — finance lib 38 tests, operational safety 10 tests, finance scenario 26 records, AI법친 dry-run `G1`.
+- `ReadLints` PASS — 수정 파일 기준 신규 linter diagnostics 없음.
+
+---
+
 ## [EVIDENCE-20260618-AIBEOPCHIN-PREDEPLOY-CODE-PROTECTION]
 
 ### Status

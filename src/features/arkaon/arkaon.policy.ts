@@ -1,4 +1,4 @@
-export const ARKAON_POLICY_VERSION = "AILAWFRIEND-RC3" as const;
+export const ARKAON_POLICY_VERSION = "AILAWFRIEND-RC3-LOCKED_SAFE_L2" as const;
 
 export const ARKAON_HARD_DENY_ACTIONS = [
   "PAYMENT",

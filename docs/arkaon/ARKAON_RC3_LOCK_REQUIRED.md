@@ -1,24 +1,27 @@
 # ARKAON × AI법친 — RC3_LOCK_REQUIRED
 
-RC3는 **IMPLEMENTED** 상태이며, 아래를 **전부 PASS**한 뒤에만 `LOCKED_SAFE_L2`로 승격한다.  
-두 번째 L2 Skill은 LOCK 전·직후 모두 추가하지 않는다. 허용 Skill = **1**.
+## STATUS: `LOCKED_SAFE_L2` ✅
 
-## RC3_LOCK_REQUIRED checklist
+Locked at: 2026-07-29  
+Allowed L2 skills: **1** (`retry_failed_internal_job_after_human_approval`)  
+Second L2 Skill: **금지** · L3 autonomous: **금지**
 
-| # | Gate | How |
+## RC3_LOCK_REQUIRED checklist (final)
+
+| # | Gate | Final |
 |---|---|---|
-| 1 | Static verifier | `npm run verify:arkaon-ailawfriend-rc3` |
-| 2 | Lock-validation Vitest | `npm run verify:arkaon-ailawfriend-rc3:lock-validation` (14/14) |
-| 3 | Migration applied on staging DB | `20260728183000_...` + `20260728190000_...` + `20260728193000_...` via `prisma migrate deploy` |
-| 4 | Partial unique index confirmed | staging script checks `ArkaonExecution_proposalId_skillId_active_uidx` |
-| 5 | Real DB concurrent EXECUTE | `npm run verify:arkaon-ailawfriend-rc3:staging-concurrent` |
-| 6 | Exactly-one mutation confirmed | evidence `mutationCount === 1` |
-| 7 | Audit evidence persisted | AuditLog rows for execute/verify |
-| 8 | VERIFY result persisted | proposal/execution → `VERIFIED` |
-| 9 | HARD DENY regression | Vitest scenarios 4–6 (+ optional staging probes) |
-| 10 | approve ≠ execute regression | Vitest scenario 11 + approve route static check |
+| 1 | Static verifier | ✅ PASS |
+| 2 | Lock-validation 14/14 | ✅ PASS |
+| 3 | Staging migration 3개 | ✅ PASS |
+| 4 | Partial unique index | ✅ PASS |
+| 5 | 실DB Concurrent EXECUTE | ✅ PASS |
+| 6 | Exactly-one mutation | ✅ 1 |
+| 7 | Audit evidence persisted | ✅ `ARKAON_SKILL_EXECUTED` + `ARKAON_SKILL_VERIFIED` (`entityType: ARKAON_EXECUTION`) |
+| 8 | VERIFY persisted | ✅ VERIFIED |
+| 9 | HARD DENY regression | ✅ violation 0 |
+| 10 | approve ≠ execute | ✅ triggered execution 0 |
 
-## Staging concurrent evidence shape
+## Real-DB concurrent evidence
 
 ```json
 {
@@ -35,9 +38,9 @@ RC3는 **IMPLEMENTED** 상태이며, 아래를 **전부 PASS**한 뒤에만 `LOC
 }
 ```
 
-Output path (default): `docs/arkaon/evidence/rc3-concurrent-execute-latest.json`
+Source: `docs/arkaon/evidence/rc3-concurrent-execute-latest.json`
 
-## LOCK promotion record (fill when all PASS)
+## LOCK EVIDENCE (confirmed)
 
 ```text
 ARKAON × AI법친 RC3 LOCK EVIDENCE
@@ -53,10 +56,14 @@ Business mutations: 1
 Hard-deny violations: 0
 Approve-triggered executions: 0
 Verification failures: 0
+
+STATUS: LOCKED_SAFE_L2
 ```
 
 ## After LOCK
 
-- Status → `LOCKED_SAFE_L2`
-- Still **no second L2 skill**
-- RC4 focus: operational stability, recovery, stuck execution, lease/timeout (WITHER Outbox Lease 교훈)
+- Do **not** add a second L2 skill
+- L3 remains OFF
+- Next: **RC4 EXECUTION RELIABILITY / RECOVERY** only  
+  (stuck · lease/timeout · crash recovery · worker recovery)
+- Separate track: AI법친 신규 DB baseline/migration 정비 (ARKAON과 분리)

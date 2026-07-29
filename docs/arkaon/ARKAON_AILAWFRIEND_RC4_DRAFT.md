@@ -1,8 +1,9 @@
-# ARKAON × AI법친 RC4 — EXECUTION RELIABILITY / RECOVERY (draft)
+# ARKAON × AI법친 RC4 — EXECUTION RELIABILITY / RECOVERY
 
-RC4 starts **only after** RC3 = `LOCKED_SAFE_L2`.  
-No second L2 Skill in RC4. Prove reliability of  
-`retry_failed_internal_job_after_human_approval` alone.
+Prerequisite: RC3 = `LOCKED_SAFE_L2` ✅ (2026-07-29)
+
+RC4 does **not** add features or a second L2 Skill.  
+Prove reliability of `retry_failed_internal_job_after_human_approval` only.
 
 ## Goal
 Detect stuck executions and propose recovery — **never auto-recover**.
@@ -34,13 +35,17 @@ PROCESSING
 | new L2 skill | **No** |
 | L3 autonomy | **No** |
 
-## Concepts to design (WITHER Outbox Lease lesson)
+## Concepts (WITHER Outbox Lease lesson)
 
 - lease / heartbeat on PROCESSING
 - timeout → STUCK
 - recovery proposal ledger (AuditLog + ArkaonExecution metadata)
 - approve recovery ≠ auto re-execute without separate EXECUTE REQUEST
 
+## Separate track (not ARKAON RC4)
+
+AI법친 신규 DB baseline / failed-migration hygiene — fix outside ARKAON scope.
+
 ## Status
 
-DRAFT — waiting RC3 LOCKED_SAFE_L2.
+READY TO START (RC3 LOCKED).

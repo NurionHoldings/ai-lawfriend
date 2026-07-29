@@ -31,6 +31,7 @@ for (const file of required) {
 const policy = fs.readFileSync("src/features/arkaon/arkaon.policy.ts", "utf8");
 for (const marker of [
   "AILAWFRIEND-RC3",
+  "LOCKED_SAFE_L2",
   "L1_ADVICE",
   "L2_HUMAN_APPROVED_EXECUTION",
   "L3_AUTONOMOUS_EXECUTION",
@@ -121,4 +122,4 @@ if (!migration.includes("ArkaonExecution_proposalId_skillId_active_uidx")) {
 }
 
 console.log("ARKAON × AI법친 RC3 STATIC VERIFY PASS");
-console.log("RC3 STATUS: IMPLEMENTED / LOCK 직전 — staging: npm run verify:arkaon-ailawfriend-rc3:lock-gate");
+console.log("RC3 STATUS: LOCKED_SAFE_L2");
