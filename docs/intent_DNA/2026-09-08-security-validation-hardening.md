@@ -19,6 +19,7 @@ Date: 2026-09-08
 - Keep proxy IP behavior unchanged because deployment proxy trust was not established.
 - Alias `server-only` only in Vitest; Next production behavior is unchanged.
 - Add PostgreSQL services plus health checks to both CI jobs. No migration or external database call was added.
+- Realign the Phase 15F static verifier with the canonical Phase 20 external-message adapter where attachment metadata is now enforced.
 - Repair stale test fixtures through builder-boundary Zod normalization and accurate fixture values; required review/source fields remain schema validated.
 
 ## Verification
