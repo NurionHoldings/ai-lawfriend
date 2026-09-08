@@ -2,7 +2,7 @@ import type { CaseSummaryValidatedContent } from "./case-summary-output-validato
 
 export type CaseSummaryGroundingEntry = {
   claim: string;
-  sourceRefs: string[];
+  sources: Array<{ ref: string; quote: string }>;
 };
 
 function normalize(value: string): string {
@@ -23,23 +23,31 @@ function contentClaims(content: CaseSummaryValidatedContent): string[] {
 export function validateCaseSummaryGrounding(input: {
   content: CaseSummaryValidatedContent;
   grounding: CaseSummaryGroundingEntry[];
-  allowedSourceRefs: string[];
+  sourceTextByRef: Record<string, string>;
 }): { passed: boolean; issues: string[] } {
   const issues: string[] = [];
-  const allowed = new Set(input.allowedSourceRefs);
   const groundingByClaim = new Map(
-    input.grounding.map((entry) => [normalize(entry.claim), entry.sourceRefs]),
+    input.grounding.map((entry) => [normalize(entry.claim), entry.sources]),
   );
 
   for (const claim of contentClaims(input.content)) {
-    const refs = groundingByClaim.get(claim);
-    if (!refs?.length) {
+    const sources = groundingByClaim.get(claim);
+    if (!sources?.length) {
       issues.push(`ungrounded case summary claim: ${claim.slice(0, 120)}`);
       continue;
     }
-    const invalidRefs = refs.filter((ref) => !allowed.has(ref));
+    const invalidRefs = sources
+      .filter((source) => !(source.ref in input.sourceTextByRef))
+      .map((source) => source.ref);
     if (invalidRefs.length) {
       issues.push(`unknown case summary source refs: ${invalidRefs.join(", ")}`);
+    }
+    for (const source of sources) {
+      const sourceText = input.sourceTextByRef[source.ref];
+      const quote = normalize(source.quote);
+      if (sourceText !== undefined && (!quote || !normalize(sourceText).includes(quote))) {
+        issues.push(`case summary source quote not found: ${source.ref}`);
+      }
     }
   }
 
