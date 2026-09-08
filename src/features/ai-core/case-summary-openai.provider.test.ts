@@ -22,7 +22,7 @@ describe("case-summary-openai.provider grounding and usage", () => {
         riskNotes: [],
         checklist: [],
         grounding: [
-          { claim: "임금 미지급을 주장합니다.", sourceRefs: ["answer:background"] },
+          { claim: "임금 미지급을 주장합니다.", sources: [{ ref: "answer:background", quote: "임금 미지급" }] },
         ],
       }),
       usage: { total_tokens: 321 },
@@ -34,7 +34,7 @@ describe("case-summary-openai.provider grounding and usage", () => {
     });
 
     expect(result.tokensUsed).toBe(321);
-    expect(result.grounding[0]?.sourceRefs).toEqual(["answer:background"]);
+    expect(result.grounding[0]?.sources[0]?.ref).toBe("answer:background");
     expect(result.content).not.toHaveProperty("grounding");
   });
 
