@@ -347,6 +347,7 @@ describe("Phase 62-B Evidence Gap Detection Engine", () => {
       memoryPacket: buildMemoryPacket(),
       realTimeSignals: [unapprovedSignal],
       auditRef: "audit-reasoning-1",
+      now: new Date("2026-05-26T12:00:00.000Z"),
     });
 
     const report = buildEvidenceGapDetectionReport({

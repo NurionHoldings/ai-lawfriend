@@ -13,6 +13,7 @@ import type {
   BuildBackfireRiskReportInput,
 } from "./phase63c-risk-backfire-check.schema";
 import {
+  buildBackfireRiskReportInputSchema,
   PHASE63C_RISK_BACKFIRE_CHECK_SCHEMA_MARKER,
   PHASE63C_RISK_BACKFIRE_CHECK_VERSION,
   backfireRiskReportBoundariesSchema,
@@ -199,7 +200,11 @@ export function assertMinimumBackfireRecommendation(input: {
   }
 }
 
-export function buildBackfireRiskReport(input: BuildBackfireRiskReportInput): BackfireRiskReport {
+export function buildBackfireRiskReport(rawInput: BuildBackfireRiskReportInput): BackfireRiskReport {
+  if (!rawInput.auditRef.trim()) {
+    throw new ValidationError("BACKFIRE_RISK_REPORT_AUDIT_REQUIRED");
+  }
+  const input = buildBackfireRiskReportInputSchema.parse(rawInput);
   if (!input.auditRef.trim()) {
     throw new ValidationError("BACKFIRE_RISK_REPORT_AUDIT_REQUIRED");
   }

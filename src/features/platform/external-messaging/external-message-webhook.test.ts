@@ -131,8 +131,9 @@ describe("external message webhook (Phase 20-D)", () => {
       providerEventId: "evt-2",
       redeliveryEligible: false,
     });
-    expect(merged.metadataOnly).toBe(true);
-    expect(merged.processedWebhookEventIds).toContain("evt-2");
+    const typedMerged = merged as Record<string, unknown>;
+    expect(typedMerged.metadataOnly).toBe(true);
+    expect(typedMerged.processedWebhookEventIds).toContain("evt-2");
     expect(JSON.stringify(merged)).not.toContain("@");
   });
 

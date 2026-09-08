@@ -102,7 +102,7 @@ export const buildBackfireRiskReportInputSchema = z.object({
   auditRef: z.string().min(1),
 });
 
-export type BuildBackfireRiskReportInput = z.infer<typeof buildBackfireRiskReportInputSchema>;
+export type BuildBackfireRiskReportInput = z.input<typeof buildBackfireRiskReportInputSchema>;
 
 export const runBackfireRiskCheckInputSchema = z.object({
   reportId: z.string().min(1),

@@ -8,6 +8,9 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // Next's runtime-only sentinel intentionally throws outside Next. Keep the
+      // server modules testable while production bundling still enforces it.
+      "server-only": path.resolve(__dirname, "./test/mocks/server-only.ts"),
     },
   },
   test: {

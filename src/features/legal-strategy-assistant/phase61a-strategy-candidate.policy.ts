@@ -11,6 +11,7 @@ import type {
   StrategyCandidateSourceTrace,
 } from "./phase61a-strategy-candidate.schema";
 import {
+  buildStrategyCandidateInputSchema,
   PHASE61A_STRATEGY_CANDIDATE_SCHEMA_MARKER,
   PHASE61A_STRATEGY_CANDIDATE_VERSION,
   strategyCandidateBoundariesSchema,
@@ -144,7 +145,8 @@ export function canUseStrategyCandidateForOperationalAction(input: {
   return { allowed: false, blockedBy: "LAWYER_REVIEW_REQUIRED_FOR_STRATEGY_USE" as const };
 }
 
-export function buildStrategyCandidate(input: BuildStrategyCandidateInput): StrategyCandidate {
+export function buildStrategyCandidate(rawInput: BuildStrategyCandidateInput): StrategyCandidate {
+  const input = buildStrategyCandidateInputSchema.parse(rawInput);
   if (!input.auditRef.trim()) {
     throw new ValidationError("STRATEGY_CANDIDATE_AUDIT_REQUIRED");
   }

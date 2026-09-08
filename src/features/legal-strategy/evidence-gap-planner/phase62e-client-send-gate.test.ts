@@ -159,7 +159,7 @@ describe("Phase 62-E Client-visible Send Gate & Litigation Ops Draft Link", () =
     const unapprovedSync = {
       ...sync,
       reviewStatus: "LAWYER_REVIEW_REQUIRED",
-    } as ClientPortalSupplementDraftSync;
+    } as unknown as ClientPortalSupplementDraftSync;
 
     expect(() =>
       approvePortalDraftForClientVisibility({

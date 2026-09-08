@@ -184,7 +184,7 @@ export const adoptDraftParagraphInputSchema = z.object({
   ledgerEntryId: z.string().min(1).optional(),
 });
 
-export type AdoptDraftParagraphInput = z.infer<typeof adoptDraftParagraphInputSchema>;
+export type AdoptDraftParagraphInput = z.input<typeof adoptDraftParagraphInputSchema>;
 
 export const modifyDraftParagraphInputSchema = z.object({
   draftParagraph: counterArgumentDraftParagraphSchema,
@@ -197,7 +197,7 @@ export const modifyDraftParagraphInputSchema = z.object({
   ledgerEntryId: z.string().min(1).optional(),
 });
 
-export type ModifyDraftParagraphInput = z.infer<typeof modifyDraftParagraphInputSchema>;
+export type ModifyDraftParagraphInput = z.input<typeof modifyDraftParagraphInputSchema>;
 
 export const rejectDraftParagraphInputSchema = z.object({
   draftParagraph: counterArgumentDraftParagraphSchema,
@@ -209,4 +209,4 @@ export const rejectDraftParagraphInputSchema = z.object({
   ledgerEntryId: z.string().min(1).optional(),
 });
 
-export type RejectDraftParagraphInput = z.infer<typeof rejectDraftParagraphInputSchema>;
+export type RejectDraftParagraphInput = z.input<typeof rejectDraftParagraphInputSchema>;

@@ -1,4 +1,3 @@
-import crypto from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import {
   generateWageClaimChecklistText,
@@ -7,6 +6,10 @@ import {
 } from "@/features/wage-claim/wage-claim-report-generator";
 import { CreateWageClaimReportSchema } from "@/features/wage-claim/wage-claim.schema";
 import { prisma } from "@/lib/prisma";
+import {
+  createPublicReportUploadToken,
+  hashPublicReportUploadToken,
+} from "@/lib/security/public-report-upload-token";
 
 export const runtime = "nodejs";
 
@@ -78,7 +81,7 @@ export async function POST(req: NextRequest) {
     const generatedStatement = generateWageClaimStatementText(input);
     const generatedTable = generateWageClaimTableText(input);
     const generatedChecklist = generateWageClaimChecklistText(input);
-    const uploadToken = crypto.randomBytes(24).toString("hex");
+    const uploadToken = createPublicReportUploadToken();
 
     const created = await prisma.wageClaimReport.create({
       data: {
@@ -126,11 +129,10 @@ export async function POST(req: NextRequest) {
 
         consentPrivacy: input.consentPrivacy,
         consentNoLegalAdvice: input.consentNoLegalAdvice,
-        uploadToken,
+        uploadToken: hashPublicReportUploadToken(uploadToken),
       },
       select: {
         id: true,
-        uploadToken: true,
         generatedStatement: true,
         generatedTable: true,
         generatedChecklist: true,
@@ -141,7 +143,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       ok: true,
       id: created.id,
-      uploadToken: created.uploadToken,
+      uploadToken,
       generatedStatement: created.generatedStatement,
       generatedTable: created.generatedTable,
       generatedChecklist: created.generatedChecklist,

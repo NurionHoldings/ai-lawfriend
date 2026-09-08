@@ -20,7 +20,7 @@ export type KakaoAlimtalkConfig = {
 };
 
 export function resolveKakaoProvider(
-  env: NodeJS.ProcessEnv = process.env,
+  env: Record<string, string | undefined> = process.env,
 ): ResolvedKakaoProvider {
   const raw = (env[KAKAO_PROVIDER_ENV_KEY] ?? "DRY_RUN").trim().toUpperCase();
   if (raw === "ALIMTALK" || raw === "DRY_RUN") {
@@ -37,7 +37,7 @@ export function kakaoProviderForResolved(
 }
 
 export function readKakaoAlimtalkConfig(
-  env: NodeJS.ProcessEnv = process.env,
+  env: Record<string, string | undefined> = process.env,
 ): KakaoAlimtalkConfig | null {
   const apiUrl = env.KAKAO_ALIMTALK_API_URL?.trim();
   const apiKey = env.KAKAO_ALIMTALK_API_KEY?.trim();

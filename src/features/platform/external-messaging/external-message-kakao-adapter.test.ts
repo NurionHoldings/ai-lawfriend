@@ -197,14 +197,15 @@ describe("external message kakao adapter (Phase 20-C)", () => {
 
     expect(createExternalMessageLogRow).toHaveBeenCalledOnce();
     const call = vi.mocked(createExternalMessageLogRow).mock.calls[0][0];
+    const payloadSummary = call.payloadSummaryJson as Record<string, unknown>;
     expect(call.status).toBe("SENT");
     expect(call.channel).toBe("KAKAO_ALIMTALK");
     expect(call.provider).toBe("KAKAO_ALIMTALK");
-    expect(call.payloadSummaryJson.metadataOnly).toBe(true);
+    expect(payloadSummary.metadataOnly).toBe(true);
 
     for (const key of EXTERNAL_MESSAGE_REDELIVERY_SAFE_PAYLOAD_KEYS) {
-      if (key in call.payloadSummaryJson) {
-        expect(call.payloadSummaryJson[key]).toBeDefined();
+      if (key in payloadSummary) {
+        expect(payloadSummary[key]).toBeDefined();
       }
     }
   });

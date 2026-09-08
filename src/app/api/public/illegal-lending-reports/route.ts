@@ -1,8 +1,11 @@
-import crypto from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { CreateIllegalLendingReportSchema } from "@/features/illegal-lending/illegal-lending.schema";
 import { generateIllegalLendingReportText } from "@/features/illegal-lending/illegal-lending-report-generator";
+import {
+  createPublicReportUploadToken,
+  hashPublicReportUploadToken,
+} from "@/lib/security/public-report-upload-token";
 
 export const runtime = "nodejs";
 
@@ -67,7 +70,7 @@ export async function POST(req: NextRequest) {
     }
 
     const generatedReport = generateIllegalLendingReportText(input);
-    const uploadToken = crypto.randomBytes(24).toString("hex");
+    const uploadToken = createPublicReportUploadToken();
 
     const created = await prisma.illegalLendingReport.create({
       data: {
@@ -75,7 +78,7 @@ export async function POST(req: NextRequest) {
         reporterName: input.reporterName,
         reporterPhone: input.reporterPhone,
         reporterEmail: input.reporterEmail || null,
-        uploadToken,
+        uploadToken: hashPublicReportUploadToken(uploadToken),
 
         victimName: input.victimName || null,
         victimPhone: input.victimPhone || null,
@@ -106,7 +109,6 @@ export async function POST(req: NextRequest) {
       },
       select: {
         id: true,
-        uploadToken: true,
         generatedReport: true,
         createdAt: true,
       },
@@ -115,7 +117,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       ok: true,
       id: created.id,
-      uploadToken: created.uploadToken,
+      // The raw token is returned once for the immediate attachment step; only its digest is stored.
+      uploadToken,
       generatedReport: created.generatedReport,
       createdAt: created.createdAt,
     });

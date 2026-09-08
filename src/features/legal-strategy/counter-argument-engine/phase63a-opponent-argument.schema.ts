@@ -178,7 +178,7 @@ export const buildOpponentArgumentInputSchema = z.object({
   auditRef: z.string().min(1),
 });
 
-export type BuildOpponentArgumentInput = z.infer<typeof buildOpponentArgumentInputSchema>;
+export type BuildOpponentArgumentInput = z.input<typeof buildOpponentArgumentInputSchema>;
 
 export const buildOpponentArgumentFromMemoryClaimInputSchema = z.object({
   opponentArgumentId: z.string().min(1),
@@ -197,6 +197,6 @@ export const buildOpponentArgumentFromMemoryClaimInputSchema = z.object({
   auditRef: z.string().min(1),
 });
 
-export type BuildOpponentArgumentFromMemoryClaimInput = z.infer<
+export type BuildOpponentArgumentFromMemoryClaimInput = z.input<
   typeof buildOpponentArgumentFromMemoryClaimInputSchema
 >;

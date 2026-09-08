@@ -29,7 +29,7 @@ export type SendGridEmailConfig = {
 };
 
 export function resolveEmailProvider(
-  env: NodeJS.ProcessEnv = process.env,
+  env: Record<string, string | undefined> = process.env,
 ): ResolvedEmailProvider {
   const raw = (env[EMAIL_PROVIDER_ENV_KEY] ?? "DRY_RUN").trim().toUpperCase();
   if (raw === "SMTP" || raw === "SENDGRID" || raw === "DRY_RUN") {
@@ -47,7 +47,7 @@ export function emailProviderForResolved(
 }
 
 export function readSmtpEmailConfig(
-  env: NodeJS.ProcessEnv = process.env,
+  env: Record<string, string | undefined> = process.env,
 ): SmtpEmailConfig | null {
   const host = env.SMTP_HOST?.trim();
   const fromAddress = env.SMTP_FROM_ADDRESS?.trim();
@@ -73,7 +73,7 @@ export function readSmtpEmailConfig(
 }
 
 export function readSendGridEmailConfig(
-  env: NodeJS.ProcessEnv = process.env,
+  env: Record<string, string | undefined> = process.env,
 ): SendGridEmailConfig | null {
   const apiKey = env.SENDGRID_API_KEY?.trim();
   const fromAddress = env.SENDGRID_FROM_ADDRESS?.trim();

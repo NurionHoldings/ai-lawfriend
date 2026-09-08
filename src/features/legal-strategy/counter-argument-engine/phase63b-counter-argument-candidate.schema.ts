@@ -175,7 +175,7 @@ export const buildCounterArgumentCandidateInputSchema = z.object({
   auditRef: z.string().min(1),
 });
 
-export type BuildCounterArgumentCandidateInput = z.infer<
+export type BuildCounterArgumentCandidateInput = z.input<
   typeof buildCounterArgumentCandidateInputSchema
 >;
 
@@ -188,6 +188,6 @@ export const buildCounterArgumentCandidateFromOpponentArgumentInputSchema = z.ob
   auditRef: z.string().min(1),
 });
 
-export type BuildCounterArgumentCandidateFromOpponentArgumentInput = z.infer<
+export type BuildCounterArgumentCandidateFromOpponentArgumentInput = z.input<
   typeof buildCounterArgumentCandidateFromOpponentArgumentInputSchema
 >;

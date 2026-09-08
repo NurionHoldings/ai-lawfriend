@@ -1,4 +1,3 @@
-import crypto from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import {
   generateJeonseDamageChecklistText,
@@ -6,6 +5,10 @@ import {
 } from "@/features/jeonse-damage/jeonse-damage-report-generator";
 import { CreateJeonseDamageReportSchema } from "@/features/jeonse-damage/jeonse-damage.schema";
 import { prisma } from "@/lib/prisma";
+import {
+  createPublicReportUploadToken,
+  hashPublicReportUploadToken,
+} from "@/lib/security/public-report-upload-token";
 
 export const runtime = "nodejs";
 
@@ -74,7 +77,7 @@ export async function POST(req: NextRequest) {
 
     const generatedSummary = generateJeonseDamageSummaryText(input);
     const generatedChecklist = generateJeonseDamageChecklistText(input);
-    const uploadToken = crypto.randomBytes(24).toString("hex");
+    const uploadToken = createPublicReportUploadToken();
 
     const created = await prisma.jeonseDamageReport.create({
       data: {
@@ -117,11 +120,10 @@ export async function POST(req: NextRequest) {
         generatedChecklist,
         consentPrivacy: input.consentPrivacy,
         consentNoLegalAdvice: input.consentNoLegalAdvice,
-        uploadToken,
+        uploadToken: hashPublicReportUploadToken(uploadToken),
       },
       select: {
         id: true,
-        uploadToken: true,
         generatedSummary: true,
         generatedChecklist: true,
         createdAt: true,
@@ -131,7 +133,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       ok: true,
       id: created.id,
-      uploadToken: created.uploadToken,
+      uploadToken,
       generatedSummary: created.generatedSummary,
       generatedChecklist: created.generatedChecklist,
       createdAt: created.createdAt,

@@ -125,4 +125,5 @@ export const buildStrategyCandidateInputSchema = z.object({
   auditRef: z.string().min(1),
 });
 
-export type BuildStrategyCandidateInput = z.infer<typeof buildStrategyCandidateInputSchema>;
+// Builder callers provide the schema input; defaults are applied at the boundary.
+export type BuildStrategyCandidateInput = z.input<typeof buildStrategyCandidateInputSchema>;

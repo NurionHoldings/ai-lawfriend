@@ -174,6 +174,6 @@ export const buildEvidenceGapCandidateInputSchema = z.object({
   auditRef: z.string().min(1),
 });
 
-export type BuildEvidenceGapCandidateInput = z.infer<
+export type BuildEvidenceGapCandidateInput = z.input<
   typeof buildEvidenceGapCandidateInputSchema
 >;

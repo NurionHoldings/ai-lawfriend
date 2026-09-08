@@ -184,14 +184,15 @@ describe("external message email adapter (Phase 20-B)", () => {
 
     expect(createExternalMessageLogRow).toHaveBeenCalledOnce();
     const call = vi.mocked(createExternalMessageLogRow).mock.calls[0][0];
+    const payloadSummary = call.payloadSummaryJson as Record<string, unknown>;
     expect(call.status).toBe("SENT");
     expect(call.provider).toBe("SMTP");
-    expect(call.payloadSummaryJson.metadataOnly).toBe(true);
-    expect(call.payloadSummaryJson.containsFileAttachment).toBe(false);
+    expect(payloadSummary.metadataOnly).toBe(true);
+    expect(payloadSummary.containsFileAttachment).toBe(false);
 
     for (const key of EXTERNAL_MESSAGE_REDELIVERY_SAFE_PAYLOAD_KEYS) {
-      if (key in call.payloadSummaryJson) {
-        expect(call.payloadSummaryJson[key]).toBeDefined();
+      if (key in payloadSummary) {
+        expect(payloadSummary[key]).toBeDefined();
       }
     }
   });

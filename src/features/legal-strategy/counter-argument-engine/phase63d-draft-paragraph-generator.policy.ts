@@ -15,6 +15,7 @@ import type {
   DraftParagraphRiskLevelAtGeneration,
 } from "./phase63d-draft-paragraph-generator.schema";
 import {
+  buildCounterArgumentDraftParagraphInputSchema,
   PHASE63D_DRAFT_PARAGRAPH_GENERATOR_SCHEMA_MARKER,
   PHASE63D_DRAFT_PARAGRAPH_GENERATOR_VERSION,
   counterArgumentDraftParagraphSchema,
@@ -185,8 +186,15 @@ function toRiskLevelAtGeneration(
 }
 
 export function buildCounterArgumentDraftParagraph(
-  input: BuildCounterArgumentDraftParagraphInput,
+  rawInput: BuildCounterArgumentDraftParagraphInput,
 ): CounterArgumentDraftParagraph {
+  if (!rawInput.auditRef.trim()) {
+    throw new ValidationError("NO_PARAGRAPH_WITHOUT_AUDIT_REF");
+  }
+  if (!rawInput.sourceTrace.length) {
+    throw new ValidationError("NO_PARAGRAPH_WITHOUT_SOURCE_TRACE");
+  }
+  const input = buildCounterArgumentDraftParagraphInputSchema.parse(rawInput);
   if (!input.auditRef.trim()) {
     throw new ValidationError("NO_PARAGRAPH_WITHOUT_AUDIT_REF");
   }

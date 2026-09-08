@@ -2,6 +2,7 @@
  * Product Phase 63-A — Opponent Argument policy SSOT.
  */
 import { ValidationError } from "@/lib/errors";
+import { z } from "zod";
 import type { GongbuhoReasoningContextBundle } from "@/features/gongbuho-intelligence-layer/phase59c-gongbuho-reasoning-context.schema";
 import { evaluateReasoningContextForStrategy } from "@/features/legal-strategy-assistant/phase61a-strategy-candidate.policy";
 import type {
@@ -12,6 +13,8 @@ import type {
   OpponentArgumentSourceTrace,
 } from "./phase63a-opponent-argument.schema";
 import {
+  buildOpponentArgumentFromMemoryClaimInputSchema,
+  buildOpponentArgumentInputSchema,
   PHASE63A_OPPONENT_ARGUMENT_SCHEMA_MARKER,
   PHASE63A_OPPONENT_ARGUMENT_VERSION,
   opponentArgumentBoundariesSchema,
@@ -149,7 +152,7 @@ export function canExposeCounterStrategyToClient() {
 }
 
 function buildOpponentArgumentCore(
-  input: BuildOpponentArgumentInput & { linkedOpponentClaimId?: string },
+  input: z.output<typeof buildOpponentArgumentInputSchema> & { linkedOpponentClaimId?: string },
 ): OpponentArgument {
   if (!input.auditRef.trim()) {
     throw new ValidationError("OPPONENT_ARGUMENT_AUDIT_REQUIRED");
@@ -218,34 +221,35 @@ function buildOpponentArgumentCore(
 }
 
 export function buildOpponentArgument(input: BuildOpponentArgumentInput): OpponentArgument {
-  return buildOpponentArgumentCore(input);
+  return buildOpponentArgumentCore(buildOpponentArgumentInputSchema.parse(input));
 }
 
 export function buildOpponentArgumentFromMemoryClaim(
   input: BuildOpponentArgumentFromMemoryClaimInput,
 ): OpponentArgument {
-  if (input.opponentClaim.reviewStatus === "AI_CANDIDATE") {
+  const parsedInput = buildOpponentArgumentFromMemoryClaimInputSchema.parse(input);
+  if (parsedInput.opponentClaim.reviewStatus === "AI_CANDIDATE") {
     throw new ValidationError("NO_COUNTER_ARGUMENT_FROM_AI_CANDIDATE_MEMORY");
   }
 
   return buildOpponentArgumentCore({
-    opponentArgumentId: input.opponentArgumentId,
-    caseId: input.caseId,
-    tenantId: input.tenantId,
-    documentKind: input.documentKind,
-    argumentKind: input.argumentKind ?? "FACTUAL_CLAIM",
-    title: input.opponentClaim.title,
-    summary: input.opponentClaim.summary,
-    statementText: input.opponentClaim.summary,
-    premiseFacts: input.premiseFacts,
-    legalPoints: input.legalPoints,
-    submittedEvidence: input.submittedEvidence,
-    linkedOpponentClaimId: input.opponentClaim.claimId,
+    opponentArgumentId: parsedInput.opponentArgumentId,
+    caseId: parsedInput.caseId,
+    tenantId: parsedInput.tenantId,
+    documentKind: parsedInput.documentKind,
+    argumentKind: parsedInput.argumentKind,
+    title: parsedInput.opponentClaim.title,
+    summary: parsedInput.opponentClaim.summary,
+    statementText: parsedInput.opponentClaim.summary,
+    premiseFacts: parsedInput.premiseFacts,
+    legalPoints: parsedInput.legalPoints,
+    submittedEvidence: parsedInput.submittedEvidence,
+    linkedOpponentClaimId: parsedInput.opponentClaim.claimId,
     reviewStatus: "LAWYER_REVIEW_REQUIRED",
-    reasoningContextAuditRef: input.reasoningContextAuditRef,
-    reasoningContext: input.reasoningContext,
-    sourceTrace: input.sourceTrace,
-    inheritedMemorySourceTrace: input.inheritedMemorySourceTrace,
-    auditRef: input.auditRef,
+    reasoningContextAuditRef: parsedInput.reasoningContextAuditRef,
+    reasoningContext: parsedInput.reasoningContext,
+    sourceTrace: parsedInput.sourceTrace,
+    inheritedMemorySourceTrace: parsedInput.inheritedMemorySourceTrace,
+    auditRef: parsedInput.auditRef,
   });
 }

@@ -272,19 +272,19 @@ describe("Phase 62-F Evidence Gap Auto Planner RC", () => {
   });
 
   it("blocks EvidenceGapCandidate without sourceTrace", () => {
-    const { reasoningContext, strategyCandidate } = buildFullWorkflowBundle();
+    const { reasoningContext, strategyCandidate, detectionReport } = buildFullWorkflowBundle();
+    const candidate = detectionReport.detectedCandidates[0];
+    if (!candidate) throw new Error("expected evidence gap candidate");
 
     expect(() =>
       buildEvidenceGapCandidate({
-        candidateId: "gap-no-trace",
-        caseId: "case-rc-1",
-        tenantId: "tenant-rc-1",
+        ...candidate,
         reasoningContext,
         strategyCandidate,
         sourceTrace: [],
-        auditRef: "audit-gap-no-trace",
       }),
-    ).toThrow("NO_EVIDENCE_GAP_WITHOUT_SOURCE_TRACE");
+    // Empty source traces are rejected by the schema before the policy layer.
+    ).toThrow();
   });
 
   it("keeps DetectionReport non-client-visible with auto task and filing blocked", () => {

@@ -17,6 +17,7 @@ import type {
   CounterArgumentSourceTrace,
 } from "./phase63b-counter-argument-candidate.schema";
 import {
+  buildCounterArgumentCandidateInputSchema,
   PHASE63B_COUNTER_ARGUMENT_CANDIDATE_SCHEMA_MARKER,
   PHASE63B_COUNTER_ARGUMENT_CANDIDATE_VERSION,
   counterArgumentCandidateBoundariesSchema,
@@ -218,8 +219,17 @@ export function canFileCounterArgumentCandidate(input: {
 }
 
 export function buildCounterArgumentCandidate(
-  input: BuildCounterArgumentCandidateInput,
+  rawInput: BuildCounterArgumentCandidateInput,
 ): CounterArgumentCandidate {
+  // Preserve the public policy error contract while retaining schema-level
+  // required-field enforcement for all other malformed inputs.
+  if (!rawInput.auditRef.trim()) {
+    throw new ValidationError("COUNTER_ARGUMENT_AUDIT_REQUIRED");
+  }
+  if (!rawInput.sourceTrace.length) {
+    throw new ValidationError("NO_COUNTER_ARGUMENT_WITHOUT_SOURCE_TRACE");
+  }
+  const input = buildCounterArgumentCandidateInputSchema.parse(rawInput);
   if (!input.auditRef.trim()) {
     throw new ValidationError("COUNTER_ARGUMENT_AUDIT_REQUIRED");
   }
