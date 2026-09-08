@@ -136,9 +136,15 @@ export function runClientCollaborationPortalFullRcBlock(
   ]);
 
   assertIncludes("src/features/secure-document-delivery/secure-document-delivery.service.ts", [
-    "containsFileAttachment: false",
-    "ExternalMessageLog",
     "documentShareNoticeEnabled",
+  ]);
+
+  assertIncludes("src/features/platform/external-messaging/external-message-adapter.service.ts", [
+    "containsFileAttachment: false",
+  ]);
+
+  assertIncludes("src/features/platform/external-messaging/external-message-log.service.ts", [
+    "ExternalMessageLog",
   ]);
 
   assertIncludes("src/components/client-portal/client-portal-client.tsx", [
