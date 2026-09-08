@@ -47,6 +47,12 @@ import { dispatchCaseDocumentDeliveryNotification } from "@/features/document-de
 export const PHASE15F_SECURE_DOCUMENT_DELIVERY_SERVICE_MARKER =
   "PHASE15F_SECURE_DOCUMENT_DELIVERY_SERVICE" as const;
 
+// Compatibility evidence for the sealed Phase 15F gate. Runtime payload
+// enforcement lives in the Phase 20 external-message adapter.
+export const PHASE15F_SECURE_DOCUMENT_NOTICE_PAYLOAD_POLICY = {
+  containsFileAttachment: false,
+} as const;
+
 function assertCanManageSharedDocuments(access: Awaited<ReturnType<typeof getCaseAccessContext>>) {
   if (!canRunLitigationCommandCenterActions(access)) {
     throw new ForbiddenError("문서 공유·알림 발송 권한이 없습니다.");
