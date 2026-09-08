@@ -158,7 +158,7 @@ async function maybeInvokeLlm(
   prompt: string,
   ruleBased: CaseSummaryValidatedContent,
   auditContext: { caseId: string; actorUserId: string },
-  allowedSourceRefs: string[],
+  sourceTextByRef: Record<string, string>,
 ): Promise<{
   model: string | null;
   content: CaseSummaryValidatedContent;
@@ -176,7 +176,7 @@ async function maybeInvokeLlm(
     const grounding = validateCaseSummaryGrounding({
       content: aiResult.content,
       grounding: aiResult.grounding,
-      allowedSourceRefs,
+      sourceTextByRef,
     });
     if (!grounding.passed) {
       markAiProviderCallSuccess("openai");
@@ -243,7 +243,7 @@ export async function invokeCaseSummaryGenerate(
     answers: data.answers,
   });
 
-  const { prompt, ruleBasedContent, allowedSourceRefs } = buildCaseSummaryGenerationContext({
+  const { prompt, ruleBasedContent, sourceTextByRef } = buildCaseSummaryGenerationContext({
     case: data.case,
     interviewCompleted: data.interviewCompleted,
     answers: data.answers,
@@ -326,7 +326,7 @@ export async function invokeCaseSummaryGenerate(
   const llmResult = await maybeInvokeLlm(mode, prompt, ruleValidation.content, {
     caseId: input.caseId,
     actorUserId: input.currentUser.id,
-  }, allowedSourceRefs);
+  }, sourceTextByRef);
   const finalValidation = validateCaseSummaryContent(llmResult.content);
   const groundingPassed = !llmResult.groundingIssues?.length;
   const outputPassed = finalValidation.passed && groundingPassed;
