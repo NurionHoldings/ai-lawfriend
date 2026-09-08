@@ -9,6 +9,7 @@ import {
 import type { CaseSummaryAiMode } from "./case-summary-ai-core-policy";
 import { getCaseSummaryModel, getOpenAIClient } from "./ai-provider-ssot";
 import type { CaseSummaryValidatedContent } from "./case-summary-output-validator";
+import type { CaseSummaryGroundingEntry } from "./case-summary-grounding-validator";
 
 export const CASE_SUMMARY_OPENAI_PROVIDER_MARKER =
   "PHASE9B_CASE_SUMMARY_OPENAI_PROVIDER" as const;
@@ -27,6 +28,10 @@ const llmSummarySchema = z.object({
       }),
     )
     .optional(),
+  grounding: z.array(z.object({
+    claim: z.string().min(1),
+    sourceRefs: z.array(z.string().min(1)).min(1),
+  })),
 });
 
 function extractJsonObject(raw: string): unknown {
@@ -44,7 +49,12 @@ function extractJsonObject(raw: string): unknown {
 export async function invokeOpenAiCaseSummaryGenerate(params: {
   prompt: string;
   mode: Extract<CaseSummaryAiMode, "AI_ENRICH" | "AI_REGENERATE">;
-}): Promise<{ model: string; content: CaseSummaryValidatedContent }> {
+}): Promise<{
+  model: string;
+  content: CaseSummaryValidatedContent;
+  grounding: CaseSummaryGroundingEntry[];
+  tokensUsed: number;
+}> {
   const client = getOpenAIClient();
   const model = getCaseSummaryModel();
 
@@ -60,5 +70,11 @@ export async function invokeOpenAiCaseSummaryGenerate(params: {
   }
 
   const parsed = llmSummarySchema.parse(extractJsonObject(text));
-  return { model, content: parsed };
+  const { grounding, ...content } = parsed;
+  return {
+    model,
+    content,
+    grounding,
+    tokensUsed: response.usage?.total_tokens ?? 0,
+  };
 }
