@@ -62,7 +62,7 @@ export function validateRealMessagingLiveSendOperatorConfirmation(
 }
 
 export function isRealMessagingProviderConfiguredForLiveSend(
-  env: NodeJS.ProcessEnv = process.env,
+  env: Record<string, string | undefined> = process.env,
 ): boolean {
   const email = resolveEmailProvider(env);
   const kakao = resolveKakaoProvider(env);
@@ -75,7 +75,7 @@ export function evaluateRealMessagingLiveSendUnlockGates(input: {
   kakaoWebhookSecretConfigured: boolean;
   consentGatePolicyAcknowledged: boolean;
   operatorConfirmationValid: boolean;
-  env?: NodeJS.ProcessEnv;
+  env?: Record<string, string | undefined>;
 }): RealMessagingLiveSendUnlockEvaluation {
   const env = input.env ?? process.env;
   const liveFlagEnabled = isRealMessagingLiveSendEnabled(env);

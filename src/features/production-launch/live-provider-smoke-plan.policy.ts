@@ -10,7 +10,7 @@ export const LIVE_PROVIDER_SMOKE_PLAN_POLICY_MARKER_PHASE25D =
 
 export function resolveProviderMode(
   envKey: string | undefined,
-  env: NodeJS.ProcessEnv = process.env,
+  env: Record<string, string | undefined> = process.env,
 ): "stub" | "live" | "unknown" {
   if (!envKey) {
     return "unknown";
@@ -28,7 +28,7 @@ export function resolveProviderMode(
 export function assembleLiveProviderSmokePlan(input: {
   environment: "staging" | "production";
   passedProviderIds: Set<string>;
-  env?: NodeJS.ProcessEnv;
+  env?: Record<string, string | undefined>;
   generatedAt?: string;
 }): LiveProviderSmokePlanResult {
   const cases = LIVE_PROVIDER_SMOKE_CASES.map((testCase) => {

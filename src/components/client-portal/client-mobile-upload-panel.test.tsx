@@ -10,17 +10,20 @@ describe("ClientMobileUploadPanel (Phase 21-E a11y smoke)", () => {
           items: [
             {
               localId: "local-1",
+              file: new File(["image"], "photo.jpg", { type: "image/jpeg" }),
               fileName: "photo.jpg",
               status: "uploading",
               progress: 42,
-              errorMessage: null,
-              failureCode: null,
+              errorMessage: undefined,
+              failureCode: undefined,
             },
           ],
           hasActiveUploads: true,
           successCount: 0,
           addFiles: () => {},
           retryUpload: () => {},
+          removeItem: () => {},
+          clearSuccessful: () => {},
         }}
       />,
     );

@@ -15,6 +15,7 @@ import type {
   SupplementRequestSendGateLedgerEntry,
 } from "./phase62e-client-send-gate.schema";
 import {
+  linkSupplementRequestToLitigationOpsDraftInputSchema,
   PHASE62E_CLIENT_SEND_GATE_SCHEMA_MARKER,
   PHASE62E_CLIENT_SEND_GATE_VERSION,
   clientVisibleSendGateBoundariesSchema,
@@ -307,8 +308,9 @@ export function enableNotificationWithMessagePolicy(
 }
 
 export function linkSupplementRequestToLitigationOpsDraft(
-  input: LinkSupplementRequestToLitigationOpsDraftInput,
+  rawInput: LinkSupplementRequestToLitigationOpsDraftInput,
 ): LitigationOpsDraftLink {
+  const input = linkSupplementRequestToLitigationOpsDraftInputSchema.parse(rawInput);
   assertAuditRef(input.auditRef, "CLIENT_VISIBLE_PAYLOAD_AUDIT_REQUIRED");
 
   if (!input.payload.clientVisible) {
@@ -321,7 +323,7 @@ export function linkSupplementRequestToLitigationOpsDraft(
     draftId: input.payload.draftId,
     caseId: input.payload.caseId,
     tenantId: input.payload.tenantId,
-    litigationOpsTarget: input.litigationOpsTarget ?? "LITIGATION_OPS_TASK_DRAFT",
+    litigationOpsTarget: input.litigationOpsTarget,
     linkStatus: "DRAFT_LINKED",
     payloadId: input.payload.payloadId,
     autoTaskExecutionAllowed: false,

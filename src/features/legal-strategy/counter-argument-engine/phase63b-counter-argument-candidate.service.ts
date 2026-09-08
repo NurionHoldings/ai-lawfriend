@@ -15,7 +15,10 @@ import type {
   CounterArgumentGongbuhoBasisRef,
   CounterArgumentSourceTrace,
 } from "./phase63b-counter-argument-candidate.schema";
-import { counterArgumentCandidateSchema } from "./phase63b-counter-argument-candidate.schema";
+import {
+  buildCounterArgumentCandidateFromOpponentArgumentInputSchema,
+  counterArgumentCandidateSchema,
+} from "./phase63b-counter-argument-candidate.schema";
 
 function pickLinkedStrategyCandidate(
   opponentArgument: OpponentArgument,
@@ -205,13 +208,14 @@ function buildSourceTrace(input: {
 }
 
 export function buildCounterArgumentCandidateFromOpponentArgument(
-  input: BuildCounterArgumentCandidateFromOpponentArgumentInput,
+  rawInput: BuildCounterArgumentCandidateFromOpponentArgumentInput,
 ): CounterArgumentCandidate {
+  const input = buildCounterArgumentCandidateFromOpponentArgumentInputSchema.parse(rawInput);
   const strategyCandidate = pickLinkedStrategyCandidate(
     input.opponentArgument,
-    input.strategyCandidates ?? [],
+    input.strategyCandidates,
   );
-  const reusablePatterns = input.reusablePatterns ?? [];
+  const reusablePatterns = input.reusablePatterns;
   const decomposition = buildCounterArgumentDecomposition({
     opponentArgument: input.opponentArgument,
     reasoningContext: input.reasoningContext,

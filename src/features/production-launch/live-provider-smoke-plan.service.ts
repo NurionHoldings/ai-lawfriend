@@ -10,7 +10,7 @@ export const LIVE_PROVIDER_SMOKE_PLAN_SERVICE_MARKER_PHASE25D =
 export function buildLiveProviderSmokePlan(input?: {
   environment?: "staging" | "production";
   passedProviderIds?: string[];
-  env?: NodeJS.ProcessEnv;
+  env?: Record<string, string | undefined>;
 }): LiveProviderSmokePlanResult {
   return assembleLiveProviderSmokePlan({
     environment: input?.environment ?? "staging",

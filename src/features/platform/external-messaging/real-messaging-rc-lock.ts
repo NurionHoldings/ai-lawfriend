@@ -120,13 +120,13 @@ export const REAL_MESSAGING_RC_PHASE15F_CROSS_LINK = {
 } as const;
 
 export function isRealMessagingLiveSendEnabled(
-  env: NodeJS.ProcessEnv = process.env,
+  env: Record<string, string | undefined> = process.env,
 ): boolean {
   return env[REAL_MESSAGING_LIVE_SEND_LIMITED_EXECUTION_ENV]?.trim() === "true";
 }
 
 export function parseRealMessagingLiveSendRecipientAllowlist(
-  env: NodeJS.ProcessEnv = process.env,
+  env: Record<string, string | undefined> = process.env,
 ): string[] {
   const raw = env[REAL_MESSAGING_LIVE_SEND_RECIPIENT_ALLOWLIST_ENV]?.trim();
   if (!raw) return [];

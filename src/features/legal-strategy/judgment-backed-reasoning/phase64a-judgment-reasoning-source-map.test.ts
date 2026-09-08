@@ -114,6 +114,7 @@ function buildReasoningContext() {
     memoryPacket: buildMemoryPacket(),
     realTimeSignals: [buildApprovedSignal()],
     auditRef: "audit-reasoning-64a-1",
+    now: new Date("2026-05-26T12:00:00.000Z"),
   });
 }
 

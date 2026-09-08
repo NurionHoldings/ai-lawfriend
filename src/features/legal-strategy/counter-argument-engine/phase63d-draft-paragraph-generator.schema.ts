@@ -109,7 +109,7 @@ export const buildCounterArgumentDraftParagraphInputSchema = z.object({
   auditRef: z.string().min(1),
 });
 
-export type BuildCounterArgumentDraftParagraphInput = z.infer<
+export type BuildCounterArgumentDraftParagraphInput = z.input<
   typeof buildCounterArgumentDraftParagraphInputSchema
 >;
 

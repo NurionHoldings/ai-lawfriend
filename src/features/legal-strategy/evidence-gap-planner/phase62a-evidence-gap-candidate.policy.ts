@@ -12,6 +12,7 @@ import type {
   EvidenceGapSourceTrace,
 } from "./phase62a-evidence-gap-candidate.schema";
 import {
+  buildEvidenceGapCandidateInputSchema,
   PHASE62A_EVIDENCE_GAP_CANDIDATE_SCHEMA_MARKER,
   PHASE62A_EVIDENCE_GAP_CANDIDATE_VERSION,
   evidenceGapBoundariesSchema,
@@ -124,7 +125,8 @@ export function canCreateLitigationOpsSupplementDraft(input: {
   return { allowed: false, blockedBy: "LAWYER_REVIEW_REQUIRED_FOR_REQUEST" as const };
 }
 
-export function buildEvidenceGapCandidate(input: BuildEvidenceGapCandidateInput): EvidenceGapCandidate {
+export function buildEvidenceGapCandidate(rawInput: BuildEvidenceGapCandidateInput): EvidenceGapCandidate {
+  const input = buildEvidenceGapCandidateInputSchema.parse(rawInput);
   if (!input.auditRef.trim()) {
     throw new ValidationError("EVIDENCE_GAP_CANDIDATE_AUDIT_REQUIRED");
   }

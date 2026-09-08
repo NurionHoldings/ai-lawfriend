@@ -161,6 +161,6 @@ export type EnableSupplementRequestSendGateInput = z.infer<
 export type EnableNotificationWithMessagePolicyInput = z.infer<
   typeof enableNotificationWithMessagePolicyInputSchema
 >;
-export type LinkSupplementRequestToLitigationOpsDraftInput = z.infer<
+export type LinkSupplementRequestToLitigationOpsDraftInput = z.input<
   typeof linkSupplementRequestToLitigationOpsDraftInputSchema
 >;

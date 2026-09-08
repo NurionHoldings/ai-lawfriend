@@ -14,6 +14,8 @@ import type {
   RejectDraftParagraphInput,
 } from "./phase63e-lawyer-review-adoption.schema";
 import {
+  adoptDraftParagraphInputSchema,
+  modifyDraftParagraphInputSchema,
   PHASE63E_LAWYER_REVIEW_ADOPTION_SCHEMA_MARKER,
   PHASE63E_LAWYER_REVIEW_ADOPTION_VERSION,
   counterArgumentAdoptionDecisionBoundariesSchema,
@@ -21,6 +23,7 @@ import {
   counterArgumentAdoptionReviewResultSchema,
   counterArgumentDocumentInsertCandidateBoundariesSchema,
   counterArgumentDocumentInsertCandidateSchema,
+  rejectDraftParagraphInputSchema,
 } from "./phase63e-lawyer-review-adoption.schema";
 import type { CounterArgumentDraftParagraph } from "./phase63d-draft-paragraph-generator.schema";
 
@@ -315,7 +318,10 @@ function buildAdoptionReviewResult(input: {
   });
 }
 
-export function adoptDraftParagraph(input: AdoptDraftParagraphInput): CounterArgumentAdoptionReviewResult {
+export function adoptDraftParagraph(rawInput: AdoptDraftParagraphInput): CounterArgumentAdoptionReviewResult {
+  assertDecisionLedgerRef(rawInput.decisionLedgerRef);
+  assertAdoptionAuditRef(rawInput.auditRef);
+  const input = adoptDraftParagraphInputSchema.parse(rawInput);
   assertDecisionLedgerRef(input.decisionLedgerRef);
   assertAdoptionAuditRef(input.auditRef);
 
@@ -337,8 +343,11 @@ export function adoptDraftParagraph(input: AdoptDraftParagraphInput): CounterArg
 }
 
 export function modifyDraftParagraph(
-  input: ModifyDraftParagraphInput,
+  rawInput: ModifyDraftParagraphInput,
 ): CounterArgumentAdoptionReviewResult {
+  assertDecisionLedgerRef(rawInput.decisionLedgerRef);
+  assertAdoptionAuditRef(rawInput.auditRef);
+  const input = modifyDraftParagraphInputSchema.parse(rawInput);
   assertDecisionLedgerRef(input.decisionLedgerRef);
   assertAdoptionAuditRef(input.auditRef);
 
@@ -361,8 +370,11 @@ export function modifyDraftParagraph(
 }
 
 export function rejectDraftParagraph(
-  input: RejectDraftParagraphInput,
+  rawInput: RejectDraftParagraphInput,
 ): CounterArgumentAdoptionReviewResult {
+  assertDecisionLedgerRef(rawInput.decisionLedgerRef);
+  assertAdoptionAuditRef(rawInput.auditRef);
+  const input = rejectDraftParagraphInputSchema.parse(rawInput);
   assertDecisionLedgerRef(input.decisionLedgerRef);
   assertAdoptionAuditRef(input.auditRef);
 

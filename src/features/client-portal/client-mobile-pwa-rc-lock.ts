@@ -101,7 +101,7 @@ export const CLIENT_MOBILE_PWA_RC_SENSITIVE_CACHE_DENY_TERMS = [
 ] as const;
 
 export function isClientMobilePwaPushLiveSendEnabled(
-  env: NodeJS.ProcessEnv = process.env,
+  env: Record<string, string | undefined> = process.env,
 ): boolean {
   return env[CLIENT_MOBILE_PWA_PUSH_LIVE_SEND_ENV]?.trim() === "true";
 }

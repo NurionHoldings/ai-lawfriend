@@ -37,7 +37,12 @@ export const AUDIT_LOG_EXPORT_COLUMNS = [
   "metadata",
 ] as const;
 
-export type AuditLogExportQuery = Omit<AuditLogListQueryInput, "page" | "pageSize">;
+// Export filters are intentionally optional; an unfiltered export is normalized
+// to the retention-bounded date window below.
+export type AuditLogExportQuery = Partial<
+  Omit<AuditLogListQueryInput, "page" | "pageSize">
+>;
+type NormalizedAuditLogExportQuery = Omit<AuditLogListQueryInput, "page" | "pageSize">;
 
 export function assertAuditLogExportAllowed(user: SessionUser): void {
   if (!isPlatformAdmin(user.role)) {
@@ -60,7 +65,7 @@ function parseDate(value: string | undefined, fallback: Date): Date {
 export function normalizeAuditLogExportQuery(
   query: AuditLogExportQuery,
   reference: Date = new Date(),
-): AuditLogExportQuery & { dateFrom: string; dateTo: string } {
+): NormalizedAuditLogExportQuery {
   const dateTo = parseDate(
     query.dateTo || undefined,
     reference,
@@ -85,10 +90,15 @@ export function normalizeAuditLogExportQuery(
   );
 
   return {
-    ...query,
+    actorUserId: query.actorUserId ?? "",
+    action: query.action ?? "",
+    entityType: query.entityType ?? "",
+    entityId: query.entityId ?? "",
+    q: query.q ?? "",
+    search: query.search ?? "",
     dateFrom: clampedFrom ?? dateFrom.toISOString().slice(0, 10),
     dateTo: dateTo.toISOString().slice(0, 10),
-  };
+  } satisfies NormalizedAuditLogExportQuery;
 }
 
 export function buildAuditLogExportAuditMetadata(input: {

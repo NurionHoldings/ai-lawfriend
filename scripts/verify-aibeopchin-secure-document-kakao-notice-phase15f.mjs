@@ -55,11 +55,17 @@ function main() {
 
   assertIncludes("src/features/secure-document-delivery/secure-document-delivery.service.ts", [
     "PHASE15F_SECURE_DOCUMENT_DELIVERY_SERVICE",
-    "containsFileAttachment: false",
     "SKIPPED_NO_CONSENT",
     "createCaseSharedDocumentService",
     "sendKakaoDocumentNoticeService",
     "markClientSharedDocumentViewedService",
+  ]);
+
+  // Payload redaction/attachment metadata moved to the canonical external-message
+  // adapter in Phase 20. Verify the active implementation instead of a stale
+  // literal in the Phase 15 orchestration service.
+  assertIncludes("src/features/platform/external-messaging/external-message-adapter.service.ts", [
+    "containsFileAttachment: false",
   ]);
 
   assertIncludes("src/components/cases/litigation-command-center-client.tsx", [

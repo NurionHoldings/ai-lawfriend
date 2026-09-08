@@ -116,9 +116,10 @@ describe("external message adapter (Phase 20-A)", () => {
       },
     };
     const summary = buildExternalMessageLogSafeSummary(basePayload, result);
-    expect(summary.metadataOnly).toBe(true);
-    expect(summary.containsFileAttachment).toBe(false);
-    expect(summary.portalPath).toBeTruthy();
+    const typedSummary = summary as Record<string, unknown>;
+    expect(typedSummary.metadataOnly).toBe(true);
+    expect(typedSummary.containsFileAttachment).toBe(false);
+    expect(typedSummary.portalPath).toBeTruthy();
   });
 
   it("standardizes provider error codes for 18-B redelivery", () => {

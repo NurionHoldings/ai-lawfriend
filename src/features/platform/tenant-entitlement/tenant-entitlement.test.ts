@@ -42,6 +42,7 @@ describe("tenant-entitlement.policy (Phase 22-B)", () => {
       "EXTERNAL_MESSAGING_KAKAO",
     );
     expect(gate.allowed).toBe(false);
+    if (gate.allowed) throw new Error("expected entitlement denial");
     expect(gate.code).toBe(TENANT_ENTITLEMENT_DENIED_CODES.FEATURE_NOT_ENTITLED);
   });
 
@@ -52,6 +53,7 @@ describe("tenant-entitlement.policy (Phase 22-B)", () => {
       activeSeatCount: entitlements.limits.maxSeats,
     });
     expect(seatGate.allowed).toBe(false);
+    if (seatGate.allowed) throw new Error("expected seat limit denial");
     expect(seatGate.code).toBe(TENANT_ENTITLEMENT_DENIED_CODES.SEAT_LIMIT_EXCEEDED);
 
     const caseGate = evaluateTenantCaseLimit({
@@ -59,6 +61,7 @@ describe("tenant-entitlement.policy (Phase 22-B)", () => {
       activeCaseCount: entitlements.limits.maxActiveCases,
     });
     expect(caseGate.allowed).toBe(false);
+    if (caseGate.allowed) throw new Error("expected case limit denial");
     expect(caseGate.code).toBe(TENANT_ENTITLEMENT_DENIED_CODES.CASE_LIMIT_EXCEEDED);
   });
 
@@ -79,6 +82,7 @@ describe("tenant-entitlement.policy (Phase 22-B)", () => {
       globalPushSurfaceEnabled: false,
     });
     expect(denied.allowed).toBe(false);
+    if (denied.allowed) throw new Error("expected global feature denial");
     expect(denied.code).toBe(TENANT_ENTITLEMENT_DENIED_CODES.GLOBAL_FEATURE_DISABLED);
 
     const allowed = evaluateClientPortalPushEntitlement({
