@@ -26,7 +26,7 @@ export type BuildCaseSummaryContextInput = {
 
 export type BuildCaseSummaryContextResult = {
   prompt: string;
-  allowedSourceRefs: string[];
+  sourceTextByRef: Record<string, string>;
   ruleBasedContent: {
     caseOverview: string;
     timeline: string[];
@@ -90,14 +90,15 @@ export function buildCaseSummaryGenerationContext(
     contractSections: enriched.contractSections,
   };
 
-  const answerSourceRefs = Object.entries(input.answers)
-    .filter(([, value]) => value !== null && value !== undefined && String(value).trim())
-    .map(([key]) => `answer:${key}`);
-  const allowedSourceRefs = [
-    ...answerSourceRefs,
-    "rule_based",
-    ...(enriched.outputContractApplied ? ["gongbuho_contract"] : []),
-  ];
+  const sourceTextByRef = Object.fromEntries(
+    Object.entries(input.answers)
+      .filter(([, value]) => value !== null && value !== undefined && String(value).trim())
+      .map(([key, value]) => [`answer:${key}`, String(value)]),
+  );
+  sourceTextByRef.rule_based = JSON.stringify(ruleBasedContent);
+  if (enriched.outputContractApplied) {
+    sourceTextByRef.gongbuho_contract = formatContractSections(enriched.contractSections);
+  }
 
   const prompt = [
     "# 사건 메타",
@@ -113,7 +114,7 @@ export function buildCaseSummaryGenerationContext(
     "",
     "# 인터뷰 답변",
     formatAnswersBlock(input.answers),
-    `사용 가능한 출처 ref: ${answerSourceRefs.join(", ") || "(없음)"}`,
+    `사용 가능한 출처 ref: ${Object.keys(sourceTextByRef).join(", ")}`,
     "",
     "# Rule-based buckets (fallback SSOT)",
     `overview: ${legacySummary.overview}`,
@@ -129,5 +130,5 @@ export function buildCaseSummaryGenerationContext(
     formatContractSections(enriched.contractSections),
   ].join("\n");
 
-  return { prompt, ruleBasedContent, allowedSourceRefs };
+  return { prompt, ruleBasedContent, sourceTextByRef };
 }
