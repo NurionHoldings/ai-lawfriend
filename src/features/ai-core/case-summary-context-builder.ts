@@ -26,6 +26,7 @@ export type BuildCaseSummaryContextInput = {
 
 export type BuildCaseSummaryContextResult = {
   prompt: string;
+  allowedSourceRefs: string[];
   ruleBasedContent: {
     caseOverview: string;
     timeline: string[];
@@ -89,6 +90,15 @@ export function buildCaseSummaryGenerationContext(
     contractSections: enriched.contractSections,
   };
 
+  const answerSourceRefs = Object.entries(input.answers)
+    .filter(([, value]) => value !== null && value !== undefined && String(value).trim())
+    .map(([key]) => `answer:${key}`);
+  const allowedSourceRefs = [
+    ...answerSourceRefs,
+    "rule_based",
+    ...(enriched.outputContractApplied ? ["gongbuho_contract"] : []),
+  ];
+
   const prompt = [
     "# 사건 메타",
     `- caseId: ${input.case.id}`,
@@ -103,6 +113,7 @@ export function buildCaseSummaryGenerationContext(
     "",
     "# 인터뷰 답변",
     formatAnswersBlock(input.answers),
+    `사용 가능한 출처 ref: ${answerSourceRefs.join(", ") || "(없음)"}`,
     "",
     "# Rule-based buckets (fallback SSOT)",
     `overview: ${legacySummary.overview}`,
@@ -118,5 +129,5 @@ export function buildCaseSummaryGenerationContext(
     formatContractSections(enriched.contractSections),
   ].join("\n");
 
-  return { prompt, ruleBasedContent };
+  return { prompt, ruleBasedContent, allowedSourceRefs };
 }
