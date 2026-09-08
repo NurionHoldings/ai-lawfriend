@@ -22,7 +22,8 @@ export function buildCaseSummaryGenerateInstructions(mode: "AI_ENRICH" | "AI_REG
     modeLine,
     CASE_SUMMARY_GUARDRAIL,
     "응답은 반드시 JSON 한 객체만 출력하세요. 마크다운 코드블록 없이 raw JSON만.",
-    '스키마: {"caseOverview":string,"timeline":string[],"issues":string[],"riskNotes":string[],"checklist":string[],"contractSections":{heading:string,body:string}[]|optional}',
+    "각 출력 문장과 제목에는 사용 가능한 출처 ref와 해당 입력에서 그대로 복사한 짧은 인용문을 하나 이상 연결하세요. ref나 인용문을 만들지 마세요.",
+    '스키마: {"caseOverview":string,"timeline":string[],"issues":string[],"riskNotes":string[],"checklist":string[],"contractSections":{heading:string,body:string}[]|optional,"grounding":{"claim":string,"sources":{"ref":string,"quote":string}[]}[]}',
   ].join("\n\n");
 }
 

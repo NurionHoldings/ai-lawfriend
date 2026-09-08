@@ -13,13 +13,13 @@ import {
 } from "./case-summary-audit";
 import { buildCaseSummaryGenerationContext } from "./case-summary-context-builder";
 import {
-  parseCaseSummaryAiMode,
   resolveCaseSummaryAiModeFromEnv,
   shouldInvokeLlmOnCaseSummaryGenerate,
   type CaseSummaryAiMode,
   type CaseSummaryAiRuntimeContext,
 } from "./case-summary-ai-core-policy";
 import { invokeOpenAiCaseSummaryGenerate } from "./case-summary-openai.provider";
+import { validateCaseSummaryGrounding } from "./case-summary-grounding-validator";
 import {
   CASE_SUMMARY_DISCLAIMER,
   CASE_SUMMARY_NOT_FINAL_JUDGMENT_NOTE,
@@ -158,14 +158,35 @@ async function maybeInvokeLlm(
   prompt: string,
   ruleBased: CaseSummaryValidatedContent,
   auditContext: { caseId: string; actorUserId: string },
-): Promise<{ model: string | null; content: CaseSummaryValidatedContent; error?: string }> {
+  sourceTextByRef: Record<string, string>,
+): Promise<{
+  model: string | null;
+  content: CaseSummaryValidatedContent;
+  tokensUsed: number;
+  error?: string;
+  groundingIssues?: string[];
+}> {
   if (mode !== "AI_ENRICH" && mode !== "AI_REGENERATE") {
-    return { model: null, content: ruleBased };
+    return { model: null, content: ruleBased, tokensUsed: 0 };
   }
 
   try {
     preAiCallCircuitCheck("openai");
     const aiResult = await invokeOpenAiCaseSummaryGenerate({ prompt, mode });
+    const grounding = validateCaseSummaryGrounding({
+      content: aiResult.content,
+      grounding: aiResult.grounding,
+      sourceTextByRef,
+    });
+    if (!grounding.passed) {
+      markAiProviderCallSuccess("openai");
+      return {
+        model: aiResult.model,
+        content: ruleBased,
+        tokensUsed: aiResult.tokensUsed,
+        groundingIssues: grounding.issues,
+      };
+    }
     markAiProviderCallSuccess("openai");
     if (mode === "AI_ENRICH") {
       return {
@@ -185,9 +206,10 @@ async function maybeInvokeLlm(
           contractSections:
             aiResult.content.contractSections ?? ruleBased.contractSections,
         },
+        tokensUsed: aiResult.tokensUsed,
       };
     }
-    return { model: aiResult.model, content: aiResult.content };
+    return { model: aiResult.model, content: aiResult.content, tokensUsed: aiResult.tokensUsed };
   } catch (error) {
     console.error("[CASE_SUMMARY_AI_CORE_GENERATE]", error);
     await handleAiProviderCallFailure({
@@ -203,6 +225,7 @@ async function maybeInvokeLlm(
     return {
       model: null,
       content: ruleBased,
+      tokensUsed: 0,
       error: error instanceof Error ? error.message : "unknown",
     };
   }
@@ -220,7 +243,7 @@ export async function invokeCaseSummaryGenerate(
     answers: data.answers,
   });
 
-  const { prompt, ruleBasedContent } = buildCaseSummaryGenerationContext({
+  const { prompt, ruleBasedContent, sourceTextByRef } = buildCaseSummaryGenerationContext({
     case: data.case,
     interviewCompleted: data.interviewCompleted,
     answers: data.answers,
@@ -303,19 +326,25 @@ export async function invokeCaseSummaryGenerate(
   const llmResult = await maybeInvokeLlm(mode, prompt, ruleValidation.content, {
     caseId: input.caseId,
     actorUserId: input.currentUser.id,
-  });
+  }, sourceTextByRef);
   const finalValidation = validateCaseSummaryContent(llmResult.content);
-  const content = finalValidation.passed ? finalValidation.content : ruleValidation.content;
+  const groundingPassed = !llmResult.groundingIssues?.length;
+  const outputPassed = finalValidation.passed && groundingPassed;
+  const content = outputPassed ? finalValidation.content : ruleValidation.content;
 
   const audit = buildAudit(mode, {
-    guardrailPassed: finalValidation.passed,
-    guardrailIssues: finalValidation.passed ? undefined : finalValidation.issues,
+    guardrailPassed: outputPassed,
+    guardrailIssues: outputPassed
+      ? undefined
+      : [...finalValidation.issues, ...(llmResult.groundingIssues ?? [])],
     model: llmResult.model ?? "none",
     skippedLlm: !llmResult.model,
     skipReason: llmResult.model
-      ? finalValidation.passed
+      ? outputPassed
         ? undefined
-        : "GUARDRAIL_FALLBACK_TO_RULE"
+        : groundingPassed
+          ? "GUARDRAIL_FALLBACK_TO_RULE"
+          : "GROUNDING_FALLBACK_TO_RULE"
       : llmResult.error
         ? "OPENAI_ERROR_FALLBACK"
         : "LLM_SKIPPED",
@@ -343,6 +372,7 @@ export async function invokeCaseSummaryGenerate(
     caseStatus: data.case.status,
     feature: "CASE_SUMMARY",
     llmInvoked: Boolean(llmResult.model),
+    tokensUsed: llmResult.tokensUsed,
   });
 
   return finalizeSummaryResult(
