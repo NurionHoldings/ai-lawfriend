@@ -30,7 +30,7 @@ const llmSummarySchema = z.object({
     .optional(),
   grounding: z.array(z.object({
     claim: z.string().min(1),
-    sourceRefs: z.array(z.string().min(1)).min(1),
+    sources: z.array(z.object({ ref: z.string().min(1), quote: z.string().min(1) })).min(1),
   })),
 });
 
