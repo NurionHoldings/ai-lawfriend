@@ -59,6 +59,10 @@ describe("AI Core production smoke bootstrap policy", () => {
   it("recognizes supported Netlify status JSON shapes", () => {
     assert.equal(extractLinkedSiteId({ site: { siteId: "expected" } }), "expected");
     assert.equal(extractLinkedSiteId({ siteData: { id: "expected" } }), "expected");
+    assert.equal(
+      extractLinkedSiteId({ siteData: { "site-id": "expected" } }),
+      "expected",
+    );
     assert.equal(extractLinkedSiteId({}), null);
   });
 });
