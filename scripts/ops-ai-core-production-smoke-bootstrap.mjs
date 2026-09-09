@@ -25,6 +25,7 @@ import {
   resolveProductionDatabaseUrl,
   resolveRequiredProductionSecret,
 } from "./lib/ai-core-production-smoke-bootstrap-policy.mjs";
+import { syncNetlifyProductionEnvironmentVariable } from "./lib/netlify-production-env-sync.mjs";
 
 function netlify(args, { capture = true } = {}) {
   const isWindows = process.platform === "win32";
@@ -44,30 +45,7 @@ function netlify(args, { capture = true } = {}) {
 }
 
 function setProductionEnv(key, value) {
-  if (!/^[A-Z0-9_]+$/.test(key)) {
-    throw new Error("unsafe Netlify environment variable key refused");
-  }
-  if (process.platform !== "win32") {
-    netlify(["env:set", key, value, "--context", "production"], {
-      capture: false,
-    });
-    return;
-  }
-  execFileSync(
-    process.env.ComSpec || "cmd.exe",
-    [
-      "/d",
-      "/s",
-      "/c",
-      `npx.cmd netlify env:set ${key} "%ARKAON_SMOKE_ENV_VALUE%" --context production`,
-    ],
-    {
-      cwd: process.cwd(),
-      env: { ...process.env, ARKAON_SMOKE_ENV_VALUE: value },
-      stdio: "inherit",
-      windowsHide: true,
-    },
-  );
+  syncNetlifyProductionEnvironmentVariable(key, value);
 }
 
 function readProductionEnv(key) {
