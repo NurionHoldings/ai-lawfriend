@@ -11,6 +11,7 @@ import {
   hasExactBootstrapConfirmation,
   hasValidBearerSecret,
   isExactProductionRuntime,
+  resolveRuntimeEnvironmentValue,
 } from "@/features/ai-core/production-smoke-bootstrap-route.policy";
 import { provisionProductionSmokeFixtures } from "@/features/ai-core/production-smoke-bootstrap.service";
 import { resolvePrismaDatabaseUrl } from "@/lib/prisma-database-url";
@@ -22,6 +23,19 @@ export const maxDuration = 60;
 const MAX_BODY_BYTES = 2_048;
 const FAILURE_WINDOW_MS = 5 * 60 * 1_000;
 const MAX_FAILURES_PER_WINDOW = 5;
+
+type NetlifyRuntimeGlobal = typeof globalThis & {
+  Netlify?: {
+    env?: {
+      get(key: string): string | undefined;
+    };
+  };
+};
+
+function runtimeEnvironmentValue(key: string): string | undefined {
+  const netlifyValue = (globalThis as NetlifyRuntimeGlobal).Netlify?.env?.get(key);
+  return resolveRuntimeEnvironmentValue(netlifyValue, process.env[key]);
+}
 const failuresByClient = new Map<string, { count: number; resetAt: number }>();
 
 function json(status: number, body: Record<string, unknown>): Response {
@@ -69,8 +83,8 @@ export async function POST(request: Request): Promise<Response> {
   if (
     !isExactProductionRuntime({
       nodeEnv: process.env.NODE_ENV,
-      context: process.env.CONTEXT,
-      siteId: process.env.SITE_ID,
+      context: runtimeEnvironmentValue("CONTEXT"),
+      siteId: runtimeEnvironmentValue("SITE_ID"),
     })
   ) {
     return json(404, { ok: false });
@@ -94,7 +108,7 @@ export async function POST(request: Request): Promise<Response> {
   let bootstrapSecret: string;
   try {
     bootstrapSecret = assertStrongBootstrapSecret(
-      process.env.OPS_SMOKE_BOOTSTRAP_SECRET,
+      runtimeEnvironmentValue("OPS_SMOKE_BOOTSTRAP_SECRET"),
     );
   } catch (error) {
     console.error(
@@ -135,10 +149,10 @@ export async function POST(request: Request): Promise<Response> {
       throw new Error("production bootstrap requires Netlify Database runtime");
     }
     const adminEmail = normalizeSmokeAdminEmail(
-      process.env.OPS_SMOKE_ADMIN_EMAIL ?? "",
+      runtimeEnvironmentValue("OPS_SMOKE_ADMIN_EMAIL") ?? "",
     );
     const adminPassword = assertStrongSmokeAdminPassword(
-      process.env.OPS_SMOKE_ADMIN_PASSWORD ?? "",
+      runtimeEnvironmentValue("OPS_SMOKE_ADMIN_PASSWORD") ?? "",
     );
 
     prisma = new PrismaClient({ datasourceUrl: database.url });
