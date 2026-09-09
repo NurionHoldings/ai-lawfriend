@@ -19,6 +19,8 @@
 - 고정 `example.invalid` 이메일·이름·역할이 정확히 일치하지 않으면 중단한다.
 - 동일 제목 사건에 전용 marker 또는 소유자가 다르면 중단한다.
 - 비밀번호 원문을 stdout, DB 감사 로그, 저장소에 기록하지 않는다.
+- ADMIN/CLIENT/LAWYER/STAFF 비밀번호는 OS 명령행이나 셸 명령 문자열에 넣지 않고
+  자식 프로세스 환경으로만 전달하며, Netlify에는 항상 `--secret`으로 저장한다.
 - `DATABASE_URL`과 `OPS_SMOKE_ADMIN_*`는 로컬 프로세스 주입값을 우선하며, 빈 값이나
   Netlify CLI가 반환한 마스킹값은 비밀로 사용하지 않는다.
 - 관리자 이메일이 없을 때만 이름 `아르카온관리자`, 역할 `SUPER_ADMIN`, 상태 `ACTIVE`인
