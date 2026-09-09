@@ -1,6 +1,16 @@
 export const AI_CORE_SMOKE_SITE_ID = "8a03b04b-b3e9-453f-9f3e-2de15bf9a91d";
 export const AI_CORE_SMOKE_MARKER = "ARKAON_PRODUCTION_SMOKE_V1";
-export const AI_CORE_SMOKE_CASE_TITLE = "[ARKAON PRODUCTION SMOKE] 차량담보대출 사기";
+export const AI_CORE_SMOKE_CASE_TITLE =
+  "[ARKAON PRODUCTION SMOKE] 차량담보대출 사기";
+export const AI_CORE_SMOKE_ADMIN_NAME = "아르카온관리자";
+
+const MASKED_SECRET_PATTERNS = [
+  /^\*+$/,
+  /^•+$/,
+  /^<redacted>$/i,
+  /^\[redacted\]$/i,
+  /^redacted$/i,
+];
 
 export const AI_CORE_SMOKE_ACCOUNTS = Object.freeze({
   CLIENT: Object.freeze({
@@ -30,8 +40,10 @@ export const AI_CORE_SMOKE_ANSWERS = Object.freeze({
   "incident.amount": "가상 피해 주장액 32,000,000원",
   "evidence.available":
     "가상 대화 캡처, 가상 대출계약서, 가상 계좌 입출금 내역, 가상 자동차등록원부 사본이 있다고 진술한다.",
-  "opponent.response": "가상 중개업체는 정상 계약이었다고 주장하며 환급을 거부했다고 진술한다.",
-  "client.request": "추가 채무와 차량 처분의 효력을 검토하고 민형사상 대응 가능성을 안내받고 싶다.",
+  "opponent.response":
+    "가상 중개업체는 정상 계약이었다고 주장하며 환급을 거부했다고 진술한다.",
+  "client.request":
+    "추가 채무와 차량 처분의 효력을 검토하고 민형사상 대응 가능성을 안내받고 싶다.",
   "safety.notice":
     "본 내용과 인물은 ARKAON 운영 스모크 테스트 전용 가상 데이터이며 실제 법률사건이나 실제 인물이 아니다.",
 });
@@ -47,7 +59,9 @@ export function assertExactSmokeCollision(existing, expected, label) {
     );
   }
   if (existing.status !== "ACTIVE") {
-    throw new Error(`${label} smoke account is not ACTIVE; refusing to reactivate it`);
+    throw new Error(
+      `${label} smoke account is not ACTIVE; refusing to reactivate it`,
+    );
   }
 }
 
@@ -57,8 +71,105 @@ export function assertExactSmokeCase(existing, ownerUserId) {
     existing.ownerUserId !== ownerUserId ||
     !existing.description?.includes(AI_CORE_SMOKE_MARKER)
   ) {
-    throw new Error("smoke case title collision; refusing to modify the existing case");
+    throw new Error(
+      "smoke case title collision; refusing to modify the existing case",
+    );
   }
+}
+
+export function resolveRequiredProductionSecret(
+  injectedValue,
+  cliValue,
+  label,
+) {
+  const injected = injectedValue?.trim();
+  const candidate = injected || cliValue?.trim();
+  if (
+    !candidate ||
+    MASKED_SECRET_PATTERNS.some((pattern) => pattern.test(candidate))
+  ) {
+    throw new Error(
+      `${label} is unavailable or redacted; inject it into the local process environment`,
+    );
+  }
+  return candidate;
+}
+
+export function normalizeSmokeAdminEmail(value) {
+  const email = value.trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    throw new Error("OPS_SMOKE_ADMIN_EMAIL must be a valid email address");
+  }
+  return email;
+}
+
+export function assertStrongSmokeAdminPassword(value) {
+  if (value.length < 16 || value.length > 100) {
+    throw new Error(
+      "OPS_SMOKE_ADMIN_PASSWORD must contain 16 to 100 characters",
+    );
+  }
+  return value;
+}
+
+export function decideSmokeAdminBootstrap(existing, privilegedAdminCount) {
+  if (existing) {
+    if (
+      existing.status !== "ACTIVE" ||
+      !["ADMIN", "SUPER_ADMIN"].includes(existing.role)
+    ) {
+      throw new Error(
+        "OPS_SMOKE_ADMIN_EMAIL must identify an ACTIVE ADMIN or SUPER_ADMIN",
+      );
+    }
+    return "REUSE";
+  }
+  if (privilegedAdminCount !== 0) {
+    throw new Error(
+      "OPS_SMOKE_ADMIN_EMAIL is absent but another privileged admin exists; refusing to create an additional SUPER_ADMIN",
+    );
+  }
+  return "CREATE";
+}
+
+export async function ensureSmokeAdministrator({
+  tx,
+  email,
+  password,
+  passwordHash,
+  verifyPassword,
+}) {
+  const existing = await tx.user.findUnique({ where: { email } });
+  const privilegedAdminCount = existing
+    ? 0
+    : await tx.user.count({
+        where: { role: { in: ["ADMIN", "SUPER_ADMIN"] } },
+      });
+  const decision = decideSmokeAdminBootstrap(existing, privilegedAdminCount);
+
+  if (decision === "REUSE") {
+    const passwordMatches =
+      existing.passwordHash &&
+      (await verifyPassword(password, existing.passwordHash));
+    if (!passwordMatches) {
+      throw new Error(
+        "OPS_SMOKE_ADMIN_PASSWORD does not match the existing privileged account; refusing to overwrite it",
+      );
+    }
+    return { admin: existing, created: false };
+  }
+
+  const admin = await tx.user.create({
+    data: {
+      email,
+      passwordHash,
+      name: AI_CORE_SMOKE_ADMIN_NAME,
+      role: "SUPER_ADMIN",
+      status: "ACTIVE",
+      emailVerifiedAt: new Date(),
+    },
+  });
+  return { admin, created: true };
 }
 
 export function extractLinkedSiteId(status) {
