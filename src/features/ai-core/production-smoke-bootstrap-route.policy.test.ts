@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { AI_CORE_SMOKE_SITE_ID } from "../../../scripts/lib/ai-core-production-smoke-bootstrap-policy.mjs";
+import {
+  AI_CORE_SMOKE_PRODUCTION_ORIGIN,
+  AI_CORE_SMOKE_SITE_ID,
+} from "../../../scripts/lib/ai-core-production-smoke-bootstrap-policy.mjs";
 import {
   PRODUCTION_SMOKE_CONFIRMATION,
   assertStrongBootstrapSecret,
@@ -13,9 +16,10 @@ import {
 describe("production smoke bootstrap route policy", () => {
   const secret = "a-strong-bootstrap-secret-with-32-characters";
 
-  it("accepts only the exact production site runtime", () => {
+  it("requires the exact production origin and rejects conflicting runtime values", () => {
     expect(
       isExactProductionRuntime({
+        requestOrigin: AI_CORE_SMOKE_PRODUCTION_ORIGIN,
         nodeEnv: "production",
         context: "production",
         siteId: AI_CORE_SMOKE_SITE_ID,
@@ -23,15 +27,26 @@ describe("production smoke bootstrap route policy", () => {
     ).toBe(true);
     expect(
       isExactProductionRuntime({
+        requestOrigin: AI_CORE_SMOKE_PRODUCTION_ORIGIN,
+      }),
+    ).toBe(true);
+    expect(
+      isExactProductionRuntime({
+        requestOrigin: "https://deploy-preview.example.netlify.app",
         nodeEnv: "production",
-        context: "deploy-preview",
+        context: "production",
         siteId: AI_CORE_SMOKE_SITE_ID,
       }),
     ).toBe(false);
     expect(
       isExactProductionRuntime({
-        nodeEnv: "production",
-        context: "production",
+        requestOrigin: AI_CORE_SMOKE_PRODUCTION_ORIGIN,
+        context: "deploy-preview",
+      }),
+    ).toBe(false);
+    expect(
+      isExactProductionRuntime({
+        requestOrigin: AI_CORE_SMOKE_PRODUCTION_ORIGIN,
         siteId: "another-site",
       }),
     ).toBe(false);

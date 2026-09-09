@@ -82,6 +82,7 @@ function safeErrorSummary(error: unknown): string {
 export async function POST(request: Request): Promise<Response> {
   if (
     !isExactProductionRuntime({
+      requestOrigin: new URL(request.url).origin,
       nodeEnv: process.env.NODE_ENV,
       context: runtimeEnvironmentValue("CONTEXT"),
       siteId: runtimeEnvironmentValue("SITE_ID"),
