@@ -6,6 +6,7 @@ import {
   assertExactSmokeCase,
   assertExactSmokeCollision,
   extractLinkedSiteId,
+  resolveProductionDatabaseUrl,
 } from "./ai-core-production-smoke-bootstrap-policy.mjs";
 
 describe("AI Core production smoke bootstrap policy", () => {
@@ -64,5 +65,16 @@ describe("AI Core production smoke bootstrap policy", () => {
       "expected",
     );
     assert.equal(extractLinkedSiteId({}), null);
+  });
+
+  it("prefers an injected PostgreSQL URL and rejects a redacted CLI value", () => {
+    assert.equal(
+      resolveProductionDatabaseUrl("postgresql://injected", "********************"),
+      "postgresql://injected",
+    );
+    assert.throws(
+      () => resolveProductionDatabaseUrl("", "********************"),
+      /unavailable or redacted/,
+    );
   });
 });

@@ -19,6 +19,7 @@ import {
   assertExactSmokeCase,
   assertExactSmokeCollision,
   extractLinkedSiteId,
+  resolveProductionDatabaseUrl,
 } from "./lib/ai-core-production-smoke-bootstrap-policy.mjs";
 
 function netlify(args, { capture = true } = {}) {
@@ -87,7 +88,13 @@ async function main() {
     );
   }
 
-  process.env.DATABASE_URL = readProductionEnv("DATABASE_URL");
+  const injectedDatabaseUrl = process.env.DATABASE_URL;
+  process.env.DATABASE_URL = resolveProductionDatabaseUrl(
+    injectedDatabaseUrl,
+    /^postgres(?:ql)?:\/\//.test(injectedDatabaseUrl?.trim() ?? "")
+      ? undefined
+      : readProductionEnv("DATABASE_URL"),
+  );
   const adminEmail = readProductionEnv("OPS_SMOKE_ADMIN_EMAIL").toLowerCase();
   const { PrismaClient } = await import("@prisma/client");
   const prisma = new PrismaClient();
