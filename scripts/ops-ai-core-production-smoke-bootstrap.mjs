@@ -21,15 +21,46 @@ import {
   extractLinkedSiteId,
 } from "./lib/ai-core-production-smoke-bootstrap-policy.mjs";
 
-const npx = process.platform === "win32" ? "npx.cmd" : "npx";
-
 function netlify(args, { capture = true } = {}) {
-  return execFileSync(npx, ["netlify", ...args], {
+  const isWindows = process.platform === "win32";
+  if (isWindows && args.some((arg) => !/^[A-Za-z0-9:_-]+$/.test(arg))) {
+    throw new Error("unsafe Netlify CLI argument refused");
+  }
+  const executable = isWindows ? process.env.ComSpec || "cmd.exe" : "npx";
+  const executableArgs = isWindows
+    ? ["/d", "/s", "/c", `npx.cmd netlify ${args.join(" ")}`]
+    : ["netlify", ...args];
+  return execFileSync(executable, executableArgs, {
     cwd: process.cwd(),
     encoding: "utf8",
     stdio: capture ? ["ignore", "pipe", "pipe"] : "inherit",
     windowsHide: true,
   }).trim();
+}
+
+function setProductionEnv(key, value) {
+  if (!/^[A-Z0-9_]+$/.test(key)) {
+    throw new Error("unsafe Netlify environment variable key refused");
+  }
+  if (process.platform !== "win32") {
+    netlify(["env:set", key, value, "--context", "production"], { capture: false });
+    return;
+  }
+  execFileSync(
+    process.env.ComSpec || "cmd.exe",
+    [
+      "/d",
+      "/s",
+      "/c",
+      `npx.cmd netlify env:set ${key} "%ARKAON_SMOKE_ENV_VALUE%" --context production`,
+    ],
+    {
+      cwd: process.cwd(),
+      env: { ...process.env, ARKAON_SMOKE_ENV_VALUE: value },
+      stdio: "inherit",
+      windowsHide: true,
+    },
+  );
 }
 
 function readProductionEnv(key) {
@@ -252,7 +283,7 @@ async function main() {
     OPS_SMOKE_CASE_ID: provisioned.caseId,
   };
   for (const [key, value] of Object.entries(envValues)) {
-    netlify(["env:set", key, value, "--context", "production"], { capture: false });
+    setProductionEnv(key, value);
   }
 
   console.log(`PASS — fictional smoke case ${provisioned.caseId} provisioned`);
