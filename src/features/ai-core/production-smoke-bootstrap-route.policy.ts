@@ -1,6 +1,7 @@
 import { createHash, timingSafeEqual } from "node:crypto";
 import {
   AI_CORE_SMOKE_MARKER,
+  AI_CORE_SMOKE_PRODUCTION_ORIGIN,
   AI_CORE_SMOKE_SITE_ID,
   assertStrongBootstrapSecret,
   deriveSmokeAccountPassword,
@@ -14,6 +15,7 @@ export const PRODUCTION_SMOKE_CONFIRMATION = Object.freeze({
 });
 
 type RuntimeIdentity = {
+  requestOrigin?: string;
   nodeEnv?: string;
   context?: string;
   siteId?: string;
@@ -27,11 +29,11 @@ export function resolveRuntimeEnvironmentValue(
 }
 
 export function isExactProductionRuntime(identity: RuntimeIdentity): boolean {
-  return (
-    identity.nodeEnv === "production" &&
-    identity.context === "production" &&
-    identity.siteId === AI_CORE_SMOKE_SITE_ID
-  );
+  if (identity.requestOrigin !== AI_CORE_SMOKE_PRODUCTION_ORIGIN) return false;
+  if (identity.nodeEnv && identity.nodeEnv !== "production") return false;
+  if (identity.context && identity.context !== "production") return false;
+  if (identity.siteId && identity.siteId !== AI_CORE_SMOKE_SITE_ID) return false;
+  return true;
 }
 
 function digest(value: string): Buffer {
