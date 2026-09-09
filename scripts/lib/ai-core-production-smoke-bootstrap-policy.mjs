@@ -64,6 +64,7 @@ export function assertExactSmokeCase(existing, ownerUserId) {
 export function extractLinkedSiteId(status) {
   return (
     status?.siteData?.id ??
+    status?.siteData?.["site-id"] ??
     status?.site?.id ??
     status?.site?.siteId ??
     status?.site_id ??
