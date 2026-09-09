@@ -14,6 +14,13 @@ import {
   resolveProductionDatabaseUrl,
   resolveRequiredProductionSecret,
 } from "./ai-core-production-smoke-bootstrap-policy.mjs";
+import {
+  NETLIFY_ENV_SYNC_INTERNAL_FLAG,
+  NETLIFY_ENV_SYNC_VALUE_KEY,
+  buildNetlifyEnvSetArguments,
+  buildNetlifyEnvSyncInvocation,
+  isSmokePasswordEnvironmentKey,
+} from "./netlify-production-env-sync.mjs";
 
 describe("AI Core production smoke bootstrap policy", () => {
   it("accepts an absent or exact active dedicated smoke identity", () => {
@@ -256,6 +263,59 @@ describe("AI Core production smoke bootstrap policy", () => {
         verifyPassword: async () => false,
       }),
       /does not match.*refusing to overwrite/,
+    );
+  });
+
+  it("keeps hostile Windows values out of the child command and OS argv", () => {
+    const value = '"quoted"&pipe|redirect<>percent%^bang!\nsecond line';
+    const invocation = buildNetlifyEnvSyncInvocation({
+      key: "OPS_SMOKE_ADMIN_PASSWORD",
+      value,
+      cwd: "C:\\repo with spaces",
+      helperPath: "C:\\repo with spaces\\scripts\\env-sync.mjs",
+      npmExecPath:
+        "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+      nodeExecutable: "C:\\Program Files\\nodejs\\node.exe",
+      baseEnvironment: { PATH: "C:\\Windows\\system32" },
+    });
+
+    assert.equal(invocation.executable, "C:\\Program Files\\nodejs\\node.exe");
+    assert.equal(invocation.options.shell, false);
+    assert.equal(invocation.options.env[NETLIFY_ENV_SYNC_VALUE_KEY], value);
+    assert.ok(invocation.args.includes(NETLIFY_ENV_SYNC_INTERNAL_FLAG));
+    assert.ok(invocation.args.every((argument) => !argument.includes(value)));
+    assert.ok(invocation.args.every((argument) => argument !== "/c"));
+    assert.ok(
+      invocation.args.every((argument) => !argument.includes("cmd.exe")),
+    );
+  });
+
+  it("always marks every smoke password key as a Netlify secret", () => {
+    const passwordKeys = [
+      "OPS_SMOKE_ADMIN_PASSWORD",
+      "OPS_SMOKE_CLIENT_PASSWORD",
+      "OPS_SMOKE_LAWYER_PASSWORD",
+      "OPS_SMOKE_STAFF_PASSWORD",
+    ];
+    for (const key of passwordKeys) {
+      assert.equal(isSmokePasswordEnvironmentKey(key), true);
+      const args = buildNetlifyEnvSetArguments(key, "secret value &!\nline");
+      assert.ok(args.includes("--secret"));
+      assert.deepEqual(args.slice(0, 6), [
+        "env:set",
+        "--context",
+        "production",
+        "--force",
+        "--secret",
+        "--",
+      ]);
+    }
+    assert.equal(isSmokePasswordEnvironmentKey("OPS_SMOKE_ADMIN_EMAIL"), false);
+    assert.equal(
+      buildNetlifyEnvSetArguments("OPS_SMOKE_CASE_ID", "case-1").includes(
+        "--secret",
+      ),
+      false,
     );
   });
 });
