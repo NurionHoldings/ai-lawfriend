@@ -27,10 +27,11 @@
 
 ## Safety invariants
 
-- Production bootstrap은 `NODE_ENV=production`, `CONTEXT=production`, site ID
-  `8a03b04b-b3e9-453f-9f3e-2de15bf9a91d`가 모두 일치해야 한다. Netlify Next.js
-  Server Handler에서는 런타임 변수를 공식 `Netlify.env.get()`에서 우선 읽고, 로컬·테스트
-  호환을 위해서만 `process.env`로 fallback한다.
+- Production bootstrap은 요청 origin이 정확히 `https://xn--ai-e61jh10d.com`이어야 한다.
+  Netlify Next.js Server Handler에서 `CONTEXT`와 `SITE_ID` 같은 시스템 값이 제공되면 각각
+  `production`과 `8a03b04b-b3e9-453f-9f3e-2de15bf9a91d`도 일치해야 하며, 충돌하면 거부한다.
+  런타임 변수는 공식 `Netlify.env.get()`에서 우선 읽고 로컬·테스트 호환을 위해서만
+  `process.env`로 fallback한다. 별도 Bearer secret과 exact site ID 요청 본문 검증은 유지한다.
 - `NETLIFY_DB_URL`이 없는 경우 운영 bootstrap은 `DATABASE_URL`로 우회하지 않고 중단한다.
 - `OPS_SMOKE_BOOTSTRAP_SECRET`은 관리자 로그인 비밀번호와 분리된 32~256자 secret이다.
 - 요청은 `application/json`, 2 KiB 이하이며 exact Bearer와 marker/site 확인값이 필요하다.
