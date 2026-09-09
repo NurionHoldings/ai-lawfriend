@@ -39,6 +39,11 @@ describe("production smoke bootstrap route policy", () => {
   it("requires a strong standalone bootstrap secret", () => {
     expect(assertStrongBootstrapSecret(secret)).toBe(secret);
     expect(() => assertStrongBootstrapSecret("too-short")).toThrow(/32 to 256/);
+    expect(() =>
+      assertStrongBootstrapSecret(
+        "secret with spaces that is definitely long enough",
+      ),
+    ).toThrow(/non-whitespace ASCII/);
   });
 
   it("compares an exact Bearer credential without length leakage", () => {

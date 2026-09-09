@@ -38,6 +38,11 @@
 - 완료 AuditLog가 있으면 case ID만 반환하고 관리자, 계정, 사건, 비밀번호를 변경하지 않는다.
 - 전체 DB 쓰기는 하나의 Serializable transaction이며 충돌 또는 오류 시 전부 롤백한다.
 - route 응답은 성공 상태와 case ID만 포함하고 DB URL과 모든 비밀번호를 포함하지 않는다.
+- 운영 helper와 route는 동일한 역할별 HMAC 파생 함수를 사용한다. helper는 성공 응답의
+  case ID를 메모리에서 받아 CLIENT/LAWYER/STAFF 이메일·비밀번호와 함께 Netlify
+  production 환경변수에 동기화한다.
+- 역할 비밀번호 3종은 Netlify `--secret`으로만 저장하고 외부 프로세스 argv, 셸 문자열,
+  stdout/stderr에 원문을 포함하지 않는다.
 
 ## Operator boundary
 
@@ -51,6 +56,29 @@
 `OPS_SMOKE_BOOTSTRAP_SECRET`이며 서로 다른 값이어야 한다. `NETLIFY_DB_URL`은 Netlify
 Database가 자동 관리하므로 사람이 편집하거나 복사하지 않는다.
 
+### Windows PowerShell 실행 순서
+
+Production 배포와 최종 HEAD CI가 승인된 뒤 저장소 루트에서 다음 wrapper를 실행한다.
+기존 process 환경에 `OPS_SMOKE_BOOTSTRAP_SECRET`이 없으면 `SecureString` 프롬프트가
+열린다. 입력값은 화면이나 PowerShell 명령 기록에 나타나지 않는다.
+
+```powershell
+.\scripts\ops-ai-core-production-smoke-runtime-bootstrap.ps1 -ConfirmProduction
+```
+
+wrapper는 (1) 정확한 Netlify site 연결 확인, (2) Production 내부 endpoint 호출과 응답
+검증, (3) 가상 역할 계정 이메일·HMAC 파생 비밀번호·응답 case ID의 production env
+동기화 순으로만 진행한다. endpoint 또는 응답 검증 실패 시 env 동기화를 시작하지 않는다.
+env 동기화 도중 실패하면 같은 secret으로 wrapper를 재실행한다. endpoint는 완료 marker를
+무변경 반환하고 동일 HMAC 비밀번호가 다시 동기화된다.
+
+로그인 스모크 검증까지 성공한 뒤에만 bootstrap secret 제거를 별도 최종 단계로 수행한다.
+helper는 env 동기화 부분 실패 시 복구 경로를 보존하기 위해 이 값을 자동 삭제하지 않는다.
+
+```powershell
+npx netlify env:unset OPS_SMOKE_BOOTSTRAP_SECRET --context production
+```
+
 ## Acceptance
 
 1. Netlify binding이 있으면 Prisma가 공식 helper 결과를 사용한다.
@@ -58,4 +86,7 @@ Database가 자동 관리하므로 사람이 편집하거나 복사하지 않는
 3. preview, 다른 site, GET, 비 JSON, 과대 본문, 잘못된 secret/confirmation은 쓰기 전에 거부된다.
 4. 동시 호출은 advisory lock 뒤 하나만 생성하고 이후 호출은 무변경 성공으로 끝난다.
 5. 기존 CLI와 runtime route가 동일한 fixture transaction service를 사용한다.
-6. focused tests, 기존 bootstrap policy tests, typecheck, lint, build가 통과한다.
+6. 운영 helper는 endpoint 성공을 먼저 검증한 뒤 동일 파생 비밀번호와 응답 case ID를
+   비밀 노출 없이 production env에 동기화한다.
+7. 실제 신규 fixture, identity/case 충돌, transaction rollback 정책 테스트가 통과한다.
+8. focused tests, 기존 bootstrap policy tests, typecheck, lint, build가 통과한다.

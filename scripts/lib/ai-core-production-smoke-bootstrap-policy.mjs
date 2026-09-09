@@ -1,7 +1,10 @@
+import { createHmac } from "node:crypto";
+
 export const AI_CORE_SMOKE_SITE_ID = "8a03b04b-b3e9-453f-9f3e-2de15bf9a91d";
 export const AI_CORE_SMOKE_MARKER = "ARKAON_PRODUCTION_SMOKE_V1";
 export const AI_CORE_SMOKE_BOOTSTRAP_ACTION =
   "AI_CORE_PRODUCTION_SMOKE_BOOTSTRAP";
+export const AI_CORE_SMOKE_PRODUCTION_ORIGIN = "https://xn--ai-e61jh10d.com";
 export const AI_CORE_SMOKE_CASE_TITLE =
   "[ARKAON PRODUCTION SMOKE] 차량담보대출 사기";
 export const AI_CORE_SMOKE_ADMIN_NAME = "아르카온관리자";
@@ -112,6 +115,31 @@ export function assertStrongSmokeAdminPassword(value) {
     );
   }
   return value;
+}
+
+export function assertStrongBootstrapSecret(value) {
+  if (
+    !value ||
+    value.length < 32 ||
+    value.length > 256 ||
+    !/^[\x21-\x7e]+$/.test(value)
+  ) {
+    throw new Error(
+      "OPS_SMOKE_BOOTSTRAP_SECRET must contain 32 to 256 non-whitespace ASCII characters",
+    );
+  }
+  return value;
+}
+
+export function deriveSmokeAccountPassword(bootstrapSecret, label) {
+  assertStrongBootstrapSecret(bootstrapSecret);
+  if (!Object.hasOwn(AI_CORE_SMOKE_ACCOUNTS, label)) {
+    throw new Error("unknown smoke account label");
+  }
+  const material = createHmac("sha256", bootstrapSecret)
+    .update(`ai-lawfriend:${AI_CORE_SMOKE_MARKER}:${label}`, "utf8")
+    .digest("base64url");
+  return `ArK!${material.slice(0, 32)}9z`;
 }
 
 export function decideSmokeAdminBootstrap(existing, privilegedAdminCount) {

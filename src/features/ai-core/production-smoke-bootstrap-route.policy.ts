@@ -1,8 +1,12 @@
-import { createHash, createHmac, timingSafeEqual } from "node:crypto";
+import { createHash, timingSafeEqual } from "node:crypto";
 import {
   AI_CORE_SMOKE_MARKER,
   AI_CORE_SMOKE_SITE_ID,
+  assertStrongBootstrapSecret,
+  deriveSmokeAccountPassword,
 } from "../../../scripts/lib/ai-core-production-smoke-bootstrap-policy.mjs";
+
+export { assertStrongBootstrapSecret, deriveSmokeAccountPassword };
 
 export const PRODUCTION_SMOKE_CONFIRMATION = Object.freeze({
   confirm: AI_CORE_SMOKE_MARKER,
@@ -21,15 +25,6 @@ export function isExactProductionRuntime(identity: RuntimeIdentity): boolean {
     identity.context === "production" &&
     identity.siteId === AI_CORE_SMOKE_SITE_ID
   );
-}
-
-export function assertStrongBootstrapSecret(value: string | undefined): string {
-  if (!value || value.length < 32 || value.length > 256) {
-    throw new Error(
-      "OPS_SMOKE_BOOTSTRAP_SECRET must contain 32 to 256 characters",
-    );
-  }
-  return value;
 }
 
 function digest(value: string): Buffer {
@@ -54,14 +49,4 @@ export function hasExactBootstrapConfirmation(value: unknown): boolean {
     body.confirm === PRODUCTION_SMOKE_CONFIRMATION.confirm &&
     body.siteId === PRODUCTION_SMOKE_CONFIRMATION.siteId
   );
-}
-
-export function deriveSmokeAccountPassword(
-  bootstrapSecret: string,
-  label: "CLIENT" | "LAWYER" | "STAFF",
-): string {
-  const material = createHmac("sha256", bootstrapSecret)
-    .update(`ai-lawfriend:${AI_CORE_SMOKE_MARKER}:${label}`, "utf8")
-    .digest("base64url");
-  return `ArK!${material.slice(0, 32)}9z`;
 }
