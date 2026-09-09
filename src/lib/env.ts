@@ -1,5 +1,4 @@
 type RequiredEnvKey =
-  | "DATABASE_URL"
   | "JWT_SECRET"
   | "CRON_SECRET"
   | "NEXT_PUBLIC_APP_VERSION";
@@ -21,7 +20,13 @@ function readEnv(key: RequiredEnvKey): string {
 /** 서버에서 필요 시점에 접근(게터). import 시점에 전부 검증하지 않습니다. */
 export const env = {
   get DATABASE_URL() {
-    return readEnv("DATABASE_URL");
+    // Kept for compatibility with existing callers. Prisma itself resolves
+    // Netlify Database through src/lib/prisma-database-url.ts.
+    const value = process.env.NETLIFY_DB_URL || process.env.DATABASE_URL;
+    if (!value?.trim()) {
+      throw new Error("Missing required env: NETLIFY_DB_URL or DATABASE_URL");
+    }
+    return value;
   },
   get JWT_SECRET() {
     return readEnv("JWT_SECRET");

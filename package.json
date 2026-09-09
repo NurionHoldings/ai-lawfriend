@@ -143,7 +143,7 @@
     "verify:lawyer-matching-migration-predeploy": "node scripts/verify-lawyer-matching-migration-predeploy.mjs",
     "db:deploy:staging-lawyer-matching": "node scripts/run-staging-lawyer-matching-db-deploy.mjs",
     "ops:ai-core-role-smoke": "node scripts/ops-ai-core-role-smoke.mjs",
-    "ops:ai-core-production-smoke-bootstrap": "node scripts/ops-ai-core-production-smoke-bootstrap.mjs",
+    "ops:ai-core-production-smoke-bootstrap": "node --import tsx scripts/ops-ai-core-production-smoke-bootstrap.mjs",
     "test:ai-core-production-smoke-bootstrap-policy": "node --test scripts/lib/ai-core-production-smoke-bootstrap-policy.test.mjs",
     "ops:staging-client-portal-smoke": "node scripts/ops-staging-client-portal-smoke.mjs",
     "ops:staging-document-upload-smoke": "node scripts/ops-staging-document-upload-smoke.mjs",
@@ -415,6 +415,7 @@
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
+    "@netlify/database": "1.1.0",
     "@prisma/client": "^6.19.0",
     "@supabase/supabase-js": "^2.105.1",
     "bcryptjs": "^3.0.2",
@@ -466,4 +467,3 @@
     "seed": "tsx prisma/seed.ts"
   }
 }
-

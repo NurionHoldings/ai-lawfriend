@@ -1,11 +1,15 @@
 import { z } from "zod";
 
 const productionEnvSchema = z.object({
-  DATABASE_URL: z.string().min(1),
+  DATABASE_URL: z.string().min(1).optional(),
+  NETLIFY_DB_URL: z.string().min(1).optional(),
   JWT_SECRET: z.string().min(32),
   CRON_SECRET: z.string().min(16),
   APP_DATA_ENCRYPTION_KEY: z.string().min(32),
   SECRET_TOKEN_PEPPER: z.string().min(16),
+}).refine((value) => value.NETLIFY_DB_URL || value.DATABASE_URL, {
+  message: "NETLIFY_DB_URL or DATABASE_URL is required",
+  path: ["NETLIFY_DB_URL"],
 });
 
 /**
@@ -18,6 +22,7 @@ export function parseProductionEnv() {
 
   return productionEnvSchema.parse({
     DATABASE_URL: process.env.DATABASE_URL,
+    NETLIFY_DB_URL: process.env.NETLIFY_DB_URL,
     JWT_SECRET: process.env.JWT_SECRET,
     CRON_SECRET: process.env.CRON_SECRET,
     APP_DATA_ENCRYPTION_KEY: process.env.APP_DATA_ENCRYPTION_KEY,
