@@ -72,3 +72,13 @@ export function extractLinkedSiteId(status) {
     null
   );
 }
+
+export function resolveProductionDatabaseUrl(injectedValue, cliValue) {
+  const injected = injectedValue?.trim();
+  if (/^postgres(?:ql)?:\/\//.test(injected ?? "")) return injected;
+  const fromCli = cliValue?.trim();
+  if (/^postgres(?:ql)?:\/\//.test(fromCli ?? "")) return fromCli;
+  throw new Error(
+    "DATABASE_URL is unavailable or redacted; inject a PostgreSQL URL into the process environment",
+  );
+}
