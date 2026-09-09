@@ -12,7 +12,10 @@
 - 완료된 가상 인터뷰, 변호사·사무장 활성 배정
 - `OPS_SMOKE_ADMIN_EMAIL/PASSWORD`로 지정한 `아르카온관리자` 최초 생성 또는 기존
   ACTIVE ADMIN/SUPER_ADMIN의 자격·비밀번호 검증
-- 매 실행마다 별도 강력 비밀번호 생성 후 Netlify production 환경변수에 비공개 동기화
+- 로컬 운영자 CLI는 최초 실행 때 별도 강력 비밀번호를 생성해 Netlify production
+  환경변수에 비공개 동기화한다.
+- Netlify runtime 경로는 별도 bootstrap secret에서 역할별 비밀번호를 파생하고 원문을
+  응답하지 않는다. 세부 경계는 `2026-09-09-netlify-database-runtime-cutover.md`를 따른다.
 
 ## Safety invariants
 
@@ -30,7 +33,8 @@
   실제 해시와 일치할 때만 재사용한다. 이름·역할·상태·비밀번호는 덮어쓰지 않는다.
 - 이메일·문자·결제·실주문·삭제를 수행하지 않는다.
 - 정확한 Netlify site ID와 명시적 `--confirm-production` 플래그 없이는 실행하지 않는다.
-- 재실행은 전용 fixture만 갱신하며 실제 계정을 활성화하거나 변경하지 않는다.
+- 완료 감사 로그가 생성된 뒤의 재실행은 전용 fixture도 갱신하지 않고 기존 case ID만
+  확인한다. 실제 계정을 활성화하거나 변경하지 않는다.
 
 ## Transaction and collision policy
 
@@ -38,8 +42,8 @@
   `Serializable` 트랜잭션에서 생성·검증한다.
 - 이메일 unique 충돌 또는 직렬화 충돌은 자동 재시도하지 않는다. 전체 트랜잭션을
   롤백하고 운영자가 원인을 확인한 뒤 다시 실행한다.
-- DB 커밋 뒤 Netlify 환경변수 동기화가 일부 실패한 경우 같은 명령을 다시 실행할 수 있다.
-  관리자는 검증만 하고 변경하지 않으며, 전용 fixture 비밀번호와 환경변수는 다시 맞춘다.
+- DB 커밋 뒤 로컬 CLI의 Netlify 환경변수 동기화가 일부 실패하면 자동 재실행으로 DB
+  비밀번호를 다시 쓰지 않는다. 운영자가 완료 감사 로그와 환경변수 상태를 별도로 확인한다.
 - 전체 Prisma seed, 외부 메시지, 결제, 실주문, 데이터 삭제는 이 절차에 포함하지 않는다.
 
 ## Acceptance
