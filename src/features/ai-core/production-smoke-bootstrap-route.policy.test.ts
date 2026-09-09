@@ -7,6 +7,7 @@ import {
   hasExactBootstrapConfirmation,
   hasValidBearerSecret,
   isExactProductionRuntime,
+  resolveRuntimeEnvironmentValue,
 } from "./production-smoke-bootstrap-route.policy";
 
 describe("production smoke bootstrap route policy", () => {
@@ -34,6 +35,19 @@ describe("production smoke bootstrap route policy", () => {
         siteId: "another-site",
       }),
     ).toBe(false);
+  });
+
+  it("prefers Netlify runtime values and falls back to process values", () => {
+    expect(
+      resolveRuntimeEnvironmentValue(" netlify-production ", "process-preview"),
+    ).toBe("netlify-production");
+    expect(resolveRuntimeEnvironmentValue(undefined, " process-value ")).toBe(
+      "process-value",
+    );
+    expect(resolveRuntimeEnvironmentValue("   ", " process-value ")).toBe(
+      "process-value",
+    );
+    expect(resolveRuntimeEnvironmentValue(undefined, undefined)).toBeUndefined();
   });
 
   it("requires a strong standalone bootstrap secret", () => {
