@@ -19,6 +19,13 @@ type RuntimeIdentity = {
   siteId?: string;
 };
 
+export function resolveRuntimeEnvironmentValue(
+  netlifyValue: string | undefined,
+  processValue: string | undefined,
+): string | undefined {
+  return netlifyValue?.trim() || processValue?.trim() || undefined;
+}
+
 export function isExactProductionRuntime(identity: RuntimeIdentity): boolean {
   return (
     identity.nodeEnv === "production" &&
