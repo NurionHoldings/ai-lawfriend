@@ -37,6 +37,18 @@ class ProductionSmokeAdvisoryLockError extends Error {
   }
 }
 
+export async function acquireProductionSmokeAdvisoryLock(
+  tx: Pick<Prisma.TransactionClient, "$queryRaw">,
+): Promise<void> {
+  try {
+    await tx.$queryRaw(
+      Prisma.sql`SELECT pg_advisory_xact_lock(hashtext(${AI_CORE_SMOKE_MARKER})::bigint)::text AS advisory_lock`,
+    );
+  } catch (error) {
+    throw new ProductionSmokeAdvisoryLockError(error);
+  }
+}
+
 /**
  * The single write implementation shared by the local operator script and the
  * production-only Netlify runtime route. The advisory transaction lock and
@@ -51,13 +63,7 @@ export async function provisionProductionSmokeFixtures({
   try {
     return await prisma.$transaction(
       async (tx) => {
-        try {
-          await tx.$queryRaw(
-            Prisma.sql`SELECT pg_advisory_xact_lock(hashtext(${AI_CORE_SMOKE_MARKER}))`,
-          );
-        } catch (error) {
-          throw new ProductionSmokeAdvisoryLockError(error);
-        }
+        await acquireProductionSmokeAdvisoryLock(tx);
 
         const completed = await tx.auditLog.findFirst({
           where: {
