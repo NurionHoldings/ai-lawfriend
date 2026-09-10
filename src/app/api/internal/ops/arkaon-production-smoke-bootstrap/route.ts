@@ -7,6 +7,7 @@ import {
 } from "../../../../../../scripts/lib/ai-core-production-smoke-bootstrap-policy.mjs";
 import {
   assertStrongBootstrapSecret,
+  classifyProductionSmokeBootstrapError,
   deriveSmokeAccountPassword,
   hasExactBootstrapConfirmation,
   hasValidBearerSecret,
@@ -181,7 +182,10 @@ export async function POST(request: Request): Promise<Response> {
       "ARKAON production smoke bootstrap failed:",
       safeErrorSummary(error),
     );
-    return json(500, { ok: false });
+    return json(500, {
+      ok: false,
+      errorCode: classifyProductionSmokeBootstrapError(error),
+    });
   } finally {
     await prisma?.$disconnect();
   }
