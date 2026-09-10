@@ -26,6 +26,17 @@ type ProvisionProductionSmokeFixturesInput = {
   accountPasswords: Record<SmokeAccountLabel, string>;
 };
 
+const ADVISORY_LOCK_ERROR_CODE = "ARKAON_ADVISORY_LOCK_FAILED";
+
+class ProductionSmokeAdvisoryLockError extends Error {
+  readonly code = ADVISORY_LOCK_ERROR_CODE;
+
+  constructor(cause: unknown) {
+    super("production smoke advisory lock query failed", { cause });
+    this.name = "ProductionSmokeAdvisoryLockError";
+  }
+}
+
 /**
  * The single write implementation shared by the local operator script and the
  * production-only Netlify runtime route. The advisory transaction lock and
@@ -40,9 +51,13 @@ export async function provisionProductionSmokeFixtures({
   try {
     return await prisma.$transaction(
       async (tx) => {
-        await tx.$queryRaw(
-          Prisma.sql`SELECT pg_advisory_xact_lock(hashtext(${AI_CORE_SMOKE_MARKER}))`,
-        );
+        try {
+          await tx.$queryRaw(
+            Prisma.sql`SELECT pg_advisory_xact_lock(hashtext(${AI_CORE_SMOKE_MARKER}))`,
+          );
+        } catch (error) {
+          throw new ProductionSmokeAdvisoryLockError(error);
+        }
 
         const completed = await tx.auditLog.findFirst({
           where: {

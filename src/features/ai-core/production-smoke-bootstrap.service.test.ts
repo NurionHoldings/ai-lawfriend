@@ -6,9 +6,11 @@ import { provisionProductionSmokeFixtures } from "./production-smoke-bootstrap.s
 function buildFreshFixtureTransaction({
   clientCollision = false,
   failAtCaseCreate = false,
+  failAtAdvisoryLock = false,
 }: {
   clientCollision?: boolean;
   failAtCaseCreate?: boolean;
+  failAtAdvisoryLock?: boolean;
 } = {}) {
   let sequence = 0;
   const write = <T extends Record<string, unknown>>(
@@ -19,7 +21,10 @@ function buildFreshFixtureTransaction({
     ...data,
   });
   const tx = {
-    $queryRaw: vi.fn(async () => [{ pg_advisory_xact_lock: null }]),
+    $queryRaw: vi.fn(async () => {
+      if (failAtAdvisoryLock) throw new Error("sensitive database detail");
+      return [{ pg_advisory_xact_lock: null }];
+    }),
     auditLog: {
       findFirst: vi.fn(async () => null),
       create: vi.fn(async ({ data }) => write("audit", data)),
@@ -81,6 +86,28 @@ const freshInput = {
 } as const;
 
 describe("provisionProductionSmokeFixtures", () => {
+  it("classifies an advisory-lock query failure without exposing its detail", async () => {
+    const tx = buildFreshFixtureTransaction({ failAtAdvisoryLock: true });
+    const prisma = {
+      $transaction: vi.fn(async (callback: (client: typeof tx) => unknown) =>
+        callback(tx),
+      ),
+    } as unknown as PrismaClient;
+
+    const error = await provisionProductionSmokeFixtures({
+      prisma,
+      ...freshInput,
+    }).catch((caught: unknown) => caught);
+
+    expect(error).toMatchObject({
+      name: "ProductionSmokeAdvisoryLockError",
+      code: "ARKAON_ADVISORY_LOCK_FAILED",
+      message: "production smoke advisory lock query failed",
+    });
+    expect((error as Error).message).not.toContain("sensitive database detail");
+    expect(tx.auditLog.findFirst).not.toHaveBeenCalled();
+  });
+
   it("returns the persisted completion without mutating any fixture", async () => {
     const queryRaw = vi.fn(async () => [{ pg_advisory_xact_lock: null }]);
     const findFirst = vi.fn(async () => ({ entityId: "case-already-created" }));

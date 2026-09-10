@@ -23,6 +23,7 @@ type RuntimeIdentity = {
 
 export type ProductionSmokeBootstrapErrorCode =
   | "DATABASE_BINDING_UNAVAILABLE"
+  | "ADVISORY_LOCK_ERROR"
   | "ADMIN_CONFIGURATION_INVALID"
   | "FIXTURE_COLLISION"
   | "TRANSACTION_CONFLICT"
@@ -46,6 +47,9 @@ export function classifyProductionSmokeBootstrapError(
     /^P10(?:0[0-9]|1[0-7])$/.test(code)
   ) {
     return "DATABASE_BINDING_UNAVAILABLE";
+  }
+  if (code === "ARKAON_ADVISORY_LOCK_FAILED") {
+    return "ADVISORY_LOCK_ERROR";
   }
   if (/OPS_SMOKE_ADMIN_/i.test(message)) {
     return "ADMIN_CONFIGURATION_INVALID";
