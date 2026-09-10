@@ -21,6 +21,44 @@ type RuntimeIdentity = {
   siteId?: string;
 };
 
+export type ProductionSmokeBootstrapErrorCode =
+  | "DATABASE_BINDING_UNAVAILABLE"
+  | "ADMIN_CONFIGURATION_INVALID"
+  | "FIXTURE_COLLISION"
+  | "TRANSACTION_CONFLICT"
+  | "DATABASE_ERROR"
+  | "BOOTSTRAP_FAILED";
+
+export function classifyProductionSmokeBootstrapError(
+  error: unknown,
+): ProductionSmokeBootstrapErrorCode {
+  const message = error instanceof Error ? error.message : "";
+  const code =
+    error && typeof error === "object" && "code" in error
+      ? String(error.code)
+      : "";
+
+  if (
+    /NETLIFY_DB_URL|Netlify Database runtime|connection URL/i.test(message) ||
+    /^P10(?:0[0-9]|1[0-7])$/.test(code)
+  ) {
+    return "DATABASE_BINDING_UNAVAILABLE";
+  }
+  if (/OPS_SMOKE_ADMIN_/i.test(message)) {
+    return "ADMIN_CONFIGURATION_INVALID";
+  }
+  if (/smoke (?:identity|case title) collision/i.test(message)) {
+    return "FIXTURE_COLLISION";
+  }
+  if (/uniqueness or serialization conflict/i.test(message) || code === "P2034") {
+    return "TRANSACTION_CONFLICT";
+  }
+  if (/^P\d{4}$/.test(code)) {
+    return "DATABASE_ERROR";
+  }
+  return "BOOTSTRAP_FAILED";
+}
+
 const AI_CORE_SMOKE_PRODUCTION_HOST = new URL(
   AI_CORE_SMOKE_PRODUCTION_ORIGIN,
 ).host;
