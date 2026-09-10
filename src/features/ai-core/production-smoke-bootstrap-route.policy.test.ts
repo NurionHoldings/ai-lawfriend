@@ -6,6 +6,7 @@ import {
 import {
   PRODUCTION_SMOKE_CONFIRMATION,
   assertStrongBootstrapSecret,
+  classifyProductionSmokeBootstrapError,
   deriveSmokeAccountPassword,
   hasExactBootstrapConfirmation,
   hasValidBearerSecret,
@@ -111,6 +112,35 @@ describe("production smoke bootstrap route policy", () => {
         "secret with spaces that is definitely long enough",
       ),
     ).toThrow(/non-whitespace ASCII/);
+  });
+
+  it("classifies bootstrap failures without returning sensitive details", () => {
+    expect(
+      classifyProductionSmokeBootstrapError(
+        new Error("production bootstrap requires Netlify Database runtime"),
+      ),
+    ).toBe("DATABASE_BINDING_UNAVAILABLE");
+    expect(
+      classifyProductionSmokeBootstrapError(
+        new Error("OPS_SMOKE_ADMIN_PASSWORD does not match the account"),
+      ),
+    ).toBe("ADMIN_CONFIGURATION_INVALID");
+    expect(
+      classifyProductionSmokeBootstrapError(
+        new Error("CLIENT smoke identity collision"),
+      ),
+    ).toBe("FIXTURE_COLLISION");
+    expect(
+      classifyProductionSmokeBootstrapError(
+        new Error("bootstrap uniqueness or serialization conflict detected"),
+      ),
+    ).toBe("TRANSACTION_CONFLICT");
+    expect(
+      classifyProductionSmokeBootstrapError({ code: "P2022" }),
+    ).toBe("DATABASE_ERROR");
+    expect(classifyProductionSmokeBootstrapError(new Error("unknown"))).toBe(
+      "BOOTSTRAP_FAILED",
+    );
   });
 
   it("compares an exact Bearer credential without length leakage", () => {
