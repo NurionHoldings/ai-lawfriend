@@ -11,6 +11,7 @@ import {
   hasExactBootstrapConfirmation,
   hasValidBearerSecret,
   isExactProductionRuntime,
+  resolveProductionRequestOrigin,
   resolveRuntimeEnvironmentValue,
 } from "@/features/ai-core/production-smoke-bootstrap-route.policy";
 import { provisionProductionSmokeFixtures } from "@/features/ai-core/production-smoke-bootstrap.service";
@@ -80,14 +81,13 @@ function safeErrorSummary(error: unknown): string {
 }
 
 export async function POST(request: Request): Promise<Response> {
-  if (
-    !isExactProductionRuntime({
-      requestOrigin: new URL(request.url).origin,
-      nodeEnv: process.env.NODE_ENV,
-      context: runtimeEnvironmentValue("CONTEXT"),
-      siteId: runtimeEnvironmentValue("SITE_ID"),
-    })
-  ) {
+  const runtimeIdentity = {
+    requestOrigin: resolveProductionRequestOrigin(request.url, request.headers),
+    nodeEnv: process.env.NODE_ENV,
+    context: runtimeEnvironmentValue("CONTEXT"),
+    siteId: runtimeEnvironmentValue("SITE_ID"),
+  };
+  if (!isExactProductionRuntime(runtimeIdentity)) {
     return json(404, { ok: false });
   }
 
