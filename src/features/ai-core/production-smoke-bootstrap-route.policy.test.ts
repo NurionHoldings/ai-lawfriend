@@ -135,9 +135,18 @@ describe("production smoke bootstrap route policy", () => {
         new Error("bootstrap uniqueness or serialization conflict detected"),
       ),
     ).toBe("TRANSACTION_CONFLICT");
-    expect(
-      classifyProductionSmokeBootstrapError({ code: "P2022" }),
-    ).toBe("DATABASE_ERROR");
+    expect(classifyProductionSmokeBootstrapError({ code: "P2022" })).toBe(
+      "DATABASE_SCHEMA_MISMATCH",
+    );
+    expect(classifyProductionSmokeBootstrapError({ code: "P2003" })).toBe(
+      "DATABASE_CONSTRAINT_ERROR",
+    );
+    expect(classifyProductionSmokeBootstrapError({ code: "P2028" })).toBe(
+      "DATABASE_TRANSACTION_ERROR",
+    );
+    expect(classifyProductionSmokeBootstrapError({ code: "P2010" })).toBe(
+      "DATABASE_QUERY_ERROR",
+    );
     expect(classifyProductionSmokeBootstrapError(new Error("unknown"))).toBe(
       "BOOTSTRAP_FAILED",
     );
