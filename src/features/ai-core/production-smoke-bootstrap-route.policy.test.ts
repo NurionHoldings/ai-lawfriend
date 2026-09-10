@@ -121,6 +121,11 @@ describe("production smoke bootstrap route policy", () => {
       ),
     ).toBe("DATABASE_BINDING_UNAVAILABLE");
     expect(
+      classifyProductionSmokeBootstrapError({
+        code: "ARKAON_ADVISORY_LOCK_FAILED",
+      }),
+    ).toBe("ADVISORY_LOCK_ERROR");
+    expect(
       classifyProductionSmokeBootstrapError(
         new Error("OPS_SMOKE_ADMIN_PASSWORD does not match the account"),
       ),
