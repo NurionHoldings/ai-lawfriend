@@ -10,6 +10,7 @@ import {
   hasExactBootstrapConfirmation,
   hasValidBearerSecret,
   isExactProductionRuntime,
+  resolveProductionRequestOrigin,
   resolveRuntimeEnvironmentValue,
 } from "./production-smoke-bootstrap-route.policy";
 
@@ -63,6 +64,43 @@ describe("production smoke bootstrap route policy", () => {
       "process-value",
     );
     expect(resolveRuntimeEnvironmentValue(undefined, undefined)).toBeUndefined();
+  });
+
+  it("resolves the exact production origin through trusted proxy headers", () => {
+    const headers = new Headers({
+      "x-forwarded-proto": "https",
+      "x-forwarded-host": "xn--ai-e61jh10d.com",
+    });
+    expect(
+      resolveProductionRequestOrigin(
+        "https://internal.example.netlify.app/internal/path",
+        headers,
+      ),
+    ).toBe(AI_CORE_SMOKE_PRODUCTION_ORIGIN);
+    expect(
+      resolveProductionRequestOrigin(
+        `${AI_CORE_SMOKE_PRODUCTION_ORIGIN}/internal/path`,
+        new Headers(),
+      ),
+    ).toBe(AI_CORE_SMOKE_PRODUCTION_ORIGIN);
+    expect(
+      resolveProductionRequestOrigin(
+        "https://internal.example.netlify.app/internal/path",
+        new Headers({
+          "x-forwarded-proto": "http",
+          "x-forwarded-host": "xn--ai-e61jh10d.com",
+        }),
+      ),
+    ).toBeUndefined();
+    expect(
+      resolveProductionRequestOrigin(
+        "https://internal.example.netlify.app/internal/path",
+        new Headers({
+          "x-forwarded-proto": "https",
+          "x-forwarded-host": "deploy-preview.example.netlify.app",
+        }),
+      ),
+    ).toBeUndefined();
   });
 
   it("requires a strong standalone bootstrap secret", () => {
