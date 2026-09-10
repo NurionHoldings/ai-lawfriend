@@ -21,6 +21,32 @@ type RuntimeIdentity = {
   siteId?: string;
 };
 
+const AI_CORE_SMOKE_PRODUCTION_HOST = new URL(
+  AI_CORE_SMOKE_PRODUCTION_ORIGIN,
+).host;
+
+function firstForwardedValue(value: string | null): string | undefined {
+  return value?.split(",", 1)[0]?.trim() || undefined;
+}
+
+export function resolveProductionRequestOrigin(
+  requestUrl: string,
+  headers: Pick<Headers, "get">,
+): string | undefined {
+  const directOrigin = new URL(requestUrl).origin;
+  if (directOrigin === AI_CORE_SMOKE_PRODUCTION_ORIGIN) return directOrigin;
+
+  const forwardedProto = firstForwardedValue(headers.get("x-forwarded-proto"));
+  const forwardedHost = firstForwardedValue(headers.get("x-forwarded-host"));
+  if (
+    forwardedProto === "https" &&
+    forwardedHost === AI_CORE_SMOKE_PRODUCTION_HOST
+  ) {
+    return AI_CORE_SMOKE_PRODUCTION_ORIGIN;
+  }
+  return undefined;
+}
+
 export function resolveRuntimeEnvironmentValue(
   netlifyValue: string | undefined,
   processValue: string | undefined,
