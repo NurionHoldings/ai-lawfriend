@@ -26,7 +26,10 @@ export type ProductionSmokeBootstrapErrorCode =
   | "ADMIN_CONFIGURATION_INVALID"
   | "FIXTURE_COLLISION"
   | "TRANSACTION_CONFLICT"
-  | "DATABASE_ERROR"
+  | "DATABASE_SCHEMA_MISMATCH"
+  | "DATABASE_CONSTRAINT_ERROR"
+  | "DATABASE_TRANSACTION_ERROR"
+  | "DATABASE_QUERY_ERROR"
   | "BOOTSTRAP_FAILED";
 
 export function classifyProductionSmokeBootstrapError(
@@ -53,8 +56,17 @@ export function classifyProductionSmokeBootstrapError(
   if (/uniqueness or serialization conflict/i.test(message) || code === "P2034") {
     return "TRANSACTION_CONFLICT";
   }
+  if (/^P202[123]$/.test(code)) {
+    return "DATABASE_SCHEMA_MISMATCH";
+  }
+  if (/^P20(?:0[0123]|1[1458]|25)$/.test(code)) {
+    return "DATABASE_CONSTRAINT_ERROR";
+  }
+  if (/^P20(?:24|28)$/.test(code)) {
+    return "DATABASE_TRANSACTION_ERROR";
+  }
   if (/^P\d{4}$/.test(code)) {
-    return "DATABASE_ERROR";
+    return "DATABASE_QUERY_ERROR";
   }
   return "BOOTSTRAP_FAILED";
 }
