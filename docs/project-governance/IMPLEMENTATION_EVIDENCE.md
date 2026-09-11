@@ -6,6 +6,26 @@
 
 ---
 
+## [EVIDENCE-20260911-SITE-FOOTER-PG-BUSINESS-DISCLOSURE]
+
+### Status
+
+✅ 모바일·공용 사이트 푸터에 PG(지급대행) 심사용 **사업자정보**·**민원책임고지** 반영
+
+### Changes
+
+- `src/components/layout/site-footer.tsx`
+  - 상호 `(주)누리온홀딩스` · 대표 최인석 · 사업자등록번호 `702-86-03510`
+  - 주소 `세종특별자치시 집현중앙7로6, A동 910호` · 유선 `044-715-5715`
+  - 책임고지: 거래·배송·환불·민원 처리는 ㈜누리온홀딩스 / 민원담당자 최인석 `010-5945-5925`
+- 루트 레이아웃 `SiteFooter`로 공개·모바일 웹 공통 노출
+
+### Note
+
+- 통신판매업 신고번호는 요청 범위에 없어 미기재. 카드사·PG 심사에 필요하면 별도 추가.
+
+---
+
 ## [EVIDENCE-20260627-DIAGNOSTIC-ENGINE-PHASE2-EXIT-REASON-LOCK]
 
 ### Status
