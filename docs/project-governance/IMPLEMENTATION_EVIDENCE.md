@@ -6,6 +6,27 @@
 
 ---
 
+## [EVIDENCE-20260911-PHASE-A-INICIS-AML-STUB-AILAWFRIEND]
+
+### Status
+
+✅ AI법친 Phase A 샘플 — OpenMall AML **순수 정책 스텁** + 아르카온 읽기전용 가이던스 (live gate 미배선)
+
+### Changes
+
+- `src/features/payments/inicis-openmall-aml.ts` (+ Vitest)
+- `src/features/arkaon/arkaon-aml-guidance.ts` (+ Vitest)
+- `GET /api/admin/arkaon/aml-guidance` (ADMIN)
+- `.env.example` `INICIS_OPENMALL_*` · cursor 규칙 AML/협업 사전고지
+- `docs/arkaon/INICIS_OPENMALL_AML_PHASE_A.md`
+
+### Boundary
+
+- `INICIS_OPENMALL_AML_LIVE_GATE_WIRED = false`
+- allowlist 공란 → `approved_status_allowlist_empty` fail-closed
+- 지급 execute 경로 import 없음
+
+---
 ## [EVIDENCE-20260911-SITE-FOOTER-PG-BUSINESS-DISCLOSURE]
 
 ### Status

@@ -1,0 +1,56 @@
+---
+description: 범/GPT 수정 시 아르카온 참관·방문·Change DNA·peer review 의무
+alwaysApply: true
+---
+
+# 아르카온 참관 계약 (권한 확장 아님) — AI법친
+
+아르카온은 **운영 감사·검색 맥락**을 담당한다. 범/GPT가 수정·분석할 때 **관리자 통보·Change Intent DNA·가벼운 peer review**를 남긴다.
+회원/고객 항해 DNA와 수정 DNA는 분리한다.
+
+## 금지
+- 결제·환불·제재·PII mutate 권한 확대 없음
+- 시크릿·토큰·실값을 DNA/방문/리뷰에 넣지 않음
+- `ARKAON_AGENT_HANDOFF_SECRET` / `X-ARKAON-AGENT-KEY` 는 capability 키(역할 아님)
+
+## 필수 절차
+1. 시작 전 방문 통보 (`agent-visits/announce`) — purpose·areas·requests
+2. 가능하면 report / wake / no-touch / change-dna / cross-checks 검색
+3. 수정 후 Change Intent DNA 기록 (summary, return_point, checklist, contract_pointers)
+4. 의미 있는 변경은 peer review 요청 (author ≠ reviewer: beom↔gpt)
+5. 종료 시 visit close
+
+## Wake
+접속자 동시 구간에만 깨어 감지·수정**제안**(자동 실행 아님).
+
+## Host profile 사전고지
+시작 전 `host-profile`(또는 report.host_profile) 확인.
+Netlify 공통이어도 API 본체(Railway 등)가 있으면 시크릿은 API 호스트에 필요.
+Netlify Functions만이면 Netlify env만으로 충분. 미설정 시 `.arkaon/participation` 폴백.
+
+## API (이 제품)
+- Base: `/api/admin/arkaon/participation`
+- `.../host-profile` — 호스트·시크릿 범위 사전고지 (값 비공개)
+- 로컬 API 불가 시: `.arkaon/participation/` 또는 커밋/세션 요약
+
+## 레이어
+| 레이어 | 용도 |
+|--------|------|
+| visit | 방문·요청·업무분장 |
+| change_dna | 코드 수정 맥락 |
+| cross_check | 범↔GPT peer review |
+| wake | 접속 동시 감지 |
+| readiness / no-touch | 설정 여부·금지 prefix |
+
+## 결제·AML 접근 시 필수 사전고지
+
+관리자/GPT가 결제·정산·지급 영역에 접근하면 `/api/admin/arkaon/aml-guidance` 와 관련 finding을 먼저 확인한다.
+아르카온은 미비점의 원인·영향·수정제안·검증방법을 보고하되 **AML 수동승인, 지급·환불 실행, 상태값 추정, 시크릿·PII 보고는 금지**한다.
+Phase A에서는 `INICIS_OPENMALL_AML_LIVE_GATE_WIRED=false` 이며 실지급 경로에 게이트를 연결하지 않는다.
+
+## 증거기반 협업관제 (규칙)
+
+작업 시작 전 Work Contract 범위·no-touch·완료조건·테스트계획을 기록한다.
+`no_evidence` / `stalled` 를 실행 중으로 보고하지 않는다.
+커밋·테스트·CI·배포는 reference와 HEAD SHA로 증명하며, 검증 증거 없는 완료 주장은 금지한다.
+결정 확정·위험 인수는 HQ만 가능하다.
