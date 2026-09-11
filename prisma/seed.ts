@@ -8,12 +8,28 @@ import { seedAiEvaluationDataset } from "./seed-ai-evaluation-dataset";
 
 const prisma = new PrismaClient();
 
+function assertSeedAllowedInThisEnvironment() {
+  const nodeEnv = (process.env.NODE_ENV || "").toLowerCase();
+  const appEnv = (process.env.NEXT_PUBLIC_APP_ENV || "").toLowerCase();
+  const allow =
+    process.env.ALLOW_PRODUCTION_SEED === "1" ||
+    process.env.ALLOW_PRODUCTION_SEED === "true";
+  if ((nodeEnv === "production" || appEnv === "production") && !allow) {
+    throw new Error(
+      "Refusing prisma seed in production. Local/staging only, or set ALLOW_PRODUCTION_SEED=1 with explicit HQ approval.",
+    );
+  }
+}
+
 async function main() {
+  assertSeedAllowedInThisEnvironment();
+
   const saltRounds = Math.min(
     20,
     Math.max(4, Number(process.env.BCRYPT_SALT_ROUNDS) || 12),
   );
 
+  // Local/dev defaults only — never rely on these in production (seed is blocked there).
   const password = "Admin1234!";
   const passwordHash = await bcrypt.hash(password, saltRounds);
 
@@ -28,10 +44,12 @@ async function main() {
       role: UserRole.SUPER_ADMIN,
       status: UserStatus.ACTIVE,
       passwordHash: opsSuperAdminHash,
+      emailVerifiedAt: new Date(),
     },
     create: {
       email: opsSuperAdminEmail,
       passwordHash: opsSuperAdminHash,
+      emailVerifiedAt: new Date(),
       name: "최고관리자",
       role: UserRole.SUPER_ADMIN,
       status: UserStatus.ACTIVE,
@@ -49,10 +67,12 @@ async function main() {
       role: UserRole.ADMIN,
       status: UserStatus.ACTIVE,
       passwordHash,
+      emailVerifiedAt: new Date(),
     },
     create: {
       email: adminEmail,
       passwordHash,
+      emailVerifiedAt: new Date(),
       name: "시스템 관리자",
       role: UserRole.ADMIN,
       status: UserStatus.ACTIVE,
@@ -67,10 +87,12 @@ async function main() {
       role: UserRole.LAWYER,
       status: UserStatus.ACTIVE,
       passwordHash,
+      emailVerifiedAt: new Date(),
     },
     create: {
       email: lawyerEmail,
       passwordHash,
+      emailVerifiedAt: new Date(),
       name: "테스트 변호사",
       role: UserRole.LAWYER,
       status: UserStatus.ACTIVE,
@@ -103,10 +125,12 @@ async function main() {
       role: UserRole.USER,
       status: UserStatus.ACTIVE,
       passwordHash,
+      emailVerifiedAt: new Date(),
     },
     create: {
       email: userEmail,
       passwordHash,
+      emailVerifiedAt: new Date(),
       name: "테스트 사용자",
       role: UserRole.USER,
       status: UserStatus.ACTIVE,
@@ -121,10 +145,12 @@ async function main() {
       role: UserRole.STAFF,
       status: UserStatus.ACTIVE,
       passwordHash,
+      emailVerifiedAt: new Date(),
     },
     create: {
       email: "staff@example.com",
       passwordHash,
+      emailVerifiedAt: new Date(),
       name: "Ops Staff",
       role: UserRole.STAFF,
       status: UserStatus.ACTIVE,

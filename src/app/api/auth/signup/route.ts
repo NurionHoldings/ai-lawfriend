@@ -3,6 +3,11 @@ import { fail, ok } from "@/lib/domain-api-response";
 import { signUpSchema } from "@/lib/validators/auth";
 import { hashPassword } from "@/lib/auth/password";
 import { enforceAuthRateLimit } from "@/lib/security/auth-rate-limit";
+import {
+  buildEmailVerifyUrl,
+  dispatchEmailVerificationMail,
+  issueEmailVerificationToken,
+} from "@/lib/auth/email-verification";
 import { Prisma, UserRole, UserStatus } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
@@ -44,6 +49,7 @@ export async function POST(req: Request) {
         phone: parsed.data.phone?.trim() || null,
         role: UserRole.USER,
         status: UserStatus.ACTIVE,
+        emailVerifiedAt: null,
       },
       select: {
         id: true,
@@ -55,11 +61,29 @@ export async function POST(req: Request) {
       },
     });
 
+    const issued = await issueEmailVerificationToken(user.id);
+    const verifyUrl = buildEmailVerifyUrl(issued.rawToken);
+    const mail = await dispatchEmailVerificationMail({
+      to: user.email,
+      verifyUrl,
+    });
+
+    const allowDevLink =
+      process.env.NODE_ENV !== "production" ||
+      String(process.env.AUTH_EMAIL_VERIFY_RETURN_LINK || "").toLowerCase() ===
+        "true";
+
     return ok(
       {
         user,
+        verificationRequired: true,
+        emailDispatch: { mode: mail.mode, delivered: mail.delivered },
+        ...(allowDevLink
+          ? { devVerifyPath: `/verify-email?token=${issued.rawToken}` }
+          : {}),
         message:
-          "가입이 완료되었습니다. 로그인 후 이용해 주세요.",
+          "가입이 완료되었습니다. 이메일 인증을 완료한 뒤 로그인해 주세요.",
+        nextPath: `/verify-email?email=${encodeURIComponent(user.email)}&sent=1`,
       },
       { status: 201 },
     );

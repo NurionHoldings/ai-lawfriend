@@ -1,13 +1,16 @@
 import { isStaffRole } from "@/lib/auth/roles";
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { requireUser } from "@/lib/auth/session";
+import { redirect } from "next/navigation";
+import { getSessionUser } from "@/lib/auth/session";
+import { isGuestBrowseActive } from "@/lib/auth/guest-browse.server";
 import { canManageQuestionSets } from "@/features/question-set/question-set.service";
 import AuthStatus from "@/components/auth/auth-status";
 import { AdminHeaderAlertBell } from "@/components/admin/alerts/admin-header-alert-bell";
 import { AibeopchinLogo } from "@/components/brand/aibeopchin-logo";
 import { AppBuildBadge } from "@/components/common/AppBuildBadge";
 import { ProtectedPageWayfinding } from "@/components/layout/protected-page-wayfinding";
+import { GuestBrowseBanner } from "@/components/auth/guest-browse-banner";
 import { getPostLoginHref, getRoleLabelKo } from "@/lib/landing/post-login-href";
 
 type Props = {
@@ -15,11 +18,73 @@ type Props = {
 };
 
 export default async function ProtectedLayout({ children }: Props) {
-  const user = await requireUser();
-  const isPlatformAdmin = user.role === "ADMIN" || user.role === "SUPER_ADMIN";
-  const canEditQuestionSets = canManageQuestionSets(user.role);
-  const workspaceHomeHref = getPostLoginHref(user.role);
-  const workspaceHomeLabel = `${getRoleLabelKo(user.role)} 작업 홈`;
+  const user = await getSessionUser();
+  const guestBrowse = !user ? await isGuestBrowseActive() : false;
+
+  if (!user && !guestBrowse) {
+    redirect("/login");
+  }
+
+  if (!user && guestBrowse) {
+    return (
+      <div className="min-h-screen bg-aibeop-bg text-aibeop-text">
+        <header className="border-b border-aibeop-line bg-aibeop-surface">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-4">
+            <div className="flex flex-wrap items-center gap-6">
+              <AibeopchinLogo href="/dashboard" compact />
+              <nav className="flex flex-wrap gap-4 text-sm font-bold text-aibeop-subtle">
+                <Link href="/dashboard" className="hover:text-aibeop-deep">
+                  대시보드
+                </Link>
+                <Link href="/cases" className="hover:text-aibeop-deep">
+                  내 사건
+                </Link>
+                <Link href="/cases/demo" className="hover:text-aibeop-deep">
+                  데모 사건
+                </Link>
+                <Link href="/cases/new" className="hover:text-aibeop-deep">
+                  사건 등록
+                </Link>
+                <Link href="/tour" className="hover:text-aibeop-deep">
+                  투어 맵
+                </Link>
+              </nav>
+            </div>
+            <div className="flex flex-wrap items-center gap-3 text-sm">
+              <Link
+                href="/signup?guest=1&redirect=/cases/new"
+                className="rounded-xl bg-aibeop-green px-3 py-2 font-semibold text-white hover:bg-aibeop-deep"
+              >
+                회원가입
+              </Link>
+              <Link
+                href="/login?guest=1&redirect=/dashboard"
+                className="rounded-xl border border-aibeop-line px-3 py-2 font-semibold text-aibeop-deep"
+              >
+                로그인
+              </Link>
+            </div>
+          </div>
+        </header>
+        <main className="mx-auto max-w-6xl px-6 py-8">
+          <GuestBrowseBanner compact />
+          <ProtectedPageWayfinding
+            homeHref="/dashboard"
+            homeLabel="게스트 둘러보기"
+            scope="protected"
+          />
+          {children}
+        </main>
+      </div>
+    );
+  }
+
+  const sessionUser = user!;
+  const isPlatformAdmin =
+    sessionUser.role === "ADMIN" || sessionUser.role === "SUPER_ADMIN";
+  const canEditQuestionSets = canManageQuestionSets(sessionUser.role);
+  const workspaceHomeHref = getPostLoginHref(sessionUser.role);
+  const workspaceHomeLabel = `${getRoleLabelKo(sessionUser.role)} 작업 홈`;
 
   return (
     <div className="min-h-screen bg-aibeop-bg text-aibeop-text">
@@ -37,12 +102,12 @@ export default async function ProtectedLayout({ children }: Props) {
               <Link href="/cases/new" className="hover:text-aibeop-deep">
                 사건 등록
               </Link>
-              {user.role === "LAWYER" ? (
+              {sessionUser.role === "LAWYER" ? (
                 <Link href="/lawyer" className="hover:text-aibeop-deep">
                   변호사 포털
                 </Link>
               ) : null}
-              {isStaffRole(user.role) ? (
+              {isStaffRole(sessionUser.role) ? (
                 <>
                   <Link href="/admin/alerts/ops-queue" className="hover:text-aibeop-deep">
                     Ops 대기열
@@ -74,7 +139,7 @@ export default async function ProtectedLayout({ children }: Props) {
                   문서 템플릿
                 </Link>
               ) : null}
-              {isStaffRole(user.role) || isPlatformAdmin ? (
+              {isStaffRole(sessionUser.role) || isPlatformAdmin ? (
                 <>
                   <Link href="/admin/gongbuho" className="hover:text-aibeop-deep">
                     공부호 패킷
@@ -150,6 +215,9 @@ export default async function ProtectedLayout({ children }: Props) {
                   >
                     Control Tower Brain
                   </Link>
+                  <Link href="/admin/arkaon" className="hover:text-aibeop-deep">
+                    ARKAON Control Center
+                  </Link>
                   <Link
                     href="/admin/operations/data-governance"
                     className="hover:text-aibeop-deep"
@@ -174,7 +242,7 @@ export default async function ProtectedLayout({ children }: Props) {
           </div>
           <div className="flex items-center gap-3">
             {isPlatformAdmin ? <AdminHeaderAlertBell /> : null}
-            <AuthStatus user={user} />
+            <AuthStatus user={sessionUser} />
           </div>
         </div>
       </header>

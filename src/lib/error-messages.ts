@@ -7,6 +7,9 @@ type ApiError = {
 const ERROR_MESSAGES: Record<string, string> = {
   VALIDATION_ERROR: "입력값을 다시 확인해 주세요.",
   EMAIL_EXISTS: "이미 가입된 이메일입니다.",
+  EMAIL_NOT_VERIFIED:
+    "이메일 인증이 필요합니다. 인증 메일의 링크를 확인하거나 재발송해 주세요.",
+  INVALID_OR_EXPIRED_TOKEN: "인증 링크가 만료되었거나 올바르지 않습니다.",
   INVALID_CREDENTIALS: "이메일 또는 비밀번호가 올바르지 않습니다.",
   ACCOUNT_BLOCKED: "현재 로그인할 수 없는 계정입니다.",
   ACCOUNT_PENDING:
@@ -18,6 +21,8 @@ const ERROR_MESSAGES: Record<string, string> = {
   OAUTH_PROFILE_FETCH_FAILED: "소셜 로그인 사용자 정보를 가져오지 못했습니다.",
   OAUTH_EMAIL_REQUIRED: "이 소셜 계정에서 이메일 정보를 확인할 수 없습니다.",
   OAUTH_EMAIL_NOT_VERIFIED: "이 소셜 계정의 이메일 검증이 필요합니다.",
+  OAUTH_ACCOUNT_LINK_REQUIRED:
+    "이미 가입된 이메일입니다. 비밀번호로 로그인한 뒤 소셜 계정을 연결해 주세요.",
   OAUTH_ACCESS_DENIED: "소셜 로그인 인증이 취소되었습니다.",
   OAUTH_FAILED: "소셜 로그인 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.",
   LAWYER_VERIFICATION_REQUIRED:

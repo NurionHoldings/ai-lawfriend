@@ -41,3 +41,16 @@ Netlify Functions만이면 Netlify env만으로 충분. 미설정 시 `.arkaon/p
 | cross_check | 범↔GPT peer review |
 | wake | 접속 동시 감지 |
 | readiness / no-touch | 설정 여부·금지 prefix |
+
+## 결제·AML 접근 시 필수 사전고지
+
+관리자/GPT가 결제·정산·지급 영역에 접근하면 `/api/admin/arkaon/aml-guidance` 와 관련 finding을 먼저 확인한다.
+아르카온은 미비점의 원인·영향·수정제안·검증방법을 보고하되 **AML 수동승인, 지급·환불 실행, 상태값 추정, 시크릿·PII 보고는 금지**한다.
+Phase A에서는 `INICIS_OPENMALL_AML_LIVE_GATE_WIRED=false` 이며 실지급 경로에 게이트를 연결하지 않는다.
+
+## 증거기반 협업관제 (규칙)
+
+작업 시작 전 Work Contract 범위·no-touch·완료조건·테스트계획을 기록한다.
+`no_evidence` / `stalled` 를 실행 중으로 보고하지 않는다.
+커밋·테스트·CI·배포는 reference와 HEAD SHA로 증명하며, 검증 증거 없는 완료 주장은 금지한다.
+결정 확정·위험 인수는 HQ만 가능하다.

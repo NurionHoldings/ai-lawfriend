@@ -2,7 +2,10 @@ import Link from "next/link";
 import { ClientDashboardHome } from "@/components/dashboard/client/client-dashboard-home";
 import { DashboardLegacyBridge } from "@/components/dashboard/dashboard-legacy-bridge";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
+import { GuestDashboardPreview } from "@/components/auth/guest-dashboard-preview";
 import { requireSessionUser } from "@/lib/auth/require-session-user";
+import { isGuestBrowseActive } from "@/lib/auth/guest-browse.server";
+import { getSessionUser } from "@/lib/auth/getSessionUser";
 import { getDashboardCasesService } from "@/features/cases/case.service";
 import {
   formatDate,
@@ -37,7 +40,13 @@ import { prisma } from "@/lib/prisma";
 import { redirectLawyerToVerificationUnlessApproved } from "@/lib/auth/session";
 
 export default async function DashboardPage() {
-  const currentUser = await requireSessionUser();
+  const session = await getSessionUser();
+  if (!session) {
+    if (await isGuestBrowseActive()) {
+      return <GuestDashboardPreview />;
+    }
+  }
+  const currentUser = session ?? (await requireSessionUser());
   await redirectLawyerToVerificationUnlessApproved(currentUser);
 
   const recentCases = await getDashboardCasesService(currentUser);

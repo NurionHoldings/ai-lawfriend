@@ -39,6 +39,13 @@ yarn-error.log*
 # local navigator / tool state
 /.aibeopchin/
 
+# ARKAON participation local store (host_profile.json may be committed)
+.arkaon/participation/store.json
+/tools/nurion-engine/_nurion_events/archive/
+/tools/nurion-engine/_nurion_events/month-close/
+/tools/nurion-engine/_nurion_events/active-incident.json
+/tools/nurion-engine/_nurion_events/incidents/
+
 # python / IDE
 __pycache__/
 *.pyc
@@ -53,3 +60,6 @@ __pycache__/
 docs/project-governance/IMPLEMENTATION_EVIDENCE.md.*.txt
 
 # prisma
+
+# Local Netlify folder
+.netlify

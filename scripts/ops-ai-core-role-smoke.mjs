@@ -206,6 +206,7 @@ async function main() {
     const preview = await apiGet(`/api/cases/${caseId}/client-disclosure-preview`, cookie);
     const review = await apiGet(`/api/cases/${caseId}/intelligence-review`, cookie);
     const auditPolicy = await apiGet("/api/admin/ai-core/audit-policy", cookie);
+    const amlGuidance = await apiGet("/api/admin/arkaon/aml-guidance", cookie);
     const refreshReview = await apiPost(`/api/cases/${caseId}/intelligence-review`, cookie);
 
     const graphPresent = Boolean(summary.json?.data?.summary?.intelligenceGraph);
@@ -219,6 +220,8 @@ async function main() {
       reviewStatus: review.status,
       refreshReviewStatus: refreshReview.status,
       auditPolicyStatus: auditPolicy.status,
+      amlGuidanceStatus: amlGuidance.status,
+      amlLiveGateWired: amlGuidance.json?.data?.liveGateWired,
     });
   }
 
@@ -247,6 +250,13 @@ async function main() {
     ["ADMIN audit-policy 200", admin?.auditPolicyStatus === 200],
     ["ADMIN preview 200", admin?.previewStatus === 200],
     ["ADMIN review 200", admin?.reviewStatus === 200],
+    ["CLIENT aml-guidance blocked", isBlocked(client?.amlGuidanceStatus ?? 0)],
+    ["LAWYER aml-guidance blocked", isBlocked(lawyer?.amlGuidanceStatus ?? 0)],
+    ["STAFF aml-guidance blocked", isBlocked(staff?.amlGuidanceStatus ?? 0)],
+    [
+      "ADMIN aml-guidance 200 liveGateWired=false",
+      admin?.amlGuidanceStatus === 200 && admin?.amlLiveGateWired === false,
+    ],
   ];
 
   console.table(results);

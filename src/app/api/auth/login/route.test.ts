@@ -60,6 +60,7 @@ describe("POST /api/auth/login", () => {
       name: "일반 회원",
       role: "USER",
       status: "ACTIVE",
+      emailVerifiedAt: new Date("2026-01-01T00:00:00.000Z"),
     });
 
     const response = await POST(
@@ -95,6 +96,7 @@ describe("POST /api/auth/login", () => {
       name: "관리자",
       role: "ADMIN",
       status: "ACTIVE",
+      emailVerifiedAt: new Date("2026-01-01T00:00:00.000Z"),
     });
 
     const response = await POST(
@@ -123,6 +125,7 @@ describe("POST /api/auth/login", () => {
       name: "변호사",
       role: "LAWYER",
       status: "ACTIVE",
+      emailVerifiedAt: new Date("2026-01-01T00:00:00.000Z"),
     });
     prismaMocks.lawyerProfileFindUnique.mockResolvedValueOnce({
       verificationStatus: "APPROVED",
@@ -154,6 +157,7 @@ describe("POST /api/auth/login", () => {
       name: "변호사",
       role: "LAWYER",
       status: "ACTIVE",
+      emailVerifiedAt: new Date("2026-01-01T00:00:00.000Z"),
     });
     prismaMocks.lawyerProfileFindUnique.mockResolvedValueOnce({
       verificationStatus: "PENDING",
@@ -183,6 +187,7 @@ describe("POST /api/auth/login", () => {
       name: "Google User",
       role: "USER",
       status: "ACTIVE",
+      emailVerifiedAt: new Date("2026-01-01T00:00:00.000Z"),
     });
 
     const response = await POST(
@@ -198,9 +203,48 @@ describe("POST /api/auth/login", () => {
 
     expect(response.status).toBe(401);
     expect(verifyPassword).not.toHaveBeenCalled();
+    expect(writeAuditLog).toHaveBeenCalledWith(
+      expect.objectContaining({
+        action: "AUTH_LOGIN_FAILURE",
+        metadata: { reason: "oauth_only" },
+      }),
+    );
 
     const body = await response.json();
     expect(body.code).toBe("INVALID_CREDENTIALS");
+  });
+
+  it("records AUTH_LOGIN_FAILURE audit on invalid password", async () => {
+    vi.mocked(verifyPassword).mockResolvedValueOnce(false);
+    prismaMocks.findUnique.mockResolvedValueOnce({
+      id: "user-id",
+      email: "user@example.com",
+      passwordHash: "hashed-password",
+      name: "User",
+      role: "USER",
+      status: "ACTIVE",
+      emailVerifiedAt: new Date("2026-01-01T00:00:00.000Z"),
+    });
+
+    const response = await POST(
+      new Request("http://localhost/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: "user@example.com",
+          password: "wrong-password",
+        }),
+      }),
+    );
+
+    expect(response.status).toBe(401);
+    expect(writeAuditLog).toHaveBeenCalledWith(
+      expect.objectContaining({
+        action: "AUTH_LOGIN_FAILURE",
+        actorUserId: "user-id",
+        metadata: { reason: "invalid_password" },
+      }),
+    );
   });
 
   it("PENDING 계정이면 403 ACCOUNT_PENDING과 역할 힌트를 반환한다", async () => {
@@ -213,6 +257,7 @@ describe("POST /api/auth/login", () => {
       name: "대기 변호사",
       role: "LAWYER",
       status: "PENDING",
+      emailVerifiedAt: new Date("2026-01-01T00:00:00.000Z"),
     });
 
     const response = await POST(
@@ -231,5 +276,33 @@ describe("POST /api/auth/login", () => {
     expect(body.code).toBe("ACCOUNT_PENDING");
     expect(body.pendingAccountRole).toBe("LAWYER");
     expect(body.message).toContain("가입 신청이 완료되었습니다");
+  });
+
+  it("blocks password login when email is not verified", async () => {
+    vi.mocked(verifyPassword).mockResolvedValueOnce(true);
+    prismaMocks.findUnique.mockResolvedValueOnce({
+      id: "unverified-id",
+      email: "unverified@example.com",
+      passwordHash: "hashed-password",
+      name: "미인증",
+      role: "USER",
+      status: "ACTIVE",
+      emailVerifiedAt: null,
+    });
+
+    const response = await POST(
+      new Request("http://localhost/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: "unverified@example.com",
+          password: "password",
+        }),
+      }),
+    );
+
+    expect(response.status).toBe(403);
+    const body = await response.json();
+    expect(body.code).toBe("EMAIL_NOT_VERIFIED");
   });
 });

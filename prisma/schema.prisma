@@ -667,6 +667,7 @@ model User {
   supplementRequestStatusLogs SupplementRequestStatusLog[]      @relation("SupplementRequestStatusLogActor")
   supplementRequestAuditLogs  SupplementRequestAuditLog[]       @relation("SupplementRequestAuditLogActor")
   authAccounts                AuthAccount[]
+  emailVerificationTokens     EmailVerificationToken[]
   lawyerProfile               LawyerProfile?
   lawyerProfilesReviewed      LawyerProfile[]                   @relation("LawyerProfileReviewer")
   gongbuhoPacketsCreated      GongbuhoPacket[]                  @relation("GongbuhoPacketCreatedBy")
@@ -785,6 +786,21 @@ model AuthAccount {
   @@unique([provider, providerAccountId])
   @@index([userId])
   @@index([email])
+}
+
+/// Password signup email verification (AUTH-002). Hashed token only — never store raw token.
+model EmailVerificationToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([expiresAt])
 }
 
 model BulkActionJob {

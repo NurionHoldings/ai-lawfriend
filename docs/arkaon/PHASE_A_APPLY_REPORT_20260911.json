@@ -1,0 +1,100 @@
+﻿[
+    {
+        "Order":  1,
+        "Product":  "ARKAON CONTROL \u0026 Intent DNA",
+        "Status":  "APPLIED",
+        "Mode":  "control-specs",
+        "Detail":  "rule,contract,host_profile,phase_a_doc,control_spec"
+    },
+    {
+        "Order":  2,
+        "Product":  "ARKAON-CORE",
+        "Status":  "APPLIED",
+        "Mode":  "core-meta",
+        "Detail":  "rule,contract,host_profile,phase_a_doc,core_policy_pack"
+    },
+    {
+        "Order":  3,
+        "Product":  "GaonSejong",
+        "Status":  "APPLIED",
+        "Mode":  "netlify-static",
+        "Detail":  "rule,contract,host_profile,phase_a_doc,js_aml_stub,env:appended"
+    },
+    {
+        "Order":  4,
+        "Product":  "NURION Character Landmarker",
+        "Status":  "APPLIED",
+        "Mode":  "python-tooling",
+        "Detail":  "rule,contract,host_profile,phase_a_doc"
+    },
+    {
+        "Order":  5,
+        "Product":  "ARKAON Call",
+        "Status":  "APPLIED",
+        "Mode":  "android-rules",
+        "Detail":  "rule,contract,host_profile,phase_a_doc"
+    },
+    {
+        "Order":  6,
+        "Product":  "ARKAON INSURANCE",
+        "Status":  "APPLIED",
+        "Mode":  "netlify-web",
+        "Detail":  "rule,contract,host_profile,phase_a_doc,ts_aml_stub,ts_guidance,env:appended"
+    },
+    {
+        "Order":  7,
+        "Product":  "DeliveryAI",
+        "Status":  "APPLIED",
+        "Mode":  "services",
+        "Detail":  "rule,contract,host_profile,phase_a_doc,py_aml_stub,py_guidance,js_aml_stub,env:created"
+    },
+    {
+        "Order":  8,
+        "Product":  "Honfile",
+        "Status":  "APPLIED",
+        "Mode":  "next-prisma",
+        "Detail":  "rule,contract,host_profile,phase_a_doc,ts_aml_stub,ts_guidance,env:appended"
+    },
+    {
+        "Order":  9,
+        "Product":  "JJAJANGNARA",
+        "Status":  "APPLIED",
+        "Mode":  "netlify-static",
+        "Detail":  "rule,contract,host_profile,phase_a_doc,js_aml_stub,env:created"
+    },
+    {
+        "Order":  10,
+        "Product":  "NogadaNews",
+        "Status":  "APPLIED",
+        "Mode":  "netlify-static",
+        "Detail":  "rule,contract,host_profile,phase_a_doc"
+    },
+    {
+        "Order":  11,
+        "Product":  "Nurypay",
+        "Status":  "APPLIED",
+        "Mode":  "next-prisma",
+        "Detail":  "rule,contract,host_profile,phase_a_doc,ts_aml_stub,ts_guidance,env:appended"
+    },
+    {
+        "Order":  12,
+        "Product":  "Wither",
+        "Status":  "APPLIED",
+        "Mode":  "fastapi-payout",
+        "Detail":  "rule,contract,host_profile,phase_a_doc,py_aml_stub,py_guidance,env:appended"
+    },
+    {
+        "Order":  13,
+        "Product":  "Dosirak.store",
+        "Status":  "APPLIED",
+        "Mode":  "netlify-ops",
+        "Detail":  "rule,contract,host_profile,phase_a_doc,js_aml_stub,env:appended"
+    },
+    {
+        "Order":  14,
+        "Product":  "Digital Citizen Forum",
+        "Status":  "APPLIED",
+        "Mode":  "static-landing",
+        "Detail":  "rule,contract,host_profile,phase_a_doc"
+    }
+]

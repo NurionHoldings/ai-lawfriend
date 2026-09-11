@@ -64,6 +64,15 @@ type ControlCenterSnapshot = {
     actorUserId: string;
     createdAt: string;
   }>;
+  amlGuidance?: {
+    mode: string;
+    phase: string;
+    liveGateWired: boolean;
+    notification: string;
+    prohibited: string[];
+    endpoints: { guidance: string; participation: string };
+    checklist: ReadonlyArray<{ code: string; question: string }>;
+  };
 };
 
 type Props = {
@@ -300,6 +309,41 @@ export function ArkaonControlCenter({ initialSnapshot }: Props) {
         <StatCard label="FAILED" value={snapshot.overall.failedCount} />
         <StatCard label="L3 / bare EXECUTE" value="OFF / OFF" />
       </section>
+
+      {snapshot.amlGuidance ? (
+        <section className="space-y-3 rounded-xl border border-aibeop-border bg-white p-4">
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <div>
+              <h2 className="text-lg font-semibold text-aibeop-deep">OpenMall AML Guidance (read-only)</h2>
+              <p className="mt-1 text-sm text-aibeop-muted">{snapshot.amlGuidance.notification}</p>
+            </div>
+            <div className="flex flex-col items-end gap-1 text-xs font-semibold">
+              <span className="rounded-full bg-slate-100 px-2.5 py-1 text-slate-700">
+                Phase {snapshot.amlGuidance.phase} · {snapshot.amlGuidance.mode}
+              </span>
+              <span className="rounded-full bg-amber-50 px-2.5 py-1 text-amber-800">
+                liveGateWired={String(snapshot.amlGuidance.liveGateWired)}
+              </span>
+            </div>
+          </div>
+          <p className="text-sm text-aibeop-deep">
+            API:{" "}
+            <a className="underline" href={snapshot.amlGuidance.endpoints.guidance}>
+              {snapshot.amlGuidance.endpoints.guidance}
+            </a>
+          </p>
+          <ul className="list-disc space-y-1 pl-5 text-sm text-aibeop-muted">
+            {snapshot.amlGuidance.checklist.slice(0, 4).map((item) => (
+              <li key={item.code}>
+                <span className="font-medium text-aibeop-deep">{item.code}</span> — {item.question}
+              </li>
+            ))}
+          </ul>
+          <p className="text-xs text-aibeop-muted">
+            금지: {snapshot.amlGuidance.prohibited.join(" · ")}
+          </p>
+        </section>
+      ) : null}
 
       <section className="space-y-3">
         <h2 className="text-lg font-semibold text-aibeop-deep">Awaiting Human Approval</h2>

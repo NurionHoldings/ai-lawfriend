@@ -9,6 +9,7 @@ import {
   rejectArkaonProposal,
 } from "./arkaon.repository";
 import { ARKAON_AILAWFRIEND_POLICY, evaluateArkaonAction } from "./arkaon.policy";
+import { buildAmlGuidance } from "./arkaon-aml-guidance";
 import { getControlTowerBrainSnapshot } from "@/features/control-tower-brain/control-tower-brain.orchestrator.service";
 import { buildInternalRetryProposals } from "./skills/ailawfriend/retry-failed-internal-job-after-human-approval";
 import { listArkaonSkills } from "./skills/registry";
@@ -87,6 +88,7 @@ export async function getArkaonControlCenterSnapshot() {
     listArkaonProposals(100),
     listArkaonAuditEvidence(40),
   ]);
+  const amlGuidance = buildAmlGuidance();
 
   const awaitingApproval = proposals.filter((p) => p.status === "PROPOSED");
   const approved = proposals.filter((p) => p.status === "APPROVED");
@@ -142,5 +144,6 @@ export async function getArkaonControlCenterSnapshot() {
       ...row,
       createdAt: row.createdAt.toISOString(),
     })),
+    amlGuidance,
   };
 }

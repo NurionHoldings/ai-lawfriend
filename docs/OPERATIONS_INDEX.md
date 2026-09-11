@@ -728,6 +728,15 @@
 - [ ] 환경 변수
 - [ ] health / release-meta
 - [ ] STAFF / ADMIN 접근 흐름
+- [ ] `ARKAON_AGENT_HANDOFF_SECRET` (배포 환경 16자+)
+- [ ] [INICIS_OPENMALL_AML_PHASE_A.md](./arkaon/INICIS_OPENMALL_AML_PHASE_A.md) — Phase A stub only, live gate OFF
+- [ ] [ARKAON_PARTICIPATION_CONTRACT.md](./ARKAON_PARTICIPATION_CONTRACT.md)
+- [ ] [GAP_MATRIX_20260911.md](./arkaon/GAP_MATRIX_20260911.md)
+- [ ] [CASE_LAWYER_ASSIGNMENT_NOT_MATCHING.md](./arkaon/CASE_LAWYER_ASSIGNMENT_NOT_MATCHING.md)
+- [ ] [CASE_LAWYER_MATCHING_ENGINE_SPEC.md](./arkaon/CASE_LAWYER_MATCHING_ENGINE_SPEC.md)
+- [ ] [INICIS_OPENMALL_AML_PHASE_BC.md](./arkaon/INICIS_OPENMALL_AML_PHASE_BC.md)
+- [ ] [OPS_SMOKE_ACCOUNT_ROTATION_RUNBOOK.md](./operations/OPS_SMOKE_ACCOUNT_ROTATION_RUNBOOK.md)
+- [ ] 통신판매업신고: 현재 **미신청** (발급 후 푸터 숫자 교체)
 
 ---
 

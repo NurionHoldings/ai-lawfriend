@@ -197,12 +197,19 @@ async function fetchNaverProfile(accessToken: string): Promise<OAuthProfile> {
     throw new Error("OAUTH_EMAIL_REQUIRED");
   }
 
+  // Naver profile API does not expose a reliable email_verified flag.
+  // Never claim verified (fail-closed). HQ may later add an explicit signal.
+  const emailVerified =
+    response?.email_verified === true ||
+    response?.is_email_verified === true ||
+    response?.emailVerified === true;
+
   return {
     provider: AuthProvider.NAVER,
     providerKey: "naver",
     providerAccountId,
     email,
-    emailVerified: true,
+    emailVerified,
     name: normalizeDisplayName(
       typeof response?.name === "string"
         ? response.name

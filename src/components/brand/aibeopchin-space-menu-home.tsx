@@ -6,9 +6,14 @@ import { AibeopchinCharacterModel } from "@/components/brand/aibeopchin-characte
 
 const menuItems = [
   {
+    label: "게스트로 구경하기",
+    href: "/tour",
+    description: "프리패스로 대시보드·사건 화면을 둘러보고, 입력 시점에 가입합니다.",
+  },
+  {
     label: "회원가입",
     href: "/signup",
-    description: "의뢰인 계정으로 사건 정리를 시작합니다.",
+    description: "둘러본 뒤 가입하면 이메일 인증부터 시작합니다.",
   },
   {
     label: "변호사 로그인",
@@ -28,7 +33,7 @@ const menuItems = [
 ] as const;
 
 const speechMessage =
-  "안녕하세요. AI법친입니다. 아래 메뉴를 선택하면 회원가입, 변호사 로그인, 관리자 로그인, 전체 홈화면으로 바로 안내해 드릴게요.";
+  "안녕하세요. AI법친입니다. 게스트 프리패스로 먼저 구석구석 둘러보신 뒤, 참여가 시작되면 회원가입을 도와드릴게요.";
 
 type Star = {
   x: number;

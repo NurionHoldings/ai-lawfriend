@@ -108,23 +108,26 @@ export async function GET(
     let user = existingAccount?.user ?? null;
 
     if (!user) {
-      user = await prisma.user.findUnique({
+      const existingByEmail = await prisma.user.findUnique({
         where: { email: profile.email },
       });
 
-      if (!user) {
-        user = await prisma.user.create({
-          data: {
-            email: profile.email,
-            passwordHash: null,
-            name: profile.name,
-            phone: null,
-            role: UserRole.USER,
-            status: UserStatus.ACTIVE,
-            emailVerifiedAt: profile.emailVerified ? new Date() : null,
-          },
-        });
+      if (existingByEmail) {
+        // Fail-closed: never auto-link OAuth to an existing account by email alone.
+        return buildLoginRedirect(provider, "OAUTH_ACCOUNT_LINK_REQUIRED");
       }
+
+      user = await prisma.user.create({
+        data: {
+          email: profile.email,
+          passwordHash: null,
+          name: profile.name,
+          phone: null,
+          role: UserRole.USER,
+          status: UserStatus.ACTIVE,
+          emailVerifiedAt: profile.emailVerified ? new Date() : null,
+        },
+      });
 
       await prisma.authAccount.create({
         data: {

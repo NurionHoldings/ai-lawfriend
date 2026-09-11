@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { redirectLawyerToVerificationUnlessApproved } from "@/lib/auth/session";
 import { requireSessionUser } from "@/lib/auth/require-session-user";
+import { getSessionUser } from "@/lib/auth/getSessionUser";
+import { isGuestBrowseActive } from "@/lib/auth/guest-browse.server";
+import { GuestCasesPreview } from "@/components/auth/guest-cases-preview";
 import { listCasesService } from "@/features/cases/case.service";
 import {
   formatDate,
@@ -22,7 +25,11 @@ type CasesPageProps = {
 };
 
 export default async function CasesPage({ searchParams }: CasesPageProps) {
-  const currentUser = await requireSessionUser();
+  const session = await getSessionUser();
+  if (!session && (await isGuestBrowseActive())) {
+    return <GuestCasesPreview />;
+  }
+  const currentUser = session ?? (await requireSessionUser());
   await redirectLawyerToVerificationUnlessApproved(currentUser);
   const resolved = await searchParams;
 

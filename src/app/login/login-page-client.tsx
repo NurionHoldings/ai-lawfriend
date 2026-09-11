@@ -61,10 +61,13 @@ export default function LoginPageClient({ oauthProviders }: LoginPageClientProps
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/dashboard";
   const registered = searchParams.get("registered") === "1";
+  const emailVerified = searchParams.get("emailVerified") === "1";
   const lawyerRegistered = searchParams.get("lawyerRegistered") === "1";
   const urlAccountPending = searchParams.get("accountPending") === "1";
   const urlPendingRole = searchParams.get("pendingRole");
   const oauthErrorCode = searchParams.get("oauthError");
+  const fromGuest = searchParams.get("guest") === "1";
+  const intent = searchParams.get("intent");
 
   const { loading, errorMessage, accountPending, submit } = useAuthForm();
 
@@ -84,7 +87,7 @@ export default function LoginPageClient({ oauthProviders }: LoginPageClientProps
         redirect: searchParams.get("redirect") ?? undefined,
       },
       onSuccess: async (data) => {
-        router.push(data.postLoginRedirect ?? redirect);
+        router.push(data.postLoginRedirect ?? "/dashboard");
         router.refresh();
       },
     });
@@ -115,6 +118,13 @@ export default function LoginPageClient({ oauthProviders }: LoginPageClientProps
           <p className="mt-2 text-sm text-aibeop-subtle">
             가입한 이메일과 비밀번호로 로그인하세요.
           </p>
+          {fromGuest ? (
+            <p className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950">
+              게스트 둘러보기 중 참여·입력이 필요한 단계에 도달했습니다.
+              {intent === "case_create" ? " 사건 등록을 이어가려면 " : " "}
+              로그인 후 원래 화면으로 돌아갑니다.
+            </p>
+          ) : null}
           {oauthProviders.length > 0 ? (
             <p className="mt-2 text-xs leading-relaxed text-aibeop-subtle">
               Google 간편 로그인은 현재 활성화되어 있으며, Kakao·Naver도 같은 패턴으로 확장 가능합니다.
@@ -122,7 +132,12 @@ export default function LoginPageClient({ oauthProviders }: LoginPageClientProps
           ) : null}
         {registered ? (
           <p className="mt-3 rounded-xl border border-aibeop-pale bg-aibeop-pale/60 px-3 py-2 text-xs leading-relaxed text-aibeop-deep">
-            가입이 완료되었습니다. 같은 이메일로 로그인해 주세요.
+            가입이 완료되었습니다. 이메일 인증 후 같은 이메일로 로그인해 주세요.
+          </p>
+        ) : null}
+        {emailVerified ? (
+          <p className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs leading-relaxed text-emerald-950">
+            이메일 인증이 완료되었습니다. 이제 로그인할 수 있습니다.
           </p>
         ) : null}
         {lawyerRegistered ? (
@@ -178,6 +193,15 @@ export default function LoginPageClient({ oauthProviders }: LoginPageClientProps
           ) : null}
 
           <FormError message={visibleErrorMessage} />
+
+          {visibleErrorMessage.includes("이메일 인증") ? (
+            <Link
+              href={`/verify-email?email=${encodeURIComponent(form.email)}`}
+              className="block text-center text-sm font-semibold text-aibeop-deep underline"
+            >
+              이메일 인증 / 재발송으로 이동
+            </Link>
+          ) : null}
 
           <button
             type="submit"

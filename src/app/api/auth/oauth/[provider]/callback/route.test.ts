@@ -78,7 +78,7 @@ describe("GET /api/auth/oauth/:provider/callback", () => {
     vi.mocked(normalizeAuthRedirectPath).mockReturnValue("/dashboard");
   });
 
-  it("links an existing verified Google user and redirects with a session", async () => {
+  it("refuses auto-linking OAuth to an existing email account", async () => {
     vi.mocked(exchangeOAuthCode).mockResolvedValue("access-token");
     vi.mocked(fetchOAuthProfile).mockResolvedValue({
       provider: "GOOGLE",
@@ -96,8 +96,8 @@ describe("GET /api/auth/oauth/:provider/callback", () => {
       name: "Active User",
       role: "USER",
       status: "ACTIVE",
+      passwordHash: "hashed",
     });
-    prismaMocks.authAccountCreate.mockResolvedValueOnce({ id: "account-1" });
 
     const response = await GET(
       new NextRequest(
@@ -114,18 +114,9 @@ describe("GET /api/auth/oauth/:provider/callback", () => {
       },
     );
 
-    expect(response.headers.get("location")).toBe("http://localhost:3000/dashboard");
-    expect(prismaMocks.lawyerProfileFindUnique).not.toHaveBeenCalled();
-    expect(prismaMocks.authAccountCreate).toHaveBeenCalledWith({
-      data: {
-        userId: "user-1",
-        provider: "GOOGLE",
-        providerAccountId: "google-sub-1",
-        email: "active@example.com",
-        emailVerified: true,
-      },
-    });
-    expect(applyLoginSession).toHaveBeenCalled();
+    expect(response.headers.get("location")).toContain("oauthError=OAUTH_ACCOUNT_LINK_REQUIRED");
+    expect(prismaMocks.authAccountCreate).not.toHaveBeenCalled();
+    expect(applyLoginSession).not.toHaveBeenCalled();
   });
 
   it("creates an ACTIVE social user, applies session, and redirects", async () => {

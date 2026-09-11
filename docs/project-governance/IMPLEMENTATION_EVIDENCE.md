@@ -6,6 +6,250 @@
 
 ---
 
+## [EVIDENCE-20260911-GUEST-FREEPASS-BROWSE]
+
+### Status
+
+✅ 게스트 **프리패스** — 본인인증 없이 대시보드·사건 미리보기 둘러보기, **참여·입력 시점**에 회원가입/로그인 활성화
+
+### Flow
+
+1. `/tour` 또는 「게스트로 구경하기」→ `POST /api/auth/guest-browse` 쿠키 발급
+2. `/dashboard` · `/cases` · `/cases/demo` 미리보기 (실데이터·mutate 없음)
+3. `/cases/new` 등 참여 지점 → `GuestParticipationGate` → `/signup`·`/login?guest=1`
+4. `/lawyer`·`/admin`·실 `cases/[id]` 는 게스트 불가 (미들웨어 allowlist)
+
+### Changes
+
+- `src/lib/auth/guest-browse.ts` (+ Vitest)
+- `src/app/api/auth/guest-browse/route.ts`
+- `src/middleware.ts` · `(protected)/layout.tsx`
+- guest preview/gate 컴포넌트 · `/cases/demo`
+- `/tour` 프리패스 시작 CTA
+
+### Boundary
+
+- 게스트는 역할 상승·API 쓰기·PII 접근 없음
+- 이메일 인증·PENDING 계정 규칙은 기존 유지
+
+### Verification
+
+- `npx vitest run src/lib/auth/guest-browse.test.ts`
+
+---
+
+## [EVIDENCE-20260911-GUEST-TOUR-EMAIL-VERIFICATION]
+
+### Status
+
+✅ 게스트 둘러보기 + 회원가입 후 **이메일 인증 시작** (대시보드 게스트 개방 없음)
+
+### Flow
+
+1. `/tour` · 루트 메뉴「게스트로 둘러보기」· `/home` CTA
+2. `/signup` → `emailVerifiedAt=null` + 토큰 발급 + 메일(dispatch dry_run 기본)
+3. `/verify-email` 인증 · 재발송
+4. 미인증 비밀번호 로그인 → `EMAIL_NOT_VERIFIED`
+
+### Changes
+
+- `src/app/tour/page.tsx`
+- `src/lib/auth/email-verification.ts` + API verify/resend
+- `prisma` `EmailVerificationToken` + grandfather migration
+- signup/login/middleware/seed/UI 연동
+
+### Boundary
+
+- `/dashboard`·`/cases` 게스트 개방 없음
+- `UserStatus.PENDING`과 이메일 미검증 분리
+- 실 SMTP는 `AUTH_EMAIL_VERIFY_DRY_RUN=false` + SMTP_* 필요
+
+### Verification
+
+- vitest: signup · login · email-verification helpers
+
+---
+
+## [EVIDENCE-20260911-AUTH-SAFE-HARDENING]
+
+### Status
+
+✅ 회원가입/로그인 **안전 보완** — OAuth 자동링크 차단 · Naver verified fail-closed · lawyer pending gate · 실패 로그인 감사
+
+### Changes
+
+- `src/app/api/auth/oauth/[provider]/callback/route.ts` — 기존 이메일 자동 `AuthAccount` 생성 금지
+- `src/lib/auth/oauth.ts` — Naver `emailVerified` 하드코딩 제거
+- `src/app/(lawyer)/lawyer/layout.tsx` + `lawyer-pending-path.ts` + middleware `x-pathname`
+- `src/app/api/auth/login/route.ts` — `AUTH_LOGIN_FAILURE` audit
+- `src/app/login/login-page-client.tsx` — 서버 `postLoginRedirect`만 사용
+- `docs/social-login-provider-setup.md` 정합
+- `docs/arkaon/AUTH_SIGNUP_LOGIN_GAP_MATRIX_20260911.md`
+
+### Boundary
+
+- 비밀번호 재설정·이메일 인증·명시적 OAuth 연결 API는 **미포함**
+- Naver는 verified 신호 없으면 로그인 거부(의도)
+
+### Verification
+
+- vitest: oauth callback · login · lawyer-pending-path
+
+---
+
+## [EVIDENCE-20260911-AILAWFRIEND-GAP-BATCH3-SPEC-AMLBC-ROTATION]
+
+### Status
+
+✅ Gap Batch 3 — 매칭 엔진 **스펙+advice API** · AML Phase B/C **문서+skeleton(미배선)** · OPS smoke **로테이션 런북+게이트**
+
+### Changes
+
+- `docs/arkaon/CASE_LAWYER_MATCHING_ENGINE_SPEC.md`
+- `src/features/case-lawyer-matching/*` + `GET /api/cases/[caseId]/lawyer-match-advice`
+- `docs/arkaon/INICIS_OPENMALL_AML_PHASE_BC.md`
+- `src/features/payments/inicis-openmall-aml-client.ts` (+ Vitest)
+- `arkaon-aml-guidance` ← `phaseRoadmap`
+- `docs/operations/OPS_SMOKE_ACCOUNT_ROTATION_RUNBOOK.md`
+- `scripts/ops-smoke-account-rotation-check.mjs` · `npm run ops:smoke-account-rotation-check`
+
+### Boundary
+
+- `INICIS_OPENMALL_AML_LIVE_GATE_WIRED === false`
+- 매칭: `advice_only` · 자동 배정 없음
+- 로테이션 스크립트: 시크릿 출력·DB mutate 없음 (정책 게이트만)
+- 실 비밀번호 교체·AML 계약·allowlist 채움 = **HQ 운영**
+
+### Verification
+
+- vitest: lawyer-match-advice · aml-client · aml-guidance
+- `npm run ops:smoke-account-rotation-check` (로컬)
+
+---
+
+## [EVIDENCE-20260911-AILAWFRIEND-GAP-BATCH2]
+
+### Status
+
+✅ Gap Batch 2 — 통신판매 **미신청** 고지 · role smoke AML · seed prod 가드 · 배정≠매칭 정리
+
+### HQ input
+
+- 통신판매업 신고번호 = **미신청** (발급 전; 푸터에 상태 명시)
+
+### Changes
+
+- `src/components/layout/site-footer.tsx` — `통신판매업신고번호: 미신청`
+- `scripts/ops-ai-core-role-smoke.mjs` — aml-guidance CLIENT/LAWYER/STAFF blocked + ADMIN 200/`liveGateWired=false`
+- `prisma/seed.ts` — production seed 거부 (`ALLOW_PRODUCTION_SEED` 명시 예외만)
+- `aibeopchin_patchset/tests/case-lawyer-assignment.service.test.ts` (+ matching* alias)
+- `docs/arkaon/CASE_LAWYER_ASSIGNMENT_NOT_MATCHING.md`
+- `docs/arkaon/GAP_MATRIX_20260911.md` Batch 2
+
+### Boundary
+
+- AML live gate 미배선 유지
+- 매칭 엔진 미구현(의도)
+- 통신판매 번호 자리 채우지 않음
+
+### Verification
+
+- patchset assignment vitest
+- (smoke는 서버+계정 필요 — 스크립트 확장만 반영)
+
+---
+
+## [EVIDENCE-20260911-AILAWFRIEND-GAP-BATCH1-ARKAON-COLLAB]
+
+### Status
+
+✅ AI법친 정밀분석 갭 매트릭스 Batch 1 — 아르카온 협업 안전 보완 (live payout/AML gate **미활성**)
+
+### Analysis
+
+- `docs/arkaon/GAP_MATRIX_20260911.md`
+
+### Changes
+
+- Participation **fail-closed** (`src/features/arkaon/arkaon-participation-auth.ts` + route)
+- Contract SSOT 정렬 + `no-touch-map` / visit close / verdict (`docs/ARKAON_PARTICIPATION_CONTRACT.md`)
+- host_profile: 배포 환경 시크릿 필수 고지
+- Control Center 읽기전용 AML guidance 패널
+- CI `arkaon-rc3-prelock` job
+- `.env.example` `ARKAON_AGENT_HANDOFF_SECRET` · `.gitignore` `store.json`
+- OPERATIONS_INDEX 링크
+
+### Boundary
+
+- `INICIS_OPENMALL_AML_LIVE_GATE_WIRED` 유지 false
+- 통신판매신고번호·seed 로테이션·매칭 엔진·Phase B/C는 보류
+
+### Verification
+
+- `npx vitest run src/features/arkaon/arkaon-participation-auth.test.ts src/features/arkaon/arkaon-aml-guidance.test.ts src/features/payments/inicis-openmall-aml.test.ts`
+- `npm run verify:arkaon-ailawfriend-rc3:prelock`
+
+---
+
+## [EVIDENCE-20260911-PHASE-A-MULTI-PLATFORM-APPLY]
+
+### Status
+
+✅ 14개 플랫폼에 ARKAON Phase A(참관 규칙·host_profile·협업 규칙 + 스택별 AML 스텁) 순서 적용 완료. **live payout gate 미배선**.
+
+### Report
+
+- `docs/arkaon/PHASE_A_APPLY_REPORT_20260911.md`
+- `scripts/apply-arkaon-phase-a-platforms.ps1` + `scripts/arkaon-phase-a-targets.json`
+
+### Boundary
+
+- APPROVED_STATUSES 추정 없음 · 지급 execute 훅 없음 · HQ-only 결정 유지
+
+---
+
+## [EVIDENCE-20260911-PHASE-A-INICIS-AML-STUB-AILAWFRIEND]
+
+### Status
+
+✅ AI법친 Phase A 샘플 — OpenMall AML **순수 정책 스텁** + 아르카온 읽기전용 가이던스 (live gate 미배선)
+
+### Changes
+
+- `src/features/payments/inicis-openmall-aml.ts` (+ Vitest)
+- `src/features/arkaon/arkaon-aml-guidance.ts` (+ Vitest)
+- `GET /api/admin/arkaon/aml-guidance` (ADMIN)
+- `.env.example` `INICIS_OPENMALL_*` · cursor 규칙 AML/협업 사전고지
+- `docs/arkaon/INICIS_OPENMALL_AML_PHASE_A.md`
+
+### Boundary
+
+- `INICIS_OPENMALL_AML_LIVE_GATE_WIRED = false`
+- allowlist 공란 → `approved_status_allowlist_empty` fail-closed
+- 지급 execute 경로 import 없음
+
+---
+
+## [EVIDENCE-20260911-SITE-FOOTER-PG-BUSINESS-DISCLOSURE]
+
+### Status
+
+✅ 모바일·공용 사이트 푸터에 PG(지급대행) 심사용 **사업자정보**·**민원책임고지** 반영
+
+### Changes
+
+- `src/components/layout/site-footer.tsx`
+  - 상호 `(주)누리온홀딩스` · 대표 최인석 · 사업자등록번호 `702-86-03510`
+  - 주소 `세종특별자치시 집현중앙7로6, A동 910호` · 유선 `044-715-5715`
+  - 책임고지: 거래·배송·환불·민원 처리는 ㈜누리온홀딩스 / 민원담당자 최인석 `010-5945-5925`
+- 루트 레이아웃 `SiteFooter`로 공개·모바일 웹 공통 노출
+
+### Note
+
+- 통신판매업 신고번호는 요청 범위에 없어 미기재. 카드사·PG 심사에 필요하면 별도 추가.
+
+---
+
 ## [EVIDENCE-20260729-ARKAON-RC3-LOCKED-SAFE-L2]
 
 ### Status

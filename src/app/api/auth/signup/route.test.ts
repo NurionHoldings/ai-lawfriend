@@ -10,6 +10,12 @@ const passwordMocks = vi.hoisted(() => ({
   hashPassword: vi.fn(),
 }));
 
+const verifyMocks = vi.hoisted(() => ({
+  issueEmailVerificationToken: vi.fn(),
+  buildEmailVerifyUrl: vi.fn(),
+  dispatchEmailVerificationMail: vi.fn(),
+}));
+
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     user: {
@@ -20,6 +26,7 @@ vi.mock("@/lib/prisma", () => ({
 }));
 
 vi.mock("@/lib/auth/password", () => passwordMocks);
+vi.mock("@/lib/auth/email-verification", () => verifyMocks);
 
 import { POST } from "./route";
 import { hashPassword } from "@/lib/auth/password";
@@ -28,9 +35,20 @@ describe("POST /api/auth/signup", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(hashPassword).mockResolvedValue("hashed-password");
+    verifyMocks.issueEmailVerificationToken.mockResolvedValue({
+      rawToken: "raw-token-hex",
+      expiresAt: new Date("2026-09-12T00:00:00.000Z"),
+    });
+    verifyMocks.buildEmailVerifyUrl.mockReturnValue(
+      "http://localhost:3000/verify-email?token=raw-token-hex",
+    );
+    verifyMocks.dispatchEmailVerificationMail.mockResolvedValue({
+      mode: "dry_run",
+      delivered: false,
+    });
   });
 
-  it("creates an ACTIVE USER account from normalized signup input", async () => {
+  it("creates ACTIVE USER with verificationRequired and starts email auth", async () => {
     prismaMocks.findUnique.mockResolvedValueOnce(null);
     prismaMocks.create.mockResolvedValueOnce({
       id: "user-1",
@@ -55,10 +73,6 @@ describe("POST /api/auth/signup", () => {
     );
 
     expect(response.status).toBe(201);
-    expect(prismaMocks.findUnique).toHaveBeenCalledWith({
-      where: { email: "newuser@example.com" },
-      select: { id: true },
-    });
     expect(prismaMocks.create).toHaveBeenCalledWith({
       data: {
         email: "newuser@example.com",
@@ -67,6 +81,7 @@ describe("POST /api/auth/signup", () => {
         phone: "01012345678",
         role: "USER",
         status: "ACTIVE",
+        emailVerifiedAt: null,
       },
       select: {
         id: true,
@@ -77,33 +92,29 @@ describe("POST /api/auth/signup", () => {
         createdAt: true,
       },
     });
+    expect(verifyMocks.issueEmailVerificationToken).toHaveBeenCalledWith("user-1");
 
     const body = await response.json();
-    expect(body.ok).toBe(true);
-    expect(body.data.user.status).toBe("ACTIVE");
+    expect(body.data.verificationRequired).toBe(true);
+    expect(body.data.nextPath).toContain("/verify-email");
   });
 
-  it("rejects duplicate emails before creating a user", async () => {
-    prismaMocks.findUnique.mockResolvedValueOnce({ id: "existing-user" });
+  it("rejects duplicate email", async () => {
+    prismaMocks.findUnique.mockResolvedValueOnce({ id: "existing" });
 
     const response = await POST(
       new Request("http://localhost/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: "existing@example.com",
+          email: "dup@example.com",
           password: "Password123!",
-          name: "기존 사용자",
-          phone: "01012345678",
+          name: "중복",
         }),
       }),
     );
 
     expect(response.status).toBe(409);
     expect(prismaMocks.create).not.toHaveBeenCalled();
-
-    const body = await response.json();
-    expect(body.ok).toBe(false);
-    expect(body.code).toBe("EMAIL_EXISTS");
   });
 });

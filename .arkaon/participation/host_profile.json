@@ -2,24 +2,25 @@
   "product": "AI법친",
   "primary_api_host": "netlify",
   "edge_host": "netlify",
-  "handoff_secret_policy": "netlify_env_sufficient",
+  "handoff_secret_policy": "netlify_env_required_in_deployed",
+  "secret_required_in_deployed_envs": true,
   "notices": [
     {
       "code": "NETLIFY_VS_API_HOST",
       "severity": "info",
-      "summary": "AI법친: Netlify env의 ARKAON_AGENT_HANDOFF_SECRET만으로 handoff 가능."
+      "summary": "AI법친: Netlify env의 ARKAON_AGENT_HANDOFF_SECRET으로 handoff. 배포(production/staging)에서는 16자+ 필수."
     },
     {
-      "code": "DEFER_PER_PLATFORM_OK",
-      "severity": "info",
-      "summary": "시크릿 미설정 시 폴백 가능. 추후 플랫폼별 분석 후 개별 적용해도 됩니다."
+      "code": "SECRET_REQUIRED_IN_DEPLOYED",
+      "severity": "warning",
+      "summary": "배포 환경에서 시크릿 미설정 시 participation API는 401(fail-closed). 로컬만 filesystem 폴백 허용."
     }
   ],
   "secret_hosts": [
     {
       "host": "netlify",
       "role": "functions",
-      "handoff": "sufficient"
+      "handoff": "required"
     }
   ]
 }

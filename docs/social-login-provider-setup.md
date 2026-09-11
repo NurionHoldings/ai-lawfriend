@@ -12,9 +12,9 @@
 
 - 시작 라우트: `/api/auth/oauth/{provider}/start`
 - 콜백 라우트: `/api/auth/oauth/{provider}/callback`
-- 신규 소셜 가입자는 `USER`, `PENDING` 상태로 생성된다.
-- `PENDING` 상태에서는 세션을 발급하지 않고 로그인 화면으로 되돌린다.
-- 관리자 승인 후 동일 소셜 계정으로 다시 로그인하면 정상 세션이 발급된다.
+- 신규 소셜 가입자는 `USER`, `ACTIVE` 상태로 생성되며 **즉시 세션**이 발급된다.
+- 이미 동일 이메일의 계정이 있으면 OAuth **자동 연결을 거부**한다 (`OAUTH_ACCOUNT_LINK_REQUIRED`). 비밀번호 로그인 후 연결 UX는 후속 작업.
+- Naver는 프로필 API에 신뢰할 `email_verified`가 없어 **미검증으로 취급**하며, 검증 신호 없이는 로그인되지 않는다.
 - 이메일 검증이 되지 않았거나 이메일을 제공하지 않는 소셜 계정은 로그인되지 않는다.
 
 ---
@@ -234,12 +234,12 @@ NAVER_CLIENT_SECRET=replace_with_naver_client_secret
 - [ ] 인증 완료 후 앱으로 정상 복귀한다.
 - [ ] 신규 소셜 사용자가 `User` 테이블에 생성된다.
 - [ ] 신규 소셜 사용자의 `role` 이 `USER` 로 생성된다.
-- [ ] 신규 소셜 사용자의 `status` 가 `PENDING` 으로 생성된다.
+- [ ] 신규 소셜 사용자의 `status` 가 `ACTIVE` 로 생성된다.
 - [ ] `AuthAccount` 레코드가 생성된다.
 - [ ] `AuthAccount.provider` 값이 `GOOGLE` 이다.
 - [ ] `AuthAccount.providerAccountId` 값이 채워진다.
-- [ ] 세션 쿠키가 발급되지 않는다.
-- [ ] 로그인 화면으로 돌아오며 승인 대기 안내가 보인다.
+- [ ] 세션 쿠키가 발급된다.
+- [ ] 지정 redirect(기본 `/dashboard`)로 이동한다.
 
 ### 7.2 Kakao / Naver 최초 가입
 
@@ -269,12 +269,13 @@ NAVER_CLIENT_SECRET=replace_with_naver_client_secret
 - [ ] 감사로그에 `AUTH_LOGIN_SUCCESS` 가 적재된다.
 - [ ] 감사로그 metadata 에 `mode=OAUTH`, `provider=google` 이 남는다.
 
-### 8.2 기존 ACTIVE 이메일 계정 연결
+### 8.2 기존 ACTIVE 이메일 계정 연결 (자동 링크 금지)
 
 - [ ] 기존 ACTIVE 일반 계정 이메일과 동일한 verified Google 계정으로 로그인한다.
+- [ ] `oauthError=OAUTH_ACCOUNT_LINK_REQUIRED` 로 로그인 화면에 머무른다.
+- [ ] `AuthAccount`가 자동 생성되지 않는다.
 - [ ] 새 `User` 가 중복 생성되지 않는다.
-- [ ] 기존 `User` 에 `AuthAccount` 만 연결된다.
-- [ ] 로그인 즉시 세션이 발급된다.
+- [ ] (후속) 비밀번호 로그인 후 명시적 연결 API가 생기면 그때 연결을 검증한다.
 
 ### 8.3 권한 / 상태 확인
 

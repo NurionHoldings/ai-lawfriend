@@ -16,8 +16,8 @@ import {
 const roles = [
   {
     ...AIBEOPCHIN_HOME_ROLE_CARDS[0],
-    primary: { href: "/signup", label: "회원가입" },
-    secondary: { href: "/login?redirect=/dashboard", label: "로그인 → 대시보드" },
+    primary: { href: "/signup", label: "회원가입 · 인증 시작" },
+    secondary: { href: "/tour", label: "게스트로 구경하기" },
   },
   {
     ...AIBEOPCHIN_HOME_ROLE_CARDS[1],

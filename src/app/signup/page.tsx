@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import AuthInput from "@/components/auth/auth-input";
 import FormError from "@/components/auth/form-error";
 import { useAuthForm } from "@/hooks/use-auth-form";
@@ -17,10 +17,15 @@ type SignupResponse = {
     createdAt: string;
   };
   message: string;
+  nextPath?: string;
+  verificationRequired?: boolean;
+  devVerifyPath?: string;
 };
 
-export default function SignupPage() {
+function SignupPageClient() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const fromGuest = searchParams.get("guest") === "1";
   const { loading, errorMessage, submit } = useAuthForm();
 
   const [form, setForm] = useState({
@@ -58,8 +63,11 @@ export default function SignupPage() {
         name: form.name,
         phone: form.phone,
       },
-      onSuccess: async () => {
-        router.push("/login?registered=1");
+      onSuccess: async (data) => {
+        const next =
+          data.nextPath ||
+          `/verify-email?email=${encodeURIComponent(form.email)}&sent=1`;
+        router.push(next);
         router.refresh();
       },
     });
@@ -71,46 +79,21 @@ export default function SignupPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-aibeop-text">회원가입</h1>
           <p className="mt-2 text-sm text-aibeop-muted">
-            AI법친 계정을 만들고 사건 정리를 시작하세요.
+            AI법친 계정을 만들고 이메일 인증 후 사건 정리를 시작하세요.
           </p>
           <p className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950">
-            가입이 완료되면 바로 로그인할 수 있습니다. (이메일·휴대폰 본인확인 절차는 운영 정책에 따라
-            단계적으로 적용합니다.)
+            {fromGuest
+              ? "게스트 프리패스에서 참여 단계로 넘어왔습니다. 가입·이메일 인증 후 사건 등록을 이어갈 수 있습니다."
+              : "게스트로 둘러본 뒤 가입해도 됩니다. 가입이 완료되면 이메일 인증이 시작되며, 인증 후에만 로그인할 수 있습니다."}
+          </p>
+          <p className="mt-2 text-xs text-aibeop-subtle">
+            <Link href="/tour" className="underline">
+              아직 둘러보기 중이라면 게스트 투어로
+            </Link>
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <AuthInput
-            label="이메일"
-            type="email"
-            value={form.email}
-            placeholder="you@example.com"
-            autoComplete="email"
-            onChange={(value) => setForm((prev) => ({ ...prev, email: value }))}
-          />
-
-          <AuthInput
-            label="비밀번호"
-            type="password"
-            value={form.password}
-            placeholder="8자 이상 입력"
-            autoComplete="new-password"
-            onChange={(value) =>
-              setForm((prev) => ({ ...prev, password: value }))
-            }
-          />
-
-          <AuthInput
-            label="비밀번호 확인"
-            type="password"
-            value={form.passwordConfirm}
-            placeholder="비밀번호를 다시 입력"
-            autoComplete="new-password"
-            onChange={(value) =>
-              setForm((prev) => ({ ...prev, passwordConfirm: value }))
-            }
-          />
-
           <AuthInput
             label="이름"
             value={form.name}
@@ -118,13 +101,37 @@ export default function SignupPage() {
             autoComplete="name"
             onChange={(value) => setForm((prev) => ({ ...prev, name: value }))}
           />
-
           <AuthInput
-            label="전화번호(선택)"
+            label="이메일"
+            value={form.email}
+            placeholder="you@example.com"
+            autoComplete="email"
+            onChange={(value) => setForm((prev) => ({ ...prev, email: value }))}
+          />
+          <AuthInput
+            label="휴대폰"
             value={form.phone}
-            placeholder="01012345678"
+            placeholder="010-0000-0000"
             autoComplete="tel"
             onChange={(value) => setForm((prev) => ({ ...prev, phone: value }))}
+          />
+          <AuthInput
+            label="비밀번호"
+            type="password"
+            value={form.password}
+            placeholder="8자 이상"
+            autoComplete="new-password"
+            onChange={(value) => setForm((prev) => ({ ...prev, password: value }))}
+          />
+          <AuthInput
+            label="비밀번호 확인"
+            type="password"
+            value={form.passwordConfirm}
+            placeholder="비밀번호 재입력"
+            autoComplete="new-password"
+            onChange={(value) =>
+              setForm((prev) => ({ ...prev, passwordConfirm: value }))
+            }
           />
 
           <FormError message={localError || errorMessage} />
@@ -132,19 +139,31 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-aibeop-green px-4 py-3 text-white transition hover:bg-aibeop-deep disabled:opacity-50"
+            className="w-full rounded-2xl bg-aibeop-green px-4 py-3 text-sm font-extrabold text-white hover:bg-aibeop-deep disabled:opacity-60"
           >
-            {loading ? "가입 처리 중..." : "회원가입"}
+            {loading ? "가입 중…" : "회원가입"}
           </button>
         </form>
 
-        <div className="mt-6 text-sm text-aibeop-muted">
-          이미 계정이 있으신가요?{" "}
-          <Link href="/login" className="font-medium text-aibeop-text underline">
+        <p className="mt-6 text-center text-sm text-aibeop-muted">
+          이미 계정이 있나요?{" "}
+          <Link href="/login" className="font-semibold text-aibeop-deep underline">
             로그인
           </Link>
-        </div>
+        </p>
       </div>
     </main>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="px-6 py-16 text-center text-sm text-aibeop-muted">로딩...</div>
+      }
+    >
+      <SignupPageClient />
+    </Suspense>
   );
 }

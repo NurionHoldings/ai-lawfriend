@@ -1,6 +1,9 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { requireLawyer } from "@/lib/auth/session";
+import { isLawyerPendingAllowedPath } from "@/lib/auth/lawyer-pending-path";
 import { isLawyerVerificationApproved } from "@/lib/lawyer/lawyer-verification-access";
 import { canManageQuestionSets } from "@/features/question-set/question-set.service";
 import AuthStatus from "@/components/auth/auth-status";
@@ -24,6 +27,13 @@ export default async function LawyerLayout({ children }: Props) {
     ? "/lawyer"
     : "/lawyer/verification-pending";
 
+  if (!lawyerApproved) {
+    const pathname = (await headers()).get("x-pathname") || "";
+    if (pathname && !isLawyerPendingAllowedPath(pathname)) {
+      redirect("/lawyer/verification-pending");
+    }
+  }
+
   return (
     <div className="min-h-screen bg-aibeop-bg text-aibeop-text">
       <header className="border-b border-aibeop-line bg-aibeop-surface">
@@ -36,9 +46,11 @@ export default async function LawyerLayout({ children }: Props) {
               <Link href={lawyerHomeHref} className="hover:text-aibeop-deep">
                 홈
               </Link>
-              <Link href="/lawyer/case-packages/lookup" className="hover:text-aibeop-deep">
-                사건 고유번호 조회
-              </Link>
+              {lawyerApproved ? (
+                <Link href="/lawyer/case-packages/lookup" className="hover:text-aibeop-deep">
+                  사건 고유번호 조회
+                </Link>
+              ) : null}
               {lawyerApproved ? (
                 <Link
                   href="/lawyer/legal-knowledge/reviews"
@@ -47,7 +59,7 @@ export default async function LawyerLayout({ children }: Props) {
                   공부호 Legal Knowledge 검수
                 </Link>
               ) : null}
-              {canManageQuestionSets(user.role) ? (
+              {lawyerApproved && canManageQuestionSets(user.role) ? (
                 <Link href="/admin/question-sets" className="hover:text-aibeop-deep">
                   인터뷰 질문셋
                 </Link>
@@ -64,7 +76,11 @@ export default async function LawyerLayout({ children }: Props) {
       </header>
 
       <main className="mx-auto max-w-6xl px-6 py-8">
-        <ProtectedPageWayfinding homeHref="/lawyer" homeLabel="변호사 홈" scope="lawyer" />
+        <ProtectedPageWayfinding
+          homeHref={lawyerHomeHref}
+          homeLabel="변호사 홈"
+          scope="lawyer"
+        />
         {children}
       </main>
     </div>

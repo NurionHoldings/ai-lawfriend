@@ -19,12 +19,22 @@ export default async function DetailedHomePage() {
       <header className="sticky top-0 z-30 border-b border-aibeop-line bg-aibeop-surface/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
           <AibeopchinLogo href="/" />
-          <Link
-            href={user ? "/dashboard" : "/login"}
-            className="rounded-2xl bg-aibeop-green px-5 py-3 text-sm font-extrabold text-white shadow-soft transition hover:bg-aibeop-deep"
-          >
-            {user ? "대시보드" : "로그인"}
-          </Link>
+          <div className="flex flex-wrap items-center gap-2">
+            {!user ? (
+              <Link
+                href="/tour"
+                className="rounded-2xl border border-aibeop-line px-4 py-3 text-sm font-extrabold text-aibeop-deep transition hover:bg-aibeop-soft"
+              >
+                게스트로 구경하기
+              </Link>
+            ) : null}
+            <Link
+              href={user ? "/dashboard" : "/login"}
+              className="rounded-2xl bg-aibeop-green px-5 py-3 text-sm font-extrabold text-white shadow-soft transition hover:bg-aibeop-deep"
+            >
+              {user ? "대시보드" : "로그인"}
+            </Link>
+          </div>
         </div>
       </header>
       <main id="main-content" className="flex-1">
