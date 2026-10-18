@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/session";
+import { prisma } from "@/lib/prisma";
 
 /**
  * Operator-only, read-only workflow navigation. Links do not grant permissions.
@@ -7,8 +8,13 @@ import { requireAdmin } from "@/lib/auth/session";
  */
 export default async function OperatorVerificationPage() {
   const user = await requireAdmin();
+  const admins = await prisma.user.findMany({
+    where: { role: "SUPER_ADMIN", status: "ACTIVE" },
+    select: { id: true },
+    take: 2,
+  });
   if (user.role !== "SUPER_ADMIN" || process.env.OPERATOR_ACCESS_ENABLED !== "true" ||
-      process.env.OPERATOR_ACCESS_USER_ID !== user.id ||
+      admins.length !== 1 || admins[0].id !== user.id ||
       process.env.OPERATOR_ACCESS_ID !== "operator") {
     return <main className="mx-auto max-w-3xl p-8"><h1 className="text-2xl font-bold">접근 권한이 없습니다.</h1></main>;
   }
