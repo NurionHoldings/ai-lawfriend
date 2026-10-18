@@ -4,6 +4,7 @@ import { normalizeAuthRedirectPath } from "@/lib/auth/oauth";
 import { resolvePostAuthRedirect } from "@/lib/auth/post-auth-redirect";
 import { loginSchema } from "@/lib/validators/auth";
 import { verifyPassword } from "@/lib/auth/password";
+import { selectUniqueActiveSuperAdmin } from "@/lib/auth/operator-access";
 import { buildJsonLoginResponse } from "@/lib/auth/login-response";
 import { enforceAuthRateLimit } from "@/lib/security/auth-rate-limit";
 import {
@@ -45,7 +46,7 @@ export async function POST(req: Request) {
             where: { role: "SUPER_ADMIN", status: "ACTIVE" },
             take: 2,
           });
-          const operator = admins.length === 1 ? admins[0] : null;
+          const operator = selectUniqueActiveSuperAdmin(admins);
           if (operator && operator.role === "SUPER_ADMIN" && isAccountStatusLoginAllowed(operator.status)) {
             return buildJsonLoginResponse(
               { id: operator.id, email: operator.email, name: operator.name, role: operator.role, status: operator.status },
