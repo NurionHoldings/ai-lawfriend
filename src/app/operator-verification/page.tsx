@@ -11,7 +11,7 @@ export default async function OperatorVerificationPage() {
   const user = await requireAdmin();
   const admins = await prisma.user.findMany({
     where: { role: "SUPER_ADMIN", status: "ACTIVE" },
-    select: { id: true },
+    select: { id: true, role: true, status: true },
     take: 2,
   });
   if (user.role !== "SUPER_ADMIN" || process.env.OPERATOR_ACCESS_ENABLED !== "true" ||
