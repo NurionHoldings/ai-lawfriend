@@ -1,22 +1,15 @@
-# operator 입장키 배포 설정
+# operator 입장키 배포 설정 (간소화)
 
-운영 환경의 **서버 전용** 변수에 다음을 등록한다.
+Netlify 서버 전용 환경변수:
 
 ```dotenv
 OPERATOR_ACCESS_ENABLED=false
 OPERATOR_ACCESS_ID=operator
-OPERATOR_ACCESS_PASSWORD_HASH=<현행 password helper와 호환되는 해시>
-OPERATOR_ACCESS_USER_ID=<ACTIVE SUPER_ADMIN 사용자 DB ID>
+OPERATOR_ACCESS_PASSWORD_HASH=<bcrypt 암호화 값>
 ```
 
-비밀번호 원문을 GitHub, NEXT_PUBLIC_ 변수, 클라이언트 코드, 이슈나 로그에 저장하지 않는다.
+`OPERATOR_ACCESS_USER_ID`는 더 이상 필요하지 않다. 로그인 시 데이터베이스에서 ACTIVE SUPER_ADMIN 계정을 조회하고 **정확히 1명일 때만** 연결한다. 0명 또는 2명 이상이면 인증을 거부한다. 이는 임의의 최고관리자 선택을 방지한다.
 
-설정 및 검증 절차:
-1. 현행 비밀번호 해시 알고리즘(`src/lib/auth/password.ts`)으로 강력한 비밀번호의 해시를 생성한다.
-2. 실제 ACTIVE SUPER_ADMIN 계정의 DB ID를 별도로 확인한다. 다른 사용자의 ID를 지정하지 않는다.
-3. 테스트 환경에서 변수 4개를 설정하고 `OPERATOR_ACCESS_ENABLED=true`로 변경한다.
-4. `/login`에서 이메일 입력칸에 `operator`, 비밀번호 입력칸에 별도 지정한 비밀번호를 넣는다.
-5. 로그인 성공 시 `/admin`으로 이동한다. 기존 역할·사건 접근 권한은 그대로 적용된다.
-6. 인증 실패, 비활성화, 계정 정지, 다른 역할 연결 및 접근 권한을 테스트한 뒤 운영 배포한다.
+비밀번호 원문은 GitHub, NEXT_PUBLIC_ 변수, 로그에 기록하지 않는다. 변경 시 bcrypt 해시를 새로 만들어 Netlify의 OPERATOR_ACCESS_PASSWORD_HASH 값을 갱신하고 재배포한다. 설정이 끝나고 브랜치 테스트와 보안 검증을 통과한 뒤에만 OPERATOR_ACCESS_ENABLED=true로 활성화한다.
 
-주의: 현재 단계는 통합 입장 인증만 구현한 것으로 일반인/변호사/관리자 역할 전환과 데모 사건 격리 기능은 아직 구현하지 않았다. 실제 사건에 대한 만능 접근을 허용하지 않는다.
+운영자 확인 화면은 /operator-verification이며 역할 전환, 고객 사건 접근 우회, 변호사 승인 우회는 제공하지 않는다. 운영 배포 전에 계정 수·인증 실패·접근제어·로그인 후 이동을 검증한다.
