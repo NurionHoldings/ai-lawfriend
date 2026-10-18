@@ -21,9 +21,9 @@ export default async function OperatorVerificationPage() {
   }
 
   const flows = [
-    { title: "일반인", description: "상담 및 사건 신청 화면을 점검합니다. 실제 의뢰인 자료는 표시하지 않습니다.", href: "/dashboard" },
-    { title: "변호사", description: "변호사 등록·승인 및 업무 화면의 접근 제어를 점검합니다. 변호사 자격 검증은 우회하지 않습니다.", href: "/lawyer" },
-    { title: "관리자", description: "운영·승인·관리 화면의 접근 제어를 점검합니다.", href: "/admin" },
+    { title: "일반인", description: "상담·신청 화면을 확인합니다. 실제 의뢰인 계정으로 전환하지 않습니다.", href: "/dashboard", steps: ["상담 시작 및 안내 확인", "사건 신청 화면 구성 확인", "결과·진행상태 표시 점검"] },
+    { title: "변호사", description: "자격 심사 흐름을 관리 화면에서 점검합니다. 변호사 계정으로 가장하지 않습니다.", href: "/admin/lawyer-verifications", steps: ["변호사 등록 심사 현황 확인", "승인·반려 절차 점검", "전문가 포털 권한 분리 확인"] },
+    { title: "관리자", description: "운영·승인·감사기록 등 실제 관리자 기능으로 이동합니다.", href: "/admin", steps: ["가입 승인 대기 확인", "운영 현황 확인", "감사기록 점검"] },
   ];
 
   return (
@@ -38,7 +38,8 @@ export default async function OperatorVerificationPage() {
           <article key={flow.title} className="rounded-xl border p-5">
             <h2 className="text-xl font-semibold">{flow.title}</h2>
             <p className="my-3 text-sm">{flow.description}</p>
-            <Link className="underline" href={flow.href}>화면 열기 (기존 권한 적용)</Link>
+            <ol className="mb-4 list-decimal space-y-1 pl-5 text-sm">{flow.steps.map((step) => <li key={step}>{step}</li>)}</ol>
+            <Link className="font-semibold underline" href={flow.href}>업무 화면 열기 →</Link>
           </article>
         ))}
       </section>
