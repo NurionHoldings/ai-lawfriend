@@ -4,6 +4,7 @@ import { normalizeAuthRedirectPath } from "@/lib/auth/oauth";
 import { resolvePostAuthRedirect } from "@/lib/auth/post-auth-redirect";
 import { loginSchema } from "@/lib/validators/auth";
 import { verifyPassword } from "@/lib/auth/password";
+import { selectUniqueActiveSuperAdmin } from "@/lib/auth/operator-access";
 import { buildJsonLoginResponse } from "@/lib/auth/login-response";
 import { enforceAuthRateLimit } from "@/lib/security/auth-rate-limit";
 import {
@@ -32,6 +33,30 @@ export async function POST(req: Request) {
     }
 
     const email = parsed.data.email.toLowerCase().trim();
+
+    // Operator entry: fixed alias, server-side password hash, real active operator user.
+    // This grants no additional role or case access beyond the bound database account.
+    if (email === "operator" && process.env.OPERATOR_ACCESS_ENABLED === "true") {
+      const configuredAlias = process.env.OPERATOR_ACCESS_ID;
+      const hash = process.env.OPERATOR_ACCESS_PASSWORD_HASH;
+      if (configuredAlias === "operator" && hash) {
+        const valid = await verifyPassword(parsed.data.password, hash);
+        if (valid) {
+          const admins = await prisma.user.findMany({
+            where: { role: "SUPER_ADMIN", status: "ACTIVE" },
+            take: 2,
+          });
+          const operator = selectUniqueActiveSuperAdmin(admins);
+          if (operator && operator.role === "SUPER_ADMIN" && isAccountStatusLoginAllowed(operator.status)) {
+            return buildJsonLoginResponse(
+              { id: operator.id, email: operator.email, name: operator.name, role: operator.role, status: operator.status },
+              { message: "운영자 입장키로 로그인되었습니다.", mode: "STANDARD", postLoginRedirect: "/operator-verification", metadata: { accessMethod: "OPERATOR_ALIAS" } },
+            );
+          }
+        }
+      }
+      return fail("이메일 또는 비밀번호가 올바르지 않습니다.", 401, { code: "INVALID_CREDENTIALS" });
+    }
 
     const user = await prisma.user.findUnique({
       where: { email },

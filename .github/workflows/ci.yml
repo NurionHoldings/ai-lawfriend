@@ -53,9 +53,19 @@ jobs:
         run: npm ci
 
       - name: Step 3 local gate (tsc, lint, canonical-sources, vitest, staging policy)
-        run: npm run verify:349-12 && npm run test:staging-secrets-policy
+        run: |
+          npm run verify:349-12 > ci-verify.log 2>&1 || { tail -n 160 ci-verify.log; exit 1; }
+          npm run test:staging-secrets-policy >> ci-verify.log 2>&1 || { tail -n 160 ci-verify.log; exit 1; }
         env:
           NODE_ENV: test
+
+      - name: Preserve verification failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-verify-diagnostics
+          path: ci-verify.log
+          retention-days: 7
 
   predeploy-fresh-build:
     name: predeploy-fresh-build
@@ -88,4 +98,12 @@ jobs:
         run: npm ci
 
       - name: Predeploy check (no dev server; build uses NODE_ENV=production via script)
-        run: npm run predeploy:check
+        run: npm run predeploy:check > ci-predeploy.log 2>&1 || { tail -n 160 ci-predeploy.log; exit 1; }
+
+      - name: Preserve predeploy failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-predeploy-diagnostics
+          path: ci-predeploy.log
+          retention-days: 7
