@@ -38,11 +38,14 @@ export async function POST(req: Request) {
     if (email === "operator" && process.env.OPERATOR_ACCESS_ENABLED === "true") {
       const configuredAlias = process.env.OPERATOR_ACCESS_ID;
       const hash = process.env.OPERATOR_ACCESS_PASSWORD_HASH;
-      const userId = process.env.OPERATOR_ACCESS_USER_ID;
-      if (configuredAlias === "operator" && hash && userId) {
+      if (configuredAlias === "operator" && hash) {
         const valid = await verifyPassword(parsed.data.password, hash);
         if (valid) {
-          const operator = await prisma.user.findUnique({ where: { id: userId } });
+          const admins = await prisma.user.findMany({
+            where: { role: "SUPER_ADMIN", status: "ACTIVE" },
+            take: 2,
+          });
+          const operator = admins.length === 1 ? admins[0] : null;
           if (operator && operator.role === "SUPER_ADMIN" && isAccountStatusLoginAllowed(operator.status)) {
             return buildJsonLoginResponse(
               { id: operator.id, email: operator.email, name: operator.name, role: operator.role, status: operator.status },
