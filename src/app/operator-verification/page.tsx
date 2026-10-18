@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
+import { selectUniqueActiveSuperAdmin } from "@/lib/auth/operator-access";
 
 /**
  * Operator-only, read-only workflow navigation. Links do not grant permissions.
@@ -14,7 +15,7 @@ export default async function OperatorVerificationPage() {
     take: 2,
   });
   if (user.role !== "SUPER_ADMIN" || process.env.OPERATOR_ACCESS_ENABLED !== "true" ||
-      admins.length !== 1 || admins[0].id !== user.id ||
+      selectUniqueActiveSuperAdmin(admins)?.id !== user.id ||
       process.env.OPERATOR_ACCESS_ID !== "operator") {
     return <main className="mx-auto max-w-3xl p-8"><h1 className="text-2xl font-bold">접근 권한이 없습니다.</h1></main>;
   }
