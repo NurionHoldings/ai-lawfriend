@@ -49,7 +49,7 @@ export async function POST(req: Request) {
           if (operator && operator.role === "SUPER_ADMIN" && isAccountStatusLoginAllowed(operator.status)) {
             return buildJsonLoginResponse(
               { id: operator.id, email: operator.email, name: operator.name, role: operator.role, status: operator.status },
-              { message: "운영자 입장키로 로그인되었습니다.", mode: "STANDARD", postLoginRedirect: "/admin", metadata: { accessMethod: "OPERATOR_ALIAS" } },
+              { message: "운영자 입장키로 로그인되었습니다.", mode: "STANDARD", postLoginRedirect: "/operator-verification", metadata: { accessMethod: "OPERATOR_ALIAS" } },
             );
           }
         }
